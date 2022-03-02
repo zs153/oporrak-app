@@ -1,0 +1,41 @@
+@api= http://localhost:8000/api/usuarios
+
+###
+GET {{api}} HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcklEIjoienM1MyIsInJvbCI6MSwicGVyZmlsIjoxLCJvZmljaW5hIjoxMCwiaWF0IjoxNjQ1MTI0MTE3LCJleHAiOjE2NDUxMzEzMTd9.lrm23dfs2fVMETSCnDI3WyJEHKIVFPIOSM97CrN_A9M
+
+###
+GET {{api}}/103
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcklEIjoienM1MyIsInJvbCI6MSwicGVyZmlsIjoxLCJvZmljaW5hIjoxMCwiaWF0IjoxNjQ1MTI0MTE3LCJleHAiOjE2NDUxMzEzMTd9.hrGtvNzA65tP_l2gWVbSc6YXmZQNt3eH-EdJYh5EXmxr8_JKZNgJnOJWO0PDN0hp
+
+###
+GET {{api}}/bu04
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJ6czUzIiwiZXNBZG1pbiI6MSwiaWF0IjoxNjQ0NTY3NDA4LCJleHAiOjE2NDQ1NzQ2MDh9.bOO60vsseXa518az3XmEWa_FeKSAp2IfjngUxS-ggks
+
+###
+POST {{api}}
+Content-Type: application/json
+
+{
+  "userid": "lg29",
+  "nombre": "STRELLA LOPEZ",
+  "email": "estrella.lopez@bizkaia.eus",
+}
+
+###
+DELETE {{api}}/5
+
+###
+PUT {{api}}/1
+Content-Type: application/json
+
+{
+  "userid": "ao20",
+  "nomusu": "IBON ALDEKOA",
+  "emausu": "ao20@gmail.com",
+  "esAdmin": 0
+}
+
