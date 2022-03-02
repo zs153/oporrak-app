@@ -34,8 +34,6 @@ Content-Type: application/json
 
 {
   "userid": "ao20",
-  "nomusu": "IBON ALDEKOA",
-  "emausu": "ao20@gmail.com",
   "esAdmin": 0
 }
 
