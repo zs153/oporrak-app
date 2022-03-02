@@ -12,6 +12,7 @@ import {
   updatePerfil,
   enviarNotificacion,
 } from '../controllers/usuario.controller'
+import { validationRules, validate } from '../middleware/usuarioValidator'
 
 const usuarioRouter = express.Router()
 
@@ -21,8 +22,20 @@ usuarioRouter.get('/usuarios/add', verifyTokenAndAdmin, addPage)
 usuarioRouter.get('/usuarios/edit/:userid', verifyTokenAndAdmin, editPage)
 
 // procedures
-usuarioRouter.post('/usuarios/insert', verifyTokenAndAdmin, insertUsuario)
-usuarioRouter.post('/usuarios/update', verifyTokenAndAdmin, updateUsuario)
+usuarioRouter.post(
+  '/usuarios/insert',
+  verifyTokenAndAdmin,
+  validationRules,
+  validate,
+  insertUsuario
+)
+usuarioRouter.post(
+  '/usuarios/update',
+  verifyTokenAndAdmin,
+  validationRules,
+  validate,
+  updateUsuario
+)
 usuarioRouter.post('/usuarios/delete', verifyTokenAndAdmin, deleteUsuario)
 usuarioRouter.post(
   '/usuarios/restablecer',
