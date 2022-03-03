@@ -112,7 +112,7 @@ export const crearRegistro = async (req, res) => {
 
   const nuevoRegistro = {
     nombre: nomusu,
-    oficina: 10,
+    oficina: 1,
     rol: userid === "go500" ? tiposRol.admin : tiposRol.usuario,
     userid: userid,
     email: emausu,
