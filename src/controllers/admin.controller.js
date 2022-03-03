@@ -23,6 +23,8 @@ export const estadistica = async (req, res) => {
     desde: req.body.desde,
     hasta: req.body.hasta,
   };
+
+  console.log(periodo);
   const result = await axios.post(
     "http://localhost:8000/api/formularios/estadistica",
     { periodo }

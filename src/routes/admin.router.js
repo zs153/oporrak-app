@@ -13,7 +13,7 @@ const adminRouter = express.Router();
 
 // paginas
 adminRouter.get("/", authRoutes, mainPage);
-adminRouter.get("/estadistica/", verifyTokenAndAdmin, estadisticaPage);
+adminRouter.get("/estadistica", verifyTokenAndAdmin, estadisticaPage);
 adminRouter.get("/estadistica/acumulados", verifyTokenAndAdmin, acumuladosPage);
 // procedures
 adminRouter.post("/update", authRoutes, updatePerfil);
