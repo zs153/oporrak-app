@@ -21,6 +21,7 @@ export const tiposMovimiento = {
   crearSms: 19,
   modificarSms: 20,
   borrarSms: 21,
+  actualizarPerfil: 22,
   cambioPassword: 60,
   olvidoPassword: 61,
   restablecerPassword: 62,

@@ -16,11 +16,6 @@ export const forgotPage = async (req, res) => {
 export const registroPage = async (req, res) => {
   res.render("log/sign-up", { datos: {}, alerts: undefined });
 };
-export const changePage = async (req, res) => {
-  const username = req.username;
-
-  res.render("log/change", { username });
-};
 export const verifyLogin = async (req, res) => {
   const { userid, password } = req.body;
   try {
@@ -104,23 +99,6 @@ export const forgotPassword = async (req, res) => {
 
   try {
     const result = await axios.post("http://localhost:8000/api/forgot", {
-      user,
-    });
-
-    res.redirect("/");
-  } catch (error) {
-    res.redirect("/");
-  }
-};
-export const changePassword = async (req, res) => {
-  const id = req.body.idusua;
-
-  const user = {
-    id,
-  };
-
-  try {
-    const result = await axios.post("http://localhost:8000/api/change", {
       user,
     });
 

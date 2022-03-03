@@ -142,19 +142,19 @@
                       <div class="col-2">
                         <div class="mb-3">
                           <label class="form-label">NIF</label>
-                          <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nif %>" />
+                          <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" />
                         </div>
                       </div>
                       <div class="col-6">
                         <div class="mb-3">
                           <label class="form-label">Nombre</label>
-                          <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nombre %>" />
+                          <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
                         </div>
                       </div>
                       <div class="col-4">
                         <div class="mb-3">
                           <label class="form-label">Correo electrónico</label>
-                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.documento.email %>" />
+                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.documento.emacon %>" />
                         </div>
                       </div>
                     </div>
@@ -162,9 +162,9 @@
                       <div class="col-9">
                         <div class="mb-3">
                           <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipo %>">
+                          <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipcon %>">
                             <% datos.arrTipos.map(element => { %> 
-                              <option value="<%- element.IDTIPO %>"<%- element.IDTIPO == datos.documento.tipo ? " selected":"" %>><%- element.DESTIP %> (<%- element.AYUTIP %>)</option>
+                              <option value="<%- element.IDTIPO %>"<%- element.IDTIPO == datos.documento.tipcon ? " selected":"" %>><%- element.DESTIP %> (<%- element.AYUTIP %>)</option>
                             <% }) %> 
                           </select>
                         </div>
@@ -172,13 +172,13 @@
                       <div class="col-2">
                         <div class="mb-3">
                           <label class="form-label">Ejercicio</label>
-                          <input type="number" name="ejedoc" id="ejedoc" class="form-control" value="<%- datos.documento.ejercicio %>" />
+                          <input type="number" name="ejedoc" id="ejedoc" class="form-control" value="<%- datos.documento.ejedoc %>" />
                         </div>
                       </div>
                       <div class="col-1">
                         <div class="mb-3">
                           <label class="form-label">Adm</label>
-                          <input type="text" name="fundoc" id="fundoc" class="form-control" value="<%- datos.documento.funcionario %>" readonly />
+                          <input type="text" name="fundoc" id="fundoc" class="form-control" value="<%- datos.documento.fundoc %>" readonly />
                         </div>
                       </div>
                     </div>
@@ -186,21 +186,21 @@
                       <div class="col-2">
                         <div class="mb-3">
                           <label class="form-label">Referencia</label>
-                          <input type="text" name="refdoc" id="refdoc" class="form-control" value="<%- datos.documento.referencia %>" />
+                          <input type="text" name="refdoc" id="refdoc" class="form-control" value="<%- datos.documento.refdoc %>" />
                         </div>
                       </div>
                       <div class="col-3">
                         <div class="mb-4">
                           <label class="form-label">Fecha</label>
-                          <input type="date" name="fecdoc" id="fecdoc" class="form-control" value="<%- datos.documento.fecha %>" />
+                          <input type="date" name="fecdoc" id="fecdoc" class="form-control" value="<%- datos.documento.fecdoc %>" />
                         </div>
                       </div>
                       <div class="col-3">
                         <div class="mb-4">
                           <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofidoc" value="<%- datos.documento.oficina %>">
+                          <select class="form-select" id="cboofi" name="ofidoc" value="<%- datos.documento.ofidoc %>">
                             <% datos.arrOficinas.map(element => { %> 
-                              <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == datos.documento.oficina ? " selected":"" %>><%= element.DESOFI %></option>
+                              <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == datos.documento.ofidoc ? " selected":"" %>><%= element.DESOFI %></option>
                             <% }) %> 
                           </select>
                         </div>
@@ -208,13 +208,13 @@
                       <div class="col-2">
                         <div class="mb-3">
                           <label class="form-label">Teléfono</label>
-                          <input type="text" name="teldec" id="teldec" class="form-control" value="<%- datos.documento.telefono %>" />
+                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.documento.telcon %>" />
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="mb-3">
                           <label class="form-label">Movil</label>
-                          <input type="text" name="movdoc" id="movdoc" class="form-control" value="<%- datos.documento.movil %>" />
+                          <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
                         </div>
                       </div>
                     </div>
@@ -223,7 +223,7 @@
                         <small></small>
                         <div class="mb-3">
                           <label class="form-label">Observaciones</label>
-                            <textarea type="text" name="obsdoc" id="obsdoc" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.observaciones %></textarea>
+                            <textarea type="text" name="obsdoc" id="obsdoc" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.obsdoc %></textarea>
                         </div>
                       </div>
                     </div>

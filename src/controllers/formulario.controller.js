@@ -39,20 +39,22 @@ export const addPage = async (req, res) => {
     const arrOficinas = resultOficinas.data.dat;
 
     const documento = {
-      id: 0,
-      fecha: fecha.toISOString().substring(0, 10),
-      nif: "",
-      nombre: "",
-      email: "",
-      referencia: "",
-      tipo: 0,
-      ejercicio: fecha.getFullYear(),
-      oficina: 0,
-      observaciones: "",
-      telefono: "",
-      movil: "",
-      funcionario: user.userID,
-      estado: estadosDocumento.pendiente,
+      iddocu: 0,
+      fecdoc: fecha.toISOString().substring(0, 10),
+      nifcon: "",
+      nomcon: "",
+      emAcon: "",
+      telcon: "",
+      movcon: "",
+      refdoc: "",
+      tipdoc: 0,
+      ejedoc: fecha.getFullYear(),
+      ofidoc: 0,
+      obsdoc: "",
+      licdoc: "",
+      fundoc: user.userID,
+
+      stadoc: estadosDocumento.pendiente,
     };
     const datos = {
       documento,
@@ -85,19 +87,20 @@ export const editPage = async (req, res) => {
     });
 
     const documento = {
-      id: result.data.iddocu,
-      fecha: result.data.fecdoc,
-      nif: result.data.nifcon,
-      nombre: result.data.nomcon,
-      email: result.data.emacon,
-      referencia: result.data.refdoc,
-      tipo: result.data.tipdoc,
-      ejercicio: result.data.ejedoc,
-      oficina: result.data.ofidoc,
-      observaciones: result.data.obsdoc,
-      telefono: result.data.teldec,
-      movil: result.data.movdoc,
-      funcionario: result.data.fundoc,
+      iddocu: result.data.iddocu,
+      fecdoc: result.data.fecdoc,
+      nifcon: result.data.nifcon,
+      nomcon: result.data.nomcon,
+      emacon: result.data.emacon,
+      telcon: result.data.telcon,
+      movcon: result.data.movcon,
+      refdoc: result.data.refdoc,
+      tipdoc: result.data.tipdoc,
+      ejedoc: result.data.ejedoc,
+      ofidoc: result.data.ofidoc,
+      obsdoc: result.data.obsdoc,
+      fundoc: result.data.fundoc,
+      liqdoc: result.data.liqdoc,
     };
     const datos = {
       documento,
@@ -118,13 +121,13 @@ export const insertFormulario = async (req, res) => {
     nif: req.body.nifcon,
     nombre: req.body.nomcon,
     email: req.body.emacon,
+    telefono: req.body.telcon,
+    movil: req.body.movcon,
     referencia: req.body.refdoc,
     tipo: req.body.tipdoc,
     ejercicio: req.body.ejedoc,
     oficina: req.body.ofidoc,
     observaciones: req.body.obsdoc,
-    telefono: req.body.teldec,
-    movil: req.body.movdoc,
     funcionario: req.body.fundoc,
     liquidador: "PEND",
     estado: estadosDocumento.pendiente,
@@ -133,7 +136,7 @@ export const insertFormulario = async (req, res) => {
     usuarioMov: user.id,
     tipoMov: tiposMovimiento.crearDocumento,
   };
-
+  console.log(documento);
   try {
     const result = await axios.post(
       "http://localhost:8000/api/formularios/insert",
@@ -184,13 +187,13 @@ export const updateFormulario = async (req, res) => {
     nif: req.body.nifcon,
     nombre: req.body.nomcon,
     email: req.body.emacon,
+    telefono: req.body.telcon,
+    movil: req.body.movcon,
     referencia: req.body.refdoc,
     tipo: req.body.tipdoc,
     ejercicio: req.body.ejedoc,
     oficina: req.body.ofidoc,
     observaciones: req.body.obsdoc,
-    telefono: req.body.teldec,
-    movil: req.body.movdoc,
     funcionario: req.body.fundoc,
   };
   const movimiento = {
@@ -428,7 +431,7 @@ export const verTodo = async (req, res) => {
 export const sms = async (req, res) => {
   const user = req.user;
   const sms = {
-    idDocumento: req.body.iddocu,
+    idDocumento: req.body.docsms,
     texto: req.body.texsms,
     movil: req.body.movsms,
     estado: estadosDocumento.pendiente,
@@ -437,7 +440,7 @@ export const sms = async (req, res) => {
     usuarioMov: user.id,
     tipoMov: tiposMovimiento.crearSms,
   };
-
+  console.log(sms);
   try {
     const result = await axios.post(
       "http://localhost:8000/api/formularios/sms",

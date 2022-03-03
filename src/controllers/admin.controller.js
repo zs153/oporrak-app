@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import { tiposMovimiento } from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
@@ -35,12 +36,16 @@ export const changePassword = async (req, res) => {
     id: req.body.idusua,
     password: req.body.pwdusu,
   };
-
+  const movimiento = {
+    usuarioMov: user.id,
+    tipoMov: tiposMovimiento.cambioPassword,
+  };
   try {
     const result = await axios.post(
       "http://localhost:8000/api/usuarios/cambio",
       {
         usuario,
+        movimiento,
       }
     );
 
@@ -59,6 +64,10 @@ export const updatePerfil = async (req, res) => {
     rol: user.rol,
     oficina: user.oficina,
     telefono: req.body.telusu,
+  };
+  const movimiento = {
+    usuarioMov: user.id,
+    tipoMov: tiposMovimiento.actualizarPerfil,
   };
 
   try {

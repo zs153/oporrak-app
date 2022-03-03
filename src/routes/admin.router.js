@@ -17,7 +17,7 @@ adminRouter.get("/estadistica/", verifyTokenAndAdmin, estadisticaPage);
 adminRouter.get("/estadistica/acumulados", verifyTokenAndAdmin, acumuladosPage);
 // procedures
 adminRouter.post("/update", authRoutes, updatePerfil);
-adminRouter.post("/cambio", authRoutes, changePassword);
+adminRouter.post("/cambio", changePassword);
 adminRouter.post("/estadistica", verifyTokenAndAdmin, estadistica);
 adminRouter.post("/cambio", authRoutes, changePassword);
 adminRouter.post("/updatePerfil", authRoutes, updatePerfil);
