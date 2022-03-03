@@ -24,38 +24,6 @@
               <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
             </a>
           </h1>
-          <!-- <div class="navbar-nav flex-row order-md-last">
-            <div class="nav-item dropdown d-none d-md-flex me-3">
-              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
-                <span class="badge bg-white"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-                <div class="card">
-                  <div class="card-body">
-                    Notificaciones...
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <div class="d-none d-xl-block">
-                  <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idperf').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-perfil">
-                  <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
-                </a>
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
-                  <i class="bi bi-wrench dropdown-item-icon"></i>Cambiar contraseña
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
-              </div>
-            </div>
-          </div> -->
         </div>
       </header>
 
@@ -75,7 +43,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="/admin/formularios" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-info-circle"></i>
+                    <i class="bi bi-music-note"></i>
                   </span>
                   <span class="nav-link-title">
                     Formularios
@@ -85,7 +53,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="/admin/fraudes" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-collection"></i>
+                    <i class="bi bi-cash"></i>
                   </span>
                   <span class="nav-link-title">
                     Fraudes
@@ -130,16 +98,16 @@
                     </div>
                     <div class="card-body">
                       <div class="row">
-                        <div class="col-4">
+                        <div class="col-6">
                           <div class="mb-3">
                             <label class="form-label">Desde</label>
-                            <input type="date" name="desde" id="desde" class="form-control" />
+                            <input type="date" name="desde" id="desde" class="form-control" value="<%- new Date().toISOString().substring(0,10) %>" autofocus/>
                           </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                           <div class="mb-3">
                             <label class="form-label">Hasta</label>
-                            <input type="date" name="hasta" id="hasta" class="form-control" />
+                            <input type="date" name="hasta" id="hasta" class="form-control" value="<%- new Date().toISOString().substring(0,10) %>"/>
                           </div>
                         </div>
                       </div>
@@ -170,102 +138,5 @@
         </footer>
       </div>
     </div>
-
-    <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Perfil de usuario</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/usuarios/updatePerfil" method="POST">
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-2">
-                  <div class="mb-3">
-                    <label class="form-label">UserID</label>
-                    <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
-                  </div>
-                </div>
-                <div class="col-10">
-                  <div class="mb-3">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-10">
-                  <div class="mb-3">
-                    <label class="control-label">Correo electrónico</label>
-                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="mb-3">
-                    <label class="control-label">Teléfono</label>
-                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <a href="/admin/usuarios" class="btn btn-link">Cancelar</a>
-              <input type="hidden" id="idperf" name="idperf" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar usuario</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Cambio de contraseña</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/usuarios/change" method="POST">
-            <div class="modal-body">
-            <div class="row">
-              <div class="mb-3">
-                <label class="form-label">Actualizar contraseña</label>
-                <input
-                  type="password"
-                  name="pwdusu"
-                  id="pwdusu"
-                  class="form-control"
-                  value=""
-                  autocomplete="off"
-                  autofocus
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="mb-3">
-                <label class="form-label">Volver a escribir contraseña</label>
-                <input
-                  type="password"
-                  name="pwdusu2"
-                  id="pwdusu2"
-                  class="form-control"
-                  value=""
-                  autocomplete="off"
-                />
-              </div>
-            </div>
-            </div>
-            <div class="modal-footer">
-              <a href="/admin/usuarios" class="btn btn-link">Cancelar</a>
-              <input type="hidden" id="idchan" name="idchan" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <script src="/js/ayuda.js"></script>
   </body>
 </html>

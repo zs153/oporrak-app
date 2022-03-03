@@ -50,7 +50,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a href="/admin/usuarios/edit/<%- user.id %> " class="dropdown-item"><i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario</a>
-              <a href="/admin/usuarios/change/<%- user.id %> " class="dropdown-item"><i class="bi bi-wrench dropdown-item-icon"></i>Cambiar contraseña</a>
+              <a href="/admin/usuarios/change/<%- user.id %> " class="dropdown-item"><i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña</a>
               <div class="dropdown-divider"></div>
               <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
             </div>
@@ -75,7 +75,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/admin/formularios" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-info-circle"></i>
+                  <i class="bi bi-music-note"></i>
                 </span>
                 <span class="nav-link-title">
                   Formularios
@@ -85,7 +85,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/admin/fraudes" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-collection"></i>
+                  <i class="bi bi-cash"></i>
                 </span>
                 <span class="nav-link-title">
                   Fraudes
@@ -123,15 +123,16 @@
           <div class="row row-deck row-cards">
             <div class="col-12">
               <div class="card">
-                <% if(typeof alerts !='undefined' ) { %> <% alerts.map(function (alert)
-                { %>
-                <div
-                  class="alert alert-warning alert-dismissible fade show"
-                  role="alert"
-                >
-                  <%- alert.msg %>
-                </div>
-                <% }) %> <% } %>                
+                <% if(typeof alerts !='undefined') { %>
+                  <% alerts.map(function (alert){ %>
+                    <div
+                      class="alert alert-warning alert-dismissible fade show"
+                      role="alert"
+                    >
+                      <%- alert.msg %>
+                    </div>
+                  <% }) %>
+                <% } %>                
                 <form action="/admin/tipos/insert" method="POST">
                   <div class="card-header">
                     Tipo
@@ -141,7 +142,7 @@
                       <div class="col-4">
                         <div class="mb-3">
                           <label class="form-label">Descripción</label>
-                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.descripcion %>" />
+                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.descripcion %>" autofocus/>
                         </div>
                       </div>
                       <div class="col-8">
