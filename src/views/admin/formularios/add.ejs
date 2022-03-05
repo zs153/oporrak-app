@@ -141,7 +141,7 @@
                     <div class="row">
                       <div class="col-2">
                         <div class="mb-3">
-                          <label class="form-label">NIF</label>
+                          <label class="form-label">NIF/NIE</label>
                           <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
                         </div>
                       </div>
@@ -183,19 +183,19 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-2">
+                      <!-- <div class="col-2">
                         <div class="mb-3">
                           <label class="form-label">Referencia</label>
                           <input type="text" name="refdoc" id="refdoc" class="form-control" value="<%- datos.documento.refdoc %>" />
                         </div>
-                      </div>
+                      </div> -->
                       <div class="col-3">
                         <div class="mb-4">
                           <label class="form-label">Fecha</label>
                           <input type="date" name="fecdoc" id="fecdoc" class="form-control" value="<%- datos.documento.fecdoc %>" />
                         </div>
                       </div>
-                      <div class="col-3">
+                      <div class="col-5">
                         <div class="mb-4">
                           <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="ofidoc" value="<%- datos.documento.ofidoc %>">

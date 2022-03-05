@@ -2,6 +2,7 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import {
   estadosDocumento,
+  estadosSms,
   tiposMovimiento,
   tiposVisualizacion,
 } from '../public/js/enumeraciones'
@@ -119,7 +120,7 @@ export const insertFormulario = async (req, res) => {
     email: req.body.emacon,
     telefono: req.body.telcon,
     movil: req.body.movcon,
-    referencia: req.body.refdoc,
+    //referencia: req.body.refdoc,
     tipo: req.body.tipdoc,
     ejercicio: req.body.ejedoc,
     oficina: req.body.ofidoc,
@@ -266,7 +267,7 @@ export const asignarFormulario = async (req, res) => {
   const user = req.user
   const documento = {
     id: req.body.iddocu,
-    userID: user.userID,
+    liquidador: user.userID,
     estado: estadosDocumento.asignado,
   }
   const movimiento = {
@@ -299,9 +300,12 @@ export const asignarFormulario = async (req, res) => {
 }
 export const resolverFormulario = async (req, res) => {
   const user = req.user
+
+  if (req.body.chkenv) {
+  }
   const documento = {
     id: req.body.iddocu,
-    userID: user.userID,
+    liquidador: user.userID,
     estado: estadosDocumento.resuelto,
   }
   const movimiento = {
@@ -314,7 +318,7 @@ export const resolverFormulario = async (req, res) => {
     const resul = await axios.post('http://localhost:8000/api/formulario', {
       id: req.body.iddocu,
     })
-
+    // cambiar estado
     if (resul.data.stadoc === estadosDocumento.asignado) {
       const result = await axios.post(
         'http://localhost:8000/api/formularios/cambioEstado',
@@ -323,6 +327,27 @@ export const resolverFormulario = async (req, res) => {
           movimiento,
         }
       )
+
+      /// envio sms
+      if (req.body.chkenv) {
+        const sms = {
+          texto: req.body.texsms,
+          movil: req.body.movcon,
+          estado: estadosSms.pendiente,
+          idDocumento: req.body.iddocu,
+        }
+        const movimiento = {
+          usuarioMov: user.id,
+          tipoMov: tiposMovimiento.crearSms,
+        }
+        const result = await axios.post(
+          'http://localhost:8000/api/formularios/sms',
+          {
+            sms,
+            movimiento,
+          }
+        )
+      }
 
       res.redirect('/admin/formularios')
     } else {
@@ -336,7 +361,7 @@ export const remitirFormulario = async (req, res) => {
   const user = req.user
   const documento = {
     id: req.body.iddocu,
-    userID: user.userID,
+    liquidador: user.userID,
     estado: estadosDocumento.remitido,
   }
   const movimiento = {
@@ -371,7 +396,7 @@ export const desadjudicarFormulario = async (req, res) => {
   const user = req.user
   const documento = {
     id: req.body.iddocu,
-    userID: 'PEND',
+    liquidador: 'PEND',
     estado: estadosDocumento.pendiente,
   }
   const movimiento = {

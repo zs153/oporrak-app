@@ -253,7 +253,7 @@
                                       </a>
                                     </li>
                                     <li class="nav-item <%- element.STADOC === 1 ? '' : 'd-none' %>">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('movcon').value ='<%- element.MOVCON %>', document.getElementById('resol').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
                                         <i class="bi bi-check2 dropdown-item-icon"></i>Resolver formulario
                                       </a>
                                     </li>
@@ -267,11 +267,13 @@
                                         <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Desasignar formulario
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STADOC = 1 ? '': 'd-none' %>">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>' }" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                                    <li class="nav-item list-divider">
+                                    </li>
+                                    <li class="nav-item <%- element.STADOC === 1 ? '': 'd-none' %>">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-sms">
                                         <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
                                       </a>
-                                      </li>
+                                    </li>
                                   </ul>
                                 </li>                              
                               </ul>
@@ -367,32 +369,60 @@
     </div>
 
     <div class="modal modal-blur fade" id="modal-resolver" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="modal-status bg-success"></div>
-          <div class="modal-body text-center py-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <circle cx="12" cy="12" r="9"></circle>
-              <path d="M9 12l2 2l4 -4"></path>
-            </svg> 
-            <h3>Resolver formulario</h3>
-          </div>
-          <div class="modal-footer">
-            <div class="w-100">
-              <div class="row">
-                <div class="col">
-                  <a href="/admin/formularios" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+            <form action="/admin/formularios/resolver" method="POST">
+              <div class="modal-body text-center py-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M9 12l2 2l4 -4"></path>
+                </svg> 
+                <h3>Resolver formulario</h3>
+                <div class="card-header">
+                  SMS
                 </div>
-                <div class="col">
-                  <form action="/admin/formularios/resolver" method="POST">
-                    <input type="hidden" id="resol" name="iddocu" value="">
-                    <button type="submit" class="btn btn-success w-100">Resolver formulario</button>
-                  </form>
+                <div class="card-body">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="mb-1">
+                      <label class="form-label text-start">Móvil</label>
+                      <input type="text" name="movcon" id="movcon" class="form-control" value="" autofocus/>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="mb-1">
+                      <label class="form-label text-start">Texto sms</label>
+                      <input type="text" name="texsms" id="textsms" class="form-control" value="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-2">
+                      <label class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" name="chkenv" id="chkenv" />
+                        <span class="form-check-label">Enviar</span>
+                      </label>
+                  </div>
+                </div>
                 </div>
               </div>
-            </div>
+              <div class="modal-footer">
+                <div class="w-100">
+                  <div class="row">
+                    <div class="col">
+                      <a href="/admin/formularios" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                    </div>
+                    <div class="col">
+                      <input type="hidden" id="resol" name="iddocu" value="">
+                      <button type="submit" class="btn btn-success w-100">Resolver formulario</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -548,7 +578,7 @@
     </div>
 
     <div class="modal modal-blur fade" id="modal-sms" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title mb-3">Envío SMS</h5>
@@ -603,16 +633,6 @@
         }
       })
     </script>     
-    <script>
-      const messages = document.getElementById('messages')
-      const socket = io()
-
-      socket.on('receive-message', msg => {
-        const li = document.createElement('li')
-        li.textContent = msg
-        messages.appendChild(li)
-      })
-    </script>
     <script>
       function filtroDocumentos() {
         const input = document.getElementById("buscarDocBox");

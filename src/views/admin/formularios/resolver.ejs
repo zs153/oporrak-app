@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Resolver</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
+  <!-- custom -->
+  <link rel="stylesheet" href="/css/estilos.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+</head>
+
+<body class="antialiased">
+  <div class="wrapper">
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+      <div class="container-xl">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <h1 class="navbar-brand pe-0 pe-md-3">
+          <a href="/">
+            <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
+          </a>
+        </h1>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            <div class="col-12">
+              <div class="card">
+                <% if(typeof alerts !='undefined') { %>
+                  <% alerts.map(function (alert){ %>
+                    <div
+                      class="alert alert-warning alert-dismissible fade show"
+                      role="alert"
+                    >
+                      <%- alert.msg %>
+                    </div>
+                  <% }) %>
+                <% } %>                
+                <form action="/admin/formlarios/resolver" method="POST">
+                  <div class="card-header">
+                    Resolver
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-4">
+                        <div class="mb-3">
+                          <label class="form-label">Móvil</label>
+                          <input type="text" name="movsms" id="movsms" class="form-control" value="<%- datos.documento.movil %>" autofocus/>
+                        </div>
+                      </div>
+                      <div class="col-8">
+                        <div class="mb-3">
+                          <label class="form-label">Texto sms</label>
+                          <input type="text" name="texsms" id="textsms" class="form-control" value="<%- datos.documento.texto %>" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <div class="mt-4">
+                          <label class="form-check form-check-inline">
+                            <input type="checkbox" class="form-check-input" name="chkenv" id="chkenv" />
+                            <span class="form-check-label">Enviar</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  <div class="card-footer text-end">
+                    <div class="d-flex">
+                      <a href="/admin/formularios" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto">Resolver formulario/button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer class="footer footer-transparent d-print-none">
+      <div class="container">
+        <div class="row text-center align-items-center flex-row-reverse">
+          <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+            Copyright &copy; 2022
+            <a href="/" class="link-secondary">SIAC</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
