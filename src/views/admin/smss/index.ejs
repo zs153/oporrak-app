@@ -24,38 +24,6 @@
               <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
             </a>
           </h1>
-          <!-- <div class="navbar-nav flex-row order-md-last">
-            <div class="nav-item dropdown d-none d-md-flex me-3">
-              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
-                <span class="badge bg-white"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-                <div class="card">
-                  <div class="card-body">
-                    Notificaciones...
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <div class="d-none d-xl-block">
-                  <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idperf').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-perfil">
-                  <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
-                </a>
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
-                    <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
-              </div>
-            </div>
-          </div> -->
         </div>
       </header>
 
@@ -106,6 +74,9 @@
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
                   </a>
+                  <a href="/admin/smss" class="dropdown-item">
+                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                  </a>
                   <div class="dropdown-divider"></div>
                   <a href="/admin/estadistica" class="dropdown-item">
                     <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
@@ -124,7 +95,7 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    Sms
+                    SMS
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
                         <div class="input-icon me-3">
@@ -144,29 +115,52 @@
                     </div>                    
                   </div>
                   <div class="card-body overflow-auto">
-                    <table class="table table-vcenter card-table table-fixHead" id="tblSmss">
+                    <table class="table table-vcenter" id="tblSmss">
                       <thead>
                       <tr>
+                        <th></th>
+                        <th class="w-10">Fecha</th>
+                        <th class="w-10">Movil</th>
                         <th class="w-100">Texto</th>
-                        <th class="w-1"></th>
+                        <th></th>
                       </tr>
                       </thead>
                       <tbody>
                         <% datos.smss.map(element => { %>
                           <tr>
                             <td>
+                              <div class="d-flex py-1 align-items-center">                                
+                                <% if (element.STASMS === 0) { %>
+                                  <span class="avatar me-2 avatar-rounded bg-red-lt">
+                                    <h6>PEND</h6>
+                                  </span>
+                                <% } else { %>
+                                  <span class="avatar me-2 avatar-rounded bg-green-lt">
+                                    <h6><%- element.LIQDOC %></h6>
+                                  </span>
+                                <% } %>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="flex-fill">
+                                <div class="font-weight-medium"><%- element.STRFEC %></div>
+                              </div>
+                              </div>
+                            </td>
+                            <td>
                               <div class="d-flex py-1 align-items-center">
-                                <span class="avatar me-2 avatar-rounded">
-                                  <h6><%- element.IDSMSS %></h6>
-                                </span>
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.MOVSMS %></div>
-                                  <div class="text-muted">
-                                    <span class="text-reset">Movil: <%- element.TEXTSMS %></span>
-                                  </div>
                                 </div>
                               </div>
                             </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.TEXSMS %></div>
+                                </div>
+                              </div>
+                            </td>                            
                             <td class="text-end">
                               <ul class="dots-menu">
                                 <li class="nav-item drop-right">
@@ -245,91 +239,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Perfil de usuario</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/oficinas/updatePerfil" method="POST">
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-2">
-                  <div class="mb-3">
-                    <label class="form-label">UserID</label>
-                    <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
-                  </div>
-                </div>
-                <div class="col-10">
-                  <div class="mb-3">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-10">
-                  <div class="mb-3">
-                    <label class="control-label">Correo electrónico</label>
-                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="mb-3">
-                    <label class="control-label">Teléfono</label>
-                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <a href="/admin/oficinas" class="btn btn-link">Cancelar</a>
-              <input type="hidden" id="idperf" name="idperf" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Cambio de contraseña</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/oficinas/cambio" method="POST">
-            <div class="modal-body">
-              <div class="row">
-                <div class="mb-3">
-                  <label class="form-label">Actualizar contraseña</label>
-                  <span class="input-text">
-                    <input
-                    type="password"
-                    name="pwdusu"
-                    id="pwdusu"
-                    class="form-control"
-                    value=""
-                    autocomplete="off"
-                    autofocus
-                    />                  
-                    <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <a href="/admin/tipos" class="btn btn-link">Cancelar</a>
-              <input type="hidden" id="idchan" name="idusua" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div> -->
 
     <script src="/js/ayuda.js"></script>
     <script>

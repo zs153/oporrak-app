@@ -30,11 +30,12 @@
             <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
               <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
               <span class="badge bg-white"></span>
+              <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
               <div class="card">
                 <div class="card-body">
-                  Notificaciones...
+                  <ul id="messages" style="list-style: none;"></ul>
                 </div>
               </div>
             </div>
@@ -254,5 +255,24 @@
       </div>
     </footer>
   </div>
+  <script src="/js/ayuda.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    console.log('pass')
+    const messages = document.getElementById('messages')
+    const socket = io()
+
+    socket.on('receive-message', msg => {
+      const li = document.createElement('li')
+      li.textContent = msg
+      messages.appendChild(li)
+
+      const toggleBadge = document.querySelector('#toggleBadge');
+      const numeroMensajes = messages.getElementsByTagName("li").length
+      if (numeroMensajes === 1) {
+        toggleBadge.classList.toggle('d-none')
+      }
+    })
+  </script>
 </body>
 </html>

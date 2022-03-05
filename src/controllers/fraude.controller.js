@@ -10,16 +10,16 @@ import {
 export const mainPage = async (req, res) => {
   const user = req.user
   const documento = {
-    stadoc: tiposVisualizacion.resueltos,
+    stafra: tiposVisualizacion.resueltos,
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/formularios', {
+    const result = await axios.post('http://localhost:8000/api/fraudes', {
       documento,
     })
 
     const datos = { documentos: result.data.dat }
-    res.render('admin/formularios', { user, datos })
+    res.render('admin/fraudes', { user, datos })
   } catch (error) {
     res.redirect('/')
   }
@@ -38,21 +38,21 @@ export const addPage = async (req, res) => {
     const arrOficinas = resultOficinas.data.dat
 
     const documento = {
-      iddocu: 0,
-      fecdoc: fecha.toISOString().substring(0, 10),
+      idfrau: 0,
+      fecfra: fecha.toISOString().substring(0, 10),
       nifcon: '',
       nomcon: '',
       emAcon: '',
       telcon: '',
       movcon: '',
-      refdoc: '',
-      tipdoc: 0,
-      ejedoc: fecha.getFullYear(),
-      ofidoc: 0,
-      obsdoc: '',
-      fundoc: user.userID,
-      liqdoc: '',
-      stadoc: estadosDocumento.pendiente,
+      reffra: '',
+      tipfra: 0,
+      ejefra: fecha.getFullYear(),
+      ofifra: 0,
+      obsfra: '',
+      funfra: user.userID,
+      liqfra: '',
+      stafra: estadosDocumento.pendiente,
     }
     const datos = {
       documento,
@@ -60,9 +60,9 @@ export const addPage = async (req, res) => {
       arrOficinas,
     }
 
-    res.render('admin/formularios/add', { user, datos })
+    res.render('admin/fraudes/add', { user, datos })
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
 export const editPage = async (req, res) => {
@@ -77,25 +77,25 @@ export const editPage = async (req, res) => {
     const resultOficinas = await axios.get('http://localhost:8000/api/oficinas')
     const arrOficinas = resultOficinas.data.dat
 
-    // formularios
-    const result = await axios.post('http://localhost:8000/api/formulario', {
+    // fraudes
+    const result = await axios.post('http://localhost:8000/api/fraude', {
       id: req.params.id,
     })
 
     const documento = {
-      iddocu: result.data.iddocu,
-      fecdoc: result.data.fecdoc,
+      idfrau: result.data.idfrau,
+      fecfra: result.data.fecfra,
       nifcon: result.data.nifcon,
       nomcon: result.data.nomcon,
       emacon: result.data.emacon,
       telcon: result.data.telcon,
       movcon: result.data.movcon,
-      refdoc: result.data.refdoc,
-      tipdoc: result.data.tipdoc,
-      ejedoc: result.data.ejedoc,
-      ofidoc: result.data.ofidoc,
-      obsdoc: result.data.obsdoc,
-      fundoc: result.data.fundoc,
+      reffra: result.data.reffra,
+      tipfra: result.data.tipfra,
+      ejefra: result.data.ejefra,
+      ofifra: result.data.ofifra,
+      obsfra: result.data.obsfra,
+      funfra: result.data.funfra,
       liqdoc: result.data.liqdoc,
     }
     const datos = {
@@ -104,27 +104,27 @@ export const editPage = async (req, res) => {
       arrOficinas,
     }
 
-    res.render('admin/formularios/edit', { user, datos })
+    res.render('admin/fraudes/edit', { user, datos })
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
-export const insertFormulario = async (req, res) => {
+export const insertFraude = async (req, res) => {
   const user = req.user
 
   const documento = {
-    fecha: req.body.fecdoc,
+    fecha: req.body.fecfra,
     nif: req.body.nifcon,
     nombre: req.body.nomcon,
     email: req.body.emacon,
     telefono: req.body.telcon,
     movil: req.body.movcon,
-    //referencia: req.body.refdoc,
-    tipo: req.body.tipdoc,
-    ejercicio: req.body.ejedoc,
-    oficina: req.body.ofidoc,
-    observaciones: req.body.obsdoc,
-    funcionario: req.body.fundoc,
+    //referencia: req.body.reffra,
+    tipo: req.body.tipfra,
+    ejercicio: req.body.ejefra,
+    oficina: req.body.ofifra,
+    observaciones: req.body.obsfra,
+    funcionario: req.body.funfra,
     liquidador: 'PEND',
     estado: estadosDocumento.pendiente,
   }
@@ -135,20 +135,20 @@ export const insertFormulario = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8000/api/formularios/insert',
+      'http://localhost:8000/api/fraudes/insert',
       {
         documento,
         movimiento,
       }
     )
 
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   } catch (error) {
     let msg =
-      'No se ha podido crear el formulario. Verifique los datos introducidos'
+      'No se ha podido crear el fraude. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = 'El formulario ya existe. Verifique la referencia'
+      msg = 'El fraude ya existe. Verifique la referencia'
     }
 
     try {
@@ -168,29 +168,29 @@ export const insertFormulario = async (req, res) => {
         arrOficinas,
       }
 
-      res.render('admin/formularios/add', { user, datos, alerts: [{ msg }] })
+      res.render('admin/fraudes/add', { user, datos, alerts: [{ msg }] })
     } catch (error) {
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     }
   }
 }
-export const updateFormulario = async (req, res) => {
+export const updatefraude = async (req, res) => {
   const user = req.user
 
   const documento = {
-    id: req.body.iddocu,
-    fecha: req.body.fecdoc,
+    id: req.body.idfrau,
+    fecha: req.body.fecfra,
     nif: req.body.nifcon,
     nombre: req.body.nomcon,
     email: req.body.emacon,
     telefono: req.body.telcon,
     movil: req.body.movcon,
-    referencia: req.body.refdoc,
-    tipo: req.body.tipdoc,
-    ejercicio: req.body.ejedoc,
-    oficina: req.body.ofidoc,
-    observaciones: req.body.obsdoc,
-    funcionario: req.body.fundoc,
+    referencia: req.body.reffra,
+    tipo: req.body.tipfra,
+    ejercicio: req.body.ejefra,
+    oficina: req.body.ofifra,
+    observaciones: req.body.obsfra,
+    funcionario: req.body.funfra,
   }
   const movimiento = {
     usuarioMov: user.id,
@@ -199,20 +199,20 @@ export const updateFormulario = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8000/api/formularios/update',
+      'http://localhost:8000/api/fraudes/update',
       {
         documento,
         movimiento,
       }
     )
 
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   } catch (error) {
     let msg =
-      'No se ha podido actualizar el formulario. Verifique los datos introducidos'
+      'No se ha podido actualizar el fraude. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = 'El formulario ya existe. Verifique la referencia'
+      msg = 'El fraude ya existe. Verifique la referencia'
     }
 
     try {
@@ -232,16 +232,16 @@ export const updateFormulario = async (req, res) => {
         arrOficinas,
       }
 
-      res.render('admin/formularios/edit', { user, datos, alerts: [{ msg }] })
+      res.render('admin/fraudes/edit', { user, datos, alerts: [{ msg }] })
     } catch (error) {
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     }
   }
 }
-export const deleteFormulario = async (req, res) => {
+export const deletefraude = async (req, res) => {
   const user = req.user
   const documento = {
-    id: req.body.iddocu,
+    id: req.body.idfrau,
   }
   const movimiento = {
     usuarioMov: user.id,
@@ -250,77 +250,77 @@ export const deleteFormulario = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8000/api/formularios/delete',
+      'http://localhost:8000/api/fraudes/delete',
       {
         documento,
         movimiento,
       }
     )
 
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
-export const asignarFormulario = async (req, res) => {
+export const asignarfraude = async (req, res) => {
   const user = req.user
   const documento = {
-    id: req.body.iddocu,
+    id: req.body.idfrau,
     liquidador: user.userID,
     estado: estadosDocumento.asignado,
   }
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.asignarFormulario,
+    tipoMov: tiposMovimiento.asignarfraude,
   }
 
   try {
-    // estado formulario
-    const resul = await axios.post('http://localhost:8000/api/formulario', {
-      id: req.body.iddocu,
+    // estado fraude
+    const resul = await axios.post('http://localhost:8000/api/fraude', {
+      id: req.body.idfrau,
     })
 
-    if (resul.data.stadoc === estadosDocumento.pendiente) {
+    if (resul.data.stafra === estadosDocumento.pendiente) {
       const result = await axios.post(
-        'http://localhost:8000/api/formularios/cambioEstado',
+        'http://localhost:8000/api/fraudes/cambioEstado',
         {
           documento,
           movimiento,
         }
       )
 
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     } else {
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     }
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
-export const resolverFormulario = async (req, res) => {
+export const resolverfraude = async (req, res) => {
   const user = req.user
 
   if (req.body.chkenv) {
   }
   const documento = {
-    id: req.body.iddocu,
+    id: req.body.idfrau,
     liquidador: user.userID,
     estado: estadosDocumento.resuelto,
   }
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.resolverFormulario,
+    tipoMov: tiposMovimiento.resolverfraude,
   }
 
   try {
-    // estado formulario
-    const resul = await axios.post('http://localhost:8000/api/formulario', {
-      id: req.body.iddocu,
+    // estado fraude
+    const resul = await axios.post('http://localhost:8000/api/fraude', {
+      id: req.body.idfrau,
     })
     // cambiar estado
-    if (resul.data.stadoc === estadosDocumento.asignado) {
+    if (resul.data.stafra === estadosDocumento.asignado) {
       const result = await axios.post(
-        'http://localhost:8000/api/formularios/cambioEstado',
+        'http://localhost:8000/api/fraudes/cambioEstado',
         {
           documento,
           movimiento,
@@ -333,14 +333,14 @@ export const resolverFormulario = async (req, res) => {
           texto: req.body.texsms,
           movil: req.body.movcon,
           estado: estadosSms.pendiente,
-          idDocumento: req.body.iddocu,
+          idfraumento: req.body.idfrau,
         }
         const movimiento = {
           usuarioMov: user.id,
           tipoMov: tiposMovimiento.crearSms,
         }
         const result = await axios.post(
-          'http://localhost:8000/api/formularios/sms',
+          'http://localhost:8000/api/fraudes/sms',
           {
             sms,
             movimiento,
@@ -348,110 +348,110 @@ export const resolverFormulario = async (req, res) => {
         )
       }
 
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     } else {
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     }
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
-export const remitirFormulario = async (req, res) => {
+export const remitirfraude = async (req, res) => {
   const user = req.user
   const documento = {
-    id: req.body.iddocu,
+    id: req.body.idfrau,
     liquidador: user.userID,
     estado: estadosDocumento.remitido,
   }
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.remitirFormulario,
+    tipoMov: tiposMovimiento.remitirfraude,
   }
 
   try {
-    // estado formulario
-    const resul = await axios.post('http://localhost:8000/api/formulario', {
-      id: req.body.iddocu,
+    // estado fraude
+    const resul = await axios.post('http://localhost:8000/api/fraude', {
+      id: req.body.idfrau,
     })
 
-    if (resul.data.stadoc === estadosDocumento.asignado) {
+    if (resul.data.stafra === estadosDocumento.asignado) {
       const result = await axios.post(
-        'http://localhost:8000/api/formularios/cambioEstado',
+        'http://localhost:8000/api/fraudes/cambioEstado',
         {
           documento,
           movimiento,
         }
       )
 
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     } else {
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     }
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
-export const desadjudicarFormulario = async (req, res) => {
+export const desadjudicarfraude = async (req, res) => {
   const user = req.user
   const documento = {
-    id: req.body.iddocu,
+    id: req.body.idfrau,
     liquidador: 'PEND',
     estado: estadosDocumento.pendiente,
   }
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.desasignarFormulario,
+    tipoMov: tiposMovimiento.desasignarfraude,
   }
 
   try {
-    // estado formulario
-    const resul = await axios.post('http://localhost:8000/api/formulario', {
-      id: req.body.iddocu,
+    // estado fraude
+    const resul = await axios.post('http://localhost:8000/api/fraude', {
+      id: req.body.idfrau,
     })
 
     if (
-      resul.data.stadoc === estadosDocumento.asignado ||
-      resul.data.stadoc === estadosDocumento.resuelto ||
-      resul.data.stadoc === estadosDocumento.remitido
+      resul.data.stafra === estadosDocumento.asignado ||
+      resul.data.stafra === estadosDocumento.resuelto ||
+      resul.data.stafra === estadosDocumento.remitido
     ) {
       const result = await axios.post(
-        'http://localhost:8000/api/formularios/cambioEstado',
+        'http://localhost:8000/api/fraudes/cambioEstado',
         {
           documento,
           movimiento,
         }
       )
 
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     } else {
       // TODO mensaje
-      res.redirect('/admin/formularios')
+      res.redirect('/admin/fraudes')
     }
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
 export const verTodo = async (req, res) => {
   const user = req.user
   const documento = {
-    stadoc: tiposVisualizacion.todos,
+    stafra: tiposVisualizacion.todos,
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/formularios', {
+    const result = await axios.post('http://localhost:8000/api/fraudes', {
       documento,
     })
 
     const datos = { documentos: result.data.dat }
-    res.render('admin/formularios', { user, datos })
+    res.render('admin/fraudes', { user, datos })
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
 export const sms = async (req, res) => {
   const user = req.user
   const sms = {
-    idDocumento: req.body.docsms,
+    idfraumento: req.body.docsms,
     texto: req.body.texsms,
     movil: req.body.movsms,
     estado: estadosDocumento.pendiente,
@@ -462,17 +462,14 @@ export const sms = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(
-      'http://localhost:8000/api/formularios/sms',
-      {
-        sms,
-        movimiento,
-      }
-    )
+    const result = await axios.post('http://localhost:8000/api/fraudes/sms', {
+      sms,
+      movimiento,
+    })
 
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
 export const updatePerfil = async (req, res) => {
@@ -494,7 +491,7 @@ export const updatePerfil = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8000/api/formularios/updatePerfil',
+      'http://localhost:8000/api/fraudes/updatePerfil',
       {
         usuario,
         movimiento,
@@ -522,9 +519,9 @@ export const updatePerfil = async (req, res) => {
     }
 
     res.cookie('auth', accessToken, options)
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
 export const changePassword = async (req, res) => {
@@ -541,15 +538,15 @@ export const changePassword = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8000/api/formularios/cambio',
+      'http://localhost:8000/api/fraudes/cambio',
       {
         usuario,
         movimiento,
       }
     )
 
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }

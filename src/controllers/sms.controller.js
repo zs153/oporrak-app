@@ -1,146 +1,162 @@
-import axios from "axios";
-import { estadosSms, tiposMovimiento } from "../public/js/enumeraciones";
+import axios from 'axios'
+import {
+  arrEstadosSms,
+  estadosSms,
+  tiposMovimiento,
+} from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
 
   try {
-    const result = await axios.get("http://localhost:8000/api/smss");
+    const result = await axios.get('http://localhost:8000/api/smss')
 
-    const datos = { oficinas: result.data.dat };
-    res.render("admin/smss", { user, datos });
+    const datos = { smss: result.data.dat }
+    res.render('admin/smss', { user, datos })
   } catch (error) {
-    res.redirect("/");
+    res.redirect('/')
   }
-};
+}
 export const addPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
-    id: 0,
-    texto: "",
-    movil: "",
-  };
+    idsmss: 0,
+    texsms: '',
+    movsms: '',
+    stasms: 0,
+  }
 
   try {
     const datos = {
       sms,
-    };
+      arrEstadosSms,
+    }
 
-    res.render("admin/smss/add", { user, datos });
+    res.render('admin/smss/add', { user, datos })
   } catch (error) {
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   }
-};
+}
 export const editPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
 
   try {
-    const result = await axios.post("http://localhost:8000/api/sms", {
+    const result = await axios.post('http://localhost:8000/api/sms', {
       id: req.params.id,
-    });
+    })
 
     const sms = {
-      id: result.data.idsmss,
-      texto: result.data.texsms,
-      movil: result.data.movsms,
-      estado: result.data.stasms,
-    };
+      idsmss: result.data.idsmss,
+      texsms: result.data.texsms,
+      movsms: result.data.movsms,
+      stasms: result.data.stasms,
+    }
 
     const datos = {
       sms,
-    };
+      arrEstadosSms,
+    }
 
-    res.render("admin/smss/edit", { user, datos });
+    res.render('admin/smss/edit', { user, datos })
   } catch (error) {
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   }
-};
+}
 export const insertSms = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
     texto: req.body.texsms,
-    movil: req.body.movdoc,
+    movil: req.body.movsms,
     estado: estadosSms.pendiente,
     idDocumento: req.body.iddocu,
+  }
+  const movimiento = {
     usuarioMov: user.id,
     tipoMov: tiposMovimiento.crearSms,
-  };
+  }
 
   try {
-    const result = await axios.post("http://localhost:8000/api/smss/insert", {
-      user,
+    const result = await axios.post('http://localhost:8000/api/smss/insert', {
       sms,
-    });
+      movimiento,
+    })
 
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   } catch (error) {
-    let msg = "No se ha podido crear el sms. Verifique los datos introducidos";
+    let msg = 'No se ha podido crear el sms. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = "La sms ya existe.";
+      msg = 'La sms ya existe.'
     }
     try {
       const datos = {
-        sms,
-      };
+        sms: req.body,
+        arrEstadosSms,
+      }
 
-      res.render("admin/smss/add", { user, datos, alerts: [{ msg }] });
+      res.render('admin/smss/add', { user, datos, alerts: [{ msg }] })
     } catch (error) {
-      res.redirect("/admin/smss");
+      res.redirect('/admin/smss')
     }
   }
-};
+}
 export const updateSms = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
     id: req.body.idsmss,
-    movil: req.body.movdoc,
-    estado: req.body.stadoc,
+    texto: req.body.texsms,
+    movil: req.body.movsms,
+    estado: req.body.stasms,
+  }
+  const movimiento = {
     usuarioMov: user.id,
     tipoMov: tiposMovimiento.modificarSms,
-  };
+  }
   try {
-    const result = await axios.post("http://localhost:8000/api/smss/update", {
-      user,
+    const result = await axios.post('http://localhost:8000/api/smss/update', {
       sms,
-    });
+      movimiento,
+    })
 
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   } catch (error) {
     let msg =
-      "No se han podido modificar los datos del sms. Verifique los datos introducidos";
+      'No se han podido modificar los datos del sms. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = "El sms ya existe";
+      msg = 'El sms ya existe'
     }
 
     try {
       const datos = {
-        sms,
-      };
+        sms: req.body,
+        arrEstadosSms,
+      }
 
-      res.render("admin/smss/edit", { user, datos, alerts: [{ msg }] });
+      res.render('admin/smss/edit', { user, datos, alerts: [{ msg }] })
     } catch (error) {
-      res.redirect("/admin/smss");
+      res.redirect('/admin/smss')
     }
   }
-};
+}
 export const deleteSms = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
     id: req.body.idsmss,
+  }
+  const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.borrarSms,
-  };
+    tipoMov: tiposMovimiento.modificarSms,
+  }
 
   try {
-    const result = await axios.post("http://localhost:8000/api/smss/delete", {
-      user,
+    const result = await axios.post('http://localhost:8000/api/smss/delete', {
       sms,
-    });
+      movimiento,
+    })
 
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   } catch (error) {
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   }
-};
+}
