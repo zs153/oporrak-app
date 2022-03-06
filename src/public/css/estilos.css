@@ -2430,7 +2430,7 @@ a.avatar {
   -webkit-margin-end: -0.25rem;
   margin-inline-end: -0.25rem;
 }
-.btn-primary,
+/* .btn-primary,
 .btn-secondary,
 .btn-success,
 .btn-info,
@@ -2466,6 +2466,44 @@ a.avatar {
 .btn-tabler {
   background-color: rgba(var(--tblr-btn-color), 1);
   color: var(--tblr-btn-color-text);
+} */
+.btn-tabler,
+.btn-bitbucket,
+.btn-flickr,
+.btn-rss,
+.btn-vk,
+.btn-pinterest,
+.btn-instagram,
+.btn-github,
+.btn-dribbble,
+.btn-vimeo,
+.btn-youtube,
+.btn-google,
+.btn-linkedin,
+.btn-twitter,
+.btn-facebook,
+.btn-cyan,
+.btn-teal,
+.btn-green,
+.btn-lime,
+.btn-yellow,
+.btn-orange,
+.btn-red,
+.btn-pink,
+.btn-purple,
+.btn-indigo,
+.btn-azure,
+.btn-blue,
+.btn-muted,
+.btn-dark,
+.btn-light,
+.btn-danger,
+.btn-warning,
+.btn-info,
+.btn-success,
+.btn-secondary,
+.btn-primary {
+  border-color: rgba(98, 105, 118, 0.24);
 }
 .btn-primary .icon,
 .btn-secondary .icon,
@@ -2503,7 +2541,7 @@ a.avatar {
 .btn-tabler .icon {
   color: inherit;
 }
-.btn-primary:hover,
+/* .btn-primary:hover,
 .btn-secondary:hover,
 .btn-success:hover,
 .btn-info:hover,
@@ -2540,6 +2578,46 @@ a.avatar {
   color: var(--tblr-btn-color-text);
   background: rgba(var(--tblr-btn-color-darker), 1);
   border-color: transparent;
+} */
+.btn-tabler:hover,
+.btn-bitbucket:hover,
+.btn-flickr:hover,
+.btn-rss:hover,
+.btn-vk:hover,
+.btn-pinterest:hover,
+.btn-instagram:hover,
+.btn-github:hover,
+.btn-dribbble:hover,
+.btn-vimeo:hover,
+.btn-youtube:hover,
+.btn-google:hover,
+.btn-linkedin:hover,
+.btn-twitter:hover,
+.btn-facebook:hover,
+.btn-cyan:hover,
+.btn-teal:hover,
+.btn-green:hover,
+.btn-lime:hover,
+.btn-yellow:hover,
+.btn-orange:hover,
+.btn-red:hover,
+.btn-pink:hover,
+.btn-purple:hover,
+.btn-indigo:hover,
+.btn-azure:hover,
+.btn-blue:hover,
+.btn-muted:hover,
+.btn-dark:hover,
+.btn-light:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.btn-info:hover,
+.btn-success:hover,
+.btn-secondary:hover,
+.btn-primary:hover {
+  color: var(--tblr-btn-color-text);
+  background: var(--tblr-btn-color-interactive);
+  border-color: var(--tblr-btn-color);
 }
 .btn-primary,
 .btn-outline-primary,
@@ -3427,14 +3505,6 @@ td:hover div.popup {
   border: 1px solid #ccc;
   margin: 20px -100px 20px;
   z-index: 9999;
-}
-
-.btn-danger,
-.btn-outline-danger,
-.btn-ghost-danger {
-  --tblr-btn-color: 214, 57, 57;
-  --tblr-btn-color-darker: 193, 51, 51;
-  --tblr-btn-color-text: #f4f6fa;
 }
 
 /* modal */
@@ -4688,31 +4758,37 @@ ALERTAS
 .btn-primary,
 .btn-outline-primary,
 .btn-ghost-primary {
-  --tblr-btn-color: 32, 107, 196;
-  --tblr-btn-color-darker: 29, 96, 176;
-  --tblr-btn-color-text: #f4f6fa;
+  --tblr-btn-color: #206bc4;
+  --tblr-btn-color-interactive: #1d60b0;
+  --tblr-btn-color-text: #fafbfc;
 }
+
 .btn-secondary,
 .btn-outline-secondary,
 .btn-ghost-secondary {
-  --tblr-btn-color: 101, 109, 119;
-  --tblr-btn-color-darker: 91, 98, 107;
-  --tblr-btn-color-text: #f4f6fa;
+  --tblr-btn-color: #626976;
+  --tblr-btn-color-interactive: #585f6a;
+  --tblr-btn-color-text: #fafbfc;
 }
-
 .btn-success,
 .btn-outline-success,
 .btn-ghost-success {
-  --tblr-btn-color: 47, 179, 68;
-  --tblr-btn-color-darker: 42, 161, 61;
-  --tblr-btn-color-text: #f4f6fa;
+  --tblr-btn-color: #2fb344;
+  --tblr-btn-color-interactive: #2aa13d;
+  --tblr-btn-color-text: #fafbfc;
 }
-
 .btn-warning,
 .btn-outline-warning,
 .btn-ghost-warning {
   --tblr-btn-color: #f76707;
   --tblr-btn-color-interactive: #de5d06;
+  --tblr-btn-color-text: #fafbfc;
+}
+.btn-danger,
+.btn-outline-danger,
+.btn-ghost-danger {
+  --tblr-btn-color: #d63939;
+  --tblr-btn-color-interactive: #c13333;
   --tblr-btn-color-text: #fafbfc;
 }
 

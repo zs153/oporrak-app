@@ -258,7 +258,7 @@
                                       </a>
                                     </li>
                                     <li class="nav-item <%- element.STADOC === 1 ? '' : 'd-none' %>">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('movcon').value ='<%- element.MOVCON %>', document.getElementById('resol').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('movcon').value ='<%- element.MOVCON %>', document.getElementById('resol').value ='<%- element.IDDOCU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
                                         <i class="bi bi-check2 dropdown-item-icon"></i>Resolver formulario
                                       </a>
                                     </li>
@@ -275,7 +275,7 @@
                                     <li class="nav-item list-divider">
                                     </li>
                                     <li class="nav-item <%- element.STADOC === 1 ? '': 'd-none' %>">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
                                         <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
                                       </a>
                                     </li>
@@ -378,57 +378,56 @@
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="modal-status bg-success"></div>
-            <form action="/admin/formularios/resolver" method="POST">
-              <div class="modal-body text-center py-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M9 12l2 2l4 -4"></path>
-                </svg> 
-                <h3>Resolver formulario</h3>
-                <div class="card-header">
-                  SMS
-                </div>
-                <div class="card-body">
-                <div class="row">
-                  <div class="col-4">
-                    <div class="mb-1">
-                      <label class="form-label text-start">Móvil</label>
-                      <input type="text" name="movcon" id="movcon" class="form-control" value="" autofocus/>
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="mb-1">
-                      <label class="form-label text-start">Texto sms</label>
-                      <input type="text" name="texsms" id="textsms" class="form-control" value="" />
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-2">
-                      <label class="form-check form-check-inline">
-                        <input type="checkbox" class="form-check-input" name="chkenv" id="chkenv" />
-                        <span class="form-check-label">Enviar</span>
-                      </label>
-                  </div>
-                </div>
-                </div>
+          <form action="/admin/formularios/resolver" method="POST">
+            <div class="modal-body text-center py-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M9 12l2 2l4 -4"></path>
+              </svg> 
+              <h3>Resolver formulario</h3>
+              <div class="card-header">
+                SMS
               </div>
-              <div class="modal-footer">
-                <div class="w-100">
-                  <div class="row">
-                    <div class="col">
-                      <a href="/admin/formularios" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
-                    </div>
-                    <div class="col">
-                      <input type="hidden" id="resol" name="iddocu" value="">
-                      <button type="submit" class="btn btn-success w-100">Resolver formulario</button>
-                    </div>
+              <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class="mb-1">
+                    <label class="form-label text-start">Móvil</label>
+                    <input type="text" name="movcon" id="movcon" class="form-control" value="" readonly/>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="mb-1">
+                    <label class="form-label text-start">Texto sms</label>
+                    <textarea autofocus name="texsms" id="texsms" class="form-control" value="" maxlength="140" rows="3" style="resize: vertical" ></textarea>
                   </div>
                 </div>
               </div>
-            </form>
-          </div>
+              <div class="row">
+                <div class="col-2 text-start">
+                    <label class="form-check form-check-inline">
+                      <input type="checkbox" class="form-check-input" name="chkenv" id="chkenv" />
+                      <span class="form-check-label">Enviar</span>
+                    </label>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="w-100">
+                <div class="row">
+                  <div class="col">
+                    <a href="/admin/formularios" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                  </div>
+                  <div class="col">
+                    <input type="hidden" id="resol" name="iddocu" value="">
+                    <button type="submit" class="btn btn-success w-100">Resolver formulario</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -455,7 +454,7 @@
                 <div class="col">
                   <form action="/admin/formularios/remitir" method="POST">
                     <input type="hidden" id="remit" name="iddocu" value="">
-                    <button type="submit" class="btn btn-light w-100">Remitir formulario</button>
+                    <button type="submit" class="btn btn-warning w-100">Remitir formulario</button>
                   </form>
                 </div>
               </div>
@@ -596,7 +595,7 @@
                   <div class="col-4">
                     <div class="mb-3">
                       <label class="form-label">Movil</label>
-                      <input type="text" name="movsms" id="movsms" class="form-control" value="" />
+                      <input type="text" name="movsms" id="movsms" class="form-control" value="" readonly/>
                     </div>
                   </div>
                 </div>
@@ -604,7 +603,7 @@
                   <div class="col-12">
                     <div class="mb-3">
                       <label class="form-label">Texto</label>
-                      <input type="text" name="texsms" id="texsms" class="form-control" value="" />
+                      <textarea name="texsms" id="modsms" class="form-control" value="" maxlength="140" rows="3" style="resize: vertical"></textarea>
                     </div>
                   </div>
                 </div>
@@ -622,6 +621,18 @@
 
     <script src="/js/ayuda.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script>
+      function focoRes() {
+        const ele = document.getElementById('texsms')
+
+        ele.focus()
+      }
+      function focoSMS() {
+        const ele = document.getElementById('modsms')
+
+        ele.focus()
+      }        
+    </script>
     <script>
       const messages = document.getElementById('messages')
       const socket = io()

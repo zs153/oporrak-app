@@ -21,6 +21,7 @@ import {
   validateUpdate,
 } from '../middleware/formularioValidator'
 import { check } from 'express-validator'
+
 const formularioRouter = express.Router()
 
 // paginas
