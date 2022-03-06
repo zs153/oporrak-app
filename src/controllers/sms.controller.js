@@ -50,8 +50,8 @@ export const editPage = async (req, res) => {
       texsms: result.data.texsms,
       movsms: result.data.movsms,
       stasms: result.data.stasms,
+      refdoc: result.data.refdoc,
     }
-
     const datos = {
       sms,
       arrEstadosSms,
@@ -65,10 +65,10 @@ export const editPage = async (req, res) => {
 export const insertSms = async (req, res) => {
   const user = req.user
   const sms = {
+    referencia: req.body.refdoc,
     texto: req.body.texsms,
     movil: req.body.movsms,
     estado: estadosSms.pendiente,
-    idDocumento: req.body.iddocu,
   }
   const movimiento = {
     usuarioMov: user.id,
@@ -76,14 +76,25 @@ export const insertSms = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/smss/insert', {
+    // referencia
+    const result = await axios.post(
+      'http://localhost:8000/api/formularios/referencia',
+      {
+        referencia: sms.referencia,
+      }
+    )
+    const documento = {
+      idDocumento: result.data.iddocu,
+    }
+    await axios.post('http://localhost:8000/api/smss/insert', {
       sms,
+      documento,
       movimiento,
     })
 
     res.redirect('/admin/smss')
   } catch (error) {
-    let msg = 'No se ha podido crear el sms. Verifique los datos introducidos'
+    let msg = 'No se ha podido crear el sms. Verifique la referencia'
 
     if (error.response.data.errorNum === 20100) {
       msg = 'La sms ya existe.'
@@ -146,7 +157,7 @@ export const deleteSms = async (req, res) => {
   }
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.modificarSms,
+    tipoMov: tiposMovimiento.borrarSms,
   }
 
   try {

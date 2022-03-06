@@ -62,14 +62,9 @@ formularioRouter.post(
           return true
         }
       })
-      .withMessage(
-        'Introduzca un NIF/NIE válido (rellene la parte númerica con 0 a la izquierda)'
-      ),
+      .withMessage('Introduzca un NIF/NIE válido'),
     check('nomcon').not().isEmpty().withMessage('Debe introducir nombre'),
-    check('telcon').not().isEmpty().withMessage('Debe introducir un teléfono'),
     check('movcon')
-      .isLength({ min: 9, max: 9 })
-      .withMessage('El número de movil debe de tener 9 dígitos')
       .matches(/^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/)
       .withMessage('Introduzca un número de movil válido'),
     check('ejedoc')
@@ -111,20 +106,13 @@ formularioRouter.post(
         const pos = parseInt(dniNumero) % 23
         const letra = strBase.slice(pos, pos + 1)
 
-        console.log(nuevoNif, dniLetra, pos, letra)
-
         if (dniLetra === letra) {
           return true
         }
       })
-      .withMessage(
-        'Introduzca un NIF/NIE válido (rellene la parte númerica con 0 a la izquierda)'
-      ),
+      .withMessage('Introduzca un NIF/NIE válido'),
     check('nomcon').not().isEmpty().withMessage('Debe introducir nombre'),
-    check('telcon').not().isEmpty().withMessage('Debe introducir un teléfono'),
     check('movcon')
-      .isLength({ min: 9, max: 9 })
-      .withMessage('El número de movil debe de tener 9 dígitos')
       .matches(/^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/)
       .withMessage('Introduzca un número de movil válido'),
     check('ejedoc')

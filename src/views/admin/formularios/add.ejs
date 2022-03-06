@@ -107,6 +107,9 @@
                 <a href="/admin/usuarios" class="dropdown-item">
                   <i class="bi bi-people dropdown-item-icon"></i>Usuarios
                 </a>
+                <a href="/admin/smss" class="dropdown-item">
+                  <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                </a>
                 <div class="dropdown-divider"></div>
                 <a href="/admin/estadistica" class="dropdown-item">
                   <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
@@ -255,22 +258,22 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      const messages = document.getElementById('messages')
-      const socket = io()
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const messages = document.getElementById('messages')
+    const socket = io()
 
-      socket.on('receive-message', msg => {
-        const li = document.createElement('li')
-        li.textContent = msg
-        messages.appendChild(li)
+    socket.on('receive-message', msg => {
+      const li = document.createElement('li')
+      li.textContent = msg
+      messages.appendChild(li)
 
-        const toggleBadge = document.querySelector('#toggleBadge');
-        const numeroMensajes = messages.getElementsByTagName("li").length
-        if (numeroMensajes === 1) {
-          toggleBadge.classList.toggle('d-none')
-        }
-      })
-    </script>
+      const toggleBadge = document.querySelector('#toggleBadge');
+      const numeroMensajes = messages.getElementsByTagName("li").length
+      if (numeroMensajes === 1) {
+        toggleBadge.classList.toggle('d-none')
+      }
+    })
+  </script>
 </body>
 </html>
