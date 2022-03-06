@@ -112,27 +112,34 @@ export const editPage = async (req, res) => {
 export const insertFormulario = async (req, res) => {
   const user = req.user
 
+  const referencia =
+    'D' +
+    randomString(
+      10,
+      '123456789012345678901234567890123456789012345678901234567890abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ'
+    )
+
   const documento = {
-    fecha: req.body.fecdoc,
-    nif: req.body.nifcon,
-    nombre: req.body.nomcon,
-    email: req.body.emacon,
-    telefono: req.body.telcon,
-    movil: req.body.movcon,
-    //referencia: req.body.refdoc,
-    tipo: req.body.tipdoc,
-    ejercicio: req.body.ejedoc,
-    oficina: req.body.ofidoc,
-    observaciones: req.body.obsdoc,
-    funcionario: req.body.fundoc,
-    liquidador: 'PEND',
-    estado: estadosDocumento.pendiente,
+    fecdoc: req.body.fecdoc.toISOString().slice(0, 10),
+    nifcon: req.body.nifcon,
+    nomcon: req.body.nomcon,
+    emacon: req.body.emacon,
+    telcon: req.body.telcon,
+    movcon: req.body.movcon,
+    refdoc: referencia,
+    tipdoc: req.body.tipdoc,
+    ejedoc: req.body.ejedoc,
+    ofidoc: req.body.ofidoc,
+    obsdoc: req.body.obsdoc,
+    fundoc: req.body.fundoc,
+    liqdoc: 'PEND',
+    stadoc: estadosDocumento.pendiente,
   }
   const movimiento = {
     usuarioMov: user.id,
     tipoMov: tiposMovimiento.crearDocumento,
   }
-
+  console.log(documento)
   try {
     const result = await axios.post(
       'http://localhost:8000/api/formularios/insert',
@@ -148,7 +155,7 @@ export const insertFormulario = async (req, res) => {
       'No se ha podido crear el formulario. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = 'El formulario ya existe. Verifique la referencia'
+      msg = 'El formulario ya existe.'
     }
 
     try {
@@ -178,19 +185,19 @@ export const updateFormulario = async (req, res) => {
   const user = req.user
 
   const documento = {
-    id: req.body.iddocu,
-    fecha: req.body.fecdoc,
-    nif: req.body.nifcon,
-    nombre: req.body.nomcon,
-    email: req.body.emacon,
-    telefono: req.body.telcon,
-    movil: req.body.movcon,
-    referencia: req.body.refdoc,
-    tipo: req.body.tipdoc,
-    ejercicio: req.body.ejedoc,
-    oficina: req.body.ofidoc,
-    observaciones: req.body.obsdoc,
-    funcionario: req.body.fundoc,
+    iddocu: req.body.iddocu,
+    fecdoc: req.body.fecdoc.toISOString().slice(0, 10),
+    nifcon: req.body.nifcon,
+    nomcon: req.body.nomcon,
+    emacon: req.body.emacon,
+    telcon: req.body.telcon,
+    movcon: req.body.movcon,
+    refdoc: req.body.refdoc,
+    tipdoc: req.body.tipdoc,
+    ejedoc: req.body.ejedoc,
+    ofidoc: req.body.ofidoc,
+    obsdoc: req.body.obsdoc,
+    fundoc: req.body.fundoc,
   }
   const movimiento = {
     usuarioMov: user.id,
@@ -552,4 +559,13 @@ export const changePassword = async (req, res) => {
   } catch (error) {
     res.redirect('/admin/formularios')
   }
+}
+
+// helpers
+function randomString(long, chars) {
+  let result = ''
+  for (let i = long; i > 0; --i) {
+    result += chars[Math.floor(Math.random() * chars.length)]
+  }
+  return result
 }

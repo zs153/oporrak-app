@@ -2112,6 +2112,10 @@ table {
   top: 0;
   z-index: 2;
 }
+.table-striped > tbody > tr:nth-of-type(even) > * {
+  --tblr-table-accent-bg: var(--tblr-table-striped-bg);
+  color: var(--tblr-table-striped-color);
+}
 th {
   text-align: inherit;
   text-align: -webkit-match-parent;
