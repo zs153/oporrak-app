@@ -17,7 +17,7 @@ export const mainPage = async (req, res) => {
     const result = await axios.post('http://localhost:8000/api/formularios', {
       documento,
     })
-
+    console.log(result.data.dat)
     const datos = { documentos: result.data.dat }
     res.render('admin/formularios', { user, datos })
   } catch (error) {
@@ -116,7 +116,7 @@ export const insertFormulario = async (req, res) => {
     'D' +
     randomString(
       10,
-      '123456789012345678901234567890123456789012345678901234567890abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ'
+      '1234567890abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ'
     )
 
   const documento = {

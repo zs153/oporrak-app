@@ -151,16 +151,16 @@
                     </div>                    
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-fixHead" id="tblDocumentos">
+                    <table class="table table-vcenter table-striped" id="tblDocumentos">
                       <thead>
                       <tr>
                         <th>Oficina</th>
                         <th>Fecha</th>
                         <th>Referencia</th>
                         <th>NIF</th>
-                        <th class="w-25">Nombre</th>
-                        <th class="w-15">Tipo</th>
-                        <th class="w-20">Observaciones</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Observaciones</th>
                         <th class="w-5"></th>
                       </tr>
                       </thead>
@@ -229,7 +229,9 @@
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.OBSDOC %></div>
+                                  <% if (element.OBSDOC !== null) { %>
+                                    <div class="font-weight-medium"><%- element.OBSDOC.slice(0,20) + '...' %></div>
+                                  <% }%>
                                 </div>
                               </div>
                             </td>
@@ -672,6 +674,6 @@
         password.setAttribute('type', type);
         this.classList.toggle("bi-eye");
       });        
-    </script>   
+    </script>
   </body>
 </html>
