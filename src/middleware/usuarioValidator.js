@@ -1,4 +1,4 @@
-import { body, check, validationResult } from 'express-validator'
+import { validationResult } from 'express-validator'
 import axios from 'axios'
 import {
   arrTiposRol,

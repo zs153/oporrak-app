@@ -7,7 +7,7 @@ import {
   tiposVisualizacion,
 } from '../public/js/enumeraciones'
 
-export const mainPage = async (req, res) => {
+export const mainPageFraude = async (req, res) => {
   const user = req.user
   const documento = {
     stafra: tiposVisualizacion.resueltos,
@@ -24,7 +24,7 @@ export const mainPage = async (req, res) => {
     res.redirect('/')
   }
 }
-export const addPage = async (req, res) => {
+export const addPageFraude = async (req, res) => {
   const user = req.user
   const fecha = new Date()
 
@@ -59,13 +59,13 @@ export const addPage = async (req, res) => {
       arrTipos,
       arrOficinas,
     }
-
+    console.log(documento)
     res.render('admin/fraudes/add', { user, datos })
   } catch (error) {
     res.redirect('/admin/fraudes')
   }
 }
-export const editPage = async (req, res) => {
+export const editPageFraude = async (req, res) => {
   const user = req.user
 
   try {
@@ -174,7 +174,7 @@ export const insertFraude = async (req, res) => {
     }
   }
 }
-export const updatefraude = async (req, res) => {
+export const updateFraude = async (req, res) => {
   const user = req.user
 
   const documento = {
@@ -238,7 +238,7 @@ export const updatefraude = async (req, res) => {
     }
   }
 }
-export const deletefraude = async (req, res) => {
+export const deleteFraude = async (req, res) => {
   const user = req.user
   const documento = {
     id: req.body.idfrau,
@@ -262,7 +262,7 @@ export const deletefraude = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const asignarfraude = async (req, res) => {
+export const asignarFraude = async (req, res) => {
   const user = req.user
   const documento = {
     id: req.body.idfrau,
@@ -297,7 +297,7 @@ export const asignarfraude = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const resolverfraude = async (req, res) => {
+export const resolverFraude = async (req, res) => {
   const user = req.user
 
   if (req.body.chkenv) {
@@ -356,7 +356,7 @@ export const resolverfraude = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const remitirfraude = async (req, res) => {
+export const remitirFraude = async (req, res) => {
   const user = req.user
   const documento = {
     id: req.body.idfrau,
@@ -391,7 +391,7 @@ export const remitirfraude = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const desadjudicarfraude = async (req, res) => {
+export const desadjudicarFraude = async (req, res) => {
   const user = req.user
   const documento = {
     id: req.body.idfrau,
@@ -431,7 +431,7 @@ export const desadjudicarfraude = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const verTodo = async (req, res) => {
+export const verTodoFraude = async (req, res) => {
   const user = req.user
   const documento = {
     stafra: tiposVisualizacion.todos,
@@ -448,7 +448,7 @@ export const verTodo = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const sms = async (req, res) => {
+export const smsFraude = async (req, res) => {
   const user = req.user
   const sms = {
     idfraumento: req.body.docsms,
@@ -472,7 +472,7 @@ export const sms = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const updatePerfil = async (req, res) => {
+export const updatePerfilFraude = async (req, res) => {
   const user = req.user
   const usuario = {
     id: user.id,
@@ -524,7 +524,7 @@ export const updatePerfil = async (req, res) => {
     res.redirect('/admin/fraudes')
   }
 }
-export const changePassword = async (req, res) => {
+export const changePasswordFraude = async (req, res) => {
   const user = req.user
 
   const usuario = {

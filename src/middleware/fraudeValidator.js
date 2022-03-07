@@ -24,29 +24,31 @@ export const validateInsert = async (req, res, next) => {
     const arrOficinas = resultOficinas.data.dat
 
     const documento = {
-      fecdoc: new Date(req.body.fecdoc).toISOString().substring(0, 10),
+      idfrau: req.body.idfrau,
+      fecfra: new Date(req.body.fecfra).toISOString().substring(0, 10),
       nifcon: req.body.nifcon,
       nomcon: req.body.nomcon,
-      telcon: req.body.telcon,
       emacon: req.body.emacon,
+      telcon: req.body.telcon,
       movcon: req.body.movcon,
-      refdoc: req.body.refdoc,
-      tipdoc: req.body.tipdoc,
-      ejedoc: req.body.ejedoc,
-      ofidoc: req.body.ofidoc,
-      obsdoc: req.body.obsdoc,
-      bosdoc: req.body.obsdoc,
-      fundoc: req.body.fundoc,
+      reffra: req.body.reffra,
+      tipfra: req.body.tipfra,
+      ejefra: req.body.ejefra,
+      ofifra: req.body.ofifra,
+      obsfra: req.body.obsfra,
+      funfra: req.body.funfra,
+      liqfra: req.body.liqfra,
     }
+    console.log(req.body)
 
     const datos = {
-      documento,
+      documento: req.body,
       arrTipos,
       arrOficinas,
     }
-    res.render('admin/formularios/add', { user, datos, alerts })
+    res.render('admin/fraudes/add', { user, datos, alerts })
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }
 
@@ -73,29 +75,29 @@ export const validateUpdate = async (req, res, next) => {
     const arrOficinas = resultOficinas.data.dat
 
     const documento = {
-      iddocu: req.body.iddocu,
-      fecdoc: new Date(req.body.fecdoc).toISOString().substring(0, 10),
+      idfrau: req.body.idfrau,
+      fecfra: new Date(req.body.fecfra).toISOString().substring(0, 10),
       nifcon: req.body.nifcon,
       nomcon: req.body.nomcon,
       emacon: req.body.emacon,
       telcon: req.body.telcon,
       movcon: req.body.movcon,
-      refdoc: req.body.refdoc,
-      tipdoc: req.body.tipdoc,
-      ejedoc: req.body.ejedoc,
-      ofidoc: req.body.ofidoc,
-      obsdoc: req.body.obsdoc,
-      bosdoc: req.body.obsdoc,
-      fundoc: req.body.fundoc,
-      liqdoc: req.body.liqdoc,
+      reffra: req.body.reffra,
+      tipfra: req.body.tipfra,
+      ejefra: req.body.ejefra,
+      ofifra: req.body.ofifra,
+      obsfra: req.body.obsfra,
+      funfra: req.body.funfra,
+      liqfra: req.body.liqfra,
     }
+
     const datos = {
       documento,
       arrTipos,
       arrOficinas,
     }
-    res.render('admin/formularios/edit', { user, datos, alerts })
+    res.render('admin/fraudes/edit', { user, datos, alerts })
   } catch (error) {
-    res.redirect('/admin/formularios')
+    res.redirect('/admin/fraudes')
   }
 }

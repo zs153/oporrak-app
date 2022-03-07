@@ -1,6 +1,5 @@
 import express from 'express'
-import authRoutes, { verifyTokenAndAdmin } from '../middleware/auth'
-import { validationRules, validate } from '../middleware/oficinaValidator'
+import { verifyTokenAndAdmin } from '../middleware/auth'
 import {
   mainPage,
   addPage,
@@ -9,6 +8,8 @@ import {
   updateOficina,
   deleteOficina,
 } from '../controllers/oficina.controller'
+import { check } from 'express-validator'
+import { validateInsert, validateUpdate } from '../middleware/oficinaValidator'
 
 const oficinaRouter = express.Router()
 
@@ -21,15 +22,41 @@ oficinaRouter.get('/oficinas/edit/:id', verifyTokenAndAdmin, editPage)
 oficinaRouter.post(
   '/oficinas/insert',
   verifyTokenAndAdmin,
-  validationRules(),
-  validate,
+  [
+    check('desofi')
+      .not()
+      .isEmpty()
+      .withMessage('Debe introducir descripción')
+      .isLength({ max: 250 })
+      .withMessage('La longitud máxima de 250'),
+    check('codofi')
+      .not()
+      .isEmpty()
+      .withMessage('Debe introducir código')
+      .isLength({ max: 20 })
+      .withMessage('La longitud máxima de 250'),
+  ],
+  validateInsert,
   insertOficina
 )
 oficinaRouter.post(
   '/oficinas/update',
   verifyTokenAndAdmin,
-  validationRules(),
-  validate,
+  [
+    check('desofi')
+      .not()
+      .isEmpty()
+      .withMessage('Debe introducir descripción')
+      .isLength({ max: 250 })
+      .withMessage('La longitud máxima de 250'),
+    check('codofi')
+      .not()
+      .isEmpty()
+      .withMessage('Debe introducir código')
+      .isLength({ max: 20 })
+      .withMessage('La longitud máxima de 250'),
+  ],
+  validateUpdate,
   updateOficina
 )
 oficinaRouter.post('/oficinas/delete', verifyTokenAndAdmin, deleteOficina)

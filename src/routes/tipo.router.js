@@ -8,7 +8,8 @@ import {
   updateTipo,
   deleteTipo,
 } from '../controllers/tipo.controller'
-import { validationRules, validate } from '../middleware/tipoValidator'
+import { validateInsert, validateUpdate } from '../middleware/tipoValidator'
+import { check } from 'express-validator'
 
 const tipoRouter = express.Router()
 
@@ -21,15 +22,41 @@ tipoRouter.get('/tipos/edit/:id', verifyTokenAndAdmin, editPage)
 tipoRouter.post(
   '/tipos/insert',
   verifyTokenAndAdmin,
-  validationRules(),
-  validate,
+  [
+    check('destip')
+      .not()
+      .isEmpty()
+      .withMessage('De introducir descripción')
+      .isLength({ max: 250 })
+      .withMessage('La longitud de la descripción máximo 250'),
+    check('ayutip')
+      .not()
+      .isEmpty()
+      .withMessage('De introducir texto de ayuda')
+      .isLength({ max: 250 })
+      .withMessage('La longitud del texto máximo 4000'),
+  ],
+  validateInsert,
   insertTipo
 )
 tipoRouter.post(
   '/tipos/update',
   verifyTokenAndAdmin,
-  validationRules(),
-  validate,
+  [
+    check('destip')
+      .not()
+      .isEmpty()
+      .withMessage('De introducir descripción')
+      .isLength({ max: 250 })
+      .withMessage('La longitud de la descripción máximo 250'),
+    check('ayutip')
+      .not()
+      .isEmpty()
+      .withMessage('De introducir texto de ayuda')
+      .isLength({ max: 250 })
+      .withMessage('La longitud del texto máximo 4000'),
+  ],
+  validateUpdate,
   updateTipo
 )
 tipoRouter.post('/tipos/delete', verifyTokenAndAdmin, deleteTipo)
