@@ -167,9 +167,9 @@
                       <div class="col-9">
                         <div class="mb-3">
                           <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipcon %>">
+                          <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipdoc %>">
                             <% datos.arrTipos.map(element => { %> 
-                              <option value="<%- element.IDTIPO %>"<%- element.IDTIPO == datos.documento.tipcon ? " selected":"" %>><%- element.DESTIP %> (<%- element.AYUTIP %>)</option>
+                              <option value="<%- element.IDTIPO %>"<%- element.IDTIPO == datos.documento.tipdoc ? " selected":"" %>><%- element.DESTIP %></option>
                             <% }) %> 
                           </select>
                         </div>
@@ -232,6 +232,11 @@
                         </div>
                       </div>
                     </div>
+                    <div class="row">
+                      <h4>
+                        <small id="tipayu" class="form-hint"></small>
+                      </h4>
+                    </div>                    
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
@@ -274,6 +279,25 @@
       if (numeroMensajes === 1) {
         toggleBadge.classList.toggle('d-none')
       }
+    })
+  </script>
+  <script>
+    const combo = document.getElementById('cbotip')
+    const e = document.getElementById('tipayu')
+    const arr = <%- JSON.stringify(datos.arrTipos) %>;
+
+    arr.map(element => {
+      if(element.IDTIPO == combo.value) {
+        document.getElementById('tipayu').innerText = element.AYUTIP
+      }
+    });
+
+    combo.addEventListener('change', () => {
+      arr.map(element => {
+        if(element.IDTIPO == combo.value) {
+          document.getElementById('tipayu').innerText = element.AYUTIP
+        }
+      });
     })
   </script>
 </body>

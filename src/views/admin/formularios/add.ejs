@@ -166,9 +166,9 @@
                       <div class="col-9">
                         <div class="mb-3">
                           <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipcon %>">
+                          <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipdoc %>">
                             <% datos.arrTipos.map(element => { %> 
-                              <option value="<%- element.IDTIPO %>" <%- element.IDTIPO == datos.documento.tipcon ? " selected":"" %>><%- element.DESTIP %></option>
+                              <option value="<%- element.IDTIPO %>" <%- element.IDTIPO == datos.documento.tipdoc ? " selected":"" %>><%- element.DESTIP %></option>
                             <% }) %> 
                           </select>
                         </div>
