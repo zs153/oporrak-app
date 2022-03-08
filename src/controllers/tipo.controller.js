@@ -13,7 +13,6 @@ export const mainPage = async (req, res) => {
 
     const datos = { tipos: result.data.dat, arrOrigenTipo };
 
-    console.log(datos);
     res.render("admin/tipos", { user, datos });
   } catch (error) {
     res.redirect("/");
@@ -133,7 +132,6 @@ export const updateTipo = async (req, res) => {
         arrOrigenTipo,
       };
 
-      console.log(datos);
       res.render("admin/tipos/edit", { user, datos, alerts: [{ msg }] });
     } catch (error) {
       res.redirect("/admin/tipos");

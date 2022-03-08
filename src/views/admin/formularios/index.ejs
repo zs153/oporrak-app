@@ -252,30 +252,29 @@
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar formulario
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STADOC === 0 ? '' : 'd-none' %>">
+                                    <li class="nav-item <%- element.STADOC === 0 ? '' : ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
                                         <i class="bi bi-heart dropdown-item-icon"></i>Asignar formulario
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STADOC === 1 ? '' : 'd-none' %>">
+                                    <li class="nav-item <%- element.STADOC === 1 ? '' : ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('movcon').value ='<%- element.MOVCON %>', document.getElementById('resol').value ='<%- element.IDDOCU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
                                         <i class="bi bi-check2 dropdown-item-icon"></i>Resolver formulario
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STADOC === 1 ? '': 'd-none' %>">
+                                    <li class="nav-item <%- element.STADOC === 1 ? '': ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('remit').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-remitir">
                                         <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Remitir formulario
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STADOC > 1 ? '': 'd-none' %>">
+                                    <li class="nav-item <%- element.STADOC > 1 ? '': ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
                                         <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Desasignar formulario
                                       </a>
                                     </li>
-                                    <li class="nav-item list-divider">
-                                    </li>
-                                    <li class="nav-item <%- element.STADOC === 1 ? '': 'd-none' %>">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                                    <li class="nav-item <%- element.STADOC === 1 ? ' list-divider': ' d-none' %>"></li>
+                                    <li class="nav-item ">
+                                      <a href="#" class="nav-link <%- element.STADOC === 1 ? '': ' d-none' %>" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
                                         <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
                                       </a>
                                     </li>

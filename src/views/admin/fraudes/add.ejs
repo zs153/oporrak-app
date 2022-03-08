@@ -11,6 +11,34 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    /* .input-control {
+      display: flex;
+      flex-direction: column;
+    } */
+    .input-control input {
+      /* border: 2px solid #f0f0f0; */
+      border-radius: 4px;
+      display: block;
+      /* font-size: 12px; */
+      /* padding: 10px; */
+      width: 100%;
+    }
+    .input-control input:focus {
+      outline: 0;      
+    }
+    .input-control.success input {
+      border-color: #09c372;
+    }
+    .input-control.error input {
+      border-color: #ff3860;
+    }
+    .input-control .error {
+      color: #ff3860;
+      font-size: 9px;
+      height: 13px;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -137,7 +165,7 @@
                   </div>
                   <% }) %>
                 <% } %>
-                <form action="/admin/fraudes/insert" method="POST">
+                <form id="form" action="/admin/fraudes/insert" method="POST">
                   <div class="card-header">
                     Fraude
                   </div>
@@ -145,8 +173,11 @@
                     <div class="row">
                       <div class="col-2">
                         <div class="mb-3">
-                          <label class="form-label">NIF/NIE</label>
-                          <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
+                          <div class="input-control">
+                            <label class="form-label">NIF/NIE</label>
+                            <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
+                            <div class="error"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-6">
@@ -279,6 +310,7 @@
     const e = document.getElementById('tipayu')
     const arr = <%- JSON.stringify(datos.arrTipos) %>;
 
+    // inicial
     arr.map(element => {
       if(element.IDTIPO == combo.value) {
         document.getElementById('tipayu').innerText = element.AYUTIP
@@ -292,6 +324,39 @@
         }
       });
     })
-  </script>   
+  </script>
+  <script>
+    const form = document.getElementById('form');
+    const nifcon = document.getElementById('nifcon')
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      validateInput();
+    })
+
+    const validateInput = () => {
+      const nifconValue = nifcon.value.trim()
+      if (nifconValue === '') {
+        setError(nifcon, 'NIF/NIE requerido')
+      } else {
+        setSuccess(nifcon)
+      }
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.error');
+      errorDisplay.innerText = '';
+      inputControl.classList.add('success');
+      inputControl.classList.remove('error');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.error');
+      errorDisplay.innerText = message;
+      inputControl.classList.add('error');
+      inputControl.classList.remove('success');
+    }
+  </script>
 </body>
 </html>

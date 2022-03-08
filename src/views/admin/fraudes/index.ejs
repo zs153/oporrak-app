@@ -136,7 +136,7 @@
                       <div class="d-flex">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarDocBox" onkeyup="filtroFraudes();" placeholder="Buscar..."
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarFraBox" onkeyup="filtroFraudes();" placeholder="Buscar..."
                             aria-label="Buscar en formularios">
                         </div>
                         <a href="/admin/fraudes/add" class="btn btn-primary">
@@ -250,31 +250,48 @@
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STAFRA === 0 ? '' : 'd-none' %>">
+                                    <li class="nav-item <%- element.STAFRA === 0 ? '' : ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.IDFRAU %>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
                                         <i class="bi bi-heart dropdown-item-icon"></i>Asignar fraude
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STAFRA === 1 ? '' : 'd-none' %>">
+                                    <li class="nav-item <%- element.STAFRA === 1 ? '' : ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.IDFRAU %>'}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
                                         <i class="bi bi-check2 dropdown-item-icon"></i>Resolver fraude
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STAFRA === 1 ? '': 'd-none' %>">
+                                    <li class="nav-item <%- element.STAFRA === 1 ? '': ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('remit').value ='<%- element.IDFRAU %>'}" data-bs-toggle="modal" data-bs-target="#modal-remitir">
                                         <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Remitir fraude
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STAFRA > 1 ? '': 'd-none' %>">
+                                    <li class="nav-item <%- element.STAFRA > 1 ? '': ' d-none' %>">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDFRAU %>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
                                         <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Desasignar fraude
                                       </a>
                                     </li>
-                                    <li class="nav-item <%- element.STAFRA = 1 ? '': 'd-none' %>">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDFRAU %>' }" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                                    <li class="nav-item <%- element.STAFRA === 1 ? ' list-divider': ' d-none' %>"></li>
+                                    <li class="nav-item">
+                                      <a href="#" class="nav-link <%- element.STAFRA === 1 ? '': 'd-none' %>" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDFRAU %>' }" data-bs-toggle="modal" data-bs-target="#modal-sms">
                                         <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
                                       </a>
-                                      </li>
+                                    </li>
+                                    <li class="nav-item <%- element.STAFRA === 1 ? ' list-divider': ' d-none' %>"></li>
+                                    <li class="nav-item">
+                                      <a href="/admin/formularios/referencias/<%- element.IDFRAU %>" class="nav-link">
+                                        <i class="bi bi-diagram-2 dropdown-item-icon"></i>Referencias
+                                      </a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a href="/admin/formularios/hitos/<%- element.IDFRAU %>" class="nav-link">
+                                        <i class="bi bi-layers dropdown-item-icon"></i>Hitos
+                                      </a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a href="#" class="nav-link <%- element.STAFRA === 1 ? '': 'd-none' %>" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDFRAU %>' }" data-bs-toggle="modal" data-bs-target="#modal-ejer">
+                                        <i class="bi bi-layers dropdown-item-icon"></i>Nuevo ejercicio
+                                      </a>
+                                    </li>
                                   </ul>
                                 </li>                              
                               </ul>
@@ -618,7 +635,7 @@
     </script>
     <script>
       function filtroFraudes() {
-        const input = document.getElementById("buscarDocBox");
+        const input = document.getElementById("buscarFraBox");
         const filter = input.value.toUpperCase();
         const table = document.getElementById("tlbFraudes");
         const tr = table.getElementsByTagName("tr");

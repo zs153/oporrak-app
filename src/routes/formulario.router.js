@@ -106,7 +106,7 @@ formularioRouter.post(
         const dniNumero = nuevoNif.slice(0, 8);
         const pos = parseInt(dniNumero) % 23;
         const letra = strBase.slice(pos, pos + 1);
-        console.log(letra);
+
         if (dniLetra === letra) {
           return true;
         }
