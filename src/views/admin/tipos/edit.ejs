@@ -94,8 +94,7 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-deck row-cards">
-            <div class="col-3"></div>
-            <div class="col-6">
+            <div class="col-12">
               <div class="card">
                 <% if(typeof alerts !='undefined') { %>
                   <% alerts.map(function (alert){ %>
@@ -108,36 +107,46 @@
                   <% }) %> 
                 <% } %>                   
                 <form action="/admin/tipos/update" method="POST">
-                  <input type="hidden" name="idtipo" value="<%- datos.tipo.id %>">
+                  <input type="hidden" name="idtipo" id="idtipo" value = <%- datos.tipo.idtipo %>>
                   <div class="card-header">
                     Tipo
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-4">
-                        <div class="mb-3">
-                          <label class="form-label">Descripción</label>
-                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.descripcion %>" autofocus/>
-                        </div>
-                      </div>
                       <div class="col-8">
                         <div class="mb-3">
-                          <label class="form-label">Texto ayuda</label>
-                          <input type="text" name="ayutip" id="ayutip" class="form-control" value="<%- datos.tipo.texto %>" />
+                          <label class="form-label">Descripción</label>
+                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" autofocus/>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-3">
+                          <label class="form-label">Origen</label>
+                          <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.tipo.orgtip %>">
+                            <% datos.arrOrigenTipo.map(element => { %> 
+                              <option value="<%- element.id %>" <%- element.id == datos.tipo.orgtip ? " selected":"" %>><%- element.des %></option>
+                            <% }) %> 
+                          </select>
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <div class="row">
+                        <div class="col-12">
+                          <div class="mb-3">
+                            <label class="form-label">Texto ayuda</label>
+                            <input type="text" name="ayutip" id="ayutip" class="form-control" value="<%- datos.tipo.ayutip %>" />
+                          </div>
+                      </div>
+                    </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/tipos" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar tipo</button>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear nuevo tipo</button>
                     </div>
                   </div>
                 </form>
               </div>                
             </div>
-            <div class="col-3"></div>
           </div>
         </div>
       </div>

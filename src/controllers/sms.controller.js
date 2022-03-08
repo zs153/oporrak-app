@@ -67,7 +67,7 @@ export const insertSms = async (req, res) => {
   const sms = {
     referencia: req.body.refdoc,
     texto: req.body.texsms,
-    movil: req.body.movsms,
+    // movil: req.body.movsms,
     estado: estadosSms.pendiente,
   };
   const movimiento = {
@@ -85,6 +85,7 @@ export const insertSms = async (req, res) => {
     );
 
     const documento = {
+      movil: result.data.movcon,
       idDocumento: result.data.iddocu,
     };
     await axios.post("http://localhost:8000/api/smss/insert", {

@@ -1,4 +1,9 @@
 import axios from "axios";
+import {
+  origenTipo,
+  arrOrigenTipo,
+  tiposMovimiento,
+} from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
@@ -6,7 +11,9 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.get("http://localhost:8000/api/tipos");
 
-    const datos = { tipos: result.data.dat };
+    const datos = { tipos: result.data.dat, arrOrigenTipo };
+
+    console.log(datos);
     res.render("admin/tipos", { user, datos });
   } catch (error) {
     res.redirect("/");
@@ -15,14 +22,16 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user;
   const tipo = {
-    id: 0,
-    descripcion: "",
-    texto: "",
+    idtipo: 0,
+    destip: "",
+    ayutip: "",
+    orgtip: origenTipo.formulario,
   };
 
   try {
     const datos = {
       tipo,
+      arrOrigenTipo,
     };
 
     res.render("admin/tipos/add", { user, datos });
@@ -39,13 +48,14 @@ export const editPage = async (req, res) => {
     });
 
     const tipo = {
-      id: result.data.idtipo,
-      descripcion: result.data.destip,
-      texto: result.data.ayutip,
+      idtipo: result.data.idtipo,
+      destip: result.data.destip,
+      ayutip: result.data.ayutip,
+      arrOrigenTipo: result.data.orgtip,
     };
-
     const datos = {
       tipo,
+      arrOrigenTipo,
     };
 
     res.render("admin/tipos/edit", { user, datos });
@@ -58,13 +68,17 @@ export const insertTipo = async (req, res) => {
   const tipo = {
     descripcion: req.body.destip.toUpperCase(),
     texto: req.body.ayutip,
+    origen: req.body.orgtip,
+  };
+  const movimiento = {
     usuarioMov: user.id,
+    tipoMov: tiposMovimiento.crearTipo,
   };
 
   try {
     const result = await axios.post("http://localhost:8000/api/tipos/insert", {
-      user,
       tipo,
+      movimiento,
     });
 
     res.redirect("/admin/tipos");
@@ -76,7 +90,8 @@ export const insertTipo = async (req, res) => {
     }
     try {
       const datos = {
-        tipo,
+        tipo: req.body,
+        arrOrigenTipo,
       };
 
       res.render("admin/tipos/add", { user, datos, alerts: [{ msg }] });
@@ -91,12 +106,17 @@ export const updateTipo = async (req, res) => {
     id: req.body.idtipo,
     descripcion: req.body.destip.toUpperCase(),
     texto: req.body.ayutip,
+    origen: req.body.orgtip,
+  };
+  const movimiento = {
     usuarioMov: user.id,
+    tipoMov: tiposMovimiento.modificarTipo,
   };
 
   try {
     const result = await axios.post("http://localhost:8000/api/tipos/update", {
       tipo,
+      movimiento,
     });
 
     res.redirect("/admin/tipos");
@@ -109,9 +129,11 @@ export const updateTipo = async (req, res) => {
     }
     try {
       const datos = {
-        tipo,
+        tipo: req.body,
+        arrOrigenTipo,
       };
 
+      console.log(datos);
       res.render("admin/tipos/edit", { user, datos, alerts: [{ msg }] });
     } catch (error) {
       res.redirect("/admin/tipos");
@@ -122,12 +144,16 @@ export const deleteTipo = async (req, res) => {
   const user = req.user;
   const tipo = {
     id: req.body.idtipo,
+  };
+  const movimiento = {
     usuarioMov: user.id,
+    tipoMov: tiposMovimiento.borrarTipo,
   };
 
   try {
     const result = await axios.post("http://localhost:8000/api/tipos/delete", {
       tipo,
+      movimiento,
     });
 
     res.redirect("/admin/tipos");

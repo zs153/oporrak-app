@@ -58,6 +58,10 @@ export const estadosSms = {
   pendiente: 0,
   enviado: 1,
 };
+export const origenTipo = {
+  formulario: 0,
+  fraude: 1,
+};
 
 /* arrays */
 export const arrTiposRol = [
@@ -83,4 +87,8 @@ export const arrEstadosFormulario = [
   { ID: 1, DES: "ASIGNADO", LIT: "ASI" },
   { ID: 2, DES: "RESUELTO", LIT: "RES" },
   { ID: 3, DES: "REMITIDO", LIT: "REM" },
+];
+export const arrOrigenTipo = [
+  { id: 0, des: "FORMULARIO" },
+  { id: 1, des: "FRAUDE" },
 ];

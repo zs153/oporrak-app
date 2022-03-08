@@ -111,16 +111,28 @@
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-4">
-                        <div class="mb-3">
-                          <label class="form-label">Descripción</label>
-                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.descripcion %>" autofocus/>
-                        </div>
-                      </div>
                       <div class="col-8">
                         <div class="mb-3">
+                          <label class="form-label">Descripción</label>
+                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" autofocus/>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-3">
+                          <label class="form-label">Origen</label>
+                          <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.tipo.orgtip %>">
+                            <% datos.arrOrigenTipo.map(element => { %> 
+                              <option value="<%- element.id %>" <%- element.id == datos.tipo.orgtip ? " selected":"" %>><%- element.des %></option>
+                            <% }) %> 
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="mb-3">
                           <label class="form-label">Texto ayuda</label>
-                          <input type="text" name="ayutip" id="ayutip" class="form-control" value="<%- datos.tipo.texto %>" />
+                          <input type="text" name="ayutip" id="ayutip" class="form-control" value="<%- datos.tipo.ayutip %>" />
                         </div>
                       </div>
                     </div>

@@ -33,11 +33,6 @@ smsRouter.post(
       .withMessage("Debe introducir el texto sms")
       .isLength({ min: 1, max: 140 })
       .withMessage("La longitud del texto máximo 140 caracteres"),
-    check("movsms")
-      .isLength({ min: 9, max: 9 })
-      .withMessage("El número de movil debe de tener 9 dígitos")
-      .matches(/^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/)
-      .withMessage("Introduzca un número de movil válido"),
   ],
   validateInsert,
   insertSms
@@ -56,11 +51,6 @@ smsRouter.post(
       .withMessage("Debe introducir el texto sms")
       .isLength({ min: 1, max: 140 })
       .withMessage("La longitud del texto máximo 140 caracteres"),
-    check("movsms")
-      .isLength({ min: 9, max: 9 })
-      .withMessage("El número de movil debe de tener 9 dígitos")
-      .matches(/^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/)
-      .withMessage("Introduzca un número de movil válido"),
   ],
   validateUpdate,
   updateSms

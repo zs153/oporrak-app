@@ -100,8 +100,8 @@
                       <div class="d-flex">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" onkeyup="filtroUsuarios();" placeholder="Buscar..."
-                            aria-label="Buscar en usuarios">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarTipoBox" onkeyup="filtroTipos();" placeholder="Buscar..."
+                            aria-label="Buscar en tipos">
                         </div>
                         <a href="/admin/tipos/add" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -115,11 +115,12 @@
                     </div>                     
                   </div>
                   <div class="card-body overflow-auto">
-                    <table class="table table-vcenter card-table table-fixHead" id="tblTipos">
+                    <table class="table table-vcenter" id="tblTipos">
                       <thead>
                       <tr>
-                        <th class="w-100">Nombre</th>
-                        <th class="w-1"></th>
+                        <th>Nombre</th>
+                        <th>Origen</th>
+                        <th class="w-5"></th>
                       </tr>
                       </thead>
                       <tbody>
@@ -137,6 +138,15 @@
                                   </div>
                                 </div>
                               </div>
+                            </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium">
+                                    <%- datos.arrOrigenTipo[element.ORGTIP].des %>
+                                  </div>
+                                </div>
+                              </div>                              
                             </td>
                             <td class="text-end">
                               <ul class="dots-menu">
@@ -220,20 +230,25 @@
     <script src="/js/ayuda.js"></script>
     <script>
       function filtroTipos() {
-        const input = document.getElementById("buscarUserBox");
+        const input = document.getElementById("buscarTipoBox");
         const filter = input.value.toUpperCase();
         const table = document.getElementById("tblTipos");
         const tr = table.getElementsByTagName("tr");
-  
-        for (let i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
+        let arrTd
+        let td
+        let match = true
 
-          if (td) {
-            const txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
+        for (let i = 0; i < tr.length; i++) {
+          arrTd = tr[i].getElementsByTagName("td");
+          for(let j = 0; j < arrTd.length; j++) {
+            td = arrTd[j]
+            if (td) {
+              if (td.innerText.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                break
+              } else {
+                tr[i].style.display = "none";
+              }
             }
           }
         }
