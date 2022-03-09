@@ -12,11 +12,11 @@
   <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <style>
-    .input-control input {
+    /* .input-control input {
       border-radius: 4px;
       display: block;
       width: 100%;
-    }
+    } */
     .input-control input:focus {
       outline: 0;      
     }
@@ -170,7 +170,7 @@
                           <div class="input-control">
                             <label class="form-label">NIF/NIE</label>
                             <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -179,7 +179,7 @@
                           <div class="input-control">
                             <label class="form-label">Nombre</label>
                             <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -206,7 +206,7 @@
                           <div class="input-control">
                             <label class="form-label">Ejercicio</label>
                             <input type="number" name="ejedoc" id="ejedoc" class="form-control" value="<%- datos.documento.ejedoc %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -229,7 +229,7 @@
                           <div class="input-control">
                             <label class="form-label">Fecha</label>
                             <input type="date" name="fecdoc" id="fecdoc" class="form-control" value="<%- datos.documento.fecdoc %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -254,7 +254,7 @@
                           <div class="input-control">
                             <label class="form-label">Movil</label>
                             <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -422,7 +422,7 @@
 
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
 
       errorDisplay.innerText = '';
       inputControl.classList.add('success');
@@ -430,10 +430,10 @@
     }
     const setError = (element, message) => {
       const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
 
       errorDisplay.innerText = message;
-      inputControl.classList.add('error');
+      inputControl.classList.add('invalid-feedback');
       inputControl.classList.remove('success');
     }
   </script>
