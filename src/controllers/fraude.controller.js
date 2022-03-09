@@ -126,15 +126,20 @@ export const editPageFraude = async (req, res) => {
 };
 export const insertFraude = async (req, res) => {
   const user = req.user;
-
+  const referencia =
+    "F" +
+    randomString(
+      10,
+      "abcdefghijklmnpqrstuvwxyz1234567890ABCDEFGHIJKLMNPQRSTUVWXYZ"
+    );
   const documento = {
-    fecfra: req.body.fecfra.toISOString().slice(0, 10),
+    fecfra: req.body.fecfra,
     nifcon: req.body.nifcon,
     nomcon: req.body.nomcon,
     emacon: req.body.emacon,
     telcon: req.body.telcon,
     movcon: req.body.movcon,
-    reffra: "",
+    reffra: referencia,
     tipfra: req.body.tipfra,
     ejefra: req.body.ejefra,
     ofifra: req.body.ofifra,
@@ -145,7 +150,7 @@ export const insertFraude = async (req, res) => {
   };
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.crearDocumento,
+    tipoMov: tiposMovimiento.crearFraude,
   };
 
   try {
@@ -159,7 +164,6 @@ export const insertFraude = async (req, res) => {
 
     res.redirect("/admin/fraudes");
   } catch (error) {
-    console.log(req.alerts);
     let msg =
       "No se ha podido crear el fraude. Verifique los datos introducidos";
 
@@ -195,23 +199,21 @@ export const updateFraude = async (req, res) => {
   const user = req.user;
 
   const documento = {
-    id: req.body.idfrau,
-    fecha: req.body.fecfra,
-    nif: req.body.nifcon,
-    nombre: req.body.nomcon,
-    email: req.body.emacon,
-    telefono: req.body.telcon,
-    movil: req.body.movcon,
-    referencia: req.body.reffra,
-    tipo: req.body.tipfra,
-    ejercicio: req.body.ejefra,
-    oficina: req.body.ofifra,
-    observaciones: req.body.obsfra,
-    funcionario: req.body.funfra,
+    idfrau: req.body.idfrau,
+    fecfra: req.body.fecfra,
+    nifcon: req.body.nifcon,
+    nomcon: req.body.nomcon,
+    emacon: req.body.emacon,
+    telcon: req.body.telcon,
+    movcon: req.body.movcon,
+    tipfra: req.body.tipfra,
+    ejefra: req.body.ejefra,
+    ofifra: req.body.ofifra,
+    obsfra: req.body.obsfra,
   };
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.modificarDocumento,
+    tipoMov: tiposMovimiento.modificarFraude,
   };
 
   try {
@@ -262,7 +264,7 @@ export const deleteFraude = async (req, res) => {
   };
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.borrarDocumento,
+    tipoMov: tiposMovimiento.borrarFraude,
   };
 
   try {
@@ -567,3 +569,12 @@ export const changePasswordFraude = async (req, res) => {
     res.redirect("/admin/fraudes");
   }
 };
+
+// helpers
+function randomString(long, chars) {
+  let result = "";
+  for (let i = long; i > 0; --i) {
+    result += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return result;
+}

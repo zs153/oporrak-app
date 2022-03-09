@@ -137,7 +137,7 @@
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
                           <input type="text" class="form-control d-inline-block me-3" id="buscarFraBox" onkeyup="filtroFraudes();" placeholder="Buscar..."
-                            aria-label="Buscar en formularios">
+                            aria-label="Buscar en fraudes">
                         </div>
                         <a href="/admin/fraudes/add" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -241,7 +241,7 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/formularios/edit/<%- element.IDFRAU %>" class="nav-link">
+                                        <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
                                           <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude</a>
                                         </a>
                                     </li>
@@ -278,12 +278,12 @@
                                     </li>
                                     <li class="nav-item <%- element.STAFRA === 1 ? ' list-divider': ' d-none' %>"></li>
                                     <li class="nav-item">
-                                      <a href="/admin/formularios/referencias/<%- element.IDFRAU %>" class="nav-link">
+                                      <a href="/admin/fraudes/referencias/<%- element.IDFRAU %>" class="nav-link">
                                         <i class="bi bi-diagram-2 dropdown-item-icon"></i>Referencias
                                       </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="/admin/formularios/hitos/<%- element.IDFRAU %>" class="nav-link">
+                                      <a href="/admin/fraude/hitos/<%- element.IDFRAU %>" class="nav-link">
                                         <i class="bi bi-layers dropdown-item-icon"></i>Hitos
                                       </a>
                                     </li>

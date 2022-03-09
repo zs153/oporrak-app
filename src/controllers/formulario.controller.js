@@ -126,16 +126,14 @@ export const editPage = async (req, res) => {
 };
 export const insertFormulario = async (req, res) => {
   const user = req.user;
-
   const referencia =
     "D" +
     randomString(
       10,
       "1234567890abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ"
     );
-
   const documento = {
-    fecdoc: req.body.fecdoc.toISOString().slice(0, 10),
+    fecdoc: req.body.fecdoc,
     nifcon: req.body.nifcon,
     nomcon: req.body.nomcon,
     emacon: req.body.emacon,
@@ -201,18 +199,16 @@ export const updateFormulario = async (req, res) => {
 
   const documento = {
     iddocu: req.body.iddocu,
-    fecdoc: req.body.fecdoc.toISOString().slice(0, 10),
+    fecdoc: req.body.fecdoc,
     nifcon: req.body.nifcon,
     nomcon: req.body.nomcon,
     emacon: req.body.emacon,
     telcon: req.body.telcon,
     movcon: req.body.movcon,
-    refdoc: req.body.refdoc,
     tipdoc: req.body.tipdoc,
     ejedoc: req.body.ejedoc,
     ofidoc: req.body.ofidoc,
     obsdoc: req.body.obsdoc,
-    fundoc: req.body.fundoc,
   };
   const movimiento = {
     usuarioMov: user.id,

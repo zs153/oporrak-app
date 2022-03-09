@@ -12,16 +12,9 @@
   <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <style>
-    /* .input-control {
-      display: flex;
-      flex-direction: column;
-    } */
     .input-control input {
-      /* border: 2px solid #f0f0f0; */
       border-radius: 4px;
       display: block;
-      /* font-size: 12px; */
-      /* padding: 10px; */
       width: 100%;
     }
     .input-control input:focus {
@@ -165,14 +158,14 @@
                   </div>
                   <% }) %>
                 <% } %>
-                <form id="form" action="/admin/fraudes/insert" method="POST">
+                <form id="form" action="/admin/fraudes/insert" method="POST" onsubmit="return validate();">
                   <div class="card-header">
                     Fraude
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-2">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label">NIF/NIE</label>
                             <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
@@ -181,13 +174,16 @@
                         </div>
                       </div>
                       <div class="col-6">
-                        <div class="mb-3">
-                          <label class="form-label">Nombre</label>
-                          <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
+                            <div class="error"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-4">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <label class="form-label">Correo electrónico</label>
                           <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.documento.emacon %>" />
                         </div>
@@ -195,7 +191,7 @@
                     </div>
                     <div class="row">
                       <div class="col-9">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <div class="form-label">Tipo</div>
                           <select class="form-select" id="cbotip" name="tipfra" value="<%- datos.documento.tipfra %>">
                             <% datos.arrTipos.map(element => { %> 
@@ -205,13 +201,16 @@
                         </div>
                       </div>
                       <div class="col-2">
-                        <div class="mb-3">
-                          <label class="form-label">Ejercicio</label>
-                          <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.documento.ejefra %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label">Ejercicio</label>
+                            <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.documento.ejefra %>" />
+                            <div class="error"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-1">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <label class="form-label">Adm</label>
                           <input type="text" name="funfra" id="funfra" class="form-control" value="<%- datos.documento.funfra %>" readonly />
                         </div>
@@ -219,13 +218,16 @@
                     </div>
                     <div class="row">
                       <div class="col-3">
-                        <div class="mb-4">
-                          <label class="form-label">Fecha</label>
-                          <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.documento.fecfra %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.documento.fecfra %>" />
+                            <div class="error"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-5">
-                        <div class="mb-4">
+                        <div class="mb-1">
                           <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="ofifra" value="<%- datos.documento.ofifra %>">
                             <% datos.arrOficinas.map(element => { %> 
@@ -235,22 +237,25 @@
                         </div>
                       </div>
                       <div class="col-2">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <label class="form-label">Teléfono</label>
                           <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.documento.telcon %>" />
                         </div>
                       </div>
                       <div class="col-2">
-                        <div class="mb-3">
-                          <label class="form-label">Movil</label>
-                          <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label">Movil</label>
+                            <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
+                            <div class="error"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <small></small>
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <label class="form-label">Observaciones</label>
                             <textarea type="text" name="obsfra" id="obsfra" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.obsfra %></textarea>
                         </div>
@@ -326,26 +331,93 @@
     })
   </script>
   <script>
-    const form = document.getElementById('form');
     const nifcon = document.getElementById('nifcon')
+    const movcon = document.getElementById('movcon')
+    const nomcon = document.getElementById('nomcon')
+    const fecfra = document.getElementById('fecfra')
+    const ejefra = document.getElementById('ejefra')
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      validateInput();
-    })
-
-    const validateInput = () => {
+    const validate = () => {
       const nifconValue = nifcon.value.trim()
+      const movconValue = movcon.value.trim()
+      const nomconValue = nomcon.value.trim()
+      const fecfraValue = fecfra.value.trim()
+      const ejefraValue = ejefra.value.trim()
+
       if (nifconValue === '') {
         setError(nifcon, 'NIF/NIE requerido')
+        return false
       } else {
+        const strBase = "TRWAGMYFPDXBNJZSQVHLCKET";
+        const primeraPosicion = nifconValue.slice(0, 1);
+        let nuevoNif = nifconValue;
+
+        if (isNaN(primeraPosicion)) {
+          nuevoNif = nifconValue.slice(1);
+          if (primeraPosicion === "Y") {
+            nuevoNif = "1" + nuevoNif;
+          } else if (primeraPosicion === "Z") {
+            nuevoNif = "2" + nuevoNif;
+          }
+        }
+        const dniLetra = nuevoNif.slice(8);
+        const dniNumero = nuevoNif.slice(0, 8);
+        const pos = parseInt(dniNumero) % 23;
+        const letra = strBase.slice(pos, pos + 1);
+        const isValid = dniLetra === letra
+
+        if(isValid === false) {
+          setError(nifcon, 'Introduzca NIF/NIE válido')
+          return false
+        }
         setSuccess(nifcon)
       }
+      if (nomconValue === '') {
+        setError(nomcon, 'Nombre requerido')
+        return false
+      } else {
+        setSuccess(nomcon)
+      }
+      if (ejefraValue === '') {
+        setError(ejefra, 'Ejercicio requerido')
+        return false
+      } else {
+        const pattern = /^([0-9]{4})$/
+        const isValid = pattern.test(ejefraValue)
+
+        if(isValid === false) {
+          setError(ejefra, 'Introduzca ejercicio válido')
+          return false
+        }
+        setSuccess(ejefra)        
+      }
+      if (isNaN(Date.parse(fecfraValue))) {
+        setError(fecfra, 'Fecha requerida')
+        return false
+      } else {
+        setSuccess(fecfra)        
+      }      
+      if (movconValue === '') {
+        setError(movcon, 'Movil requerido')
+        return false
+      } else {
+        const pattern = /^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/
+        const isValid = pattern.test(movconValue)
+
+        if(isValid === false) {
+          setError(movcon, 'Introduzca movil válido')
+          return false
+        }
+        setSuccess(movcon)
+      }
+
+      return true
     }
 
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.error');
+
       errorDisplay.innerText = '';
       inputControl.classList.add('success');
       inputControl.classList.remove('error');
@@ -353,6 +425,7 @@
     const setError = (element, message) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.error');
+
       errorDisplay.innerText = message;
       inputControl.classList.add('error');
       inputControl.classList.remove('success');
