@@ -11,27 +11,6 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css">
-  <style>
-    .input-control input {
-      border-radius: 4px;
-      display: block;
-      width: 100%;
-    }
-    .input-control input:focus {
-      outline: 0;      
-    }
-    .input-control.success input {
-      border-color: #09c372;
-    }
-    .input-control.error input {
-      border-color: #ff3860;
-    }
-    .input-control .error {
-      color: #ff3860;
-      font-size: 9px;
-      height: 13px;
-    }
-  </style>
 </head>
 
 <body class="antialiased">
@@ -170,7 +149,7 @@
                           <div class="input-control">
                             <label class="form-label">NIF/NIE</label>
                             <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -179,7 +158,7 @@
                           <div class="input-control">
                             <label class="form-label">Nombre</label>
                             <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -206,7 +185,7 @@
                           <div class="input-control">
                             <label class="form-label">Ejercicio</label>
                             <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.documento.ejefra %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -223,7 +202,7 @@
                           <div class="input-control">
                             <label class="form-label">Fecha</label>
                             <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.documento.fecfra %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -248,7 +227,7 @@
                           <div class="input-control">
                             <label class="form-label">Movil</label>
                             <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
-                            <div class="error"></div>
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -333,39 +312,49 @@
   </script>
   <script>
     const nifcon = document.getElementById('nifcon')
-    const movcon = document.getElementById('movcon')
     const nomcon = document.getElementById('nomcon')
-    const fecfra = document.getElementById('fecfra')
+    const movcon = document.getElementById('movcon')
     const ejefra = document.getElementById('ejefra')
+    const fecfra = document.getElementById('fecfra')
 
     const validate = () => {
       const nifconValue = nifcon.value.trim()
-      const movconValue = movcon.value.trim()
       const nomconValue = nomcon.value.trim()
-      const fecfraValue = fecfra.value.trim()
+      const movconValue = movcon.value.trim()
       const ejefraValue = ejefra.value.trim()
+      const fecfraValue = fecfra.value.trim()
 
       if (nifconValue === '') {
         setError(nifcon, 'NIF/NIE requerido')
         return false
       } else {
+        const pattern = /^(X[0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
+
+        if (!pattern.test(nifconValue)){
+          setError(nifcon, 'Introduzca NIF/NIE válido')
+          return false
+        }
+
         const strBase = "TRWAGMYFPDXBNJZSQVHLCKET";
         const primeraPosicion = nifconValue.slice(0, 1);
+        const letraNif = nifconValue.slice(8);
         let nuevoNif = nifconValue;
 
         if (isNaN(primeraPosicion)) {
           nuevoNif = nifconValue.slice(1);
-          if (primeraPosicion === "Y") {
+          if (primeraPosicion === 'X') {
+            nuevoNif = '0' + nuevoNif;
+          } else if (primeraPosicion === "Y") {
             nuevoNif = "1" + nuevoNif;
           } else if (primeraPosicion === "Z") {
             nuevoNif = "2" + nuevoNif;
           }
         }
-        const dniLetra = nuevoNif.slice(8);
+
         const dniNumero = nuevoNif.slice(0, 8);
         const pos = parseInt(dniNumero) % 23;
         const letra = strBase.slice(pos, pos + 1);
-        const isValid = dniLetra === letra
+        const isValid = letraNif === letra
 
         if(isValid === false) {
           setError(nifcon, 'Introduzca NIF/NIE válido')
@@ -417,19 +406,19 @@
 
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
 
       errorDisplay.innerText = '';
-      inputControl.classList.add('success');
-      inputControl.classList.remove('error');
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
     }
     const setError = (element, message) => {
       const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.error');
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
 
       errorDisplay.innerText = message;
-      inputControl.classList.add('error');
-      inputControl.classList.remove('success');
+      inputControl.classList.remove('is-valid');
+      element.classList.add('is-invalid');
     }
   </script>
 </body>
