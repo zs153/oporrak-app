@@ -94,8 +94,8 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-deck row-cards">
-            <div class="col-3"></div>
-            <div class="col-6">
+            <div class="col-2"></div>
+            <div class="col-8">
               <div class="card mt-3">
                 <% if(typeof alerts !='undefined') { %>
                   <% alerts.map(function (alert){ %>
@@ -107,38 +107,41 @@
                     </div>
                   <% }) %>
                 <% } %>                   
-                <form action="/admin/oficinas/update" method="POST">
-                  <input type="hidden" name="idofic" value="<%- datos.oficina.id %>">
+                <form action="/admin/oficinas/update" method="POST" onsubmit="return validate();">
                   <div class="card-header">
                     Oficina
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-8">
-                        <div class="mb-3">
-                          <label class="form-label">Descripción</label>
-                          <input type="text" name="desofi" id="desofi" class="form-control" value="<%- datos.oficina.descripcion %>" autofocus/>
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Descripción</label>
+                            <input type="text" name="desofi" id="desofi" class="form-control" value="<%- datos.oficina.desofi %>" autofocus/>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-4">
-                        <div class="mb-3">
-                          <label class="form-label">Código</label>
-                          <input type="text" name="codofi" id="codofi" class="form-control" value="<%- datos.oficina.codigo %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Código</label>
+                            <input type="text" name="codofi" id="codofi" class="form-control" value="<%- datos.oficina.codofi %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
-
                     </div>
-                  </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/oficinas" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar oficina</button>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Modificar oficina</button>
                     </div>
                   </div>
                 </form>
               </div>                
             </div>
-            <div class="col-3"></div>
+            <div class="col-2"></div>
           </div>
         </div>
       </div>
@@ -156,5 +159,46 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
+  <script>
+    const desofi = document.getElementById('desofi')
+    const codofi = document.getElementById('codofi')
+
+    const validate = () => {
+      const desofiValue = desofi.value.trim()
+      const codofiValue = codofi.value.trim()
+
+      if (desofiValue === '') {
+        setError(desofi, 'Descripción requerida')
+        return false
+      } else {
+        setSuccess(desofi)
+      }
+      if (codofiValue === '') {
+        setError(codofi, 'Código requerido')
+        return false
+      } else {
+        setSuccess(codofi)
+      }
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+  </script>
 </body>
 </html>

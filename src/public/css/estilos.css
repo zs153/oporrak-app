@@ -2661,6 +2661,11 @@ a.avatar {
   font-weight: 400;
   color: #656d77;
 }
+.form-label.required:after {
+  content: '*';
+  margin-left: 0.25rem;
+  color: #d63939;
+}
 
 /* form-select */
 .form-select {
