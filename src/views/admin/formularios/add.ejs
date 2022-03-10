@@ -171,7 +171,7 @@
                     <div class="row">
                       <div class="col-9">
                         <div class="mb-1">
-                          <div class="form-label required">Tipo</div>
+                          <div class="form-label">Tipo</div>
                           <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipdoc %>">
                             <% datos.arrTipos.map(element => { %> 
                               <option value="<%- element.IDTIPO %>" <%- element.IDTIPO == datos.documento.tipdoc ? " selected":"" %>><%- element.DESTIP %></option>
@@ -207,7 +207,7 @@
                       </div>
                       <div class="col-5">
                         <div class="mb-1">
-                          <div class="form-label required">Oficina</div>
+                          <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="ofidoc" value="<%- datos.documento.ofidoc %>">
                             <% datos.arrOficinas.map(element => { %> 
                               <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == datos.documento.ofidoc ? " selected":"" %>><%= element.DESOFI %></option>

@@ -124,7 +124,7 @@
                       </div>
                       <div class="col-4">
                         <div class="mb-1">                          
-                          <label class="form-label required">Origen</label>
+                          <label class="form-label">Origen</label>
                           <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.tipo.orgtip %>">
                             <% datos.arrOrigenTipo.map(element => { %> 
                               <option value="<%- element.id %>" <%- element.id == datos.tipo.orgtip ? " selected":"" %>><%- element.des %></option>

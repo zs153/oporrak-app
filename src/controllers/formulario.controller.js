@@ -469,10 +469,10 @@ export const verTodo = async (req, res) => {
 export const sms = async (req, res) => {
   const user = req.user;
   const sms = {
-    idDocumento: req.body.docsms,
-    texto: req.body.texsms,
-    movil: req.body.movsms,
-    estado: estadosDocumento.pendiente,
+    iddocu: req.body.docsms,
+    texsms: req.body.texsms,
+    movsms: req.body.movsms,
+    stasms: estadosSms.pendiente,
   };
   const movimiento = {
     usuarioMov: user.id,

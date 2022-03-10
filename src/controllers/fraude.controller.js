@@ -470,10 +470,10 @@ export const verTodoFraude = async (req, res) => {
 export const smsFraude = async (req, res) => {
   const user = req.user;
   const sms = {
-    idfraumento: req.body.docsms,
-    texto: req.body.texsms,
-    movil: req.body.movsms,
-    estado: estadosDocumento.pendiente,
+    texfra: req.body.texsms,
+    movfra: req.body.movsms,
+    stafra: estadosSms.pendiente,
+    idfrau: req.body.frasms,
   };
   const movimiento = {
     usuarioMov: user.id,
