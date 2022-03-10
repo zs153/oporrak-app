@@ -104,7 +104,7 @@ export const insertUsuario = async (req, res) => {
     usuarioMov: user.id,
     tipoMov: tiposMovimiento.crearUsuario,
   };
-  console.log(usuario);
+
   try {
     const result = await axios.post(
       "http://localhost:8000/api/usuarios/insert",
