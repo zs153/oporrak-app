@@ -159,7 +159,7 @@
                                       </a>
                                     </li> -->
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idusua').value ='<%- element.IDUSUA %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idusua').value ='<%- element.IDUSUA %>', document.getElementById('delusu').innerText ='<%- element.NOMUSU %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                         <i class="bi bi-person-dash dropdown-item-icon"></i>Borrar usuario
                                       </a>
                                     </li>
@@ -203,7 +203,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>¿Desea borrar a este usuario?</h3>
-            <div id="nombreUser"></div>
+            <div id="delusu"></div>
             <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
           </div>
           <div class="modal-footer">
@@ -235,7 +235,7 @@
           <form action="/admin/usuarios/notificacion" method="POST">
             <div class="modal-body">
             <div class="row">
-              <div class="mb-3">
+              <div class="mb-1">
                 <label class="form-label">Texto notificación</label>
                 <input
                   type="text"

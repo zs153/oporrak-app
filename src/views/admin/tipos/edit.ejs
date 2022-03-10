@@ -106,7 +106,7 @@
                     </div>
                   <% }) %> 
                 <% } %>                   
-                <form action="/admin/tipos/update" method="POST">
+                <form action="/admin/tipos/update" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="idtipo" id="idtipo" value = <%- datos.tipo.idtipo %>>
                   <div class="card-header">
                     Tipo
@@ -114,14 +114,17 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col-8">
-                        <div class="mb-3">
-                          <label class="form-label">Descripción</label>
-                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" autofocus/>
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Descripción</label>
+                            <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" autofocus/>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-4">
-                        <div class="mb-3">
-                          <label class="form-label">Origen</label>
+                        <div class="mb-1">                          
+                          <label class="form-label required">Origen</label>
                           <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.tipo.orgtip %>">
                             <% datos.arrOrigenTipo.map(element => { %> 
                               <option value="<%- element.id %>" <%- element.id == datos.tipo.orgtip ? " selected":"" %>><%- element.des %></option>
@@ -132,12 +135,16 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                          <div class="mb-3">
-                            <label class="form-label">Texto ayuda</label>
-                            <input type="text" name="ayutip" id="ayutip" class="form-control" value="<%- datos.tipo.ayutip %>" />
+                          <div class="mb-1">
+                            <div class="input-control">
+                              <label class="form-label required">Texto ayuda</label>
+                              <textarea type="text" name="ayutip" id="ayutip" class="form-control" rows="3" style="resize: vertical"><%- datos.tipo.ayutip %></textarea>
+                              <div class="invalid-feedback"></div>
+                            </div>
                           </div>
                       </div>
                     </div>
+                  </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/tipos" class="btn btn-link">Cancelar</a>
@@ -163,6 +170,47 @@
       </div>
     </footer>
   </div>
-  <script src="/js/ayuda.js"></script>  
+  <script src="/js/ayuda.js"></script>
+  <script>
+    const destip = document.getElementById('destip')
+    const ayutip = document.getElementById('ayutip')
+
+    const validate = () => {
+      const destipValue = destip.value.trim()
+      const ayutipValue = ayutip.value.trim()
+
+      if (destipValue === '') {
+        setError(destip, 'Descripción requerida')
+        return false
+      } else {
+        setSuccess(destip)
+      }
+      if (ayutipValue === '') {
+        setError(ayutip, 'Texto requerido')
+        return false
+      } else {
+        setSuccess(ayutip)
+      }
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+  </script>
 </body>
 </html>

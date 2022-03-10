@@ -161,7 +161,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idtipo').value ='<%- element.IDTIPO %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idtipo').value ='<%- element.IDTIPO %>', document.getElementById('deltip').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar tipo
                                       </a>
                                     </li>
@@ -205,7 +205,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>¿Desea borrar este tipo?</h3>
-            <div id="nombreUser"></div>
+            <div id="deltip"></div>
             <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
           </div>
           <div class="modal-footer">

@@ -105,27 +105,24 @@
                     </div>
                   <% }) %>
                 <% } %>
-                <form action="/admin/smss/insert" method="POST">
+                <form action="/admin/smss/insert" method="POST" onsubmit="return validate();">
                   <div class="card-header">
                     SMS
                   </div>
                   <div class="card-body">                    
                     <div class="row">
                       <div class="col-3">
-                        <div class="mb-3">
-                          <label class="form-label">Referencia</label>
-                          <input type="text" name="refdoc" id="refdoc" class="form-control" value="<%- datos.sms.refdoc %>" autofocus/>
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Referencia</label>
+                            <input type="text" name="refdoc" id="refdoc" class="form-control" value="<%- datos.sms.refdoc %>" autofocus/>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
-                      <!-- <div class="col-3">
-                        <div class="mb-3">
-                          <label class="form-label">Movil</label>
-                          <input type="text" name="movsms" id="movsms" class="form-control" value="<%- datos.sms.movsms %>" readonly/>
-                        </div>
-                      </div> -->
                       <div class="col-6"></div>
                       <div class="col-3">
-                        <div class="mb-4">
+                        <div class="mb-1">
                           <div class="form-label">Estado</div>
                           <select class="form-select" id="cbosta" name="stasms" value="<%- datos.sms.stasms %>">
                             <% datos.arrEstadosSms.map(element => { %> 
@@ -137,12 +134,16 @@
                     </div>
                     <div class="row">
                       <div class="col-12">
-                        <div class="mb-3">
-                          <label class="form-label">Texto</label>
-                          <input type="text" name="texsms" id="texsms" class="form-control" value="<%- datos.sms.texsms %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Texto</label>
+                            <input type="text" name="texsms" id="texsms" class="form-control" value="<%- datos.sms.texsms %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/smss" class="btn btn-link">Cancelar</a>
@@ -169,5 +170,46 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
+  <script>
+    const refdoc = document.getElementById('refdoc')
+    const texsms = document.getElementById('texsms')
+
+    const validate = () => {
+      const refdocValue = refdoc.value.trim()
+      const texsmsValue = texsms.value.trim()
+
+      if (refdocValue === '') {
+        setError(refdoc, 'Referencia requerida')
+        return false
+      } else {
+        setSuccess(refdoc)
+      }
+      if (texsmsValue === '') {
+        setError(texsms, 'Texto requerido')
+        return false
+      } else {
+        setSuccess(texsms)
+      }
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+  </script> 
 </body>
 </html>

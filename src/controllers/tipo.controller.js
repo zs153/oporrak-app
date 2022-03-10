@@ -50,7 +50,7 @@ export const editPage = async (req, res) => {
       idtipo: result.data.idtipo,
       destip: result.data.destip,
       ayutip: result.data.ayutip,
-      arrOrigenTipo: result.data.orgtip,
+      orgtip: result.data.orgtip,
     };
     const datos = {
       tipo,
@@ -65,9 +65,9 @@ export const editPage = async (req, res) => {
 export const insertTipo = async (req, res) => {
   const user = req.user;
   const tipo = {
-    descripcion: req.body.destip.toUpperCase(),
-    texto: req.body.ayutip,
-    origen: req.body.orgtip,
+    destip: req.body.destip,
+    ayutip: req.body.ayutip,
+    orgtip: req.body.orgtip,
   };
   const movimiento = {
     usuarioMov: user.id,
@@ -102,10 +102,10 @@ export const insertTipo = async (req, res) => {
 export const updateTipo = async (req, res) => {
   const user = req.user;
   const tipo = {
-    id: req.body.idtipo,
-    descripcion: req.body.destip.toUpperCase(),
-    texto: req.body.ayutip,
-    origen: req.body.orgtip,
+    idtipo: req.body.idtipo,
+    destip: req.body.destip,
+    ayutip: req.body.ayutip,
+    orgtip: req.body.orgtip,
   };
   const movimiento = {
     usuarioMov: user.id,
@@ -141,7 +141,7 @@ export const updateTipo = async (req, res) => {
 export const deleteTipo = async (req, res) => {
   const user = req.user;
   const tipo = {
-    id: req.body.idtipo,
+    idtipo: req.body.idtipo,
   };
   const movimiento = {
     usuarioMov: user.id,

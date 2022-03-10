@@ -103,30 +103,36 @@
                       role="alert"
                     >
                       <%- alert.msg %>
-                  </div>
-                <% }) %>
-              <% } %>
-                <form action="/admin/usuarios/update" method="POST">
-                  <input type="hidden" name="idusua" value="<%- datos.usuario.idusua %>">
+                    </div>
+                  <% }) %>
+                <% } %>
+                <form action="/admin/usuarios/update" method="POST" onsubmit="return validate();">
+                  <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
                   <div class="card-header">
                     Usuario
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-2">
-                        <div class="mb-3">
-                          <label class="form-label">UserID</label>
-                          <input type="text" name="userid" id="userid" class="form-control" value="<%- datos.usuario.userid %>" autofocus/>
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">UserID</label>
+                            <input type="text" name="userid" id="userid" class="form-control" onkeyup="this.value = this.value.toLowerCase();" value="<%- datos.usuario.userid %>" autofocus/>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-8">
-                        <div class="mb-3">
-                          <label class="form-label">Nombre</label>
-                          <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- datos.usuario.nomusu %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Nombre</label>
+                            <input type="text" name="nomusu" id="nomusu" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.usuario.nomusu %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-2">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <div class="form-label">Estado</div>
                           <select class="form-select" id="cboest" name="stausu" value="<%- datos.usuario.stausu %>">
                             <% datos.arrEstadosUsuario.map(element => { %> 
@@ -138,21 +144,27 @@
                     </div>
                     <div class="row">
                       <div class="col-10">
-                        <div class="mb-3">
-                          <label class="control-label">Correo electrónico</label>
-                          <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.emausu %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Correo electrónico</label>
+                            <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.emausu %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-2">
-                        <div class="mb-3">
-                          <label class="control-label">Teléfono</label>
-                          <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.telusu %>" />
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Teléfono</label>
+                            <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.telusu %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-4">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="ofiusu" value="<%- datos.usuario.ofiusu %>">
                             <% datos.arrOficinas.map(element => { %> 
@@ -162,7 +174,7 @@
                         </div>
                       </div>
                       <div class="col-4">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <div class="form-label">Rol</div>
                           <select class="form-select" id="cborol" name="rolusu" value="<%- datos.usuario.rolusu %>">
                             <% datos.arrTiposRol.map(element => { %> 
@@ -172,7 +184,7 @@
                         </div>
                       </div>
                       <div class="col-4">
-                        <div class="mb-3">
+                        <div class="mb-1">
                           <div class="form-label">Perfil</div>
                           <select class="form-select" id="cboper" name="perusu" value="<%- datos.usuario.perusu %>">
                             <% datos.arrTiposPerfil.map(element => { %> 
@@ -209,5 +221,62 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
+  <script>
+    const userid = document.getElementById('userid')
+    const nomusu = document.getElementById('nomusu')
+    const emausu = document.getElementById('emausu')
+    const telusu = document.getElementById('telusu')
+
+    const validate = () => {
+      const useridValue = userid.value.trim()
+      const nomusuValue = nomusu.value.trim()
+      const emausuValue = emausu.value.trim()
+      const telusuValue = telusu.value.trim()
+
+      if (useridValue === '') {
+        setError(userid, 'UserID requerido')
+        return false
+      } else {
+        setSuccess(userid)
+      }
+      if (nomusuValue === '') {
+        setError(nomusu, 'Nombre requerido')
+        return false
+      } else {
+        setSuccess(nomusu)
+      }
+      if (emausuValue === '') {
+        setError(emausu, 'Email requerido')
+        return false
+      } else {
+        setSuccess(emausu)
+      }
+      if (telusuValue === '') {
+        setError(telusu, 'Teléfono requerido')
+        return false
+      } else {
+        setSuccess(telusu)
+      }
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+  </script>
 </body>
 </html>

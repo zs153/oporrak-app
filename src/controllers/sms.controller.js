@@ -23,7 +23,7 @@ export const addPage = async (req, res) => {
     idsmss: 0,
     texsms: "",
     movsms: "",
-    stasms: 0,
+    stasms: estadosSms.pendiente,
   };
 
   try {
@@ -65,10 +65,9 @@ export const editPage = async (req, res) => {
 export const insertSms = async (req, res) => {
   const user = req.user;
   const sms = {
-    referencia: req.body.refdoc,
-    texto: req.body.texsms,
-    // movil: req.body.movsms,
-    estado: estadosSms.pendiente,
+    refdoc: req.body.refdoc,
+    texsms: req.body.texsms,
+    stasms: estadosSms.pendiente,
   };
   const movimiento = {
     usuarioMov: user.id,
@@ -80,7 +79,7 @@ export const insertSms = async (req, res) => {
     const result = await axios.post(
       "http://localhost:8000/api/formularios/referencia",
       {
-        referencia: sms.referencia,
+        referencia: sms.refdoc,
       }
     );
 
@@ -116,10 +115,9 @@ export const insertSms = async (req, res) => {
 export const updateSms = async (req, res) => {
   const user = req.user;
   const sms = {
-    id: req.body.idsmss,
-    texto: req.body.texsms,
-    movil: req.body.movsms,
-    estado: req.body.stasms,
+    idsmss: req.body.idsmss,
+    texsms: req.body.texsms,
+    stasms: req.body.stasms,
   };
   const movimiento = {
     usuarioMov: user.id,
@@ -155,7 +153,7 @@ export const updateSms = async (req, res) => {
 export const deleteSms = async (req, res) => {
   const user = req.user;
   const sms = {
-    id: req.body.idsmss,
+    idsmss: req.body.idsmss,
   };
   const movimiento = {
     usuarioMov: user.id,

@@ -284,13 +284,13 @@ export const deleteFraude = async (req, res) => {
 export const asignarFraude = async (req, res) => {
   const user = req.user;
   const documento = {
-    id: req.body.idfrau,
-    liquidador: user.userID,
-    estado: estadosDocumento.asignado,
+    idfrau: req.body.idfrau,
+    liqfra: user.userID,
+    stafra: estadosDocumento.asignado,
   };
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.asignarfraude,
+    tipoMov: tiposMovimiento.asignarFraude,
   };
 
   try {
@@ -322,13 +322,13 @@ export const resolverFraude = async (req, res) => {
   if (req.body.chkenv) {
   }
   const documento = {
-    id: req.body.idfrau,
-    liquidador: user.userID,
-    estado: estadosDocumento.resuelto,
+    idfrau: req.body.idfrau,
+    liqfra: user.userID,
+    stafra: estadosDocumento.resuelto,
   };
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.resolverfraude,
+    tipoMov: tiposMovimiento.resolverFraude,
   };
 
   try {
@@ -378,13 +378,13 @@ export const resolverFraude = async (req, res) => {
 export const remitirFraude = async (req, res) => {
   const user = req.user;
   const documento = {
-    id: req.body.idfrau,
-    liquidador: user.userID,
-    estado: estadosDocumento.remitido,
+    idfrau: req.body.idfrau,
+    liqfra: user.userID,
+    stafra: estadosDocumento.remitido,
   };
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.remitirfraude,
+    tipoMov: tiposMovimiento.remitirFraude,
   };
 
   try {
@@ -413,13 +413,13 @@ export const remitirFraude = async (req, res) => {
 export const desadjudicarFraude = async (req, res) => {
   const user = req.user;
   const documento = {
-    id: req.body.idfrau,
-    liquidador: "PEND",
-    estado: estadosDocumento.pendiente,
+    idfrau: req.body.idfrau,
+    liqfra: "PEND",
+    stafra: estadosDocumento.pendiente,
   };
   const movimiento = {
     usuarioMov: user.id,
-    tipoMov: tiposMovimiento.desasignarfraude,
+    tipoMov: tiposMovimiento.desasignarFraude,
   };
 
   try {

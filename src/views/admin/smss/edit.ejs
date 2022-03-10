@@ -105,7 +105,7 @@
                     </div>
                   <% }) %>
                 <% } %>
-                <form action="/admin/smss/update" method="POST">
+                <form action="/admin/smss/update" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="idsmss" id="idsmss" value="<%- datos.sms.idsmss %>">
                   <div class="card-header">
                     SMS
@@ -139,7 +139,7 @@
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-3">
-                          <label class="form-label">Texto</label>
+                          <label class="form-label required">Texto</label>
                           <input type="text" name="texsms" id="texsms" class="form-control" value="<%- datos.sms.texsms %>" autofocus/>
                         </div>
                       </div>
@@ -170,5 +170,38 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
+  <script>
+    const texsms = document.getElementById('texsms')
+
+    const validate = () => {
+      const texsmsValue = texsms.value.trim()
+
+      if (texsmsValue === '') {
+        setError(texsms, 'Texto requerido')
+        return false
+      } else {
+        setSuccess(texsms)
+      }
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+  </script> 
 </body>
 </html>

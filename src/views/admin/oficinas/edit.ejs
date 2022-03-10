@@ -108,6 +108,7 @@
                   <% }) %>
                 <% } %>                   
                 <form action="/admin/oficinas/update" method="POST" onsubmit="return validate();">
+                  <input type="hidden" id="idofic" name="idofic" value="<%- datos.oficina.idofic %>">
                   <div class="card-header">
                     Oficina
                   </div>
@@ -117,7 +118,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="desofi" id="desofi" class="form-control" value="<%- datos.oficina.desofi %>" autofocus/>
+                            <input type="text" name="desofi" id="desofi" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.oficina.desofi %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -132,6 +133,7 @@
                         </div>
                       </div>
                     </div>
+                  </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/oficinas" class="btn btn-link">Cancelar</a>
