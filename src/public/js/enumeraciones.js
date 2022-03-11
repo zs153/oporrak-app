@@ -29,6 +29,9 @@ export const tiposMovimiento = {
   resolverFraude: 27,
   remitirFraude: 28,
   desasignarFraude: 29,
+  crearHito: 30,
+  modificarHito: 31,
+  borrarHito: 32,
   cambioPassword: 60,
   olvidoPassword: 61,
   restablecerPassword: 62,
@@ -68,6 +71,7 @@ export const estadosSms = {
 export const origenTipo = {
   formulario: 0,
   fraude: 1,
+  hito: 2,
 };
 
 /* arrays */
@@ -98,4 +102,5 @@ export const arrEstadosFormulario = [
 export const arrOrigenTipo = [
   { id: 0, des: "FORMULARIO" },
   { id: 1, des: "FRAUDE" },
+  { id: 2, des: "HITO" },
 ];

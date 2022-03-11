@@ -13,6 +13,7 @@ export const mainPage = async (req, res) => {
 
     const datos = { tipos: result.data.dat, arrOrigenTipo };
 
+    console.log(datos);
     res.render("admin/tipos", { user, datos });
   } catch (error) {
     res.redirect("/");
