@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Añadir sms</title>
+  <title>Añadir Subtipo</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -73,7 +73,7 @@
                     <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
                   </a>
                   <a href="/admin/subtipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subipos
+                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subtipos
                   </a>
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
@@ -86,7 +86,7 @@
                     <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
                   </a>
                 </div>
-              </li>
+              </li>          
           </ul>
         </div>
       </div>
@@ -94,12 +94,12 @@
 
     <div class="page-wrapper">
       <div class="page-body">
-        <div class="container-md">
+        <div class="container-xl">
           <div class="row row-deck row-cards">
             <div class="col-12">
               <div class="card">
-                <% if(typeof alerts !='undefined') { %> 
-                  <% alerts.map(function (alert) { %>
+                <% if(typeof alerts !='undefined') { %>
+                  <% alerts.map(function (alert){ %>
                     <div
                       class="alert alert-warning alert-dismissible fade show"
                       role="alert"
@@ -107,40 +107,31 @@
                       <%- alert.msg %>
                     </div>
                   <% }) %>
-                <% } %>
-                <form action="/admin/smss/insert" method="POST" onsubmit="return validate();">
+                <% } %>                
+                <form action="/admin/subtipos/insert" method="POST" onsubmit="return validate();">
                   <div class="card-header">
-                    SMS
+                    Tipo
                   </div>
-                  <div class="card-body">                    
+                  <div class="card-body">
                     <div class="row">
-                      <div class="col-3">
+                      <div class="col-8">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Referencia</label>
-                            <input type="text" name="refdoc" id="refdoc" class="form-control" value="<%- datos.sms.refdoc %>" autofocus/>
+                            <label class="form-label required">Descripción</label>
+                            <input type="text" name="dessub" id="dessub" class="form-control" value="<%- datos.subtipo.dessub %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-6"></div>
-                      <div class="col-3">
-                        <div class="mb-1">
-                          <div class="form-label">Estado</div>
-                          <select class="form-select" id="cbosta" name="stasms" value="<%- datos.sms.stasms %>">
-                            <% datos.arrEstadosSms.map(element => { %> 
-                              <option value="<%- element.id %>" <%- element.id == datos.sms.stasms ? " selected":"" %>><%= element.des %></option>
-                            <% }) %> 
-                          </select>
-                        </div>
-                      </div>                      
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
+                      <div class="col-4">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Texto</label>
-                            <input type="text" name="texsms" id="texsms" class="form-control" value="<%- datos.sms.texsms %>" />
+                            <label class="form-label">Origen</label>
+                            <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.subtipo.orgtip %>">
+                              <% datos.arrOrigenTipo.map(element => { %> 
+                                <option value="<%- element.id %>" <%- element.id == datos.subtipo.orgtip ? " selected":"" %>><%- element.des %></option>
+                              <% }) %> 
+                            </select>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -149,8 +140,8 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/smss" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Añadir sms</button>
+                      <a href="/admin/subtipos" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear nuevo subtipo</button>
                     </div>
                   </div>
                 </form>
@@ -174,24 +165,16 @@
   </div>
   <script src="/js/ayuda.js"></script>
   <script>
-    const refdoc = document.getElementById('refdoc')
-    const texsms = document.getElementById('texsms')
+    const dessub = document.getElementById('dessub')
 
     const validate = () => {
-      const refdocValue = refdoc.value.trim()
-      const texsmsValue = texsms.value.trim()
+      const dessubValue = dessub.value.trim()
 
-      if (refdocValue === '') {
-        setError(refdoc, 'Referencia requerida')
+      if (dessubValue === '') {
+        setError(dessub, 'Descripción requerida')
         return false
       } else {
-        setSuccess(refdoc)
-      }
-      if (texsmsValue === '') {
-        setError(texsms, 'Texto requerido')
-        return false
-      } else {
-        setSuccess(texsms)
+        setSuccess(dessub)
       }
 
       return true
@@ -213,6 +196,6 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
-  </script> 
+  </script>
 </body>
 </html>

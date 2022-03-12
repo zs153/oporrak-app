@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Hitos</title>
+    <title>Subtipos</title>
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <!-- bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -71,6 +71,9 @@
                   <a href="/admin/tipos" class="dropdown-item">
                     <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
                   </a>
+                  <a href="/admin/subtipos" class="dropdown-item">
+                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subtipos
+                  </a>
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
                   </a>
@@ -82,49 +85,28 @@
                     <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
                   </a>
                 </div>
-              </li>
+              </li>           
             </ul>
           </div>
         </div>
       </div>
 
       <div class="page-wrapper">
-        <div class="page-header">
-          <div class="row align-items-center">
-            <div class="col">
-              <h2 class="page-title">Fraude</h2>
-              <div class="page-subtitle">
-                <div class="row">
-                  <div class="col-auto">
-                    <a href="/admin/fraudes/edit/<%- datos.fraude.IDFRAU %>" class="text-reset"><%- datos.fraude.REFFRA %></a>
-                  </div>
-                  <div class="col-auto">
-                    NIF: <%- datos.fraude.NIFCON %> 
-                  </div>
-                  <div class="col-auto">
-                    Nombre: <%- datos.fraude.NOMCON %> 
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="page-body">
           <div class="container-xl">
             <div class="row row-deck row-cards">
               <div class="col-12">
                 <div class="card">
-                  <div class="card-header">                    
-                    Hitos - Fraude
-
+                  <div class="card-header">
+                    Subtipos
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarSMSBox" onkeyup="filtroSmss();" placeholder="Buscar..."
-                            aria-label="Buscar en sms">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarSubtipoBox" onkeyup="filtroSubtipos();" placeholder="Buscar..."
+                            aria-label="Buscar en subtipos">
                         </div>
-                        <a href="/admin/hitos/add" class="btn btn-primary">
+                        <a href="/admin/subtipos/add" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -133,58 +115,39 @@
                           Nuevo
                         </a>
                       </div>
-                    </div>                    
+                    </div>                     
                   </div>
-                  <div class="card-body overflow-auto">
-                    <table class="table table-vcenter" id="tblSmss">
+                  <div class="card-body">
+                    <table class="table table-vcenter" id="tblSubtipos">
                       <thead>
                       <tr>
-                        <th></th>
-                        <th>Fecha</th>
-                        <th>Tipo</th>
-                        <th>Observación</th>
-                        <th>Importe</th>
+                        <th>Descripción</th>
+                        <th>Origen</th>
                         <th class="w-5"></th>
                       </tr>
                       </thead>
                       <tbody>
-                        <% datos.hitos.map(element => { %>
+                        <% datos.subtipos.map(element => { %>
                           <tr>
                             <td>
-                              <div class="d-flex py-1 align-items-center">                                
+                              <div class="d-flex py-1 align-items-center">
                                 <span class="avatar me-2 avatar-rounded">
-                                  <h6><%- element.IDHITO %></h6>
+                                  <h6><%- element.idsubt %></h6>
                                 </span>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.STRFEC %></div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="d-flex py-1 align-items-center"></div>
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.DESTIP %></div>
+                                  <div class="font-weight-medium"><%- element.DESSUB %></div>
                                 </div>
                               </div>
                             </td>
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.OBSHIT.slice(0,20) + '...' %></div>
+                                  <div class="font-weight-medium">
+                                    <%- datos.arrOrigenTipo[element.ORGTIP].des %>
+                                  </div>
                                 </div>
-                              </div>
+                              </div>                              
                             </td>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.IMPHIT %></div>
-                                </div>
-                              </div>
-                            </td>                            
                             <td class="text-end">
                               <ul class="dots-menu">
                                 <li class="nav-item drop-right">
@@ -193,13 +156,13 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/hitos/edit/<%- element.IDHITO %>" class="nav-link">
-                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar hito</a>
+                                        <a href="/admin/subtipos/edit/<%- element.idsubt %>" class="nav-link">
+                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar subtipo</a>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('texhit').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
-                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar sms
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idsubt').value ='<%- element.idsubt %>', document.getElementById('deltip').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar subtipo
                                       </a>
                                     </li>
                                   </ul>
@@ -211,7 +174,7 @@
                       </tbody>
                     </table>
                   </div>
-                </div>
+                </div>                
               </div>
             </div>
           </div>
@@ -241,20 +204,20 @@
               <path d="M12 9v2m0 4v.01"></path>
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
-            <h3>¿Desea borrar este hito?</h3>
-            <h5><span id="texhit"></span></h5>
+            <h3>¿Desea borrar este tipo?</h3>
+            <div id="deltip"></div>
             <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
           </div>
           <div class="modal-footer">
             <div class="w-100">
               <div class="row">
                 <div class="col">
-                  <a href="/admin/fraudes" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                  <a href="/admin/subtipos" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                 </div>
                 <div class="col">
-                  <form action="/admin/hitos/delete" method="POST">
-                    <input type="hidden" id="idhito" name="idhito" value="">
-                    <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar hito</button>
+                  <form action="/admin/subtipos/delete" method="POST">
+                    <input type="hidden" id="idsubt" name="idsubt" value="">
+                    <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar tipo</button>
                   </form>
                 </div>
               </div>
@@ -266,10 +229,10 @@
 
     <script src="/js/ayuda.js"></script>
     <script>
-      function filtroHitos() {
-        const input = document.getElementById("buscarHitoBox");
+      function filtroSubtipos() {
+        const input = document.getElementById("buscarSubtipoBox");
         const filter = input.value.toUpperCase();
-        const table = document.getElementById("tblHitos");
+        const table = document.getElementById("tblSubtipos");
         const tr = table.getElementsByTagName("tr");
         let arrTd
         let td

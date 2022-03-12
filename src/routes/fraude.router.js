@@ -1,52 +1,75 @@
-import express from "express";
-import authRoutes from "../middleware/auth";
+import express from 'express'
+import authRoutes from '../middleware/auth'
+// import {
+//   mainPageFraude,
+//   addPageFraude,
+//   editPageFraude,
+//   ejercicioPageFraude,
+//   hitosPageFraude,
+//   addPageHitoFraude,
+//   insertFraude,
+//   updateFraude,
+//   deleteFraude,
+//   asignarFraude,
+//   changePasswordFraude,
+//   updatePerfilFraude,
+//   resolverFraude,
+//   remitirFraude,
+//   desadjudicarFraude,
+//   verTodoFraude,
+//   smsFraude,
+//   ejercicioFraude,
+//   insertHitoFraude,
+// } from "../controllers/fraude.controller";
 import {
-  mainPageFraude,
-  addPageFraude,
-  editPageFraude,
-  ejercicioPageFraude,
-  hitosPageFraude,
-  addPageHitoFraude,
+  fraudesPage,
+  addFraudesPage,
+  editFraudesPage,
+  verFraudesPage,
+  ejercicioFraudesPage,
+  hitosPage,
+  addHitosPage,
+  editHitosPage,
+  insertHito,
   insertFraude,
   updateFraude,
   deleteFraude,
   asignarFraude,
-  changePasswordFraude,
-  updatePerfilFraude,
   resolverFraude,
   remitirFraude,
   desadjudicarFraude,
-  verTodoFraude,
-  smsFraude,
-  ejercicioFraude,
-  insertHitoFraude,
-} from "../controllers/fraude.controller";
+  sms,
+  ejercicio,
+  updateHito,
+  deleteHito,
+  changePassword,
+  updatePerfil,
+} from '../controllers/fraude.controller'
 
-const fraudeRouter = express.Router();
+const fraudeRouter = express.Router()
 
-// paginas
-fraudeRouter.get("/fraudes", authRoutes, mainPageFraude);
-fraudeRouter.get("/fraudes/add", authRoutes, addPageFraude);
-fraudeRouter.get("/fraudes/edit/:id", authRoutes, editPageFraude);
-fraudeRouter.get("/fraudes/ejercicio/:id", authRoutes, ejercicioPageFraude);
-fraudeRouter.get("/fraudes/hitos/:id", authRoutes, hitosPageFraude);
-fraudeRouter.get("/fraudes/addhitos", authRoutes, addPageHitoFraude);
-fraudeRouter.get("/fraudes/vertodo", authRoutes, verTodoFraude);
+fraudeRouter.get('/fraudes', authRoutes, fraudesPage)
+fraudeRouter.get('/fraudes/add', authRoutes, addFraudesPage)
+fraudeRouter.get('/fraudes/edit/:id', authRoutes, editFraudesPage)
+fraudeRouter.get('/fraudes/ver', authRoutes, verFraudesPage)
+fraudeRouter.get('/fraudes/ejercicio/:idfrau', authRoutes, ejercicioFraudesPage)
+fraudeRouter.get('/fraudes/hitos/:idfrau', authRoutes, hitosPage)
+fraudeRouter.get('/fraudes/hitos/add/:idfrau', authRoutes, addHitosPage)
+fraudeRouter.get('/fraudes/hitos/edit/:idfrau/:id', authRoutes, editHitosPage)
 
-// procedures
-fraudeRouter.post("/fraudes/insert", authRoutes, insertFraude);
-fraudeRouter.post("/fraudes/update", authRoutes, updateFraude);
-fraudeRouter.post("/fraudes/delete", authRoutes, deleteFraude);
-fraudeRouter.post("/fraudes/asignar", authRoutes, asignarFraude);
-fraudeRouter.post("/fraudes/resolver", authRoutes, resolverFraude);
-fraudeRouter.post("/fraudes/remitir", authRoutes, remitirFraude);
-fraudeRouter.post("/fraudes/desadjudicar", authRoutes, desadjudicarFraude);
-fraudeRouter.post("/fraudes/sms", authRoutes, smsFraude);
-fraudeRouter.post("/fraudes/ejercicio", authRoutes, ejercicioFraude);
-fraudeRouter.post("/fraudes/hitos/insert", authRoutes, insertHitoFraude);
-// fraudeRouter.post("/fraudes/hito/update", authRoutes, updateHitoFraude);
-// fraudeRouter.post("/fraudes/hito/delete", authRoutes, deleteHitoFraude);
-fraudeRouter.post("/fraudes/cambio", authRoutes, changePasswordFraude);
-fraudeRouter.post("/fraudes/updatePerfil", authRoutes, updatePerfilFraude);
+fraudeRouter.post('/fraudes/insert', authRoutes, insertFraude)
+fraudeRouter.post('/fraudes/update', authRoutes, updateFraude)
+fraudeRouter.post('/fraudes/delete', authRoutes, deleteFraude)
+fraudeRouter.post('/fraudes/hitos/insert', authRoutes, insertHito)
+fraudeRouter.post('/fraudes/hitos/update', authRoutes, updateHito)
+fraudeRouter.post('/fraudes/hitos/delete', authRoutes, deleteHito)
+fraudeRouter.post('/fraudes/asignar', authRoutes, asignarFraude)
+fraudeRouter.post('/fraudes/resolver', authRoutes, resolverFraude)
+fraudeRouter.post('/fraudes/remitir', authRoutes, remitirFraude)
+fraudeRouter.post('/fraudes/desadjudicar', authRoutes, desadjudicarFraude)
+fraudeRouter.post('/fraudes/sms', authRoutes, sms)
+fraudeRouter.post('/fraudes/ejercicio', authRoutes, ejercicio)
+fraudeRouter.post('/fraudes/cambio', authRoutes, changePassword)
+fraudeRouter.post('/fraudes/updatePerfil', authRoutes, updatePerfil)
 
-export default fraudeRouter;
+export default fraudeRouter

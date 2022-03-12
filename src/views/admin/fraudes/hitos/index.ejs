@@ -50,7 +50,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item active">
                 <a class="nav-link" href="/admin/fraudes" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <i class="bi bi-cash"></i>
@@ -60,7 +60,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item dropdown active">
+              <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
                   <span>Administración</span>
                 </a>
@@ -137,7 +137,7 @@
                           <input type="text" class="form-control d-inline-block me-3" id="buscarSMSBox" onkeyup="filtroSmss();" placeholder="Buscar..."
                             aria-label="Buscar en sms">
                         </div>
-                        <a href="/admin/fraudes/addhitos" class="btn btn-primary">
+                        <a href="/admin/fraudes/hitos/add/<%- datos.fraude.idfrau %>" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -148,7 +148,7 @@
                       </div>
                     </div>                    
                   </div>
-                  <div class="card-body overflow-auto">
+                  <div class="card-body">
                     <table class="table table-vcenter" id="tblSmss">
                       <thead>
                       <tr>
@@ -187,7 +187,7 @@
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.OBSHIT.slice(0,20) + '...' %></div>
+                                  <div class="font-weight-medium"><%- element.OBSHIT.length > 20 ? element.OBSHIT.slice(0,20) + '...' : element.OBSHIT %></div>
                                 </div>
                               </div>
                             </td>
@@ -206,7 +206,7 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/fraudes/hitos/<%- element.IDHITO %>" class="nav-link">
+                                        <a href="/admin/fraudes/hitos/edit/<%- datos.fraude.idfrau %>/<%- element.IDHITO %>" class="nav-link">
                                           <i class="bi bi-pencil dropdown-item-icon"></i>Editar hito</a>
                                         </a>
                                     </li>
@@ -262,10 +262,10 @@
             <div class="w-100">
               <div class="row">
                 <div class="col">
-                  <a href="/admin/fraudes" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                  <a href="/admin/fraudes/hitos/<%- datos.fraude.idfrau %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                 </div>
                 <div class="col">
-                  <form action="/admin/hitos/delete" method="POST">
+                  <form action="/admin/fraudes/hitos/delete" method="POST">
                     <input type="hidden" id="idhito" name="idhito" value="">
                     <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar hito</button>
                   </form>

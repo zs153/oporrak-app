@@ -52,7 +52,7 @@
                 <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
                   <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
                 </a>
-                <a href="/admin/fraudes/vertodo" class="dropdown-item">
+                <a href="/admin/fraudes/ver" class="dropdown-item">
                     <i class="bi bi-eye dropdown-item-icon"></i>Mostrar todo
                 </a>
                 <div class="dropdown-divider"></div>
@@ -127,7 +127,7 @@
       <div class="page-wrapper">
         <div class="page-body">
           <div class="container-xl">
-            <div class="row row-deck row-cards">
+            <div class="row row-cards">
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
@@ -302,7 +302,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('idfrau').value ='<%- element.IDFRAU %>', document.getElementById('delfra').innerText ='<%- element.REFFRA %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                          <a href="#" class="nav-link" onclick="{document.getElementById('delfra').value ='<%- element.IDFRAU %>', document.getElementById('deltex').innerText ='<%- element.REFFRA %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                             <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
                                           </a>
                                         </li>
@@ -356,7 +356,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>¿Desea borrar este documento?</h3>
-            <div id="delfra"></div>
+            <div id="deltex"></div>
             <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
           </div>
           <div class="modal-footer">
@@ -367,7 +367,7 @@
                 </div>
                 <div class="col">
                   <form action="/admin/fraudes/delete" method="POST">
-                    <input type="hidden" id="idfrau" name="idfrau" value="">
+                    <input type="hidden" id="delfra" name="idfrau" value="">
                     <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar fraude</button>
                   </form>
                 </div>
@@ -614,7 +614,7 @@
                   <div class="col-12">
                     <div class="mb-1">
                       <div class="input-control">
-                        <label class="form-label">Texto</label>
+                        <label class="form-label required">Texto</label>
                         <textarea name="texsms" id="modsms" class="form-control" value="" maxlength="140" rows="3" style="resize: vertical"></textarea>
                         <div class="invalid-feedback"></div>
                       </div>
@@ -650,16 +650,6 @@
         }
       })
     </script>     
-    <script>
-      const messages = document.getElementById('messages')
-      const socket = io()
-
-      socket.on('receive-message', msg => {
-        const li = document.createElement('li')
-        li.textContent = msg
-        messages.appendChild(li)
-      })
-    </script>
     <script>
       function filtroFraudes() {
         const input = document.getElementById("buscarFraBox");

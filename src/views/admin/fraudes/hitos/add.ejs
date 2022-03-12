@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Añadir sms</title>
+  <title>Añadir hito</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -51,7 +51,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
               <a class="nav-link" href="/admin/fraudes" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="bi bi-cash"></i>
@@ -61,7 +61,7 @@
                 </span>
               </a>
             </li>
-              <li class="nav-item dropdown active">
+              <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
                   <span>Administración</span>
                 </a>
@@ -71,9 +71,6 @@
                   </a>
                   <a href="/admin/tipos" class="dropdown-item">
                     <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
-                  </a>
-                  <a href="/admin/subtipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subipos
                   </a>
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
@@ -108,39 +105,43 @@
                     </div>
                   <% }) %>
                 <% } %>
-                <form action="/admin/smss/insert" method="POST" onsubmit="return validate();">
+                <form action="/admin/fraudes/hitos/insert" method="POST" onsubmit="return validate();">
+                  <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
                   <div class="card-header">
-                    SMS
+                    Hito
                   </div>
                   <div class="card-body">                    
                     <div class="row">
-                      <div class="col-3">
+                      <div class="col-5">
                         <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Referencia</label>
-                            <input type="text" name="refdoc" id="refdoc" class="form-control" value="<%- datos.sms.refdoc %>" autofocus/>
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6"></div>
-                      <div class="col-3">
-                        <div class="mb-1">
-                          <div class="form-label">Estado</div>
-                          <select class="form-select" id="cbosta" name="stasms" value="<%- datos.sms.stasms %>">
-                            <% datos.arrEstadosSms.map(element => { %> 
-                              <option value="<%- element.id %>" <%- element.id == datos.sms.stasms ? " selected":"" %>><%= element.des %></option>
+                          <div class="form-label">Tipo</div>
+                          <select class="form-select" id="cbotip" name="tiphit">
+                            <% datos.tipos.map(element => { %> 
+                              <option value="<%- element.IDTIPO %>"><%= element.DESTIP %></option>
                             <% }) %> 
                           </select>
                         </div>
-                      </div>                      
+                      </div>
+                      <div class="col-5">
+                        <div class="mb-1">
+                          <div class="form-label">Subtipo</div>
+                          <select class="form-select" id="cbosub" name="subthi">
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <div class="form-label">Importe</div>
+                          <input type="text" name="imphit" id="imphit" class="form-control" />
+                        </div>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Texto</label>
-                            <input type="text" name="texsms" id="texsms" class="form-control" value="<%- datos.sms.texsms %>" />
+                            <label class="form-label required">Observaciones</label>
+                            <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"></textarea>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -149,8 +150,8 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/smss" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Añadir sms</button>
+                      <a href="/admin/fraudes/hitos/<%- datos.fraude.idfrau %>" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Añadir hito</button>
                     </div>
                   </div>
                 </form>
@@ -174,24 +175,35 @@
   </div>
   <script src="/js/ayuda.js"></script>
   <script>
-    const refdoc = document.getElementById('refdoc')
-    const texsms = document.getElementById('texsms')
+    const arrSubtipos = <%- JSON.stringify(datos.subtipos) %>
+    const selectTipos = document.querySelector('#cbotip');
+    const selectSubtipos = document.querySelector('#cbosub')    
+    
+    selectTipos.addEventListener('change', (event) => {
+      const options = document.querySelectorAll('#cbosub option');
+      const idTipo = selectTipos.value
+      
+      options.forEach(o => o.remove());
+      
+      arrSubtipos.filter(item => item.IDTIPO == idTipo).map((itm) => {
+        const option = document.createElement('option')
+        option.value = itm.IDSUBT
+        option.text = itm.DESSUB
+        selectSubtipos.appendChild(option)
+      })
+    });
+  </script>
+  <script>
+    const obshit = document.getElementById('obshit')
 
     const validate = () => {
-      const refdocValue = refdoc.value.trim()
-      const texsmsValue = texsms.value.trim()
+      const obshitValue = obshit.value.trim()
 
-      if (refdocValue === '') {
-        setError(refdoc, 'Referencia requerida')
+      if (obshitValue === '') {
+        setError(obshit, 'Observaciones requerida')
         return false
       } else {
-        setSuccess(refdoc)
-      }
-      if (texsmsValue === '') {
-        setError(texsms, 'Texto requerido')
-        return false
-      } else {
-        setSuccess(texsms)
+        setSuccess(obshit)
       }
 
       return true
@@ -213,6 +225,6 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
-  </script> 
+  </script>
 </body>
 </html>
