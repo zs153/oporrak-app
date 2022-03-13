@@ -135,7 +135,7 @@
                       <div class="col-2">
                         <div class="mb-1">
                           <div class="form-label">Importe</div>
-                          <input type="text" name="imphit" id="imphit" class="form-control" value="<%- datos.hito.imphit %>" />
+                          <input type="text" name="imphit" id="imphit" class="form-control" onkeyup="this.value=this.value.replace('.',',')" value="<%- datos.hito.imphit %>" />
                         </div>
                       </div>
                     </div>
@@ -228,6 +228,12 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
+  </script>
+  <script>
+    function numbersOnly(event) {
+      var key = event.keyCode;
+      return ((key >= 96 && key <= 105) || (key >= 48 && key <= 57) || key == 188 || key==46 || key==8);
+    };    
   </script>
 </body>
 </html>

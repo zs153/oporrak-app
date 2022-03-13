@@ -192,6 +192,7 @@ export const hitosPage = async (req, res) => {
       fraude,
       hitos: resultHitos.data,
     }
+
     res.render('admin/fraudes/hitos/index', { user, datos })
   } catch (error) {
     res.redirect('/admin/fraudes')
@@ -319,10 +320,12 @@ export const insertFraude = async (req, res) => {
       'No se ha podido crear el fraude. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = 'El fraude ya existe. Verifique la referencia'
+      msg = 'El fraude ya existe. Verifique nif, tipo y/o ejercicio'
     }
 
-    res.redirect('/admin/fraudes')
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const updateFraude = async (req, res) => {
@@ -354,7 +357,16 @@ export const updateFraude = async (req, res) => {
     )
     res.redirect('/admin/fraudes')
   } catch (error) {
-    res.redirect('/admin/fraudes')
+    let msg =
+      'No se ha podido actualizar el fraude. Verifique los datos introducidos'
+
+    if (error.response.data.errorNum === 20100) {
+      msg = 'El fraude ya existe. Verifique nif, tipo y/o ejercicio'
+    }
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const deleteFraude = async (req, res) => {
@@ -378,7 +390,12 @@ export const deleteFraude = async (req, res) => {
 
     res.redirect('/admin/fraudes')
   } catch (error) {
-    res.redirect('/admin/fraudes')
+    const msg =
+      'No se ha podido elminar el fraude. El error puede deberse a que el fraude ya no existe.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const asignarFraude = async (req, res) => {
@@ -399,20 +416,22 @@ export const asignarFraude = async (req, res) => {
     })
 
     if (resul.data.stafra === estadosDocumento.pendiente) {
-      const result = await axios.post(
-        'http://localhost:8000/api/fraudes/cambioEstado',
-        {
-          documento,
-          movimiento,
-        }
-      )
+      await axios.post('http://localhost:8000/api/fraudes/cambioEstado', {
+        documento,
+        movimiento,
+      })
 
       res.redirect('/admin/fraudes')
     } else {
       res.redirect('/admin/fraudes')
     }
   } catch (error) {
-    res.redirect('/admin/fraudes')
+    const msg =
+      'No se ha podido asignar el fraude. El error puede deberse a que el fraude ya no existe.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const resolverFraude = async (req, res) => {
@@ -431,14 +450,12 @@ export const resolverFraude = async (req, res) => {
     const resul = await axios.post('http://localhost:8000/api/fraude', {
       idfrau: req.body.idfrau,
     })
+
     if (resul.data.stafra === estadosDocumento.asignado) {
-      const result = await axios.post(
-        'http://localhost:8000/api/fraudes/cambioEstado',
-        {
-          documento,
-          movimiento,
-        }
-      )
+      await axios.post('http://localhost:8000/api/fraudes/cambioEstado', {
+        documento,
+        movimiento,
+      })
 
       // envio sms
       if (req.body.chkenv) {
@@ -452,21 +469,29 @@ export const resolverFraude = async (req, res) => {
           usuarioMov: user.id,
           tipoMov: tiposMovimiento.crearSms,
         }
-        const result = await axios.post(
-          'http://localhost:8000/api/fraudes/sms',
-          {
+        try {
+          await axios.post('http://localhost:8000/api/fraudes/sms', {
             sms,
             movimiento,
-          }
-        )
-      }
+          })
+        } catch (error) {
+          const msg =
+            'No se ha podido enviar el sms. El envio tendrá que realizarse manualmente.'
 
-      res.redirect('/admin/fraudes')
-    } else {
-      res.redirect('/admin/fraudes')
+          res.render('admin/error400', {
+            alerts: [{ msg, error }],
+          })
+        }
+      }
     }
-  } catch (error) {
+
     res.redirect('/admin/fraudes')
+  } catch (error) {
+    const msg = 'No se ha podido resolver el fraude.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const remitirFraude = async (req, res) => {
@@ -496,11 +521,13 @@ export const remitirFraude = async (req, res) => {
       )
 
       res.redirect('/admin/fraudes')
-    } else {
-      res.redirect('/admin/fraudes')
     }
   } catch (error) {
-    res.redirect('/admin/fraudes')
+    const msg = 'No se ha podido remitir el fraude.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const desadjudicarFraude = async (req, res) => {
@@ -525,21 +552,22 @@ export const desadjudicarFraude = async (req, res) => {
       resul.data.stafra === estadosDocumento.resuelto ||
       resul.data.stafra === estadosDocumento.remitido
     ) {
-      const result = await axios.post(
+      result = await axios.post(
         'http://localhost:8000/api/fraudes/cambioEstado',
         {
           documento,
           movimiento,
         }
       )
-
-      res.redirect('/admin/fraudes')
-    } else {
-      // TODO mensaje
-      res.redirect('/admin/fraudes')
     }
-  } catch (error) {
+
     res.redirect('/admin/fraudes')
+  } catch (error) {
+    const msg = 'No se ha podido desadjudicar el fraude.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 
@@ -558,17 +586,19 @@ export const insertHito = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(
-      'http://localhost:8000/api/fraudes/hitos/insert',
-      {
-        hito,
-        idFraude,
-        movimiento,
-      }
-    )
-    res.redirect('/admin/fraudes')
+    await axios.post('http://localhost:8000/api/fraudes/hitos/insert', {
+      hito,
+      idFraude,
+      movimiento,
+    })
+
+    res.redirect(`/admin/fraudes/hitos/${idFraude}`)
   } catch (error) {
-    res.redirect('/admin/fraudes')
+    const msg = 'No se ha podido insertar el hito.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const updateHito = async (req, res) => {
@@ -585,17 +615,18 @@ export const updateHito = async (req, res) => {
     tipoMov: tiposMovimiento.modificarHito,
   }
   try {
-    const result = await axios.post(
-      'http://localhost:8000/api/fraudes/hitos/update',
-      {
-        hito,
-        movimiento,
-      }
-    )
+    await axios.post('http://localhost:8000/api/fraudes/hitos/update', {
+      hito,
+      movimiento,
+    })
 
-    res.redirect('/admin/fraudes')
+    res.redirect(`/admin/fraudes/hitos/${idFraude}`)
   } catch (error) {
-    res.redirect('/admin/fraudes')
+    const msg = 'No se ha podido insertar el hito.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
   }
 }
 export const deleteHito = async (req, res) => {
@@ -768,6 +799,10 @@ export const changePassword = async (req, res) => {
   } catch (error) {
     res.redirect('/admin/fraudes')
   }
+}
+
+export const errorFraudesPage = async (req, res) => {
+  res.render('admin/error400')
 }
 
 // helpers

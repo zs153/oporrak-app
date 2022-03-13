@@ -1,26 +1,5 @@
 import express from 'express'
 import authRoutes from '../middleware/auth'
-// import {
-//   mainPageFraude,
-//   addPageFraude,
-//   editPageFraude,
-//   ejercicioPageFraude,
-//   hitosPageFraude,
-//   addPageHitoFraude,
-//   insertFraude,
-//   updateFraude,
-//   deleteFraude,
-//   asignarFraude,
-//   changePasswordFraude,
-//   updatePerfilFraude,
-//   resolverFraude,
-//   remitirFraude,
-//   desadjudicarFraude,
-//   verTodoFraude,
-//   smsFraude,
-//   ejercicioFraude,
-//   insertHitoFraude,
-// } from "../controllers/fraude.controller";
 import {
   fraudesPage,
   addFraudesPage,
@@ -44,6 +23,7 @@ import {
   deleteHito,
   changePassword,
   updatePerfil,
+  errorFraudesPage,
 } from '../controllers/fraude.controller'
 
 const fraudeRouter = express.Router()
@@ -72,4 +52,5 @@ fraudeRouter.post('/fraudes/ejercicio', authRoutes, ejercicio)
 fraudeRouter.post('/fraudes/cambio', authRoutes, changePassword)
 fraudeRouter.post('/fraudes/updatePerfil', authRoutes, updatePerfil)
 
+fraudeRouter.post('/error400', errorFraudesPage)
 export default fraudeRouter
