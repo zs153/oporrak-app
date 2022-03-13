@@ -120,7 +120,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" autofocus/>
+                            <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>

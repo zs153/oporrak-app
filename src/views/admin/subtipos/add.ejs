@@ -118,7 +118,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="dessub" id="dessub" class="form-control" value="<%- datos.subtipo.dessub %>" autofocus/>
+                            <input type="text" name="dessub" id="dessub" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.subtipo.dessub %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -126,10 +126,10 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label">Origen</label>
-                            <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.subtipo.orgtip %>">
-                              <% datos.arrOrigenTipo.map(element => { %> 
-                                <option value="<%- element.id %>" <%- element.id == datos.subtipo.orgtip ? " selected":"" %>><%- element.des %></option>
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select" id="cboorg" name="idtipo" value="<%- datos.subtipo.idtipo %>">
+                              <% datos.arrTipos.map(element => { %> 
+                                <option value="<%- element.IDTIPO %>"><%- element.DESTIP %></option>
                               <% }) %> 
                             </select>
                             <div class="invalid-feedback"></div>

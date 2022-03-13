@@ -7,7 +7,6 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.get('http://localhost:8000/api/oficinas')
 
-    console.log(result.data.dat)
     const datos = { oficinas: result.data.dat }
     res.render('admin/oficinas', { user, datos })
   } catch (error) {

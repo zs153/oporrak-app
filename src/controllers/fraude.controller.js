@@ -58,9 +58,9 @@ export const addFraudesPage = async (req, res) => {
     const datos = {
       documento,
       arrTipos: resultTipos.data,
-      arrOficinas: resultOficinas.data,
+      arrOficinas: resultOficinas.data.dat,
     }
-
+    console.log(datos)
     res.render('admin/fraudes/add', { user, datos })
   } catch (error) {
     res.redirect('/admin/fraudes')
@@ -101,7 +101,7 @@ export const editFraudesPage = async (req, res) => {
     const datos = {
       documento,
       arrTipos: resultTipos.data,
-      arrOficinas: resultOficinas.data,
+      arrOficinas: resultOficinas.data.dat,
     }
 
     res.render('admin/fraudes/edit', { user, datos })
@@ -164,7 +164,6 @@ export const ejercicioFraudesPage = async (req, res) => {
 
     res.render('admin/fraudes/ejercicio', { user, datos })
   } catch (error) {
-    console.log(error)
     res.redirect('/admin/fraudes')
   }
 }
@@ -585,7 +584,6 @@ export const updateHito = async (req, res) => {
     usuarioMov: user.id,
     tipoMov: tiposMovimiento.modificarHito,
   }
-  console.log(hito)
   try {
     const result = await axios.post(
       'http://localhost:8000/api/fraudes/hitos/update',

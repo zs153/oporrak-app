@@ -122,7 +122,7 @@
                       <thead>
                       <tr>
                         <th>Descripción</th>
-                        <th>Origen</th>
+                        <th>Tipo</th>
                         <th class="w-5"></th>
                       </tr>
                       </thead>
@@ -131,22 +131,23 @@
                           <tr>
                             <td>
                               <div class="d-flex py-1 align-items-center">
-                                <span class="avatar me-2 avatar-rounded">
-                                  <h6><%- element.idsubt %></h6>
-                                </span>
+                                <!-- <span class="avatar me-2 avatar-rounded">
+                                  <h6><%- element.IDSUBT %></h6>
+                                </span> -->
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.DESSUB %></div>
+                                  <div class="text-muted">
+                                    <small class="text-reset">ID: <%- element.IDSUBT %></small>
+                                  </div>
                                 </div>
                               </div>
                             </td>
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium">
-                                    <%- datos.arrOrigenTipo[element.ORGTIP].des %>
-                                  </div>
+                                  <div class="font-weight-medium"><%- element.DESTIP %></div>
                                 </div>
-                              </div>                              
+                              </div>
                             </td>
                             <td class="text-end">
                               <ul class="dots-menu">
@@ -156,12 +157,12 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/subtipos/edit/<%- element.idsubt %>" class="nav-link">
-                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar subtipo</a>
+                                        <a href="/admin/subtipos/edit/<%- element.IDSUBT %>" class="nav-link">
+                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar subtipo
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idsubt').value ='<%- element.idsubt %>', document.getElementById('deltip').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idsubt').value ='<%- element.IDSUBT %>', document.getElementById('deltip').innerText ='<%- element.DESSUB %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar subtipo
                                       </a>
                                     </li>

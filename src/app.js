@@ -12,6 +12,7 @@ import oficinaRouter from './routes/oficina.router'
 import formularioRouter from './routes/formulario.router'
 import fraudeRouter from './routes/fraude.router'
 import smsRouter from './routes/sms.router'
+import subtipoRouter from './routes/subtipo.router'
 
 const app = express()
 
@@ -34,6 +35,7 @@ app.use('/admin', oficinaRouter)
 app.use('/admin', formularioRouter)
 app.use('/admin', fraudeRouter)
 app.use('/admin', smsRouter)
+app.use('/admin', subtipoRouter)
 app.use('/log', loginRouter)
 
 export default app
