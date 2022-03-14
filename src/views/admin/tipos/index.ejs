@@ -127,13 +127,10 @@
                       </tr>
                       </thead>
                       <tbody>
-                        <% datos.tipos.map(element => { %>
+                        <% tipos.map(element => { %>
                           <tr>
                             <td>
                               <div class="d-flex py-1 align-items-center">
-                                <!-- <span class="avatar me-2 avatar-rounded">
-                                  <h6><%- element.IDTIPO %></h6>
-                                </span> -->
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.DESTIP %></div>
                                   <div class="text-muted">
@@ -146,7 +143,7 @@
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium">
-                                    <%- datos.arrOrigenTipo[element.ORGTIP].des %>
+                                    <%- arrOrigenTipo[element.ORGTIP].des %>
                                   </div>
                                 </div>
                               </div>                              

@@ -22,7 +22,11 @@ export const mainPage = async (req, res) => {
     const datos = { documentos: result.data.dat };
     res.render("admin/formularios", { user, datos });
   } catch (error) {
-    res.redirect("/");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const addPage = async (req, res) => {
@@ -37,13 +41,10 @@ export const addPage = async (req, res) => {
         origen: origenTipo.formulario,
       }
     );
-    const arrTipos = resultTipos.data;
-
     // oficinas
     const resultOficinas = await axios.get(
       "http://localhost:8000/api/oficinas"
     );
-    const arrOficinas = resultOficinas.data.dat;
 
     const documento = {
       iddocu: 0,
@@ -64,35 +65,32 @@ export const addPage = async (req, res) => {
     };
     const datos = {
       documento,
-      arrTipos,
-      arrOficinas,
+      arrTipos: resultTipos.data,
+      arrOficinas: resultOficinas.data.dat,
     };
 
     res.render("admin/formularios/add", { user, datos });
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const editPage = async (req, res) => {
   const user = req.user;
 
   try {
-    // tipos
     const resultTipos = await axios.post(
       "http://localhost:8000/api/tipos/origen",
       {
         origen: origenTipo.formulario,
       }
     );
-    const arrTipos = resultTipos.data;
-
-    // oficinas
     const resultOficinas = await axios.get(
       "http://localhost:8000/api/oficinas"
     );
-    const arrOficinas = resultOficinas.data.dat;
-
-    // formularios
     const result = await axios.post("http://localhost:8000/api/formulario", {
       id: req.params.id,
     });
@@ -115,13 +113,17 @@ export const editPage = async (req, res) => {
     };
     const datos = {
       documento,
-      arrTipos,
-      arrOficinas,
+      arrTipos: resultTipos.data,
+      arrOficinas: resultOficinas.data.dat,
     };
 
     res.render("admin/formularios/edit", { user, datos });
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const insertFormulario = async (req, res) => {
@@ -164,34 +166,15 @@ export const insertFormulario = async (req, res) => {
 
     res.redirect("/admin/formularios");
   } catch (error) {
-    let msg =
-      "No se ha podido crear el formulario. Verifique los datos introducidos";
+    let msg = "No se ha podido crear el formulario.";
 
     if (error.response.data.errorNum === 20100) {
       msg = "El formulario ya existe.";
     }
 
-    try {
-      // tipos
-      const resultTipos = await axios.get("http://localhost:8000/api/tipos");
-      const arrTipos = resultTipos.data.dat;
-
-      // oficinas
-      const resultOficinas = await axios.get(
-        "http://localhost:8000/api/oficinas"
-      );
-      const arrOficinas = resultOficinas.data.dat;
-
-      const datos = {
-        documento,
-        arrTipos,
-        arrOficinas,
-      };
-
-      res.render("admin/formularios/add", { user, datos, alerts: [{ msg }] });
-    } catch (error) {
-      res.redirect("/admin/formularios");
-    }
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const updateFormulario = async (req, res) => {
@@ -226,34 +209,15 @@ export const updateFormulario = async (req, res) => {
 
     res.redirect("/admin/formularios");
   } catch (error) {
-    let msg =
-      "No se ha podido actualizar el formulario. Verifique los datos introducidos";
+    let msg = "No se ha podido actualizar el formulario.";
 
     if (error.response.data.errorNum === 20100) {
-      msg = "El formulario ya existe. Verifique la referencia";
+      msg = "El formulario ya existe. Verifique nif, tipo y/o ejercicio";
     }
 
-    try {
-      // tipos
-      const resultTipos = await axios.get("http://localhost:8000/api/tipos");
-      const arrTipos = resultTipos.data.dat;
-
-      // oficinas
-      const resultOficinas = await axios.get(
-        "http://localhost:8000/api/oficinas"
-      );
-      const arrOficinas = resultOficinas.data.dat;
-
-      const datos = {
-        documento,
-        arrTipos,
-        arrOficinas,
-      };
-
-      res.render("admin/formularios/edit", { user, datos, alerts: [{ msg }] });
-    } catch (error) {
-      res.redirect("/admin/formularios");
-    }
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const deleteFormulario = async (req, res) => {
@@ -277,7 +241,12 @@ export const deleteFormulario = async (req, res) => {
 
     res.redirect("/admin/formularios");
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg =
+      "No se ha podido elminar el formulario. El error puede deberse a que el documento ya no existe.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const asignarFormulario = async (req, res) => {
@@ -293,7 +262,6 @@ export const asignarFormulario = async (req, res) => {
   };
 
   try {
-    // estado formulario
     const resul = await axios.post("http://localhost:8000/api/formulario", {
       id: req.body.iddocu,
     });
@@ -308,18 +276,18 @@ export const asignarFormulario = async (req, res) => {
       );
 
       res.redirect("/admin/formularios");
-    } else {
-      res.redirect("/admin/formularios");
     }
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg =
+      "No se ha podido asignar el formulario. El error puede deberse a que el documento ya no existe.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const resolverFormulario = async (req, res) => {
   const user = req.user;
-
-  if (req.body.chkenv) {
-  }
   const documento = {
     id: req.body.iddocu,
     liquidador: user.userID,
@@ -331,11 +299,10 @@ export const resolverFormulario = async (req, res) => {
   };
 
   try {
-    // estado formulario
     const resul = await axios.post("http://localhost:8000/api/formulario", {
       id: req.body.iddocu,
     });
-    // cambiar estado
+
     if (resul.data.stadoc === estadosDocumento.asignado) {
       const result = await axios.post(
         "http://localhost:8000/api/formularios/cambioEstado",
@@ -348,30 +315,39 @@ export const resolverFormulario = async (req, res) => {
       /// envio sms
       if (req.body.chkenv) {
         const sms = {
-          texto: req.body.texsms,
-          movil: req.body.movcon,
-          estado: estadosSms.pendiente,
-          idDocumento: req.body.iddocu,
+          texsms: req.body.texsms,
+          movsms: req.body.movsms,
+          stasms: estadosSms.pendiente,
+          iddocu: req.body.iddocu,
         };
         const movimiento = {
           usuarioMov: user.id,
           tipoMov: tiposMovimiento.crearSms,
         };
-        const result = await axios.post(
-          "http://localhost:8000/api/formularios/sms",
-          {
+
+        try {
+          await axios.post("http://localhost:8000/api/formularios/sms", {
             sms,
             movimiento,
-          }
-        );
-      }
+          });
+        } catch (error) {
+          const msg =
+            "No se ha podido enviar el sms. El envio tendrá que realizarse manualmente.";
 
-      res.redirect("/admin/formularios");
-    } else {
-      res.redirect("/admin/formularios");
+          res.render("admin/error400", {
+            alerts: [{ msg, error }],
+          });
+        }
+      }
     }
-  } catch (error) {
+
     res.redirect("/admin/formularios");
+  } catch (error) {
+    const msg = "No se ha podido resolver el formulario.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const remitirFormulario = async (req, res) => {
@@ -387,26 +363,24 @@ export const remitirFormulario = async (req, res) => {
   };
 
   try {
-    // estado formulario
     const resul = await axios.post("http://localhost:8000/api/formulario", {
       id: req.body.iddocu,
     });
 
     if (resul.data.stadoc === estadosDocumento.asignado) {
-      const result = await axios.post(
-        "http://localhost:8000/api/formularios/cambioEstado",
-        {
-          documento,
-          movimiento,
-        }
-      );
-
-      res.redirect("/admin/formularios");
-    } else {
-      res.redirect("/admin/formularios");
+      await axios.post("http://localhost:8000/api/formularios/cambioEstado", {
+        documento,
+        movimiento,
+      });
     }
-  } catch (error) {
+
     res.redirect("/admin/formularios");
+  } catch (error) {
+    const msg = "No se ha podido remitir el fraude.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const desadjudicarFormulario = async (req, res) => {
@@ -422,7 +396,6 @@ export const desadjudicarFormulario = async (req, res) => {
   };
 
   try {
-    // estado formulario
     const resul = await axios.post("http://localhost:8000/api/formulario", {
       id: req.body.iddocu,
     });
@@ -432,21 +405,19 @@ export const desadjudicarFormulario = async (req, res) => {
       resul.data.stadoc === estadosDocumento.resuelto ||
       resul.data.stadoc === estadosDocumento.remitido
     ) {
-      const result = await axios.post(
-        "http://localhost:8000/api/formularios/cambioEstado",
-        {
-          documento,
-          movimiento,
-        }
-      );
-
-      res.redirect("/admin/formularios");
-    } else {
-      // TODO mensaje
-      res.redirect("/admin/formularios");
+      await axios.post("http://localhost:8000/api/formularios/cambioEstado", {
+        documento,
+        movimiento,
+      });
     }
-  } catch (error) {
+
     res.redirect("/admin/formularios");
+  } catch (error) {
+    const msg = "No se ha podido desadjudicar el formulario.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const verTodo = async (req, res) => {
@@ -463,7 +434,11 @@ export const verTodo = async (req, res) => {
     const datos = { documentos: result.data.dat };
     res.render("admin/formularios", { user, datos });
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const sms = async (req, res) => {
@@ -480,17 +455,18 @@ export const sms = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(
-      "http://localhost:8000/api/formularios/sms",
-      {
-        sms,
-        movimiento,
-      }
-    );
+    await axios.post("http://localhost:8000/api/formularios/sms", {
+      sms,
+      movimiento,
+    });
 
     res.redirect("/admin/formularios");
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg = "No se ha podido enviar el sms.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const updatePerfil = async (req, res) => {
@@ -511,13 +487,10 @@ export const updatePerfil = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(
-      "http://localhost:8000/api/formularios/updatePerfil",
-      {
-        usuario,
-        movimiento,
-      }
-    );
+    await axios.post("http://localhost:8000/api/formularios/updatePerfil", {
+      usuario,
+      movimiento,
+    });
 
     const accessToken = jwt.sign(
       {
@@ -542,7 +515,11 @@ export const updatePerfil = async (req, res) => {
     res.cookie("auth", accessToken, options);
     res.redirect("/admin/formularios");
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg = "No se ha podido actualizar el perfil de usuario";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const changePassword = async (req, res) => {
@@ -558,17 +535,18 @@ export const changePassword = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(
-      "http://localhost:8000/api/formularios/cambio",
-      {
-        usuario,
-        movimiento,
-      }
-    );
+    await axios.post("http://localhost:8000/api/formularios/cambio", {
+      usuario,
+      movimiento,
+    });
 
     res.redirect("/admin/formularios");
   } catch (error) {
-    res.redirect("/admin/formularios");
+    const msg = "No se ha podido actualizar la contraseña.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 

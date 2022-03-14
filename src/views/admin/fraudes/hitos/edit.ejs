@@ -110,10 +110,11 @@
                 <% } %>
                 <form action="/admin/fraudes/hitos/update" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idhito" name="idhito" value="<%- datos.hito.idhito %>">
+                  <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
                   <div class="card-header">
                     Hito
                   </div>
-                  <div class="card-body">                    
+                  <div class="card-body">
                     <div class="row">
                       <div class="col-5">
                         <div class="mb-1">

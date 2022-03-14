@@ -1,4 +1,4 @@
-import express from 'express'
+import express from "express";
 import {
   mainPage,
   estadisticaPage,
@@ -6,20 +6,23 @@ import {
   acumuladosPage,
   changePassword,
   updatePerfil,
-} from '../controllers/admin.controller'
-import authRoutes, { verifyTokenAndAdmin } from '../middleware/auth'
+  errorPage,
+} from "../controllers/admin.controller";
+import authRoutes, { verifyTokenAndAdmin } from "../middleware/auth";
 
-const adminRouter = express.Router()
+const adminRouter = express.Router();
 
 // paginas
-adminRouter.get('/', authRoutes, mainPage)
-adminRouter.get('/estadistica', verifyTokenAndAdmin, estadisticaPage)
-adminRouter.get('/estadistica/acumulados', verifyTokenAndAdmin, acumuladosPage)
+adminRouter.get("/", authRoutes, mainPage);
+adminRouter.get("/estadistica", verifyTokenAndAdmin, estadisticaPage);
+adminRouter.get("/estadistica/acumulados", verifyTokenAndAdmin, acumuladosPage);
 // procedures
-adminRouter.post('/update', authRoutes, updatePerfil)
-adminRouter.post('/cambio', authRoutes, changePassword)
-adminRouter.post('/estadistica', verifyTokenAndAdmin, estadistica)
-adminRouter.post('/cambio', authRoutes, changePassword)
-adminRouter.post('/updatePerfil', authRoutes, updatePerfil)
+adminRouter.post("/update", authRoutes, updatePerfil);
+adminRouter.post("/cambio", authRoutes, changePassword);
+adminRouter.post("/estadistica", verifyTokenAndAdmin, estadistica);
+adminRouter.post("/cambio", authRoutes, changePassword);
+adminRouter.post("/updatePerfil", authRoutes, updatePerfil);
+// error
+adminRouter.post("/error400", errorPage);
 
-export default adminRouter
+export default adminRouter;

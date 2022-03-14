@@ -11,10 +11,13 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.get("http://localhost:8000/api/smss");
 
-    const datos = { smss: result.data.dat };
-    res.render("admin/smss", { user, datos });
+    res.render("admin/smss", { user, smss: result.data.dat });
   } catch (error) {
-    res.redirect("/");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const addPage = async (req, res) => {
@@ -34,7 +37,11 @@ export const addPage = async (req, res) => {
 
     res.render("admin/smss/add", { user, datos });
   } catch (error) {
-    res.redirect("/admin/smss");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const editPage = async (req, res) => {
@@ -59,7 +66,11 @@ export const editPage = async (req, res) => {
 
     res.render("admin/smss/edit", { user, datos });
   } catch (error) {
-    res.redirect("/admin/smss");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const insertSms = async (req, res) => {
@@ -98,18 +109,11 @@ export const insertSms = async (req, res) => {
     let msg = "No se ha podido crear el sms. Verifique la referencia";
 
     if (error.response.data.errorNum === 20100) {
-      msg = "La sms ya existe.";
+      msg = "El sms ya existe.";
     }
-    try {
-      const datos = {
-        sms: req.body,
-        arrEstadosSms,
-      };
-
-      res.render("admin/smss/add", { user, datos, alerts: [{ msg }] });
-    } catch (error) {
-      res.redirect("/admin/smss");
-    }
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const updateSms = async (req, res) => {
@@ -138,16 +142,9 @@ export const updateSms = async (req, res) => {
       msg = "El sms ya existe";
     }
 
-    try {
-      const datos = {
-        sms: req.body,
-        arrEstadosSms,
-      };
-
-      res.render("admin/smss/edit", { user, datos, alerts: [{ msg }] });
-    } catch (error) {
-      res.redirect("/admin/smss");
-    }
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const deleteSms = async (req, res) => {
@@ -168,6 +165,10 @@ export const deleteSms = async (req, res) => {
 
     res.redirect("/admin/smss");
   } catch (error) {
-    res.redirect("/admin/smss");
+    const msg = "No se ha podido elminar el sms.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };

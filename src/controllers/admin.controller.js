@@ -17,6 +17,10 @@ export const acumuladosPage = async (req, res) => {
 
   res.render("admin/estadistica/acumulados", { user });
 };
+export const errorPage = async (req, res) => {
+  res.render("admin/error400");
+};
+// proc
 export const estadistica = async (req, res) => {
   const user = req.user;
   const periodo = {

@@ -20,7 +20,11 @@ export const mainPage = async (req, res) => {
     const datos = { usuarios: result.data.dat };
     res.render("admin/usuarios", { user, datos });
   } catch (error) {
-    res.redirect("/");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const addPage = async (req, res) => {
@@ -51,7 +55,11 @@ export const addPage = async (req, res) => {
 
     res.render("admin/usuarios/add", { user, datos });
   } catch (error) {
-    res.redirect("/admin/usuarios");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const editPage = async (req, res) => {
@@ -85,7 +93,11 @@ export const editPage = async (req, res) => {
 
     res.render("admin/usuarios/edit", { user, datos });
   } catch (error) {
-    res.redirect("/");
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const insertUsuario = async (req, res) => {
@@ -106,37 +118,22 @@ export const insertUsuario = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(
-      "http://localhost:8000/api/usuarios/insert",
-      {
-        usuario,
-        movimiento,
-      }
-    );
+    await axios.post("http://localhost:8000/api/usuarios/insert", {
+      usuario,
+      movimiento,
+    });
 
     res.redirect("/admin/usuarios");
   } catch (error) {
-    let msg =
-      "No se ha podido crear el nuevo usuario. Verifique los datos introducidos";
+    let msg = "No se ha podido crear el nuevo usuario.";
 
     if (error.response.data.errorNum === 20100) {
       msg = "El usuario ya está registrado";
     }
-    try {
-      const result = await axios.get("http://localhost:8000/api/oficinas");
 
-      const datos = {
-        usuario,
-        arrTiposRol,
-        arrTiposPerfil,
-        arrEstadosUsuario,
-        arrOficinas: result.data.dat,
-      };
-
-      res.render("admin/usuarios/add", { user, datos, alerts: [{ msg }] });
-    } catch (error) {
-      res.redirect("/admin/usuarios");
-    }
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const updateUsuario = async (req, res) => {
@@ -159,13 +156,10 @@ export const updateUsuario = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(
-      "http://localhost:8000/api/usuarios/update",
-      {
-        usuario,
-        movimiento,
-      }
-    );
+    await axios.post("http://localhost:8000/api/usuarios/update", {
+      usuario,
+      movimiento,
+    });
 
     res.redirect("/admin/usuarios");
   } catch (error) {
@@ -176,22 +170,10 @@ export const updateUsuario = async (req, res) => {
       msg =
         "El usuario ya está registrado. Verifique el userID y la contraseña.";
     }
-    try {
-      // oficinas
-      const result = await axios.get("http://localhost:8000/api/oficinas");
 
-      const datos = {
-        usuario,
-        arrTiposRol,
-        arrTiposPerfil,
-        arrEstadosUsuario,
-        arrOficinas: result.data.dat,
-      };
-
-      res.render("admin/usuarios/edit", { user, datos, alerts: [{ msg }] });
-    } catch (error) {
-      res.redirect("/admin/usuarios");
-    }
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const deleteUsuario = async (req, res) => {
@@ -205,17 +187,18 @@ export const deleteUsuario = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(
-      "http://localhost:8000/api/usuarios/delete",
-      {
-        usuario,
-        movimiento,
-      }
-    );
+    await axios.post("http://localhost:8000/api/usuarios/delete", {
+      usuario,
+      movimiento,
+    });
 
     res.redirect("/admin/usuarios");
   } catch (error) {
-    res.redirect("/admin/usuarios");
+    const msg = "No se ha podido elminar la oficina.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
   }
 };
 export const changePassword = async (req, res) => {

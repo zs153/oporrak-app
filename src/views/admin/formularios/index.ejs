@@ -252,7 +252,7 @@
                                           </a>
                                       </li>
                                       <li class="nav-item">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('movcon').value ='<%- element.MOVCON %>', document.getElementById('resol').value ='<%- element.IDDOCU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
+                                        <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.MOVCON %>', document.getElementById('resdoc').value ='<%- element.IDDOCU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
                                           <i class="bi bi-check2 dropdown-item-icon"></i>Resolver formulario
                                         </a>
                                       </li>
@@ -419,7 +419,7 @@
                 <div class="col-4">
                   <div class="mb-1">
                     <label class="form-label text-start">Móvil</label>
-                    <input type="text" name="movcon" id="movcon" class="form-control" value="" readonly/>
+                    <input type="text" name="movsms" id="resol" class="form-control" value="" readonly/>
                   </div>
                 </div>
                 <div class="col-8">
@@ -446,7 +446,7 @@
                     <a href="/admin/formularios" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                   </div>
                   <div class="col">
-                    <input type="hidden" id="resol" name="iddocu" value="">
+                    <input type="hidden" id="resdoc" name="iddocu" value="">
                     <button type="submit" class="btn btn-success w-100">Resolver formulario</button>
                   </div>
                 </div>
