@@ -848,9 +848,6 @@ export const changePassword = async (req, res) => {
     });
   }
 };
-export const errorFraudesPage = async (req, res) => {
-  res.render("admin/error400");
-};
 
 // helpers
 function randomString(long, chars) {
