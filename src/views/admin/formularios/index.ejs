@@ -154,7 +154,7 @@
                     </div>                    
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-striped" id="tblDocumentos">
+                    <table class="table table-vcenter table-striped table-fixHead" id="tblDocumentos">
                       <thead>
                       <tr>
                         <th>Oficina</th>
@@ -164,7 +164,7 @@
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Observaciones</th>
-                        <th class="w-5"></th>
+                        <th class="w-2"></th>
                       </tr>
                       </thead>
                       <tbody>
@@ -239,7 +239,7 @@
                               </div>
                             </td>
                             <% if(element.LIQDOC === user.userID) { %>
-                              <td class="text-end">
+                              <td class="text-end w-2">
                                 <ul class="dots-menu">
                                   <li class="nav-item drop-right">
                                     <a href="#" class="nav-link">
@@ -278,7 +278,7 @@
                               </td>
                             <% } else {%>
                               <% if(element.STADOC === 0) { %>
-                                <td class="text-end">
+                                <td class="text-end w-2">
                                   <ul class="dots-menu">
                                     <li class="nav-item drop-right">
                                       <a href="#" class="nav-link">

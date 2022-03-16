@@ -116,23 +116,19 @@
                     <div class="row">
                       <div class="col-8">
                         <div class="mb-1">
-                          <div class="input-control">
                             <label class="form-label required">Descripción</label>
                             <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
                             <div class="invalid-feedback"></div>
-                          </div>
                         </div>
                       </div>
                       <div class="col-4">
                         <div class="mb-1">
-                          <div class="input-control">
                             <label class="form-label">Origen</label>
                             <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.tipo.orgtip %>">
                               <% datos.arrOrigenTipo.map(element => { %> 
                                 <option value="<%- element.id %>" <%- element.id == datos.tipo.orgtip ? " selected":"" %>><%- element.des %></option>
                               <% }) %> 
                             </select>
-                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -140,11 +136,9 @@
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                          <div class="input-control">
                             <label class="form-label required">Texto ayuda</label>
                             <textarea type="text" name="ayutip" id="ayutip" class="form-control" rows="3" style="resize: vertical"><%- datos.tipo.ayutip %></textarea>
                             <div class="invalid-feedback"></div>
-                          </div>
                         </div>
                       </div>
                     </div>

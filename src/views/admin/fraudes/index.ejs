@@ -154,17 +154,17 @@
                     </div>                    
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-striped" id="tlbFraudes">
+                    <table class="table table-vcenter table-striped table-fixHead" id="tlbFraudes">
                       <thead>
                       <tr>
                         <th>Oficina</th>
                         <th>Fecha</th>
                         <th>Referencia</th>
                         <th>NIF</th>
-                        <th class="w-25">Nombre</th>
-                        <th class="w-15">Tipo</th>
-                        <th class="w-20">Observaciones</th>
-                        <th class="w-5"></th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Observaciones</th>
+                        <th class="w-2"></th>
                       </tr>
                       </thead>
                       <tbody>
@@ -237,7 +237,7 @@
                               </div>
                             </td>
                             <% if(element.LIQFRA === user.userID) {%>
-                              <td class="text-end">
+                              <td class="text-end w-2">
                                 <ul class="dots-menu">
                                   <li class="nav-item drop-right">
                                     <a href="#" class="nav-link">
@@ -292,7 +292,7 @@
                               </td>
                             <% } else { %>
                               <% if(element.STAFRA === 0) {%>
-                                <td class="text-end">
+                                <td class="text-end w-2">
                                   <ul class="dots-menu">
                                     <li class="nav-item drop-right">
                                       <a href="#" class="nav-link">
