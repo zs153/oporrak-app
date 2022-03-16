@@ -35,6 +35,7 @@ export const tiposMovimiento = {
   crearSubtipo: 33,
   modificarSubtipo: 34,
   borrarSubtipo: 35,
+  modificarPerfil: 36,
   cambioPassword: 60,
   olvidoPassword: 61,
   restablecerPassword: 62,
