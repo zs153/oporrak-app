@@ -157,10 +157,10 @@
                     <table class="table table-vcenter table-striped table-fixHead" id="tlbFraudes">
                       <thead>
                       <tr>
-                        <th>Oficina</th>
-                        <th>Fecha</th>
-                        <th>Referencia</th>
-                        <th>NIF</th>
+                        <th class="w-9">Oficina</th>
+                        <th class="w-6">Fecha</th>
+                        <th class="w-8">Referencia</th>
+                        <th class="w-6">NIF</th>
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Observaciones</th>
@@ -170,22 +170,22 @@
                       <tbody>
                         <% datos.documentos.map(element => { %>
                           <tr>
-                            <td>
+                            <td class="w-9">
                               <div class="d-flex py-1 align-items-center">                                
                                 <% if (element.STAFRA === 0) { %>
-                                    <span class="avatar me-2 avatar-rounded bg-red-lt">
+                                    <span class="avatar avatar-rounded bg-red-lt">
                                       <h6><%- element.LIQFRA %></h6>
                                     </span>
                                   <% } else if (element.STAFRA === 1) { %>
-                                    <span class="avatar me-2 avatar-rounded bg-blue-lt">
+                                    <span class="avatar avatar-rounded bg-blue-lt">
                                       <h6><%- element.LIQFRA %></h6>
                                     </span>
                                   <% } else if (element.STAFRA === 2) { %>
-                                    <span class="avatar me-2 avatar-rounded bg-green-lt">
+                                    <span class="avatar avatar-rounded bg-green-lt">
                                       <h6><%- element.LIQFRA %></h6>
                                     </span>
                                   <% } else { %>
-                                    <span class="avatar me-2 avatar-rounded bg-orange-lt">
+                                    <span class="avatar avatar-rounded bg-orange-lt">
                                       <h6><%- element.LIQFRA %></h6>
                                     </span>
                                   <% } %>
@@ -194,21 +194,21 @@
                                 </div>
                               </div>
                             </td>
-                            <td>
+                            <td class="w-6">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.STRFEC %></div>
                                 </div>
                               </div>
                             </td>
-                            <td>
+                            <td class="w-8">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.REFFRA %></div>
                                 </div>
                               </div>
                             </td>
-                            <td>
+                            <td class="w-6">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.NIFCON %></div>
@@ -319,7 +319,7 @@
                                   </ul>
                                 </td>                              
                               <% } else { %>
-                                <td></td>
+                                <td class="w-2"></td>
                               <% } %>
 
                             <% } %>
