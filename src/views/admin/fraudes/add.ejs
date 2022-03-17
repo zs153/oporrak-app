@@ -278,91 +278,91 @@
     </footer>
   </div>
 
-  <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title mt-0">Perfil de usuario</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/admin/formularios/updatePerfil" method="POST">
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-2">
-                <div class="mb-1">
-                  <label class="form-label">UserID</label>
-                  <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
+    <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title mt-0">Perfil de usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="/admin/fraudes/updatePerfil" method="POST">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-2">
+                  <div class="mb-1">
+                    <label class="form-label required">UserID</label>
+                    <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
+                  </div>
+                </div>
+                <div class="col-10">
+                  <div class="mb-1">
+                    <label class="form-label required">Nombre</label>
+                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+                  </div>
                 </div>
               </div>
-              <div class="col-10">
-                <div class="mb-1">
-                  <label class="form-label">Nombre</label>
-                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+              <div class="row">
+                <div class="col-10">
+                  <div class="mb-1">
+                    <label class="form-label required">Correo electrónico</label>
+                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="mb-1">
+                    <label class="form-label required">Teléfono</label>
+                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-10">
-                <div class="mb-1">
-                  <label class="control-label">Correo electrónico</label>
-                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="mb-1">
-                  <label class="control-label">Teléfono</label>
-                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
-                </div>
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <input type="hidden" id="idperf" name="idperf" value="">
+              <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-            <input type="hidden" id="idperf" name="idperf" value="">
-            <button type="submit" class="btn btn-primary ms-auto">Actualizar usuario</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title mt-0">Cambio de contraseña</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/admin/formularios/cambio" method="POST">
-          <div class="modal-body">
-            <div class="row">
-              <div class="mb-1">
-                <label class="form-label">Actualizar contraseña</label>
-                <span class="input-text">
-                  <input
-                  type="password"
-                  name="pwdusu"
-                  id="pwdusu"
-                  class="form-control"
-                  value=""
-                  autocomplete="off"
-                  autofocus
-                  />                  
-                  <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-            <input type="hidden" id="idchan" name="idusua" value="">
-            <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
           </div>
         </form>
       </div>
     </div>
-  </div>
-    
+
+    <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title mt-0">Cambio de contraseña</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="/admin/fraudes/cambio" method="POST">
+            <div class="modal-body">
+              <div class="row">
+                <div class="mb-1">
+                  <label class="form-label required">Actualizar contraseña</label>
+                  <span class="input-text">
+                    <input
+                    type="password"
+                    name="pwdusu"
+                    id="pwdusu"
+                    class="form-control"
+                    value=""
+                    autocomplete="off"
+                    autofocus
+                    />                  
+                    <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <input type="hidden" id="idchan" name="idusua" value="">
+              <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
   <script src="/js/ayuda.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
