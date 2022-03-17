@@ -1,4 +1,4 @@
-import express from 'express'
+import express from "express";
 import {
   loginPage,
   verifyLogin,
@@ -7,17 +7,19 @@ import {
   forgotPassword,
   registroPage,
   crearRegistro,
-} from '../controllers/login.controller'
+  okPage,
+} from "../controllers/login.controller";
 
-const loginRouter = express.Router()
+const loginRouter = express.Router();
 
 // auth
-loginRouter.get('/login', loginPage)
-loginRouter.get('/logout', verifyLogout)
-loginRouter.get('/forgot', forgotPage)
-loginRouter.get('/registro', registroPage)
-loginRouter.post('/login', verifyLogin)
-loginRouter.post('/forgot', forgotPassword)
-loginRouter.post('/registro', crearRegistro)
+loginRouter.get("/login", loginPage);
+loginRouter.get("/logout", verifyLogout);
+loginRouter.get("/forgot", forgotPage);
+loginRouter.get("/registro", registroPage);
+loginRouter.get("/ok", okPage);
+loginRouter.post("/login", verifyLogin);
+loginRouter.post("/forgot", forgotPassword);
+loginRouter.post("/registro", crearRegistro);
 
-export default loginRouter
+export default loginRouter;

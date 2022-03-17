@@ -16,6 +16,9 @@ export const forgotPage = async (req, res) => {
 export const registroPage = async (req, res) => {
   res.render("log/sign-up", { datos: {}, alerts: undefined });
 };
+export const okPage = async (req, res) => {
+  res.render("log/ok");
+};
 export const verifyLogin = async (req, res) => {
   const { userid, password } = req.body;
   try {
@@ -126,7 +129,7 @@ export const crearRegistro = async (req, res) => {
       nuevoRegistro,
     });
 
-    res.redirect("/");
+    res.render("log/ok");
   } catch (error) {
     let msg = "No se ha podido registrar al usuario";
     if (error.response.data.errorNum === 20100) {
