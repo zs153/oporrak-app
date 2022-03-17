@@ -165,22 +165,22 @@
                 </div>
                 <div class="col-10">
                   <div class="mb-3">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+                    <label class="form-label required">Nombre</label>
+                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" required />
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-10">
                   <div class="mb-3">
-                    <label class="control-label">Correo electrónico</label>
-                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
+                    <label class="control-label required">Correo electrónico</label>
+                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" required />
                   </div>
                 </div>
                 <div class="col-2">
                   <div class="mb-3">
-                    <label class="control-label">Teléfono</label>
-                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
+                    <label class="control-label required">Teléfono</label>
+                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" required />
                   </div>
                 </div>
               </div>
@@ -206,7 +206,7 @@
             <div class="modal-body">
               <div class="row">
                 <div class="mb-3">
-                  <label class="form-label">Actualizar contraseña</label>
+                  <label class="form-label required">Actualizar contraseña</label>
                   <span class="input-text">
                     <input
                     type="password"
@@ -216,6 +216,7 @@
                     value=""
                     autocomplete="off"
                     autofocus
+                    required 
                     />                  
                     <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
                   </span>

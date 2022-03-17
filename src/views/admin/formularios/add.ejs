@@ -291,14 +291,14 @@
             <div class="row">
               <div class="col-2">
                 <div class="mb-1">
-                  <label class="form-label required">UserID</label>
-                  <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
+                  <label class="form-label">UserID</label>
+                  <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly />
                 </div>
               </div>
               <div class="col-10">
                 <div class="mb-1">
                   <label class="form-label required">Nombre</label>
-                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" required />
                 </div>
               </div>
             </div>
@@ -306,13 +306,13 @@
               <div class="col-10">
                 <div class="mb-1">
                   <label class="form-label required">Correo electrónico</label>
-                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
+                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" required />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-1">
                   <label class="form-label required">Teléfono</label>
-                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
+                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" required />
                 </div>
               </div>
             </div>
@@ -334,7 +334,7 @@
           <h5 class="modal-title mt-0">Cambio de contraseña</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="/admin/formularios/cambio" method="POST">
+        <form name="formChange" action="/admin/formularios/cambio" method="POST">
           <div class="modal-body">
             <div class="row">
               <div class="mb-1">
@@ -348,6 +348,7 @@
                   value=""
                   autocomplete="off"
                   autofocus
+                  required
                   />                  
                   <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
                 </span>
@@ -511,6 +512,30 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
+  </script>
+  <script>
+    const input = document.querySelector("form[name='formChange'] input[name='pwdusu']")
+    const pwdusu = document.getElementById('pwdusu')
+
+    input.addEventListener('invalid', logValue)
+
+    function logValue(e) {
+      e.preventDefault()
+      setErrorLite(pwdusu)
+    }
+
+    const setSuccessLite = (element) => {
+      const inputControl = element.parentElement;
+
+      inputControl.classList.add('is-valid-lite');
+      element.classList.remove('is-invalid-lite');
+    }
+    const setErrorLite = (element, message) => {
+      const inputControl = element.parentElement;
+
+      element.classList.add('is-invalid-lite');
+      inputControl.classList.remove('is-valid-lite');
+    }    
   </script>
 </body>
 </html>

@@ -292,14 +292,14 @@
             <div class="row">
               <div class="col-2">
                 <div class="mb-1">
-                  <label class="form-label required">UserID</label>
+                  <label class="form-label">UserID</label>
                   <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
                 </div>
               </div>
               <div class="col-10">
                 <div class="mb-1">
                   <label class="form-label required">Nombre</label>
-                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" required />
                 </div>
               </div>
             </div>
@@ -307,13 +307,13 @@
               <div class="col-10">
                 <div class="mb-1">
                   <label class="form-label required">Correo electrónico</label>
-                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
+                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" required />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-1">
                   <label class="form-label required">Teléfono</label>
-                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
+                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" required />
                 </div>
               </div>
             </div>
@@ -342,6 +342,7 @@
                 <label class="form-label required">Actualizar contraseña</label>
                 <span class="input-text">
                   <input
+                  required
                   type="password"
                   name="pwdusu"
                   id="pwdusu"
