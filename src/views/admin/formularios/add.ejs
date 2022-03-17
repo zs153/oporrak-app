@@ -340,7 +340,6 @@
               <div class="mb-1">
                 <label class="form-label required">Actualizar contraseña</label>
                 <span class="input-text">
-                  <div class="invalid-feedback"></div>
                   <input
                   type="password"
                   name="pwdusu"
@@ -391,14 +390,14 @@
 
     arr.map(element => {
       if(element.IDTIPO == combo.value) {
-        document.getElementById('tipayu').innerText = element.AYUTIP
+        document.getElementById('tipayu').innerHTML = element.AYUTIP
       }
     });
 
     combo.addEventListener('change', () => {
       arr.map(element => {
         if(element.IDTIPO == combo.value) {
-          document.getElementById('tipayu').innerText = element.AYUTIP
+          document.getElementById('tipayu').innerHTML = element.AYUTIP
         }
       });
     })
@@ -515,32 +514,12 @@
     }
   </script>
   <script>
-    const input = document.querySelector("form[name='formChange'] input[name='pwdusu']")
-    const pwdusu = document.getElementById('pwdusu')
+    const formChange = document.querySelector("form[name='formChange'] input[name='pwdusu']")
 
-    input.addEventListener('invalid', logValue)
-
-    function logValue(e) {
-      e.preventDefault()
-      setErrorLite(pwdusu, 'Texto requerido')
-    }
-
-    const setSuccessLite = (element) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = '';
-      inputControl.classList.add('is-valid');
-      element.classList.remove('is-invalid');
-    }
-    const setErrorLite = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-      
-      errorDisplay.innerText = message;
-      element.classList.add('is-invalid');
-      inputControl.classList.remove('is-valid');
-    }    
-  </script>
+    formChange.addEventListener('invalid', (e) => {
+      e.preventDefault()      
+      e.target.classList.add('is-invalid');
+    })
+  </script> 
 </body>
 </html>
