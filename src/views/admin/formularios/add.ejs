@@ -340,6 +340,7 @@
               <div class="mb-1">
                 <label class="form-label required">Actualizar contraseña</label>
                 <span class="input-text">
+                  <div class="invalid-feedback"></div>
                   <input
                   type="password"
                   name="pwdusu"
@@ -521,20 +522,24 @@
 
     function logValue(e) {
       e.preventDefault()
-      setErrorLite(pwdusu)
+      setErrorLite(pwdusu, 'Texto requerido')
     }
 
     const setSuccessLite = (element) => {
       const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
 
-      inputControl.classList.add('is-valid-lite');
-      element.classList.remove('is-invalid-lite');
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
     }
     const setErrorLite = (element, message) => {
       const inputControl = element.parentElement;
-
-      element.classList.add('is-invalid-lite');
-      inputControl.classList.remove('is-valid-lite');
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+      
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
     }    
   </script>
 </body>
