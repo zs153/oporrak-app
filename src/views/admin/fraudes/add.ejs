@@ -278,91 +278,93 @@
     </footer>
   </div>
 
-    <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Perfil de usuario</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mt-0">Perfil de usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/admin/fraudes/updatePerfil" method="POST" onsubmit="return validatePerfil();">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-2">
+                <div class="mb-1">
+                  <label class="form-label">UserID</label>
+                  <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
+                </div>
+              </div>
+              <div class="col-10">
+                <div class="mb-1">
+                  <label class="form-label required">Nombre</label>
+                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-10">
+                <div class="mb-1">
+                  <label class="form-label required">Correo electrónico</label>
+                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="mb-1">
+                  <label class="form-label required">Teléfono</label>
+                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <form action="/admin/fraudes/updatePerfil" method="POST">
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-2">
-                  <div class="mb-1">
-                    <label class="form-label">UserID</label>
-                    <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
-                  </div>
-                </div>
-                <div class="col-10">
-                  <div class="mb-1">
-                    <label class="form-label required">Nombre</label>
-                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" required />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-10">
-                  <div class="mb-1">
-                    <label class="form-label required">Correo electrónico</label>
-                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" required />
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="mb-1">
-                    <label class="form-label required">Teléfono</label>
-                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" required />
-                  </div>
-                </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+            <input type="hidden" id="idperf" name="idperf" value="">
+            <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mt-0">Cambio de contraseña</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/admin/fraudes/cambio" method="POST" onsubmit="return validateChange();">
+          <div class="modal-body">
+            <div class="row">
+              <div class="mb-1">
+                <label class="form-label required">Actualizar contraseña</label>
+                <span class="input-text">
+                  <input
+                  type="password"
+                  name="pwdusu"
+                  id="pwdusu"
+                  class="form-control"
+                  value=""
+                  autocomplete="off"
+                  autofocus 
+                  />                  
+                  <div class="invalid-feedback d-none"></div>
+                </span>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <input type="hidden" id="idperf" name="idperf" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+            <input type="hidden" id="idchan" name="idusua" value="">
+            <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
           </div>
         </form>
       </div>
     </div>
-
-    <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Cambio de contraseña</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/fraudes/cambio" method="POST">
-            <div class="modal-body">
-              <div class="row">
-                <div class="mb-1">
-                  <label class="form-label required">Actualizar contraseña</label>
-                  <span class="input-text">
-                    <input
-                    type="password"
-                    name="pwdusu"
-                    id="pwdusu"
-                    class="form-control"
-                    value=""
-                    autocomplete="off"
-                    autofocus
-                    required 
-                    />                  
-                    <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <input type="hidden" id="idchan" name="idusua" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+  </div>
 
   <script src="/js/ayuda.js"></script>
   <script src="/socket.io/socket.io.js"></script>
@@ -408,6 +410,11 @@
     const movcon = document.getElementById('movcon')
     const ejefra = document.getElementById('ejefra')
     const fecfra = document.getElementById('fecfra')
+    const pwdusu = document.getElementById('pwdusu')
+    const modsms = document.getElementById('modsms')
+    const nomusu = document.getElementById('nomusu')
+    const emausu = document.getElementById('emausu')
+    const telusu = document.getElementById('telusu')
 
     const validate = () => {
       const nifconValue = nifcon.value.trim()
@@ -495,7 +502,43 @@
 
       return true
     }
+    const validateChange = () => {
+      const pwdusuValue = pwdusu.value.trim()
 
+      if (pwdusuValue === '') {
+        setError(pwdusu, 'Contraseña requerida')
+        return false
+      } else {
+        setSuccess(pwdusu)
+      }
+
+      return true
+    }
+    const validatePerfil = () => {
+      const nomusuValue = nomusu.value.trim()
+      const emausuValue = emausu.value.trim()
+      const telusuValue = telusu.value.trim()
+
+      if (nomusuValue === '') {
+        setError(nomusu, 'Nombre requerido')
+        return false
+      } else {
+        setSuccess(nomusu)
+      }
+      if (emausuValue === '') {
+        setError(emausu, 'Email requerido')
+        return false
+      } else {
+        setSuccess(emausu)
+      }
+      if (telusuValue === '') {
+        setError(telusu, 'Teléfono requerido')
+        return false
+      } else {
+        setSuccess(telusu)
+      }
+      return true
+    }
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');

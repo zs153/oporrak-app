@@ -286,7 +286,7 @@
           <h5 class="modal-title mt-0">Perfil de usuario</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="/admin/formularios/updatePerfil" method="POST">
+        <form action="/admin/formularios/updatePerfil" method="POST"  onsubmit="return validatePerfil();">
           <div class="modal-body">
             <div class="row">
               <div class="col-2">
@@ -298,7 +298,8 @@
               <div class="col-10">
                 <div class="mb-1">
                   <label class="form-label required">Nombre</label>
-                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" required />
+                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" onkeyup="this.value = this.value.toUpperCase();"/>
+                  <div class="invalid-feedback"></div>
                 </div>
               </div>
             </div>
@@ -306,13 +307,15 @@
               <div class="col-10">
                 <div class="mb-1">
                   <label class="form-label required">Correo electrónico</label>
-                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" required />
+                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
+                  <div class="invalid-feedback"></div>
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-1">
                   <label class="form-label required">Teléfono</label>
-                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" required />
+                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
+                    <div class="invalid-feedback"></div>
                 </div>
               </div>
             </div>
@@ -334,7 +337,7 @@
           <h5 class="modal-title mt-0">Cambio de contraseña</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form name="formChange" action="/admin/formularios/cambio" method="POST">
+        <form action="/admin/formularios/cambio" method="POST" onsubmit="return validateChange();">
           <div class="modal-body">
             <div class="row">
               <div class="mb-1">
@@ -408,6 +411,11 @@
     const movcon = document.getElementById('movcon')
     const ejedoc = document.getElementById('ejedoc')
     const fecdoc = document.getElementById('fecdoc')
+    const pwdusu = document.getElementById('pwdusu')
+    const modsms = document.getElementById('modsms')
+    const nomusu = document.getElementById('nomusu')
+    const emausu = document.getElementById('emausu')
+    const telusu = document.getElementById('telusu')
 
     const validate = () => {
       const nifconValue = nifcon.value.trim()
@@ -495,6 +503,43 @@
 
       return true
     }
+    const validateChange = () => {
+      const pwdusuValue = pwdusu.value.trim()
+
+      if (pwdusuValue === '') {
+        setError(pwdusu, 'Contraseña requerida')
+        return false
+      } else {
+        setSuccess(pwdusu)
+      }
+
+      return true
+    }
+    const validatePerfil = () => {
+      const nomusuValue = nomusu.value.trim()
+      const emausuValue = emausu.value.trim()
+      const telusuValue = telusu.value.trim()
+
+      if (nomusuValue === '') {
+        setError(nomusu, 'Nombre requerido')
+        return false
+      } else {
+        setSuccess(nomusu)
+      }
+      if (emausuValue === '') {
+        setError(emausu, 'Email requerido')
+        return false
+      } else {
+        setSuccess(emausu)
+      }
+      if (telusuValue === '') {
+        setError(telusu, 'Teléfono requerido')
+        return false
+      } else {
+        setSuccess(telusu)
+      }
+      return true
+    }
 
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
@@ -513,13 +558,5 @@
       inputControl.classList.remove('is-valid');
     }
   </script>
-  <script>
-    const formChange = document.querySelector("form[name='formChange'] input[name='pwdusu']")
-
-    formChange.addEventListener('invalid', (e) => {
-      e.preventDefault()      
-      e.target.classList.add('is-invalid');
-    })
-  </script> 
 </body>
 </html>
