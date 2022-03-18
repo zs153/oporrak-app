@@ -154,7 +154,7 @@
             <h5 class="modal-title mt-0">Perfil de usuario</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form action="/admin/updatePerfil" method="POST">
+          <form action="/admin/updatePerfil" method="POST" onsubmit="return validatePerfil();">
             <div class="modal-body">
               <div class="row">
                 <div class="col-2">
@@ -166,7 +166,8 @@
                 <div class="col-10">
                   <div class="mb-3">
                     <label class="form-label required">Nombre</label>
-                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" required />
+                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+                    <div class="invalid-feedback"></div>                  
                   </div>
                 </div>
               </div>
@@ -174,13 +175,15 @@
                 <div class="col-10">
                   <div class="mb-3">
                     <label class="control-label required">Correo electrónico</label>
-                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" required />
+                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
+                    <div class="invalid-feedback"></div>
                   </div>
                 </div>
                 <div class="col-2">
                   <div class="mb-3">
                     <label class="control-label required">Teléfono</label>
-                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" required />
+                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
+                    <div class="invalid-feedback"></div>
                   </div>
                 </div>
               </div>
@@ -202,7 +205,7 @@
             <h5 class="modal-title mt-0">Cambio de contraseña</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form action="/admin/cambio" method="POST">
+          <form action="/admin/cambio" method="POST" onsubmit="return validateChange();">
             <div class="modal-body">
               <div class="row">
                 <div class="mb-3">
@@ -215,10 +218,10 @@
                     class="form-control"
                     value=""
                     autocomplete="off"
-                    autofocus
-                    required 
+                    autofocus 
                     />                  
                     <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
+                    <div class="invalid-feedback d-none"></div>
                   </span>
                 </div>
               </div>
@@ -253,13 +256,71 @@
     </script>
     <script>
       const togglePassword = document.querySelector('#togglePassword');
-      const password = document.querySelector('#pwdusu');
+      const pwdusu = document.getElementById('pwdusu')
+      const nomusu = document.getElementById('nomusu')
+      const emausu = document.getElementById('emausu')
+      const telusu = document.getElementById('telusu')
 
       togglePassword.addEventListener('click', function (e) {
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
+        pwdusu.setAttribute('type', type);
         this.classList.toggle("bi-eye");
-      });        
+      });
+
+
+      const validateChange = () => {
+        const pwdusuValue = pwdusu.value.trim()
+
+        if (pwdusuValue === '') {
+          setError(pwdusu, 'Contraseña requerida')
+          return false
+        } else {
+          setSuccess(pwdusu)
+        }
+
+        return true
+      }
+      const validatePerfil = () => {
+        const nomusuValue = nomusu.value.trim()
+        const emausuValue = emausu.value.trim()
+        const telusuValue = telusu.value.trim()
+
+        if (nomusuValue === '') {
+          setError(nomusu, 'Nombre requerido')
+          return false
+        } else {
+          setSuccess(nomusu)
+        }
+        if (emausuValue === '') {
+          setError(emausu, 'Email requerido')
+          return false
+        } else {
+          setSuccess(emausu)
+        }
+        if (telusuValue === '') {
+          setError(telusu, 'Teléfono requerido')
+          return false
+        } else {
+          setSuccess(telusu)
+        }
+        return true
+      }
+      const setSuccess = (element) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+        errorDisplay.innerText = '';
+        inputControl.classList.add('is-valid');
+        element.classList.remove('is-invalid');
+      }
+      const setError = (element, message) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+        errorDisplay.innerText = message;
+        element.classList.add('is-invalid');
+        inputControl.classList.remove('is-valid');
+      }
     </script>
   </body>
 </html>
