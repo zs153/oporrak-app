@@ -180,11 +180,14 @@
                       <div class="col-9">
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tipdoc" value="<%- datos.documento.tipdoc %>">
-                            <% datos.arrTipos.map(element => { %> 
-                              <option value="<%- element.IDTIPO %>" <%- element.IDTIPO == datos.documento.tipdoc ? " selected":"" %>><%- element.DESTIP %></option>
-                            <% }) %> 
-                          </select>
+                          <div class="input-control">
+                            <select class="form-select form-control" id="cbotip" name="tipdoc" value="<%- datos.documento.tipdoc %>">
+                              <% datos.arrTipos.map(element => { %> 
+                                <option value="<%- element.IDTIPO %>" <%- element.IDTIPO == datos.documento.tipdoc ? " selected":"" %>><%- element.DESTIP %></option>
+                              <% }) %> 
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-2">
@@ -422,6 +425,7 @@
       const nifconValue = nifcon.value.trim()
       const nomconValue = nomcon.value.trim()
       const movconValue = movcon.value.trim()
+      const tipdocValue = combo.value
       const ejedocValue = ejedoc.value.trim()
       const fecdocValue = fecdoc.value.trim()
 
@@ -469,6 +473,12 @@
       } else {
         setSuccess(nomcon)
       }
+      if (tipdocValue === '0') {
+        setError(combo, 'Seleccione un tipo')
+        return false
+      } else {
+        setSuccess(combo)
+      }      
       if (ejedocValue === '') {
         setError(ejedoc, 'Ejercicio requerido')
         return false

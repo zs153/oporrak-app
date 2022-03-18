@@ -34,18 +34,23 @@ export const addPage = async (req, res) => {
   const fecha = new Date();
 
   try {
-    // tipos
     const resultTipos = await axios.post(
       "http://localhost:8000/api/tipos/origen",
       {
         origen: origenTipo.formulario,
       }
     );
-    // oficinas
+    let arrTipos = resultTipos.data;
+    arrTipos.unshift({
+      IDTIPO: 0,
+      DESTIP: "SELECCIONE UN TIPO",
+      AYUTIP: "",
+      ORGTIP: 0,
+    });
+
     const resultOficinas = await axios.get(
       "http://localhost:8000/api/oficinas"
     );
-
     const documento = {
       iddocu: 0,
       fecdoc: fecha.toISOString().substring(0, 10),
@@ -65,7 +70,7 @@ export const addPage = async (req, res) => {
     };
     const datos = {
       documento,
-      arrTipos: resultTipos.data,
+      arrTipos,
       arrOficinas: resultOficinas.data.dat,
     };
 
@@ -88,6 +93,13 @@ export const editPage = async (req, res) => {
         origen: origenTipo.formulario,
       }
     );
+    let arrTipos = resultTipos.data;
+    arrTipos.unshift({
+      IDTIPO: 0,
+      DESTIP: "SELECCIONE UN TIPO",
+      AYUTIP: "",
+      ORGTIP: 0,
+    });
     const resultOficinas = await axios.get(
       "http://localhost:8000/api/oficinas"
     );
@@ -113,7 +125,7 @@ export const editPage = async (req, res) => {
     };
     const datos = {
       documento,
-      arrTipos: resultTipos.data,
+      arrTipos,
       arrOficinas: resultOficinas.data.dat,
     };
 
