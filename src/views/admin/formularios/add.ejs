@@ -574,5 +574,37 @@
       inputControl.classList.remove('is-valid');
     }
   </script>
+  <script>
+    const eleNif = document.getElementById('nifcon')
+    const eleNombre = document.getElementById('nomcon')
+
+    eleNif.addEventListener('blur', async () => {
+      if (eleNif.value !== '') {
+        const requestObject = new XMLHttpRequest();
+
+        requestObject.open('GET', `http://localhost:8000/api/gentes/${eleNif.value}`, false);
+        requestObject.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        requestObject.send()
+
+                  const gente = JSON.parse(requestObject.response)
+
+          if (gente.nomgen) {
+            eleNombre.value = gente.nomgen
+          } else {
+            eleNombre.value = ''
+          }
+
+        // requestObject.onload = function() {
+        //   const gente = JSON.parse(requestObject.response)
+
+        //   if (gente.nomgen) {
+        //     eleNombre.value = gente.nomgen
+        //   } else {
+        //     eleNombre.value = ''
+        //   }
+        // };
+      }
+    })
+  </script>
 </body>
 </html>
