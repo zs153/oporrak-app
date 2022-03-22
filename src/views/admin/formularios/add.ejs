@@ -241,13 +241,14 @@
                         <div class="mb-1">
                           <label class="form-label">Observaciones</label>
                             <textarea type="text" name="obsdoc" id="obsdoc" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.obsdoc %></textarea>
+                            <div class="invalid-feedback"></div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
-                      <h4>
-                        <small id="tipayu" class="form-hint"></small>
-                      </h4>
+                      <div class="col-12">
+                        <div id="tipayu" class="form-hint" style="border: 1px solid #dadcde;padding: 0px 10px 0px 10px;max-height: 15rem;overflow: auto;"></div>
+                      </div>
                     </div>
                   </div>
                   <div class="card-footer text-end">
@@ -409,6 +410,7 @@
     const movcon = document.getElementById('movcon')
     const ejedoc = document.getElementById('ejedoc')
     const fecdoc = document.getElementById('fecdoc')
+    const obsdoc = document.getElementById('obsdoc')
     const pwdusu = document.getElementById('pwdusu')
     const modsms = document.getElementById('modsms')
     const nomusu = document.getElementById('nomusu')
@@ -422,6 +424,7 @@
       const tipdocValue = combo.value
       const ejedocValue = ejedoc.value.trim()
       const fecdocValue = fecdoc.value.trim()
+      const obsdocValue = obsdoc.value.trim()
 
       if (nifconValue === '') {
         setError(nifcon, 'NIF/NIE requerido')
@@ -464,6 +467,9 @@
       if (nomconValue === '') {
         setError(nomcon, 'Nombre requerido')
         return false
+      } if (nomconValue.length > 255) {
+        setError(nomcon, 'Se excede la longitud del nombre')
+        return false
       } else {
         setSuccess(nomcon)
       }
@@ -504,6 +510,12 @@
           return false
         }
         setSuccess(movcon)
+      }
+      if (obsdocValue.length > 4000) {
+        setError(obsdoc, 'Se excede la longitud de las observaciones')
+        return false
+      } else {
+        setSuccess(nomcon)
       }
 
       return true

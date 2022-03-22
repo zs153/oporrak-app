@@ -159,12 +159,12 @@
                       <tr>
                         <th class="w-9">Oficina</th>
                         <th class="w-6">Fecha</th>
-                        <th class="w-6">Referencia</th>
+                        <th class="w-7">Referencia</th>
                         <th class="w-6">NIF</th>
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Observaciones</th>
-                        <th class="w-2"></th>
+                        <th class="w-1"></th>
                       </tr>
                       </thead>
                       <tbody>
@@ -201,7 +201,7 @@
                                 </div>
                               </div>
                             </td>
-                            <td class="w-6">
+                            <td class="w-7">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.REFDOC %></div>
@@ -233,13 +233,13 @@
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <% if (element.OBSDOC !== null) { %>
-                                    <div class="font-weight-medium"><%- element.OBSDOC %></div>
+                                    <div class="font-weight-medium"><%- element.OBSDOC.length > 33 ? element.OBSDOC.slice(0,33) + '...': element.OBSDOC %></div>
                                   <% }%>
                                 </div>
                               </div>
                             </td>
                             <% if(element.LIQDOC === user.userID) { %>
-                              <td class="text-end w-2">
+                              <td class="text-end w-1">
                                 <ul class="dots-menu">
                                   <li class="nav-item drop-right">
                                     <a href="#" class="nav-link">

@@ -391,23 +391,23 @@
     })
   </script>
   <script>
-    const combo = document.getElementById('cbotip')
-    const e = document.getElementById('tipayu')
-    const arr = <%- JSON.stringify(datos.arrTipos) %>;
+    // const combo = document.getElementById('cbotip')
+    // const e = document.getElementById('tipayu')
+    // const arr = <%- JSON.stringify(datos.arrTipos) %>;
 
-    arr.map(element => {
-      if(element.IDTIPO == combo.value) {
-        document.getElementById('tipayu').innerText = element.AYUTIP
-      }
-    });
+    // arr.map(element => {
+    //   if(element.IDTIPO == combo.value) {
+    //     document.getElementById('tipayu').innerText = element.AYUTIP
+    //   }
+    // });
 
-    combo.addEventListener('change', () => {
-      arr.map(element => {
-        if(element.IDTIPO == combo.value) {
-          document.getElementById('tipayu').innerText = element.AYUTIP
-        }
-      });
-    })
+    // combo.addEventListener('change', () => {
+    //   arr.map(element => {
+    //     if(element.IDTIPO == combo.value) {
+    //       document.getElementById('tipayu').innerText = element.AYUTIP
+    //     }
+    //   });
+    // })
   </script>
   <script>
     const nifcon = document.getElementById('nifcon')
@@ -415,6 +415,7 @@
     const movcon = document.getElementById('movcon')
     const ejedoc = document.getElementById('ejedoc')
     const fecdoc = document.getElementById('fecdoc')
+    const obsdoc = document.getElementById('obsdoc')    
     const pwdusu = document.getElementById('pwdusu')
     const modsms = document.getElementById('modsms')
     const nomusu = document.getElementById('nomusu')
@@ -428,6 +429,7 @@
       const tipdocValue = combo.value
       const ejedocValue = ejedoc.value.trim()
       const fecdocValue = fecdoc.value.trim()
+      const obsdocValue = obsdoc.value.trim()
 
       if (nifconValue === '') {
         setError(nifcon, 'NIF/NIE requerido')
@@ -470,6 +472,9 @@
       if (nomconValue === '') {
         setError(nomcon, 'Nombre requerido')
         return false
+      } if (nomconValue.length > 255) {
+        setError(nomcon, 'Se excede la longitud del nombre')
+        return false
       } else {
         setSuccess(nomcon)
       }
@@ -510,6 +515,12 @@
           return false
         }
         setSuccess(movcon)
+      }
+      if (obsdocValue.length > 4000) {
+        setError(obsdoc, 'Se excede la longitud de las observaciones')
+        return false
+      } else {
+        setSuccess(nomcon)
       }
 
       return true
