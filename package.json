@@ -30,7 +30,7 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/register": "^7.17.0",
     "@babel/runtime": "^7.17.2",
-    "cssnano": "^5.1.4",
+    "cssnano": "^5.1.5",
     "nodemon": "^2.0.15",
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0"
