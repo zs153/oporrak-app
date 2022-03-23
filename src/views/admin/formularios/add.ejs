@@ -582,16 +582,23 @@
       if (eleNif.value !== '') {
         const xhr = new XMLHttpRequest();
 
+        /*
+        En producción no reconoce la dirección localhost
+        Hay que cambiarla a mano por la del servidor de produccion
+        en este caso http://172.27.25.44:8000/api/gente
+        */
         xhr.open('POST', 'http://localhost:8000/api/gente', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
             
         xhr.onload = function() {
-          const gente = JSON.parse(xhr.response)
-          
-          if (gente.nomgen) {
-            eleNombre.value = gente.nomgen
-          } else {
-            eleNombre.value = ''
+          if (xhr.status === 202) {
+            const gente = JSON.parse(xhr.response)
+            
+            if (gente.nomgen) {
+              eleNombre.value = gente.nomgen
+            } else {
+              eleNombre.value = ''
+            }
           }
         };
         xhr.send(JSON.stringify({nifgen: eleNif.value}))
