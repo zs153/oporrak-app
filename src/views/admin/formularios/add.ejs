@@ -580,29 +580,21 @@
 
     eleNif.addEventListener('blur', async () => {
       if (eleNif.value !== '') {
-        const requestObject = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
 
-        requestObject.open('POST', `http://localhost:8000/api/gentes/${eleNif.value}`, true);
-        requestObject.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        requestObject.send(JSON.stringify({nifgen: eleNif.value}))
-
-          // const gente = JSON.parse(requestObject.response)
-
-          // if (gente.nomgen) {
-          //   eleNombre.value = gente.nomgen
-          // } else {
-          //   eleNombre.value = ''
-          // }
-
-        requestObject.onload = function() {
-          const gente = JSON.parse(requestObject.response)
-
+        xhr.open('POST', 'http://localhost:8000/api/gente', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            
+        xhr.onload = function() {
+          const gente = JSON.parse(xhr.response)
+          
           if (gente.nomgen) {
             eleNombre.value = gente.nomgen
           } else {
             eleNombre.value = ''
           }
         };
+        xhr.send(JSON.stringify({nifgen: eleNif.value}))
       }
     })
   </script>
