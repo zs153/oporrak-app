@@ -157,22 +157,21 @@
                     <table class="table table-vcenter table-striped table-fixHead" id="tblDocumentos">
                       <thead>
                       <tr>
-                        <th class="w-4"></th>
-                        <th class="w-8">Oficina</th>
+                        <th class="w-9">Oficina</th>
                         <th class="w-6">Fecha</th>
                         <th class="w-7">Referencia</th>
                         <th class="w-6">NIF</th>
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Observaciones</th>
-                        <th class="w-4"></th>
+                        <th class="w-1"></th>
                       </tr>
                       </thead>
                       <tbody>
                         <% datos.documentos.map(element => { %>
                           <tr>
-                            <td class="w-4">
-                              <div class="align-items-center py-1">                                
+                            <td class="w-9">
+                              <div class="d-flex py-1 align-items-center">                                
                                 <% if (element.STADOC === 0) { %>
                                     <span class="avatar avatar-rounded bg-red-lt">
                                       <h6><%- element.LIQDOC %></h6>
@@ -190,10 +189,6 @@
                                       <h6><%- element.LIQDOC %></h6>
                                     </span>
                                   <% } %>
-                              </div>
-                            </td>
-                            <td class="w-8 px-3">
-                              <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.DESOFI %></div>
                                 </div>
@@ -244,7 +239,7 @@
                               </div>
                             </td>
                             <% if(element.LIQDOC === user.userID) { %>
-                              <td class="text-end w-4">
+                              <td class="text-end w-1">
                                 <ul class="dots-menu">
                                   <li class="nav-item drop-right">
                                     <a href="#" class="nav-link">
@@ -283,7 +278,7 @@
                               </td>
                             <% } else {%>
                               <% if(element.STADOC === 0) { %>
-                                <td class="text-end w-4">
+                                <td class="text-end w-1">
                                   <ul class="dots-menu">
                                     <li class="nav-item drop-right">
                                       <a href="#" class="nav-link">
@@ -310,7 +305,7 @@
                                   </ul>
                                 </td>
                               <% } else {%>
-                                <td class=" text-end w-4"></td>
+                                <td class="w-1"></td>
                               <% } %>
                             <% } %>
                           </tr>
