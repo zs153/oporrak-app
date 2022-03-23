@@ -61,7 +61,7 @@ export const addPage = async (req, res) => {
       movcon: "",
       refdoc: "",
       tipdoc: 0,
-      ejedoc: fecha.getFullYear(),
+      ejedoc: fecha.getFullYear() - 1,
       ofidoc: 0,
       obsdoc: "",
       fundoc: user.userID,
