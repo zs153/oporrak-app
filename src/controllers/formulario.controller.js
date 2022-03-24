@@ -6,6 +6,7 @@ import {
   origenTipo,
   tiposMovimiento,
   tiposVisualizacion,
+  tiposRol,
 } from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
@@ -25,6 +26,7 @@ export const mainPage = async (req, res) => {
     const datos = {
       documentos: result.data.dat,
       arrOficinas: resultOficinas.data.dat,
+      tiposRol,
     };
 
     res.render("admin/formularios", { user, datos });
