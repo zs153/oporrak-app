@@ -187,6 +187,16 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="mb-1">
+                  <div class="form-label">Oficina</div>
+                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>>
+                    <% datos.arrOficinas.map(element => { %> 
+                      <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected":"" %>><%- element.DESOFI %></option>
+                    <% }) %>
+                  </select>
+                </div>
+              </div>              
             </div>
             <div class="modal-footer">
               <a href="/admin" class="btn btn-link">Cancelar</a>
@@ -265,7 +275,7 @@
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         pwdusu.setAttribute('type', type);
         this.classList.toggle("bi-eye");
-      });      
+      });
 
       const validateChange = () => {
         const pwdusuValue = pwdusu.value.trim()

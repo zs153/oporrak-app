@@ -566,6 +566,16 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="mb-1">
+                  <div class="form-label">Oficina</div>
+                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>>
+                    <% datos.arrOficinas.map(element => { %> 
+                      <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected":"" %>><%= element.DESOFI %></option>
+                    <% }) %>
+                  </select>
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>

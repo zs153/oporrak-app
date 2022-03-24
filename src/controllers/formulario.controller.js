@@ -18,8 +18,15 @@ export const mainPage = async (req, res) => {
     const result = await axios.post("http://localhost:8000/api/formularios", {
       documento,
     });
+    const resultOficinas = await axios.get(
+      "http://localhost:8000/api/oficinas"
+    );
 
-    const datos = { documentos: result.data.dat };
+    const datos = {
+      documentos: result.data.dat,
+      arrOficinas: resultOficinas.data.dat,
+    };
+
     res.render("admin/formularios", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
@@ -62,7 +69,7 @@ export const addPage = async (req, res) => {
       refdoc: "",
       tipdoc: 0,
       ejedoc: fecha.getFullYear() - 1,
-      ofidoc: 0,
+      ofidoc: user.oficina,
       obsdoc: "",
       fundoc: user.userID,
       liqdoc: "",
@@ -138,7 +145,6 @@ export const editPage = async (req, res) => {
     });
   }
 };
-
 export const insertFormulario = async (req, res) => {
   const user = req.user;
   const referencia =
@@ -490,7 +496,7 @@ export const updatePerfil = async (req, res) => {
     nombre: req.body.nomusu,
     email: req.body.emausu,
     rol: user.rol,
-    oficina: user.oficina,
+    oficina: req.body.ofiusu,
     telefono: req.body.telusu,
   };
   const movimiento = {
