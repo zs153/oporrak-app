@@ -243,45 +243,6 @@
                                 </div>
                               </div>
                             </td>
-                            <% if(element.LIQDOC === user.userID || user.rol === datos.tiposRol.admin) { %>                              
-                              <td class="text-end w-4">
-                                <ul class="dots-menu">
-                                  <li class="nav-item drop-right">
-                                    <a href="#" class="nav-link">
-                                      <i class="bi bi-three-dots-vertical"></i>
-                                    </a>
-                                    <ul>
-                                      <li class="nav-item">
-                                          <a href="/admin/formularios/edit/<%- element.IDDOCU %>" class="nav-link">
-                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar formulario</a>
-                                          </a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.MOVCON %>', document.getElementById('resdoc').value ='<%- element.IDDOCU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
-                                          <i class="bi bi-check2 dropdown-item-icon"></i>Resolver formulario
-                                        </a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('remit').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-remitir">
-                                          <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Remitir formulario
-                                        </a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
-                                          <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Desasignar formulario
-                                        </a>
-                                      </li>
-                                      <li class="nav-item list-divider"></li>
-                                      <li class="nav-item ">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
-                                          <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </li>                              
-                                </ul>
-                              </td>
-                            <% } else {%>
                               <% if(element.STADOC === 0) { %>
                                 <td class="text-end w-4">
                                   <ul class="dots-menu">
@@ -296,12 +257,12 @@
                                           </a>
                                         </li>
                                         <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('iddocu').value ='<%- element.IDDOCU %>', document.getElementById('delfor').innerText ='<%- element.REFDOC %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                          <a href="#" class="nav-link" onclick="{document.getElementById('iddocu').value ='<%- element.IDDOCU %>', document.getElementById('delfor').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                             <i class="bi bi-trash dropdown-item-icon"></i>Borrar formulario
                                           </a>
                                         </li>
                                         <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.IDDOCU %>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
+                                          <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.IDDOCU %>', document.getElementById('texasi').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
                                             <i class="bi bi-heart dropdown-item-icon"></i>Asignar formulario
                                           </a>
                                         </li>
@@ -310,9 +271,46 @@
                                   </ul>
                                 </td>
                               <% } else {%>
-                                <td class=" text-end w-4"></td>
+                                <% if(element.LIQDOC === user.userID || user.rol === datos.tiposRol.admin) { %>                              
+                                  <td class="text-end w-4">
+                                    <ul class="dots-menu">
+                                      <li class="nav-item drop-right">
+                                        <a href="#" class="nav-link">
+                                          <i class="bi bi-three-dots-vertical"></i>
+                                        </a>
+                                        <ul>
+                                          <li class="nav-item">
+                                              <a href="/admin/formularios/edit/<%- element.IDDOCU %>" class="nav-link">
+                                                <i class="bi bi-pencil dropdown-item-icon"></i>Editar formulario</a>
+                                              </a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.MOVCON %>', document.getElementById('texres').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>', document.getElementById('resdoc').value ='<%- element.IDDOCU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
+                                              <i class="bi bi-check2 dropdown-item-icon"></i>Resolver formulario
+                                            </a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('remit').value ='<%- element.IDDOCU %>', document.getElementById('texrem').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-remitir">
+                                              <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Remitir formulario
+                                            </a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDDOCU %>', document.getElementById('texdes').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
+                                              <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar formulario
+                                            </a>
+                                          </li>
+                                          <li class="nav-item list-divider"></li>
+                                          <li class="nav-item ">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('nomsms').value ='<%- element.NOMCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                                              <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </li>                              
+                                    </ul>
+                                  </td>
+                                <% } %>
                               <% } %>
-                            <% } %>
                           </tr>
                         <% }) %>
                       </tbody>
@@ -383,6 +381,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>Asignar formulario</h3>
+            <div id="texasi"></div>
           </div>
           <div class="modal-footer">
             <div class="w-100">
@@ -416,6 +415,7 @@
                 <path d="M9 12l2 2l4 -4"></path>
               </svg> 
               <h3>Resolver formulario</h3>
+              <div id="texres"></div>
               <div class="card-header">
                 SMS
               </div>
@@ -474,6 +474,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>Remitir formulario</h3>
+              <div id="texrem"></div>
           </div>
           <div class="modal-footer">
             <div class="w-100">
@@ -506,6 +507,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>Desasignar formulario</h3>
+            <div id="texdes"></div>
           </div>
           <div class="modal-footer">
             <div class="w-100">
@@ -582,8 +584,8 @@
               <input type="hidden" id="idperf" name="idperf" value="">
               <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
 
@@ -626,10 +628,10 @@
     </div>
 
     <div class="modal modal-blur fade" id="modal-sms" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title mb-1">Envío SMS</h5>
+            <h5 class="modal-title mt-0">Envío SMS</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form action="/admin/formularios/sms" method="POST" onsubmit="return validateSms();">
@@ -643,13 +645,19 @@
                       <input type="text" name="movsms" id="movsms" class="form-control" value="" readonly/>
                     </div>
                   </div>
+                  <div class="col-8">
+                    <div class="mb-1">
+                      <label class="form-label">Nombre</label>
+                      <input type="text" name="nomcon" id="nomsms" class="form-control" value="" readonly/>
+                    </div>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-12">
                     <div class="mb-1">
                       <div class="input-control">
                         <label class="form-label required">Texto</label>
-                        <textarea name="texsms" id="modsms" class="form-control" value="" maxlength="140" rows="3" style="resize: vertical"></textarea>
+                        <textarea name="texsms" id="modsms" class="form-control" value="" maxlength="140" rows="5" style="resize: vertical"></textarea>
                         <div class="invalid-feedback"></div>
                       </div>
                     </div>
