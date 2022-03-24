@@ -5,10 +5,10 @@
 }
 body {
   margin: 0;
-  font-family: "Segoe UI";
-  font-size: 0.875rem;
-  /* font-family: 'Montserrat';
-  font-size: 0.75rem; */
+  /* font-family: "Segoe UI";
+  font-size: 0.875rem; */
+  font-family: "Nunito";
+  font-size: 0.8rem;
   font-weight: 400;
   line-height: 1.4285714;
   color: #232e3c;
@@ -2662,8 +2662,8 @@ a.avatar {
 
 /* form-label */
 .form-label {
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+  margin-bottom: 0.1rem;
+  /* font-size: 0.875rem; */
   font-weight: 500;
 }
 .form-label {
@@ -5034,11 +5034,18 @@ tbody tr:hover i {
     FONTS
 -------------------------------------------------------- */
 @font-face {
+  font-family: "Nunito";
+  src: url("/fonts/Nunito-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* @font-face {
   font-family: "Segoe UI";
   src: url("/fonts/segoeui.ttf");
   font-weight: normal;
   font-style: normal;
-}
+} */
 
 /* @font-face {
   font-family: 'Segoe Italic';
