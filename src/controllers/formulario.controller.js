@@ -14,6 +14,7 @@ export const mainPage = async (req, res) => {
   const documento = {
     stadoc: tiposVisualizacion.resueltos,
   };
+  const verTodo = false;
 
   try {
     const result = await axios.post("http://localhost:8000/api/formularios", {
@@ -27,8 +28,10 @@ export const mainPage = async (req, res) => {
       documentos: result.data.dat,
       arrOficinas: resultOficinas.data.dat,
       tiposRol,
+      estadosDocumento,
+      verTodo,
     };
-
+    console.log(datos);
     res.render("admin/formularios", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
@@ -446,6 +449,7 @@ export const verTodo = async (req, res) => {
   const documento = {
     stadoc: tiposVisualizacion.todos,
   };
+  const verTodo = true;
 
   try {
     const result = await axios.post("http://localhost:8000/api/formularios", {
@@ -459,7 +463,10 @@ export const verTodo = async (req, res) => {
       documentos: result.data.dat,
       arrOficinas: resultOficinas.data.dat,
       tiposRol,
+      estadosDocumento,
+      verTodo,
     };
+
     res.render("admin/formularios", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";

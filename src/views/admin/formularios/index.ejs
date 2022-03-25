@@ -52,8 +52,13 @@
                 <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
                   <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
                 </a>
-                <a href="/admin/formularios/vertodo" class="dropdown-item">
-                    <i class="bi bi-eye dropdown-item-icon"></i>Mostrar todo
+                <a href="#" class="dropdown-item" onclick="checkItem(this)">
+                    <!-- <i class="bi bi-eye dropdown-item-icon"></i>Mostrar todo -->
+                    <% if (datos.verTodo ) { %>
+                      <i id="alldoc" class='bi bi-eye dropdown-item-icon'></i>Solo pendientes
+                    <% } else { %>
+                      <i id="alldoc" class='bi bi-eye-slash dropdown-item-icon'></i>Mostrar todo
+                    <% } %>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
@@ -243,7 +248,7 @@
                                 </div>
                               </div>
                             </td>
-                              <% if(element.STADOC === 0) { %>
+                              <% if(element.STADOC === datos.estadosDocumento.pendiente) { %>
                                 <td class="text-end w-4">
                                   <ul class="dots-menu">
                                     <li class="nav-item drop-right">
@@ -270,6 +275,34 @@
                                     </li>                              
                                   </ul>
                                 </td>
+                              <% } else if(element.STADOC === datos.estadosDocumento.resuelto || element.STADOC === datos.estadosDocumento.remitido) {%>
+                                  <td class="text-end w-4">
+                                    <ul class="dots-menu">
+                                      <li class="nav-item drop-right">
+                                        <a href="#" class="nav-link">
+                                          <i class="bi bi-three-dots-vertical"></i>
+                                        </a>
+                                        <ul>
+                                          <li class="nav-item">
+                                              <a href="/admin/formularios/edit/<%- element.IDDOCU %>" class="nav-link">
+                                                <i class="bi bi-pencil dropdown-item-icon"></i>Editar formulario</a>
+                                              </a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDDOCU %>', document.getElementById('texdes').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
+                                              <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar formulario
+                                            </a>
+                                          </li>
+                                          <li class="nav-item list-divider"></li>
+                                          <li class="nav-item ">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('movsms').value ='<%- element.MOVCON %>', document.getElementById('nomsms').value ='<%- element.NOMCON %>', document.getElementById('idsmss').value ='<%- element.IDDOCU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                                              <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </li>                              
+                                    </ul>
+                                  </td>
                               <% } else {%>
                                 <% if(element.LIQDOC === user.userID || user.rol === datos.tiposRol.admin) { %>                              
                                   <td class="text-end w-4">
@@ -666,7 +699,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <a href="/admin/formularios" class="btn btn-link">Cancelar</a>
+              <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
               <button type="submit" class="btn btn-primary ms-auto">Enviar SMS</button>              
             </div>
           </form>
@@ -676,6 +709,15 @@
 
     <script src="/js/ayuda.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script>
+      function checkItem(elem) {
+        <% if (datos.verTodo) { %>
+          window.location.href = 'http://localhost:4000/admin/formularios/vertodo'          
+        <% } else { %>
+          window.location.href = 'http://localhost:4000/admin/formularios'
+        <% } %>
+      }
+     </script>
     <script>
       function focoRes() {
         const ele = document.getElementById('texsms')
