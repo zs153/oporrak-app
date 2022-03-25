@@ -155,7 +155,8 @@
                             <label class="form-label required">NIF/NIE</label>
                             <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
                             <div class="invalid-feedback"></div>
-                        </div>
+                            <ul id="discrim" style="list-style: none;padding: 2px;width: 400px;"></ul>
+                          </div>
                       </div>
                       <div class="col-6">
                         <div class="mb-1">
@@ -597,17 +598,27 @@
         Hay que cambiarla a mano por la del servidor de produccion
         en este caso http://172.27.25.44:8000/api/gente
         */
-        xhr.open('POST', 'http://172.27.25.44:8000/api/gente', true);
+        xhr.open('POST', 'http://localhost:8000/api/gente', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
             
         xhr.onload = function() {
-          if (xhr.status === 202) {
-            const gente = JSON.parse(xhr.response)
-            
-            if (gente.nomgen) {
-              eleNombre.value = gente.nomgen
+          if (xhr.status === 200) {
+            const gentes = JSON.parse(xhr.response)
+            const discriminantes = document.getElementById('discrim')
+
+            if (gentes.length > 1) {
+              discriminantes.innerHTML = ''
+              gentes.map((item) => {
+                const li = document.createElement('li')
+                li.textContent = item.NIFGEN + ' ' + item.NOMGEN
+                discriminantes.appendChild(li)
+              })
             } else {
-              eleNombre.value = ''
+              if (gentes[0].NOMGEN) {
+                eleNombre.value = gentes[0].NOMGEN
+              } else {
+                eleNombre.value = ''
+              }
             }
           }
         };

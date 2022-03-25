@@ -52,10 +52,8 @@ export const tiposRol = {
   admin: 3,
 }
 export const tiposVisualizacion = {
-  pendientes: 0,
-  asignados: 1,
+  pendientes: 1,
   resueltos: 2,
-  remitidos: 3,
   todos: 4,
 }
 export const estadosUsuario = {

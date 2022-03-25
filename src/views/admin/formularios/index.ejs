@@ -53,11 +53,10 @@
                   <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
                 </a>
                 <a href="#" class="dropdown-item" onclick="checkItem(this)">
-                    <!-- <i class="bi bi-eye dropdown-item-icon"></i>Mostrar todo -->
                     <% if (datos.verTodo ) { %>
-                      <i id="alldoc" class='bi bi-eye dropdown-item-icon'></i>Solo pendientes
+                      <i class='bi bi-eye-slash dropdown-item-icon'></i>Solo pendientes
                     <% } else { %>
-                      <i id="alldoc" class='bi bi-eye-slash dropdown-item-icon'></i>Mostrar todo
+                      <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
                     <% } %>
                 </a>
                 <div class="dropdown-divider"></div>
@@ -604,10 +603,10 @@
               <div class="row">
                 <div class="mb-1">
                   <div class="form-label">Oficina</div>
-                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>>
+                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>">
                     <% datos.arrOficinas.map(element => { %> 
-                      <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected":"" %>><%= element.DESOFI %></option>
-                    <% }) %>
+                    <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == user.oficina ? " selected":"" %>><%= element.DESOFI %></option>
+                    <% }) %> 
                   </select>
                 </div>
               </div>
@@ -712,9 +711,9 @@
     <script>
       function checkItem(elem) {
         <% if (datos.verTodo) { %>
-          window.location.href = 'http://localhost:4000/admin/formularios/vertodo'          
+          window.location.href = 'http://localhost:4000/admin/formularios'          
         <% } else { %>
-          window.location.href = 'http://localhost:4000/admin/formularios'
+          window.location.href = 'http://localhost:4000/admin/formularios/vertodo'
         <% } %>
       }
      </script>
@@ -782,7 +781,7 @@
       const telusu = document.getElementById('telusu')
 
       togglePassword.addEventListener('click', function (e) {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
         pwdusu.setAttribute('type', type);
         this.classList.toggle("bi-eye");
       });
