@@ -451,8 +451,15 @@ export const verTodo = async (req, res) => {
     const result = await axios.post("http://localhost:8000/api/formularios", {
       documento,
     });
+    const resultOficinas = await axios.get(
+      "http://localhost:8000/api/oficinas"
+    );
 
-    const datos = { documentos: result.data.dat };
+    const datos = {
+      documentos: result.data.dat,
+      arrOficinas: resultOficinas.data.dat,
+      tiposRol,
+    };
     res.render("admin/formularios", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
