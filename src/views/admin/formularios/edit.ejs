@@ -485,6 +485,9 @@
         return false
       } if (nomconValue.length > 255) {
         setError(nomcon, 'Se excede la longitud del nombre')
+        setTimeout(function () {
+          setSuccess(nomcon)
+        }, 3000)        
         return false
       } else {
         setSuccess(nomcon)
