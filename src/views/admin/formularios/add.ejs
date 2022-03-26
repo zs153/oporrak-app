@@ -9,7 +9,7 @@
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css"> 
 </head>
 
@@ -35,7 +35,7 @@
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
               <div class="card">
                 <div class="card-body">
-                    <ul id="messages" style="list-style: none;"></ul>
+                    <ul id="messages" style="list-style: none;padding: 0px;"></ul>
                 </div>
               </div>
             </div>
@@ -153,15 +153,18 @@
                       <div class="col-2">
                         <div class="mb-1">
                             <label class="form-label required">NIF/NIE</label>
-                            <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
+                            <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus autocomplete="false"/>
                             <div class="invalid-feedback"></div>
-                            <ul id="discrim" style="list-style: none;padding: 2px;width: 400px;"></ul>
+                            <div class="discrim">
+                              <ul id="iddisc">                                
+                              </ul>
+                            </div>
                           </div>
                       </div>
                       <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label required">Nombre</label>
-                            <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
+                            <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" autocomplete="false"/>
                             <div class="invalid-feedback"></div>
                         </div>
                       </div>
@@ -429,7 +432,7 @@
     const telusu = document.getElementById('telusu')
 
     const validate = () => {
-      const nifconValue = nifcon.value.trim()
+      const nifconValue = nifcon.value.trim().slice(0,9)
       const nomconValue = nomcon.value.trim()
       const movconValue = movcon.value.trim()
       const tipdocValue = combo.value
@@ -439,12 +442,18 @@
 
       if (nifconValue === '') {
         setError(nifcon, 'NIF/NIE requerido')
+        setTimeout(function () {
+          setSuccess(nifcon)
+        }, 3000)
         return false
       } else {
         const pattern = /^(X[0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
 
         if (!pattern.test(nifconValue)){
           setError(nifcon, 'Introduzca NIF/NIE válido')
+          setTimeout(function () {
+            setSuccess(nifcon)
+          }, 3000)
           return false
         }
 
@@ -471,6 +480,9 @@
 
         if(isValid === false) {
           setError(nifcon, 'Introduzca NIF/NIE válido')
+          setTimeout(function () {
+            setSuccess(nifcon)
+          }, 3000)          
           return false
         }
         setSuccess(nifcon)
@@ -480,18 +492,27 @@
         return false
       } if (nomconValue.length > 255) {
         setError(nomcon, 'Se excede la longitud del nombre')
+        setTimeout(function () {
+          setSuccess(nomcon)
+        }, 3000)        
         return false
       } else {
         setSuccess(nomcon)
       }
       if (tipdocValue === '0') {
         setError(combo, 'Seleccione un tipo')
+        setTimeout(function () {
+          setSuccess(combo)
+        }, 3000)
         return false
       } else {
         setSuccess(combo)
       }
       if (ejedocValue === '') {
         setError(ejedoc, 'Ejercicio requerido')
+        setTimeout(function () {
+          setSuccess(ejedoc)
+        }, 3000)
         return false
       } else {
         const pattern = /^([0-9]{4})$/
@@ -499,18 +520,27 @@
 
         if(isValid === false) {
           setError(ejedoc, 'Introduzca ejercicio válido')
+          setTimeout(function () {
+            setSuccess(ejedoc)
+          }, 3000)
           return false
         }
         setSuccess(ejedoc)        
       }
       if (isNaN(Date.parse(fecdocValue))) {
         setError(fecdoc, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(fecdoc)
+        }, 3000)
         return false
       } else {
         setSuccess(fecdoc)        
       }      
       if (movconValue === '') {
         setError(movcon, 'Movil requerido')
+        setTimeout(function () {
+          setSuccess(movcon)
+        }, 3000)
         return false
       } else {
         const pattern = /^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/
@@ -518,15 +548,21 @@
 
         if(isValid === false) {
           setError(movcon, 'Introduzca movil válido')
+          setTimeout(function () {
+            setSuccess(movcon)
+          }, 3000)
           return false
         }
         setSuccess(movcon)
       }
       if (obsdocValue.length > 4000) {
         setError(obsdoc, 'Se excede la longitud de las observaciones')
+        setTimeout(function () {
+          setSuccess(obsdoc)
+        }, 3000)
         return false
       } else {
-        setSuccess(nomcon)
+        setSuccess(obsdoc)
       }
 
       return true
@@ -536,6 +572,9 @@
 
       if (pwdusuValue === '') {
         setError(pwdusu, 'Contraseña requerida')
+        setTimeout(function () {
+          setSuccess(pwdusu)
+        }, 3000)
         return false
       } else {
         setSuccess(pwdusu)
@@ -588,6 +627,7 @@
   <script>
     const eleNif = document.getElementById('nifcon')
     const eleNombre = document.getElementById('nomcon')
+    const eleDiscri = document.getElementById('iddisc')
 
     eleNif.addEventListener('blur', async () => {
       if (eleNif.value !== '') {
@@ -598,14 +638,11 @@
         Hay que cambiarla a mano por la del servidor de produccion
         en este caso http://172.27.25.44:8000/api/gente
         */
-        xhr.open('POST', 'http://localhost:8000/api/gente', true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-            
         xhr.onload = function() {
           if (xhr.status === 200) {
             const gentes = JSON.parse(xhr.response)
-            const discriminantes = document.getElementById('discrim')
-
+            const discriminantes = document.getElementById('iddisc')
+            
             if (gentes.length > 1) {
               discriminantes.innerHTML = ''
               gentes.map((item) => {
@@ -613,16 +650,31 @@
                 li.textContent = item.NIFGEN + ' ' + item.NOMGEN
                 discriminantes.appendChild(li)
               })
+              const li = document.createElement('li')
+              li.textContent = 'Introduzca discriminante'
+              discriminantes.appendChild(li)
+              
+              eleDiscri.style.display = 'block'
+              eleNif.focus()
             } else {
               if (gentes[0].NOMGEN) {
                 eleNombre.value = gentes[0].NOMGEN
               } else {
                 eleNombre.value = ''
               }
+              eleDiscri.style.display = 'none'
             }
+          } else {
+            eleNombre.value = ''
           }
         };
-        xhr.send(JSON.stringify({nifgen: eleNif.value}))
+        try {
+          xhr.open('POST', 'http://localhost:8000/api/gente', true);
+          xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');     
+          xhr.send(JSON.stringify({nifgen: eleNif.value}))
+        } catch (error) {
+          eleNombre.value = ''
+        }
       }
     })
   </script>
