@@ -13,8 +13,7 @@ export const mainPage = async (req, res) => {
   const user = req.user
   const documento = {
     stadoc: tiposVisualizacion.pendientes,
-    // ofidoc: user.rol === tiposRol.admin ? -1 : user.oficina,
-    ofidoc: -1, // admin y usuario ven todas las oficinas en estado = pendientes
+    liqdoc: user.rol === tiposRol.admin ? 'ADMIN' : user.userID,
   }
   const verTodo = false
 
@@ -63,7 +62,7 @@ export const addPage = async (req, res) => {
     const resultOficinas = await axios.get('http://localhost:8000/api/oficinas')
     const documento = {
       iddocu: 0,
-      fecdoc: fecha.toISOString().substring(0, 10),
+      fecdoc: fecha.toISOString().slice(0, 10),
       nifcon: '',
       nomcon: '',
       emAcon: '',
@@ -148,12 +147,7 @@ export const editPage = async (req, res) => {
 }
 export const insertFormulario = async (req, res) => {
   const user = req.user
-  const referencia =
-    'D' +
-    randomString(
-      10,
-      '1234567890abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ'
-    )
+  const referencia = 'IW' + randomString(9, '1234567890YMGS')
   const documento = {
     fecdoc: req.body.fecdoc,
     nifcon: req.body.nifcon,
@@ -444,7 +438,7 @@ export const verTodo = async (req, res) => {
   const user = req.user
   const documento = {
     stadoc: tiposVisualizacion.todos,
-    ofidoc: user.rol === tiposRol.admin ? -1 : user.oficina, // admin ve todas oficinas y usuario su oficina en estado = todos
+    liqdoc: user.rol === tiposRol.admin ? 'ADMIN' : user.userID,
   }
   const verTodo = true
 
