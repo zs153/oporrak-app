@@ -122,11 +122,11 @@
                       <thead>
                       <tr>
                         <th class="w-5"></th>
-                        <th>Fecha</th>
-                        <th>Referencia</th>
-                        <th>Movil</th>
+                        <th class="w-7">Fecha</th>
+                        <th class="w-7">Referencia</th>
+                        <th class="w-7">Movil</th>
                         <th>Texto</th>
-                        <th class="w-2"></th>
+                        <th class="w-4"></th>
                       </tr>
                       </thead>
                       <tbody>
@@ -145,19 +145,20 @@
                                 <% } %>
                               </div>
                             </td>
-                            <td>
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- element.STRFEC %></div>
-                              </div>
+                            <td class="w-7">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.STRFEC %></div>
+                                </div>
                               </div>
                             </td>
-                            <td>
+                            <td class="w-7">
                               <div class="flex-fill">
                                 <div class="font-weight-medium"><%- element.REFDOC %></div>
                               </div>
                               </div>
                             </td>
-                            <td>
+                            <td class="w-7">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.MOVSMS %></div>
@@ -171,7 +172,7 @@
                                 </div>
                               </div>
                             </td>                            
-                            <td class="text-end w-2">
+                            <td class="text-end w-4">
                               <ul class="dots-menu">
                                 <li class="nav-item drop-right">
                                   <a href="#" class="nav-link">

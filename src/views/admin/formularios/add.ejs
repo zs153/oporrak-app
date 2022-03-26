@@ -419,6 +419,7 @@
     })
   </script>
   <script>
+    const togglePassword = document.querySelector('#togglePassword');
     const nifcon = document.getElementById('nifcon')
     const nomcon = document.getElementById('nomcon')
     const movcon = document.getElementById('movcon')
@@ -431,6 +432,12 @@
     const emausu = document.getElementById('emausu')
     const telusu = document.getElementById('telusu')
 
+    togglePassword.addEventListener('click', function (e) {
+      const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwdusu.setAttribute('type', type);
+      this.classList.toggle("bi-eye");
+    });
+      
     const validate = () => {
       const nifconValue = nifcon.value.trim().slice(0,9)
       const nomconValue = nomcon.value.trim()
@@ -482,7 +489,7 @@
           setError(nifcon, 'Introduzca NIF/NIE válido')
           setTimeout(function () {
             setSuccess(nifcon)
-          }, 3000)          
+          }, 3000)
           return false
         }
         setSuccess(nifcon)
@@ -494,7 +501,7 @@
         setError(nomcon, 'Se excede la longitud del nombre')
         setTimeout(function () {
           setSuccess(nomcon)
-        }, 3000)        
+        }, 3000)
         return false
       } else {
         setSuccess(nomcon)
@@ -589,18 +596,27 @@
 
       if (nomusuValue === '') {
         setError(nomusu, 'Nombre requerido')
+        setTimeout(function () {
+          setSuccess(nomusu)
+        }, 3000)
         return false
       } else {
         setSuccess(nomusu)
       }
       if (emausuValue === '') {
         setError(emausu, 'Email requerido')
+        setTimeout(function () {
+          setSuccess(emausu)
+        }, 3000)
         return false
       } else {
         setSuccess(emausu)
       }
       if (telusuValue === '') {
         setError(telusu, 'Teléfono requerido')
+        setTimeout(function () {
+          setSuccess(telusu)
+        }, 3000)
         return false
       } else {
         setSuccess(telusu)

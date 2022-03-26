@@ -401,6 +401,7 @@
     })
   </script>
   <script>
+    const togglePassword = document.querySelector('#togglePassword');
     const combo = document.getElementById('cbotip')
     const nifcon = document.getElementById('nifcon')
     const nomcon = document.getElementById('nomcon')
@@ -414,8 +415,14 @@
     const emausu = document.getElementById('emausu')
     const telusu = document.getElementById('telusu')
 
+    togglePassword.addEventListener('click', function (e) {
+      const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwdusu.setAttribute('type', type);
+      this.classList.toggle("bi-eye");
+    });
+
     const validate = () => {
-      const nifconValue = nifcon.value.trim()
+      const nifconValue = nifcon.value.trim().slice(0,9)
       const nomconValue = nomcon.value.trim()
       const movconValue = movcon.value.trim()
       const tipdocValue = combo.value
@@ -425,12 +432,18 @@
 
       if (nifconValue === '') {
         setError(nifcon, 'NIF/NIE requerido')
+        setTimeout(function () {
+          setSuccess(nifcon)
+        }, 3000)
         return false
       } else {
         const pattern = /^(X[0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
 
         if (!pattern.test(nifconValue)){
           setError(nifcon, 'Introduzca NIF/NIE válido')
+          setTimeout(function () {
+            setSuccess(nifcon)
+          }, 3000)          
           return false
         }
 
@@ -457,12 +470,18 @@
 
         if(isValid === false) {
           setError(nifcon, 'Introduzca NIF/NIE válido')
+          setTimeout(function () {
+            setSuccess(nifcon)
+          }, 3000)
           return false
         }
         setSuccess(nifcon)
       }
       if (nomconValue === '') {
         setError(nomcon, 'Nombre requerido')
+        setTimeout(function () {
+          setSuccess(nomcon)
+        }, 3000)
         return false
       } if (nomconValue.length > 255) {
         setError(nomcon, 'Se excede la longitud del nombre')
@@ -472,12 +491,18 @@
       }
       if (tipdocValue === '0') {
         setError(combo, 'Seleccione un tipo')
+        setTimeout(function () {
+          setSuccess(combo)
+        }, 3000)
         return false
       } else {
         setSuccess(combo)
       }
       if (ejedocValue === '') {
         setError(ejedoc, 'Ejercicio requerido')
+        setTimeout(function () {
+          setSuccess(ejedoc)
+        }, 3000)
         return false
       } else {
         const pattern = /^([0-9]{4})$/
@@ -485,18 +510,27 @@
 
         if(isValid === false) {
           setError(ejedoc, 'Introduzca ejercicio válido')
+          setTimeout(function () {
+            setSuccess(ejedoc)
+          }, 3000)
           return false
         }
         setSuccess(ejedoc)        
       }
       if (isNaN(Date.parse(fecdocValue))) {
         setError(fecdoc, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(fecdoc)
+        }, 3000)
         return false
       } else {
         setSuccess(fecdoc)        
       }      
       if (movconValue === '') {
         setError(movcon, 'Movil requerido')
+        setTimeout(function () {
+          setSuccess(movcon)
+        }, 3000)
         return false
       } else {
         const pattern = /^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/
@@ -504,12 +538,18 @@
 
         if(isValid === false) {
           setError(movcon, 'Introduzca movil válido')
+          setTimeout(function () {
+            setSuccess(movcon)
+          }, 3000)
           return false
         }
         setSuccess(movcon)
       }
       if (obsdocValue.length > 4000) {
         setError(obsdoc, 'Se excede la longitud de las observaciones')
+        setTimeout(function () {
+          setSuccess(obsdoc)
+        }, 3000)
         return false
       } else {
         setSuccess(nomcon)
@@ -522,6 +562,9 @@
 
       if (pwdusuValue === '') {
         setError(pwdusu, 'Contraseña requerida')
+        setTimeout(function () {
+          setSuccess(pwdusu)
+        }, 3000)
         return false
       } else {
         setSuccess(pwdusu)
@@ -536,18 +579,27 @@
 
       if (nomusuValue === '') {
         setError(nomusu, 'Nombre requerido')
+        setTimeout(function () {
+          setSuccess(nomusu)
+        }, 3000)
         return false
       } else {
         setSuccess(nomusu)
       }
       if (emausuValue === '') {
         setError(emausu, 'Email requerido')
+        setTimeout(function () {
+          setSuccess(emausu)
+        }, 3000)
         return false
       } else {
         setSuccess(emausu)
       }
       if (telusuValue === '') {
         setError(telusu, 'Teléfono requerido')
+        setTimeout(function () {
+          setSuccess(telusu)
+        }, 3000)
         return false
       } else {
         setSuccess(telusu)
