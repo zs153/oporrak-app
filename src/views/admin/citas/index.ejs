@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Citas</title>
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap-icons.css">
+    <!-- custom -->
+    <link rel="stylesheet" href="/css/estilos.min.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+  </head>
+  <body class="antialiased">
+    <div class="wrapper">
+      <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1 class="navbar-brand pe-0 pe-md-3">
+            <a href="/">
+              <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
+            </a>
+          </h1>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="nav-item dropdown d-none d-md-flex me-3">
+              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
+                <span class="badge bg-white"></span>
+                <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
+                <div class="card">
+                  <div class="card-body">
+                    <ul id="messages" style="list-style: none;"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                <div class="d-none d-xl-block">
+                  <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="#" class="dropdown-item" onclick="checkItem(this)">
+                    <% if (datos.verTodo ) { %>
+                      <i class='bi bi-eye-slash dropdown-item-icon'></i>Solo pendientes
+                    <% } else { %>
+                      <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
+                    <% } %>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="navbar-expand-md">
+        <div class="navbar navbar-light">
+          <div class="container-xl">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="/" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="bi-house"></i>
+                  </span>
+                    Inicio
+                  </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/formularios" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="bi bi-music-note"></i>
+                  </span>
+                  <span class="nav-link-title">
+                    Formularios
+                  </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/fraudes" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="bi bi-cash"></i>
+                  </span>
+                  <span class="nav-link-title">
+                    Fraudes
+                  </span>
+                </a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/admin/citas" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="bi bi-cash"></i>
+                  </span>
+                  <span class="nav-link-title">
+                    Citas
+                  </span>
+                </a>
+              </li>              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
+                  <span>Administración</span>
+                </a>
+                <div class="dropdown-menu">
+                  <a href="/admin/oficinas" class="dropdown-item">
+                    <i class="bi bi-building dropdown-item-icon"></i>Oficinas
+                  </a>
+                  <a href="/admin/tipos" class="dropdown-item">
+                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
+                  </a>
+                  <a href="/admin/subtipos" class="dropdown-item">
+                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subtipos
+                  </a>
+                  <a href="/admin/usuarios" class="dropdown-item">
+                    <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                  </a>
+                  <a href="/admin/smss" class="dropdown-item">
+                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a href="/admin/estadistica" class="dropdown-item">
+                    <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
+                  </a>
+                </div>
+              </li>            
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-wrapper">
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row row-deck row-cards">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    Citas
+                    <div class="col-auto ms-auto">
+                      <div class="d-flex">
+                        <div class="input-icon me-3">
+                          <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarCitBox" onkeyup="filtroCitas();" placeholder="Buscar..."
+                            aria-label="Buscar en citas">
+                        </div>
+                      </div>
+                    </div>                    
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-vcenter table-striped table-fixHead" id="tblCitas">
+                      <thead>
+                      <tr>
+                        <th class="w-4"></th>
+                        <th class="w-8">Oficina</th>
+                        <th class="w-6">Fecha</th>
+                        <th class="w-7">NIF</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Observaciones</th>
+                        <th class="w-4"></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <% datos.citas.map(element => { %>
+                          <tr>
+                            <td class="w-4">
+                              <div class="align-items-center py-1">                                
+                                <% if (element.STACIT === 0) { %>
+                                    <span class="avatar avatar-rounded bg-red-lt">
+                                      <h6>DISPO</h6>
+                                    </span>
+                                  <% } else { %>
+                                    <span class="avatar avatar-rounded bg-green-lt">
+                                      <h6>TRASP</h6>
+                                    </span>
+                                  <% } %>
+                              </div>
+                            </td>
+                            <td class="w-8 px-3">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.DESOFI %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="w-6">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.STRFEC %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="w-7">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.NIFCON %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.NOMCON %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.TIPCIT %></div>
+                                </div>
+                              </div>
+                            </td>                            
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <% if (element.OBSCIT !== null) { %>
+                                    <div class="font-weight-medium"><%- element.OBSCIT.length > 33 ? element.OBSCIT.slice(0,33) + '...': element.OBSCIT %></div>
+                                  <% }%>
+                                </div>
+                              </div>
+
+                            </td>
+                              <% if(element.STACIT === datos.estadosCita.pendiente) { %>
+                                <td class="text-end w-4">
+                                  <ul class="dots-menu">
+                                    <li class="nav-item drop-right">
+                                      <a href="#" class="nav-link">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                      </a>
+                                      <ul>
+                                        <li class="nav-item">
+                                          <a href="/admin/citas/edit/<%- element.idcita %>" class="nav-link">
+                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar cita</a>
+                                          </a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a href="#" class="nav-link" onclick="{document.getElementById('idcita').value ='<%- element.idcita %>', document.getElementById('delcit').innerHTML ='<p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                            <i class="bi bi-trash dropdown-item-icon"></i>Borrar cita
+                                          </a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.idcita %>', document.getElementById('texasi').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
+                                            <i class="bi bi-heart dropdown-item-icon"></i>Asignar cita
+                                          </a>
+                                        </li>
+                                      </ul>
+                                    </li>                              
+                                  </ul>
+                                </td>
+                              <% } else { %>
+                                <td></td>
+                              <% } %>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                Copyright &copy; 2022
+                <a href="/" class="link-secondary">SIAC</a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    
+    <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-danger"></div>
+          <div class="modal-body text-center py-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M12 9v2m0 4v.01"></path>
+              <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
+            </svg>
+            <h3>¿Desea borrar esta cita?</h3>
+            <div id="delfor"></div>
+            <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col">
+                  <a href="/admin/citas" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                </div>
+                <div class="col">
+                  <form action="/admin/citas/delete" method="POST">
+                    <input type="hidden" id="idcita" name="idcita" value="">
+                    <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar cita</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal modal-blur fade" id="modal-asignar" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-primary"></div>
+          <div class="modal-body text-center py-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-blue icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M12 9v2m0 4v.01"></path>
+              <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
+            </svg>
+            <h3>Asignar cita</h3>
+            <div id="texasi"></div>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col">
+                  <a href="/admin/citas" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                </div>
+                <div class="col">
+                  <form action="/admin/citas/asignar" method="POST">
+                    <input type="hidden" id="asign" name="idcita" value="">
+                    <button type="submit" class="btn btn-primary w-100">Asignar cita</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/ayuda.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      function checkItem(elem) {
+        <% if (datos.verTodo) { %>
+          window.location.href = 'http://localhost:4000/admin/citas'          
+        <% } else { %>
+          window.location.href = 'http://localhost:4000/admin/citas/vertodo'
+        <% } %>
+      }
+     </script>
+    <script>
+      const messages = document.getElementById('messages')
+      const socket = io()
+
+      socket.on('receive-message', msg => {
+        const li = document.createElement('li')
+        li.textContent = msg
+        messages.appendChild(li)
+
+        const toggleBadge = document.querySelector('#toggleBadge');
+        const numeroMensajes = messages.getElementsByTagName("li").length
+        if (numeroMensajes === 1) {
+          toggleBadge.classList.toggle('d-none')
+        }
+      })
+    </script>     
+    <script>
+      function filtroCitas() {
+        const input = document.getElementById("buscarCitBox");
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById("tblCitas");
+        const tr = table.getElementsByTagName("tr");
+        let arrTd
+        let td
+        let match = true
+
+        for (let i = 0; i < tr.length; i++) {
+          arrTd = tr[i].getElementsByTagName("td");
+          for(let j = 0; j < arrTd.length; j++) {
+            td = arrTd[j]
+            if (td) {
+              if (td.innerText.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                break
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <script>
+      const togglePassword = document.querySelector('#togglePassword');
+      const pwdusu = document.getElementById('pwdusu')
+      const modsms = document.getElementById('modsms')
+      const nomusu = document.getElementById('nomusu')
+      const emausu = document.getElementById('emausu')
+      const telusu = document.getElementById('telusu')
+
+      togglePassword.addEventListener('click', function (e) {
+        const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
+        pwdusu.setAttribute('type', type);
+        this.classList.toggle("bi-eye");
+      });
+
+      const validateSms = () => {
+        const modsmsValue = modsms.value.trim()
+
+        if (modsmsValue === '') {
+          setError(modsms, 'Texto requerido')
+          return false
+        } else {
+          setSuccess(modsms)
+        }
+
+        return true
+      }
+      const validateChange = () => {
+        const pwdusuValue = pwdusu.value.trim()
+
+        if (pwdusuValue === '') {
+          setError(pwdusu, 'Contraseña requerida')
+          setTimeout(function () {
+            setSuccess(pwdusu)
+          }, 3000)          
+          return false
+        } else {
+          setSuccess(pwdusu)
+        }
+
+        return true
+      }
+      const validatePerfil = () => {
+        const nomusuValue = nomusu.value.trim()
+        const emausuValue = emausu.value.trim()
+        const telusuValue = telusu.value.trim()
+
+        if (nomusuValue === '') {
+          setError(nomusu, 'Nombre requerido')
+          setTimeout(function () {
+            setSuccess(nomusu)
+          }, 3000)             
+          return false
+        } else {
+          setSuccess(nomusu)
+        }
+        if (emausuValue === '') {
+          setError(emausu, 'Email requerido')
+          setTimeout(function () {
+            setSuccess(emausu)
+          }, 3000)             
+          return false
+        } else {
+          setSuccess(emausu)
+        }
+        if (telusuValue === '') {
+          setError(telusu, 'Teléfono requerido')
+          setTimeout(function () {
+            setSuccess(telusu)
+          }, 3000)             
+          return false
+        } else {
+          setSuccess(telusu)
+        }
+        return true
+      }
+      const setSuccess = (element) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+        errorDisplay.innerText = '';
+        inputControl.classList.add('is-valid');
+        element.classList.remove('is-invalid');
+      }
+      const setError = (element, message) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+        errorDisplay.innerText = message;
+        element.classList.add('is-invalid');
+        inputControl.classList.remove('is-valid');
+      }
+    </script>
+  </body>
+</html>
