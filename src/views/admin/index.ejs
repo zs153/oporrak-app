@@ -200,10 +200,10 @@
               <div class="row">
                 <div class="mb-1">
                   <div class="form-label">Oficina</div>
-                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>>
+                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>">
                     <% datos.arrOficinas.map(element => { %> 
-                      <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected":"" %>><%- element.DESOFI %></option>
-                    <% }) %>
+                    <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == user.oficina ? " selected":"" %>><%= element.DESOFI %></option>
+                    <% }) %> 
                   </select>
                 </div>
               </div>              

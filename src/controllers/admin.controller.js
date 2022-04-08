@@ -4,15 +4,16 @@ import { tiposMovimiento } from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
+  console.log("pass");
 
   try {
     const resultOficinas = await axios.get(
       "http://localhost:8000/api/oficinas"
     );
+
     const datos = {
       arrOficinas: resultOficinas.data.dat,
     };
-
     res.render("admin/index", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
