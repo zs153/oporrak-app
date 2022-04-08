@@ -252,7 +252,7 @@
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <% if (element.OBSDOC !== null) { %>
-                                    <div class="font-weight-medium"><%- element.OBSDOC.length > 33 ? element.OBSDOC.slice(0,33) + '...': element.OBSDOC %></div>
+                                    <div class="font-weight-medium"><%- element.OBSDOC.length > 30 ? element.OBSDOC.slice(0,30) + '...': element.OBSDOC %></div>
                                   <% }%>
                                 </div>
                               </div>
@@ -351,6 +351,8 @@
                                       </li>                              
                                     </ul>
                                   </td>
+                                <% } else { %>
+                                  <td class="text-end w-4"></td>
                                 <% } %>
                               <% } %>
                           </tr>
@@ -721,9 +723,9 @@
     <script>
       function checkItem(elem) {
         <% if (datos.verTodo) { %>
-          window.location.href = 'http://localhost:4000/admin/formularios'          
+          window.location.href = 'http://172.27.25.44:4000/admin/formularios'          
         <% } else { %>
-          window.location.href = 'http://localhost:4000/admin/formularios/vertodo'
+          window.location.href = 'http://172.27.25.44:4000/admin/formularios/vertodo'
         <% } %>
       }
      </script>
