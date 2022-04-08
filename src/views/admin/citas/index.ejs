@@ -158,11 +158,14 @@
                       <thead>
                       <tr>
                         <th class="w-4"></th>
+                        <th class="w-7">Origen</th>
                         <th class="w-8">Oficina</th>
                         <th class="w-6">Fecha</th>
+                        <th class="w-5">Hora</th>
                         <th class="w-7">NIF</th>
                         <th>Nombre</th>
-                        <th>Tipo</th>
+                        <th class="w-6">Teléfono</th>
+                        <th>Descripción</th>
                         <th>Observaciones</th>
                         <th class="w-4"></th>
                       </tr>
@@ -183,6 +186,13 @@
                                   <% } %>
                               </div>
                             </td>
+                            <td class="w-7">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.ORGCIT %></div>
+                                </div>
+                              </div>
+                            </td>                            
                             <td class="w-8 px-3">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
@@ -194,6 +204,13 @@
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.STRFEC %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="w-5">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.HORCIT %></div>
                                 </div>
                               </div>
                             </td>
@@ -211,10 +228,17 @@
                                 </div>
                               </div>
                             </td>
+                            <td class="w-6">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.TELCON %></div>
+                                </div>
+                              </div>
+                            </td>                            
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.TIPCIT %></div>
+                                  <div class="font-weight-medium"><%- element.DESCIT %></div>
                                 </div>
                               </div>
                             </td>                            
@@ -226,7 +250,6 @@
                                   <% }%>
                                 </div>
                               </div>
-
                             </td>
                               <% if(element.STACIT === datos.estadosCita.pendiente) { %>
                                 <td class="text-end w-4">
@@ -237,18 +260,13 @@
                                       </a>
                                       <ul>
                                         <li class="nav-item">
-                                          <a href="/admin/citas/edit/<%- element.idcita %>" class="nav-link">
-                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar cita</a>
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('idcita').value ='<%- element.idcita %>', document.getElementById('delcit').innerHTML ='<p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
-                                            <i class="bi bi-trash dropdown-item-icon"></i>Borrar cita
-                                          </a>
+                                            <a href="/admin/formularios/edit/<%- element.IDDOCU %>" class="nav-link">
+                                              <i class="bi bi-pencil dropdown-item-icon"></i>Editar formulario</a>
+                                            </a>
                                         </li>
                                         <li class="nav-item">
                                           <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.idcita %>', document.getElementById('texasi').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
-                                            <i class="bi bi-heart dropdown-item-icon"></i>Asignar cita
+                                            <i class="bi bi-heart dropdown-item-icon"></i>Generar formulario
                                           </a>
                                         </li>
                                       </ul>
@@ -256,7 +274,7 @@
                                   </ul>
                                 </td>
                               <% } else { %>
-                                <td></td>
+                                <td class="text-end w-4"></td>
                               <% } %>
                           </tr>
                         <% }) %>
