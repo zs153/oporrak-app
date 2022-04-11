@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Añadir fraude</title>
+  <title>Editar cita</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -35,7 +35,7 @@
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
               <div class="card">
                 <div class="card-body">
-                    <ul id="messages" style="list-style: none;"></ul>
+                  <ul id="messages" style="list-style: none;"></ul>
                 </div>
               </div>
             </div>
@@ -55,7 +55,7 @@
               </a>
               <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
                 <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
-              </a>              
+              </a>
               <div class="dropdown-divider"></div>
               <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
             </div>
@@ -87,7 +87,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
               <a class="nav-link" href="/admin/citas" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="bi bi-alarm"></i>
@@ -97,7 +97,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/admin/fraudes" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="bi bi-cash"></i>
@@ -154,97 +154,71 @@
                   </div>
                   <% }) %>
                 <% } %>
-                <form id="form" action="/admin/fraudes/insert" method="POST" onsubmit="return validate();">
+                <form action="/admin/citas/update" method="POST">
+                  <input type="hidden" id="idcita" name="idcita" value="<%- datos.documento.idcita %>">
                   <div class="card-header">
-                    Fraude
+                    Cita
                   </div>
                   <div class="card-body">
-                    <div class="row">
-                      <div class="col-2">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">NIF/NIE</label>
-                            <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Nombre</label>
-                            <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <label class="form-label">Correo electrónico</label>
-                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.documento.emacon %>" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-9">
-                        <div class="mb-1">
-                          <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tipfra" value="<%- datos.documento.tipfra %>">
-                            <% datos.arrTipos.map(element => { %> 
-                              <option value="<%- element.IDTIPO %>" <%- element.IDTIPO == datos.documento.tipfra ? " selected":"" %>><%- element.DESTIP %></option>
-                            <% }) %> 
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Ejercicio</label>
-                            <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.documento.ejefra %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-1">
-                        <div class="mb-1">
-                          <label class="form-label">Adm</label>
-                          <input type="text" name="funfra" id="funfra" class="form-control" value="<%- datos.documento.funfra %>" readonly />
-                        </div>
-                      </div>
-                    </div>
                     <div class="row">
                       <div class="col-3">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Fecha</label>
-                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.documento.fecfra %>" />
-                            <div class="invalid-feedback"></div>
+                            <label class="form-label">Origen</label>
+                            <input type="text" name="orgcit" id="orgcit" class="form-control" value="<%- datos.documento.orgcit %>" readonly/>
                           </div>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="mb-1">
+                          <label class="form-label">Fecha</label>
+                          <input type="text" name="feccit" id="feccit" class="form-control" value="<%- datos.documento.feccit %>" readonly/>
+                        </div>
+                      </div>
+                      <div class="col-1">
+                        <div class="mb-1">
+                          <label class="form-label">Hora</label>
+                          <input type="text" name="horcit" id="horcit" class="form-control" value="<%- datos.documento.horcit %>" readonly/>
                         </div>
                       </div>
                       <div class="col-5">
                         <div class="mb-1">
-                          <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofifra" value="<%- datos.documento.ofifra %>">
-                            <% datos.arrOficinas.map(element => { %> 
-                              <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == datos.documento.ofifra ? " selected":"" %>><%= element.DESOFI %></option>
-                            <% }) %> 
-                          </select>
+                          <label class="form-label">Oficina</label>
+                          <input type="text" name="oficit" id="oficit" class="form-control" value="<%- datos.documento.desofi %>" readonly/>
                         </div>
                       </div>
+                    </div>
+                    <div class="row">
                       <div class="col-2">
+                        <div class="mb-1">
+                          <label class="form-label">NIF/NIE</label>
+                          <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" readonly/>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="mb-1">
+                          <label class="form-label">Nombre</label>
+                          <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" readonly/>
+                        </div>
+                      </div>
+                      <div class="col-4">
                         <div class="mb-1">
                           <label class="form-label">Teléfono</label>
-                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.documento.telcon %>" />
+                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.documento.telcon %>" readonly/>
                         </div>
                       </div>
-                      <div class="col-2">
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
                         <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Movil</label>
-                            <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
+                          <div class="form-label">Descripción</div>
+                          <input type="text" name="descit" id="descit" class="form-control" value="<%- datos.documento.descit %>" readonly/>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="mb-1">
+                          <label class="form-label">Notas</label>
+                          <input type="text" name="notcit" id="notcit" class="form-control" value="<%- datos.documento.notcit %>" readonly/>
                         </div>
                       </div>
                     </div>
@@ -252,20 +226,15 @@
                       <div class="col-12">
                         <div class="mb-1">
                           <label class="form-label">Observaciones</label>
-                            <textarea type="text" name="obsfra" id="obsfra" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.obsfra %></textarea>
+                            <textarea type="text" name="obscit" id="obscit" class="form-control" rows="10" style="resize: vertical"><%- datos.documento.obscit %></textarea>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <h4>
-                        <small id="tipayu" class="form-hint"></small>
-                      </h4>
                     </div>
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/fraudes" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear documento</button>
+                      <a href="/admin/citas" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar cita</button>
                     </div>
                   </div>
                 </form>
@@ -295,7 +264,7 @@
           <h5 class="modal-title mt-0">Perfil de usuario</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="/admin/fraudes/updatePerfil" method="POST" onsubmit="return validatePerfil();">
+        <form action="/admin/formularios/updatePerfil" method="POST" onsubmit="return validatePerfil();">
           <div class="modal-body">
             <div class="row">
               <div class="col-2">
@@ -307,7 +276,7 @@
               <div class="col-10">
                 <div class="mb-1">
                   <label class="form-label required">Nombre</label>
-                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
+                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" onkeyup="this.value = this.value.toUpperCase();"/>
                   <div class="invalid-feedback"></div>
                 </div>
               </div>
@@ -346,22 +315,23 @@
           <h5 class="modal-title mt-0">Cambio de contraseña</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="/admin/fraudes/cambio" method="POST" onsubmit="return validateChange();">
+        <form action="/admin/formularios/cambio" method="POST" onsubmit="return validateChange();">
           <div class="modal-body">
             <div class="row">
               <div class="mb-1">
                 <label class="form-label required">Actualizar contraseña</label>
                 <span class="input-text">
                   <input
+                  required
                   type="password"
                   name="pwdusu"
                   id="pwdusu"
                   class="form-control"
                   value=""
                   autocomplete="off"
-                  autofocus 
+                  autofocus
                   />                  
-                  <div class="invalid-feedback d-none"></div>
+                  <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
                 </span>
               </div>
             </div>
@@ -393,178 +363,6 @@
         toggleBadge.classList.toggle('d-none')
       }
     })
-  </script>
-  <script>
-    const combo = document.getElementById('cbotip')
-    const e = document.getElementById('tipayu')
-    const arr = <%- JSON.stringify(datos.arrTipos) %>;
-
-    // inicial
-    arr.map(element => {
-      if(element.IDTIPO == combo.value) {
-        document.getElementById('tipayu').innerText = element.AYUTIP
-      }
-    });
-
-    combo.addEventListener('change', () => {
-      arr.map(element => {
-        if(element.IDTIPO == combo.value) {
-          document.getElementById('tipayu').innerText = element.AYUTIP
-        }
-      });
-    })
-  </script>
-  <script>
-    const nifcon = document.getElementById('nifcon')
-    const nomcon = document.getElementById('nomcon')
-    const movcon = document.getElementById('movcon')
-    const ejefra = document.getElementById('ejefra')
-    const fecfra = document.getElementById('fecfra')
-    const pwdusu = document.getElementById('pwdusu')
-    const modsms = document.getElementById('modsms')
-    const nomusu = document.getElementById('nomusu')
-    const emausu = document.getElementById('emausu')
-    const telusu = document.getElementById('telusu')
-
-    const validate = () => {
-      const nifconValue = nifcon.value.trim()
-      const nomconValue = nomcon.value.trim()
-      const movconValue = movcon.value.trim()
-      const ejefraValue = ejefra.value.trim()
-      const fecfraValue = fecfra.value.trim()
-
-      if (nifconValue === '') {
-        setError(nifcon, 'NIF/NIE requerido')
-        return false
-      } else {
-        const pattern = /^(X[0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
-
-        if (!pattern.test(nifconValue)){
-          setError(nifcon, 'Introduzca NIF/NIE válido')
-          return false
-        }
-
-        const strBase = "TRWAGMYFPDXBNJZSQVHLCKET";
-        const primeraPosicion = nifconValue.slice(0, 1);
-        const letraNif = nifconValue.slice(8);
-        let nuevoNif = nifconValue;
-
-        if (isNaN(primeraPosicion)) {
-          nuevoNif = nifconValue.slice(1);
-          if (primeraPosicion === 'X') {
-            nuevoNif = '0' + nuevoNif;
-          } else if (primeraPosicion === "Y") {
-            nuevoNif = "1" + nuevoNif;
-          } else if (primeraPosicion === "Z") {
-            nuevoNif = "2" + nuevoNif;
-          }
-        }
-
-        const dniNumero = nuevoNif.slice(0, 8);
-        const pos = parseInt(dniNumero) % 23;
-        const letra = strBase.slice(pos, pos + 1);
-        const isValid = letraNif === letra
-
-        if(isValid === false) {
-          setError(nifcon, 'Introduzca NIF/NIE válido')
-          return false
-        }
-        setSuccess(nifcon)
-      }
-      if (nomconValue === '') {
-        setError(nomcon, 'Nombre requerido')
-        return false
-      } else {
-        setSuccess(nomcon)
-      }
-      if (ejefraValue === '') {
-        setError(ejefra, 'Ejercicio requerido')
-        return false
-      } else {
-        const pattern = /^([0-9]{4})$/
-        const isValid = pattern.test(ejefraValue)
-
-        if(isValid === false) {
-          setError(ejefra, 'Introduzca ejercicio válido')
-          return false
-        }
-        setSuccess(ejefra)        
-      }
-      if (isNaN(Date.parse(fecfraValue))) {
-        setError(fecfra, 'Fecha requerida')
-        return false
-      } else {
-        setSuccess(fecfra)        
-      }      
-      if (movconValue === '') {
-        setError(movcon, 'Movil requerido')
-        return false
-      } else {
-        const pattern = /^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/
-        const isValid = pattern.test(movconValue)
-
-        if(isValid === false) {
-          setError(movcon, 'Introduzca movil válido')
-          return false
-        }
-        setSuccess(movcon)
-      }
-
-      return true
-    }
-    const validateChange = () => {
-      const pwdusuValue = pwdusu.value.trim()
-
-      if (pwdusuValue === '') {
-        setError(pwdusu, 'Contraseña requerida')
-        return false
-      } else {
-        setSuccess(pwdusu)
-      }
-
-      return true
-    }
-    const validatePerfil = () => {
-      const nomusuValue = nomusu.value.trim()
-      const emausuValue = emausu.value.trim()
-      const telusuValue = telusu.value.trim()
-
-      if (nomusuValue === '') {
-        setError(nomusu, 'Nombre requerido')
-        return false
-      } else {
-        setSuccess(nomusu)
-      }
-      if (emausuValue === '') {
-        setError(emausu, 'Email requerido')
-        return false
-      } else {
-        setSuccess(emausu)
-      }
-      if (telusuValue === '') {
-        setError(telusu, 'Teléfono requerido')
-        return false
-      } else {
-        setSuccess(telusu)
-      }
-      return true
-    }
-    const setSuccess = (element) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = '';
-      inputControl.classList.add('is-valid');
-      element.classList.remove('is-invalid');
-    }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = message;
-      element.classList.add('is-invalid');
-      inputControl.classList.remove('is-valid');
-    }
   </script>
 </body>
 </html>

@@ -4,7 +4,6 @@ import { tiposMovimiento } from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
-  console.log("pass");
 
   try {
     const resultOficinas = await axios.get(

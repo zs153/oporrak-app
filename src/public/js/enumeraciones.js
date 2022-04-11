@@ -37,6 +37,9 @@ export const tiposMovimiento = {
   borrarSubtipo: 35,
   modificarPerfil: 36,
   asignarCita: 37,
+  crearCita: 38,
+  modificarCita: 39,
+  borrarCita: 40,
   cambioPassword: 60,
   olvidoPassword: 61,
   restablecerPassword: 62,
@@ -53,9 +56,9 @@ export const tiposRol = {
   admin: 3,
 };
 export const tiposVisualizacion = {
+  todos: -1,
   pendientes: 1,
   resueltos: 2,
-  todos: 4,
 };
 export const estadosUsuario = {
   reserva: 0,
@@ -68,7 +71,7 @@ export const estadosDocumento = {
   remitido: 3,
 };
 export const estadosCita = {
-  pendiente: 0,
+  disponible: 0,
   asignado: 1,
 };
 export const estadosSms = {

@@ -84,6 +84,16 @@
                   </span>
                 </a>
               </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/admin/citas" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="bi bi-alarm"></i>
+                  </span>
+                  <span class="nav-link-title">
+                    Citas
+                  </span>
+                </a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link" href="/admin/fraudes" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -93,17 +103,7 @@
                     Fraudes
                   </span>
                 </a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="/admin/citas" >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-cash"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Citas
-                  </span>
-                </a>
-              </li>              
+              </li>           
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
                   <span>Administración</span>
@@ -167,6 +167,7 @@
                         <th class="w-6">Teléfono</th>
                         <th>Descripción</th>
                         <th>Observaciones</th>
+                        <th class="w-4">Cja</th>
                         <th class="w-4"></th>
                       </tr>
                       </thead>
@@ -174,14 +175,14 @@
                         <% datos.citas.map(element => { %>
                           <tr>
                             <td class="w-4">
-                              <div class="align-items-center py-1">                                
+                              <div class="align-items-center py-2">                                
                                 <% if (element.STACIT === 0) { %>
-                                    <span class="avatar avatar-rounded bg-red-lt">
-                                      <h6>DISPO</h6>
+                                    <span class="avatar avatar-sm avatar-rounded bg-red-lt">
+                                      <h6>D</h6>
                                     </span>
                                   <% } else { %>
-                                    <span class="avatar avatar-rounded bg-green-lt">
-                                      <h6>TRASP</h6>
+                                    <span class="avatar avatar-sm avatar-rounded bg-green-lt">
+                                      <h6>T</h6>
                                     </span>
                                   <% } %>
                               </div>
@@ -193,7 +194,7 @@
                                 </div>
                               </div>
                             </td>                            
-                            <td class="w-8 px-3">
+                            <td class="w-8">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.DESOFI %></div>
@@ -241,7 +242,7 @@
                                   <div class="font-weight-medium"><%- element.DESCIT %></div>
                                 </div>
                               </div>
-                            </td>                            
+                            </td>
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
@@ -251,31 +252,38 @@
                                 </div>
                               </div>
                             </td>
-                              <% if(element.STACIT === datos.estadosCita.pendiente) { %>
-                                <td class="text-end w-4">
-                                  <ul class="dots-menu">
-                                    <li class="nav-item drop-right">
-                                      <a href="#" class="nav-link">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                      </a>
-                                      <ul>
-                                        <li class="nav-item">
-                                            <a href="/admin/formularios/edit/<%- element.IDDOCU %>" class="nav-link">
-                                              <i class="bi bi-pencil dropdown-item-icon"></i>Editar formulario</a>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.idcita %>', document.getElementById('texasi').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
-                                            <i class="bi bi-heart dropdown-item-icon"></i>Generar formulario
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </li>                              
-                                  </ul>
-                                </td>
-                              <% } else { %>
-                                <td class="text-end w-4"></td>
-                              <% } %>
+                            <td class="w-4">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.COMPLE %></div>
+                                </div>
+                              </div>                              
+                            </td>
+                            <% if(element.STACIT === datos.estadosCita.disponible) { %>
+                              <td class="text-end w-4">
+                                <ul class="dots-menu">
+                                  <li class="nav-item drop-right">
+                                    <a href="#" class="nav-link">
+                                      <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                    <ul>
+                                      <li class="nav-item">
+                                          <a href="/admin/citas/edit/<%- element.IDCITA %>" class="nav-link">
+                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar cita
+                                          </a>                                          
+                                      </li>
+                                      <li class="nav-item">
+                                        <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.IDCITA %>', document.getElementById('texasi').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
+                                          <i class="bi bi-heart dropdown-item-icon"></i>Generar formulario
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </li>                              
+                                </ul>
+                              </td>
+                            <% } else { %>
+                              <td class="text-end w-4"></td>
+                            <% } %>
                           </tr>
                         <% }) %>
                       </tbody>
@@ -418,98 +426,6 @@
             }
           }
         }
-      }
-    </script>
-    <script>
-      const togglePassword = document.querySelector('#togglePassword');
-      const pwdusu = document.getElementById('pwdusu')
-      const modsms = document.getElementById('modsms')
-      const nomusu = document.getElementById('nomusu')
-      const emausu = document.getElementById('emausu')
-      const telusu = document.getElementById('telusu')
-
-      togglePassword.addEventListener('click', function (e) {
-        const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
-        pwdusu.setAttribute('type', type);
-        this.classList.toggle("bi-eye");
-      });
-
-      const validateSms = () => {
-        const modsmsValue = modsms.value.trim()
-
-        if (modsmsValue === '') {
-          setError(modsms, 'Texto requerido')
-          return false
-        } else {
-          setSuccess(modsms)
-        }
-
-        return true
-      }
-      const validateChange = () => {
-        const pwdusuValue = pwdusu.value.trim()
-
-        if (pwdusuValue === '') {
-          setError(pwdusu, 'Contraseña requerida')
-          setTimeout(function () {
-            setSuccess(pwdusu)
-          }, 3000)          
-          return false
-        } else {
-          setSuccess(pwdusu)
-        }
-
-        return true
-      }
-      const validatePerfil = () => {
-        const nomusuValue = nomusu.value.trim()
-        const emausuValue = emausu.value.trim()
-        const telusuValue = telusu.value.trim()
-
-        if (nomusuValue === '') {
-          setError(nomusu, 'Nombre requerido')
-          setTimeout(function () {
-            setSuccess(nomusu)
-          }, 3000)             
-          return false
-        } else {
-          setSuccess(nomusu)
-        }
-        if (emausuValue === '') {
-          setError(emausu, 'Email requerido')
-          setTimeout(function () {
-            setSuccess(emausu)
-          }, 3000)             
-          return false
-        } else {
-          setSuccess(emausu)
-        }
-        if (telusuValue === '') {
-          setError(telusu, 'Teléfono requerido')
-          setTimeout(function () {
-            setSuccess(telusu)
-          }, 3000)             
-          return false
-        } else {
-          setSuccess(telusu)
-        }
-        return true
-      }
-      const setSuccess = (element) => {
-        const inputControl = element.parentElement;
-        const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-        errorDisplay.innerText = '';
-        inputControl.classList.add('is-valid');
-        element.classList.remove('is-invalid');
-      }
-      const setError = (element, message) => {
-        const inputControl = element.parentElement;
-        const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-        errorDisplay.innerText = message;
-        element.classList.add('is-invalid');
-        inputControl.classList.remove('is-valid');
       }
     </script>
   </body>
