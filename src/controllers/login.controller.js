@@ -27,24 +27,30 @@ export const verifyLogin = async (req, res) => {
     });
 
     if (result) {
-      const { idusua, userid, pasusu, rolusu, nomusu, emausu, ofiusu, telusu } =
-        result.data;
+      const {
+        IDUSUA,
+        NOMUSU,
+        OFIUSU,
+        ROLUSU,
+        USERID,
+        EMAUSU,
+        PERUSU,
+        TELUSU,
+        PWDUSU,
+        STAUSU,
+      } = result.data;
 
-      bcrypt.compare(password, pasusu, (err, result) => {
-        if (err) {
-          throw new Error(err);
-        }
-
+      bcrypt.compare(password, PWDUSU, (err, result) => {
         if (result) {
           const accessToken = jwt.sign(
             {
-              id: idusua,
-              nombre: nomusu,
-              userID: userid,
-              email: emausu,
-              rol: rolusu,
-              oficina: ofiusu,
-              telefono: telusu,
+              id: IDUSUA,
+              nombre: NOMUSU,
+              userID: USERID,
+              email: EMAUSU,
+              rol: ROLUSU,
+              oficina: OFIUSU,
+              telefono: TELUSU,
             },
             `${process.env.ACCESS_TOKEN_SECRET}`,
             { expiresIn: "8h" }
@@ -57,7 +63,7 @@ export const verifyLogin = async (req, res) => {
           };
 
           const user = {
-            id: idusua,
+            id: IDUSUA,
             userID: userid,
           };
 

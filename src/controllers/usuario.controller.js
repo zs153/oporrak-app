@@ -15,7 +15,7 @@ export const mainPage = async (req, res) => {
   const user = req.user;
 
   try {
-    const result = await axios.post("http://localhost:8000/api/usuarios");
+    const result = await axios.get("http://localhost:8000/api/usuarios");
 
     const datos = { usuarios: result.data.dat };
     res.render("admin/usuarios", { user, datos });
