@@ -184,14 +184,14 @@
               <div class="row">
                 <div class="col-10">
                   <div class="mb-3">
-                    <label class="control-label required">Correo electrónico</label>
+                    <label class="form-label required">Correo electrónico</label>
                     <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
                     <div class="invalid-feedback"></div>
                   </div>
                 </div>
                 <div class="col-2">
                   <div class="mb-3">
-                    <label class="control-label required">Teléfono</label>
+                    <label class="form-label required">Teléfono</label>
                     <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
                     <div class="invalid-feedback"></div>
                   </div>
@@ -201,9 +201,6 @@
                 <div class="mb-1">
                   <div class="form-label">Oficina</div>
                   <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>">
-                    <% datos.arrOficinas.map(element => { %> 
-                    <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == user.oficina ? " selected":"" %>><%= element.DESOFI %></option>
-                    <% }) %> 
                   </select>
                 </div>
               </div>              
@@ -340,6 +337,45 @@
         element.classList.add('is-invalid');
         inputControl.classList.remove('is-valid');
       }
+    </script>
+    <script>
+      document.getElementById("modal-perfil").addEventListener("shown.bs.modal", function (e) {
+        const xhr = new XMLHttpRequest()
+        // xhr.onerror = () => {
+        //   const modal = document.getElementById('modal-perfil');
+        //   modal.style.display = "none";
+        // }
+        try {
+          xhr.open('GET', 'http://172.27.25.44:8000/api/oficinas1', true)
+          xhr.setRequestHeader("Accept", "application/json");
+          xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8')
+          xhr.onload = () => {
+            if (xhr.status === 201) {
+              arrOficinas = JSON.parse(xhr.response).dat
+              const elem = document.getElementById('cboper');
+              
+              arrOficinas.forEach((element, index) => {
+                let option_elem = document.createElement('option');
+                
+                option_elem.value = element.IDOFIC;
+                option_elem.text = element.DESOFI;
+                if (element.IDOFIC === <%- user.oficina %>) {
+                  option_elem.defaultSelected = true
+                }
+                elem.appendChild(option_elem);
+              });
+            } else {
+                const modal = document.getElementById('modal-perfil');                
+                //modal.style.display = "none";
+                //window.location.href = 'http://localhost:4000/admin'
+            }
+          }
+          xhr.send(null)
+        } catch (error) {
+          const modal = document.getElementById('modal-perfil');
+          modal.style.display = "none";
+        }
+      });
     </script>
   </body>
 </html>
