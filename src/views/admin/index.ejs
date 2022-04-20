@@ -206,9 +206,9 @@
               </div>              
             </div>
             <div class="modal-footer">
-              <a href="/admin" class="btn btn-link">Cancelar</a>
+              <a href="/admin" class="btn btn-link" id="btnCancelar">Cancelar</a>
               <input type="hidden" id="idperf" name="idperf" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
+              <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar perfil</button>
             </div>
           </div>
         </form>
@@ -365,7 +365,10 @@
                 elem.appendChild(option_elem);
               });
             } else {
-                const modal = document.getElementById('modal-perfil');                
+                const btn = document.getElementById('btnCancelar');
+                btn.click()
+                //btn.disabled = true
+                //const modal = document.getElementById('modal-perfil');
                 //modal.style.display = "none";
                 //window.location.href = 'http://localhost:4000/admin'
             }
