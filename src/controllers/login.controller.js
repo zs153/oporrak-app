@@ -101,20 +101,33 @@ export const verifyLogout = async (req, res) => {
   res.render('log/logout')
 }
 export const forgotPassword = async (req, res) => {
-  const email = req.body.emausu
-
-  const user = {
-    email,
+  const { emausu } = req.body
+  const randomString = Math.random().toString(36).substring(2, 10)
+  const salt = await bcrypt.genSalt(10)
+  const passHash = await bcrypt.hash(randomString, salt)
+  const usuario = {
+    emausu: emausu,
+    pwdusu: passHash,
+    tipmov: tiposMovimiento.olvidoPassword,
+    saltus: randomString,
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/forgot', {
-      user,
-    })
+    const result = await axios.post(
+      'http://localhost:8000/api/usuarios/forgot',
+      {
+        usuario,
+      }
+    )
 
-    res.redirect('/')
+    res.render('log/okForgot')
   } catch (error) {
-    res.redirect('/')
+    const msg = 'No se ha podido generar una nueva contraseña'
+
+    res.render('log/sign-in', {
+      datos: req.body,
+      alerts: [{ msg }],
+    })
   }
 }
 export const crearRegistro = async (req, res) => {
