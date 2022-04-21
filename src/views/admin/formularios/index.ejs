@@ -46,7 +46,7 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idperf').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-perfil">
+                <a href="/admin/usuarios/perfil/<%- user.id %>" class="dropdown-item">
                   <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
                 </a>
                 <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
@@ -568,67 +568,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Perfil de usuario</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/formularios/updatePerfil" method="POST" onsubmit="return validatePerfil();">
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-2">
-                  <div class="mb-1">
-                    <label class="form-label">UserID</label>
-                    <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly />
-                  </div>
-                </div>
-                <div class="col-10">
-                  <div class="mb-1">
-                    <label class="form-label required">Nombre</label>
-                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" onkeyup="this.value = this.value.toUpperCase();"/>
-                    <div class="invalid-feedback"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-10">
-                  <div class="mb-1">
-                    <label class="form-label required">Correo electrónico</label>
-                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
-                    <div class="invalid-feedback"></div>
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="mb-1">
-                    <label class="form-label required">Teléfono</label>
-                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
-                    <div class="invalid-feedback"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="mb-1">
-                  <div class="form-label">Oficina</div>
-                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>">
-                    <% datos.arrOficinas.map(element => { %> 
-                    <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == user.oficina ? " selected":"" %>><%= element.DESOFI %></option>
-                    <% }) %> 
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <input type="hidden" id="idperf" name="idperf" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
-            </div>
-          </form>
         </div>
       </div>
     </div>

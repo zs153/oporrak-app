@@ -26,7 +26,7 @@ export const mainPage = async (req, res) => {
     );
 
     const datos = {
-      documentos: result.data.dat,
+      documentos: result.data,
       arrOficinas: resultOficinas.data.dat,
       tiposRol,
       estadosDocumento,

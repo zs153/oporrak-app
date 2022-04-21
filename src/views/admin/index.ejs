@@ -46,7 +46,7 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idperf').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-perfil">
+                <a href="/admin/usuarios/perfil/<%- user.id %>" class="dropdown-item">
                   <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
                 </a>
                 <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
@@ -157,64 +157,6 @@
       </div>
     </div>
 
-    <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Perfil de usuario</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/updatePerfil" method="POST" onsubmit="return validatePerfil();">
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-2">
-                  <div class="mb-3">
-                    <label class="form-label">UserID</label>
-                    <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
-                  </div>
-                </div>
-                <div class="col-10">
-                  <div class="mb-3">
-                    <label class="form-label required">Nombre</label>
-                    <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
-                    <div class="invalid-feedback"></div>                  
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-10">
-                  <div class="mb-3">
-                    <label class="form-label required">Correo electrónico</label>
-                    <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
-                    <div class="invalid-feedback"></div>
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="mb-3">
-                    <label class="form-label required">Teléfono</label>
-                    <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
-                    <div class="invalid-feedback"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="mb-1">
-                  <div class="form-label">Oficina</div>
-                  <select class="form-select" id="cboper" name="ofiusu" value="<%- user.oficina %>">
-                  </select>
-                </div>
-              </div>              
-            </div>
-            <div class="modal-footer">
-              <a href="/admin" class="btn btn-link" id="btnCancelar">Cancelar</a>
-              <input type="hidden" id="idperf" name="idperf" value="">
-              <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar perfil</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
     <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -296,31 +238,6 @@
 
         return true
       }
-      const validatePerfil = () => {
-        const nomusuValue = nomusu.value.trim()
-        const emausuValue = emausu.value.trim()
-        const telusuValue = telusu.value.trim()
-
-        if (nomusuValue === '') {
-          setError(nomusu, 'Nombre requerido')
-          return false
-        } else {
-          setSuccess(nomusu)
-        }
-        if (emausuValue === '') {
-          setError(emausu, 'Email requerido')
-          return false
-        } else {
-          setSuccess(emausu)
-        }
-        if (telusuValue === '') {
-          setError(telusu, 'Teléfono requerido')
-          return false
-        } else {
-          setSuccess(telusu)
-        }
-        return true
-      }
       const setSuccess = (element) => {
         const inputControl = element.parentElement;
         const errorDisplay = inputControl.querySelector('.invalid-feedback');
@@ -337,48 +254,6 @@
         element.classList.add('is-invalid');
         inputControl.classList.remove('is-valid');
       }
-    </script>
-    <script>
-      document.getElementById("modal-perfil").addEventListener("shown.bs.modal", function (e) {
-        const xhr = new XMLHttpRequest()
-        // xhr.onerror = () => {
-        //   const modal = document.getElementById('modal-perfil');
-        //   modal.style.display = "none";
-        // }
-        try {
-          xhr.open('GET', 'http://localhost:8000/api/oficinas', true)
-          xhr.setRequestHeader("Accept", "application/json");
-          xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8')
-          xhr.onload = () => {
-            if (xhr.status === 200) {
-              arrOficinas = JSON.parse(xhr.response)
-              const elem = document.getElementById('cboper');
-              
-              arrOficinas.forEach((element, index) => {
-                let option_elem = document.createElement('option');
-                
-                option_elem.value = element.IDOFIC;
-                option_elem.text = element.DESOFI;
-                if (element.IDOFIC === <%- user.oficina %>) {
-                  option_elem.defaultSelected = true
-                }
-                elem.appendChild(option_elem);
-              });
-            } else {
-                const btn = document.getElementById('btnCancelar');
-                btn.click()
-                //btn.disabled = true
-                //const modal = document.getElementById('modal-perfil');
-                //modal.style.display = "none";
-                //window.location.href = 'http://localhost:4000/admin'
-            }
-          }
-          xhr.send(null)
-        } catch (error) {
-          const modal = document.getElementById('modal-perfil');
-          modal.style.display = "none";
-        }
-      });
     </script>
   </body>
 </html>

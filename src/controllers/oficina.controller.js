@@ -7,7 +7,7 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.get("http://localhost:8000/api/oficinas");
 
-    res.render("admin/oficinas", { user, oficinas: result.data.dat });
+    res.render("admin/oficinas", { user, oficinas: result.data });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
 

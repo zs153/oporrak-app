@@ -100,6 +100,38 @@ export const editPage = async (req, res) => {
     });
   }
 };
+export const perfilPage = async (req, res) => {
+  const user = req.user;
+
+  try {
+    const result = await axios.get(
+      `http://localhost:8000/api/usuarios/${user.id}`
+    );
+
+    const usuario = {
+      idusua: result.data.IDUSUA,
+      nomusu: result.data.NOMUSU,
+      ofiusu: result.data.OFIUSU,
+      userid: result.data.USERID,
+      emausu: result.data.EMAUSU,
+      telusu: result.data.TELUSU,
+    };
+
+    // oficinas
+    const ret = await axios.get("http://localhost:8000/api/oficinas");
+    const datos = {
+      usuario,
+      arrOficinas: ret.data,
+    };
+    res.render("admin/usuarios/perfil", { user, datos });
+  } catch (error) {
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+};
 export const insertUsuario = async (req, res) => {
   const user = req.user;
   const usuario = {
@@ -225,32 +257,35 @@ export const changePassword = async (req, res) => {
 export const updatePerfil = async (req, res) => {
   const user = req.user;
   const usuario = {
-    id: user.id,
-    userid: req.body.userid,
-    nombre: req.body.nomusu,
-    email: req.body.emausu,
-    rol: user.rol,
-    oficina: user.oficina,
-    telefono: req.body.telusu,
+    idusua: user.id,
+    nomusu: req.body.nomusu,
+    ofiusu: req.body.ofiusu,
+    emausu: req.body.emausu,
+    telusu: req.body.telusu,
+  };
+  const movimiento = {
+    usumov: user.id,
+    tipmov: tiposMovimiento.modificarPerfil,
   };
 
   try {
     const result = await axios.post(
-      "http://localhost:8000/api/usuarios/updatePerfil",
+      "http://localhost:8000/api/usuarios/perfil",
       {
         usuario,
+        movimiento,
       }
     );
 
     const accessToken = jwt.sign(
       {
-        id: usuario.id,
-        nombre: usuario.nombre,
-        userID: usuario.userid,
-        email: usuario.email,
-        rol: usuario.rol,
-        oficina: usuario.oficina,
-        telefono: usuario.telefono,
+        id: user.id,
+        nombre: usuario.nomusu,
+        userID: user.userID,
+        email: usuario.emausu,
+        rol: user.rol,
+        oficina: usuario.ofiusu,
+        telefono: usuario.telusu,
       },
       `${process.env.ACCESS_TOKEN_SECRET}`,
       { expiresIn: "8h" }
@@ -261,11 +296,11 @@ export const updatePerfil = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
       httpOnly: true,
     };
-
+    console.log(accessToken);
     res.cookie("auth", accessToken, options);
-    res.redirect("/admin/usuarios");
+    res.redirect("/admin");
   } catch (error) {
-    res.redirect("/admin/usuarios");
+    res.redirect("/admin");
   }
 };
 export const enviarNotificacion = async (req, res) => {
