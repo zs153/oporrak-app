@@ -1,45 +1,37 @@
-import express from 'express'
-import authRoutes from '../middleware/auth'
+import express from "express";
+import authRoutes from "../middleware/auth";
 import {
   mainPage,
   addPage,
   editPage,
-  insertFormulario,
-  updateFormulario,
-  deleteFormulario,
-  asignarFormulario,
-  changePassword,
-  updatePerfil,
-  resolverFormulario,
-  remitirFormulario,
-  desadjudicarFormulario,
+  insert,
+  update,
+  remove,
+  asign,
+  resol,
+  remit,
+  unasign,
   verTodo,
   sms,
-} from '../controllers/formulario.controller'
+} from "../controllers/formulario.controller";
 
-const formularioRouter = express.Router()
+const formularioRouter = express.Router();
 
 // paginas
-formularioRouter.get('/formularios', authRoutes, mainPage)
-formularioRouter.get('/formularios/sms', authRoutes, mainPage)
-formularioRouter.get('/formularios/add', authRoutes, addPage)
-formularioRouter.get('/formularios/edit/:id', authRoutes, editPage)
+formularioRouter.get("/formularios", authRoutes, mainPage);
+formularioRouter.get("/formularios/sms", authRoutes, mainPage);
+formularioRouter.get("/formularios/add", authRoutes, addPage);
+formularioRouter.get("/formularios/edit/:id", authRoutes, editPage);
 
 // procedures
-formularioRouter.post('/formularios/insert', authRoutes, insertFormulario)
-formularioRouter.post('/formularios/update', authRoutes, updateFormulario)
-formularioRouter.post('/formularios/delete', authRoutes, deleteFormulario)
-formularioRouter.post('/formularios/asignar', authRoutes, asignarFormulario)
-formularioRouter.post('/formularios/resolver', authRoutes, resolverFormulario)
-formularioRouter.post('/formularios/remitir', authRoutes, remitirFormulario)
-formularioRouter.post(
-  '/formularios/desadjudicar',
-  authRoutes,
-  desadjudicarFormulario
-)
-formularioRouter.get('/formularios/vertodo', authRoutes, verTodo)
-formularioRouter.post('/formularios/sms', authRoutes, sms)
-formularioRouter.post('/formularios/cambio', authRoutes, changePassword)
-formularioRouter.post('/formularios/updatePerfil', authRoutes, updatePerfil)
+formularioRouter.post("/formularios/insert", authRoutes, insert);
+formularioRouter.post("/formularios/update", authRoutes, update);
+formularioRouter.post("/formularios/delete", authRoutes, remove);
+formularioRouter.post("/formularios/asignar", authRoutes, asign);
+formularioRouter.post("/formularios/resolver", authRoutes, resol);
+formularioRouter.post("/formularios/remitir", authRoutes, remit);
+formularioRouter.post("/formularios/desasignar", authRoutes, unasign);
+formularioRouter.get("/formularios/vertodo", authRoutes, verTodo);
+formularioRouter.post("/formularios/sms", authRoutes, sms);
 
-export default formularioRouter
+export default formularioRouter;

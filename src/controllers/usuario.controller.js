@@ -132,7 +132,7 @@ export const perfilPage = async (req, res) => {
     });
   }
 };
-export const insertUsuario = async (req, res) => {
+export const add = async (req, res) => {
   const user = req.user;
   const usuario = {
     nomusu: req.body.nomusu,

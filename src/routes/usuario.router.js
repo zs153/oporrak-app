@@ -4,7 +4,7 @@ import {
   mainPage,
   addPage,
   editPage,
-  insertUsuario,
+  add,
   updateUsuario,
   deleteUsuario,
   changePassword,
@@ -22,7 +22,7 @@ usuarioRouter.get("/usuarios/edit/:userid", verifyTokenAndAdmin, editPage);
 usuarioRouter.get("/usuarios/perfil/:id", verifyTokenAndAdmin, perfilPage);
 
 // procedures
-usuarioRouter.post("/usuarios/insert", verifyTokenAndAdmin, insertUsuario);
+usuarioRouter.post("/usuarios/insert", verifyTokenAndAdmin, add);
 usuarioRouter.post("/usuarios/update", verifyTokenAndAdmin, updateUsuario);
 usuarioRouter.post("/usuarios/delete", verifyTokenAndAdmin, deleteUsuario);
 usuarioRouter.post("/usuarios/notificacion", authRoutes, enviarNotificacion);

@@ -4,24 +4,23 @@ import {
   estadosDocumento,
   estadosCita,
   tiposMovimiento,
-  tiposVisualizacion,
   tiposRol,
 } from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
-  const documento = {
-    stacit: tiposVisualizacion.pendientes,
+  const cita = {
+    stacit: estadosCita.asignado,
   };
   const verTodo = false;
 
   try {
     const result = await axios.post("http://localhost:8000/api/citas", {
-      documento,
+      cita,
     });
 
     const datos = {
-      citas: result.data.dat,
+      citas: result.data,
       tiposRol,
       estadosCita,
       verTodo,
@@ -71,7 +70,34 @@ export const editPage = async (req, res) => {
     });
   }
 };
-export const asignarCita = async (req, res) => {
+export const update = async (req, res) => {
+  const user = req.user;
+
+  const documento = {
+    idcita: req.body.idcita,
+    obscit: req.body.obscit,
+  };
+  const movimiento = {
+    usuarioMov: user.id,
+    tipoMov: tiposMovimiento.modificarCita,
+  };
+
+  try {
+    const result = await axios.post("http://localhost:8000/api/citas/update", {
+      documento,
+      movimiento,
+    });
+
+    res.redirect("/admin/citas");
+  } catch (error) {
+    const msg = "No se ha podido actualizar la cita.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+};
+export const asign = async (req, res) => {
   const user = req.user;
   const referencia = "IC" + randomString(9, "1234567890YMGS");
   const fecha = new Date();
@@ -135,21 +161,17 @@ export const asignarCita = async (req, res) => {
 export const verTodo = async (req, res) => {
   const user = req.user;
   const verTodo = true;
-  const documento = {
-    stacit: tiposVisualizacion.todos,
+  const cita = {
+    stacit: estadosCita.disponible,
   };
 
   try {
     const result = await axios.post("http://localhost:8000/api/citas", {
-      documento,
+      cita,
     });
-    const resultOficinas = await axios.get(
-      "http://localhost:8000/api/oficinas"
-    );
 
     const datos = {
-      citas: result.data.dat,
-      arrOficinas: resultOficinas.data.dat,
+      citas: result.data,
       tiposRol,
       estadosCita,
       verTodo,
@@ -158,112 +180,6 @@ export const verTodo = async (req, res) => {
     res.render("admin/citas", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
-  }
-};
-export const updateCita = async (req, res) => {
-  const user = req.user;
-
-  const documento = {
-    idcita: req.body.idcita,
-    obscit: req.body.obscit,
-  };
-  const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.modificarCita,
-  };
-
-  try {
-    const result = await axios.post("http://localhost:8000/api/citas/update", {
-      documento,
-      movimiento,
-    });
-
-    res.redirect("/admin/citas");
-  } catch (error) {
-    const msg = "No se ha podido actualizar la cita.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
-  }
-};
-export const updatePerfil = async (req, res) => {
-  const user = req.user;
-  const usuario = {
-    id: user.id,
-    userid: req.body.userid,
-    nombre: req.body.nomusu,
-    email: req.body.emausu,
-    rol: user.rol,
-    oficina: req.body.ofiusu,
-    telefono: req.body.telusu,
-  };
-  const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.modificarPerfil,
-  };
-
-  try {
-    await axios.post("http://localhost:8000/api/formularios/updatePerfil", {
-      usuario,
-      movimiento,
-    });
-
-    const accessToken = jwt.sign(
-      {
-        id: usuario.id,
-        nombre: usuario.nombre,
-        userID: usuario.userid,
-        email: usuario.email,
-        rol: usuario.rol,
-        oficina: usuario.oficina,
-        telefono: usuario.telefono,
-      },
-      `${process.env.ACCESS_TOKEN_SECRET}`,
-      { expiresIn: "8h" }
-    );
-    const options = {
-      path: "/",
-      sameSite: true,
-      maxAge: 1000 * 60 * 60 * 8, // 8 horas
-      httpOnly: true,
-    };
-
-    res.cookie("auth", accessToken, options);
-    res.redirect("/admin/formularios");
-  } catch (error) {
-    const msg = "No se ha podido actualizar el perfil de usuario";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
-  }
-};
-export const changePassword = async (req, res) => {
-  const user = req.user;
-
-  const usuario = {
-    id: user.id,
-    password: req.body.pwdusu,
-  };
-  const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.cambioPassword,
-  };
-
-  try {
-    await axios.post("http://localhost:8000/api/formularios/cambio", {
-      usuario,
-      movimiento,
-    });
-
-    res.redirect("/admin/formularios");
-  } catch (error) {
-    const msg = "No se ha podido actualizar la contraseña.";
 
     res.render("admin/error400", {
       alerts: [{ msg }],
