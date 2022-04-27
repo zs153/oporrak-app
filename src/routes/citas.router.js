@@ -6,6 +6,7 @@ import {
   update,
   asign,
   verTodo,
+  citasOficina,
 } from "../controllers/cita.controller";
 
 const citaRouter = express.Router();
@@ -15,8 +16,9 @@ citaRouter.get("/citas", authRoutes, mainPage);
 citaRouter.get("/citas/edit/:id", authRoutes, editPage);
 
 // procedures
+citaRouter.get("/citas/vertodo", authRoutes, verTodo);
+citaRouter.get("/citas/oficina/:id", authRoutes, citasOficina);
 citaRouter.post("/citas/update", authRoutes, update);
 citaRouter.post("/citas/asignar", authRoutes, asign);
-citaRouter.get("/citas/vertodo", authRoutes, verTodo);
 
 export default citaRouter;

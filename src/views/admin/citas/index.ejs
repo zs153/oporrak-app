@@ -158,8 +158,14 @@
                 <div class="card">
                   <div class="card-header">
                     Citas
-                    <div class="col-auto ms-auto">
+                    <div class="col-auto ms-auto">                                                                  
                       <div class="d-flex">
+                        <div class="me-3">
+                          <select class="form-select" id="cboofi" name="ofiusu" value="">
+                            <option value="-1">TODAS LAS OFICINAS</option>
+                          </select>
+                        </div>
+
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
                           <input type="text" class="form-control d-inline-block me-3" id="buscarCitBox" onkeyup="filtroCitas();" placeholder="Buscar..."
@@ -179,7 +185,6 @@
                         <th class="w-5">Hora</th>
                         <th class="w-6">NIF</th>
                         <th>Nombre</th>
-                        <!-- <th class="w-6">Teléfono</th> -->
                         <th>Descripción</th>
                         <th>Observaciones</th>
                         <th class="w-4">C</th>
@@ -244,13 +249,6 @@
                                 </div>
                               </div>
                             </td>
-                            <!-- <td class="w-6">
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.TELCON %></div>
-                                </div>
-                              </div>
-                            </td>  -->
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
@@ -283,9 +281,9 @@
                                     </a>
                                     <ul>
                                       <li class="nav-item">
-                                          <a href="/admin/citas/edit/<%- element.IDCITA %>" class="nav-link">
-                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar cita
-                                          </a>                                          
+                                        <a href="/admin/citas/edit/<%- element.IDCITA %>" class="nav-link">
+                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar cita
+                                        </a>                                          
                                       </li>
                                       <li class="nav-item">
                                         <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.IDCITA %>', document.getElementById('texasi').innerHTML ='<p><%- element.REFDOC %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
@@ -366,7 +364,7 @@
           window.location.href = 'http://localhost:4000/admin/citas/vertodo'
         <% } %>
       }
-     </script>
+    </script>
     <script>
       const messages = document.getElementById('messages')
       const socket = io()
@@ -382,7 +380,7 @@
           toggleBadge.classList.toggle('d-none')
         }
       })
-    </script>     
+    </script>
     <script>
       const filtroCitas = () => {
         const trs = document.querySelectorAll('#tblCitas tr:not(.header)')
@@ -430,6 +428,52 @@
           sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
         });
       });
+    </script>
+    <script>
+      const elem = document.getElementById('cboofi');
+      elem.onchange = (event) => {
+        window.location.href = `http://localhost:4000/admin/citas/oficina/${event.target.value}`
+        setCookie('oficina', event.target.value, .5) // medio dia
+      }
+
+      const setCookie = (name,value,days) => {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      }
+      const deleteCookie = () => {
+        document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+      }
+      const Oficinas = () => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const oficinas = JSON.parse(xhr.response)
+
+            const cbo = document.getElementById('cboofi')
+
+            oficinas.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDOFIC
+              option.text = itm.DESOFI
+
+              if (option.value == <%- oficina %>) {
+                option.selected = true
+              }
+              cbo.appendChild(option)
+            })
+          }
+        };
+        xhr.open('POST', 'http://localhost:8000/api/oficinas', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send()
+      }
+      Oficinas();
     </script>
   </body>
 </html>

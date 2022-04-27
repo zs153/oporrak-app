@@ -9,8 +9,10 @@ import {
 
 export const mainPage = async (req, res) => {
   const user = req.user;
+  const ofic = decodeURIComponent(req.cookies.oficina);
   const cita = {
     stacit: estadosCita.asignado,
+    oficit: ofic === undefined ? user.oficina : ofic,
   };
   const verTodo = false;
 
@@ -26,7 +28,7 @@ export const mainPage = async (req, res) => {
       verTodo,
     };
 
-    res.render("admin/citas", { user, datos });
+    res.render("admin/citas", { user, datos, oficina: cita.oficit });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
 
@@ -40,27 +42,28 @@ export const editPage = async (req, res) => {
 
   try {
     const result = await axios.post("http://localhost:8000/api/cita", {
-      id: req.params.id,
+      idcita: req.params.id,
     });
 
     const documento = {
-      idcita: result.data.idcita,
-      orgcit: result.data.orgcit,
-      feccit: result.data.feccit,
-      horcit: result.data.horcit,
-      nifcon: result.data.nifcon,
-      nomcon: result.data.nomcon,
-      telcon: result.data.telcon,
-      descit: result.data.descit,
-      notcit: result.data.notcit,
-      obscit: result.data.obscit,
-      idofic: result.data.ofic.id,
-      desofi: result.data.ofic.descripcion,
+      idcita: result.data.IDCITA,
+      orgcit: result.data.ORGCIT,
+      oficit: result.data.OFICIT,
+      feccit: result.data.STRFEC,
+      horcit: result.data.HORCIT,
+      nifcon: result.data.NIFCON,
+      nomcon: result.data.NOMCON,
+      telcon: result.data.TELCON,
+      descit: result.data.DESCIT,
+      notcit: result.data.NOTCIT,
+      obscit: result.data.OBSCIT,
+      stacit: result.data.STACIT,
+      desofi: result.data.DESOFI,
     };
     const datos = {
       documento,
     };
-
+    console.log(datos);
     res.render("admin/citas/edit", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
@@ -73,18 +76,18 @@ export const editPage = async (req, res) => {
 export const update = async (req, res) => {
   const user = req.user;
 
-  const documento = {
+  const cita = {
     idcita: req.body.idcita,
     obscit: req.body.obscit,
   };
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.modificarCita,
+    usumov: user.id,
+    tipmov: tiposMovimiento.modificarCita,
   };
 
   try {
     const result = await axios.post("http://localhost:8000/api/citas/update", {
-      documento,
+      cita,
       movimiento,
     });
 
@@ -178,6 +181,35 @@ export const verTodo = async (req, res) => {
     };
 
     res.render("admin/citas", { user, datos });
+  } catch (error) {
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+};
+export const citasOficina = async (req, res) => {
+  const user = req.user;
+  const verTodo = true;
+  const cita = {
+    stacit: estadosCita.asignado,
+    oficit: req.params.id,
+  };
+
+  try {
+    const result = await axios.post("http://localhost:8000/api/citas", {
+      cita,
+    });
+
+    const datos = {
+      citas: result.data,
+      tiposRol,
+      estadosCita,
+      verTodo,
+    };
+
+    res.render("admin/citas", { user, datos, oficina: cita.oficit });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
 
