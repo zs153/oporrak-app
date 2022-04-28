@@ -1,4 +1,5 @@
 import axios from "axios";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { io } from "socket.io-client";
 import {
@@ -15,9 +16,9 @@ export const mainPage = async (req, res) => {
   const user = req.user;
 
   try {
-    const result = await axios.get("http://localhost:8000/api/usuarios");
+    const result = await axios.post("http://localhost:8000/api/usuarios");
+    const datos = { usuarios: result.data };
 
-    const datos = { usuarios: result.data.dat };
     res.render("admin/usuarios", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
@@ -42,15 +43,11 @@ export const addPage = async (req, res) => {
   };
 
   try {
-    // oficinas
-    const result = await axios.get("http://localhost:8000/api/oficinas");
-
     const datos = {
       usuario,
       arrTiposRol,
       arrTiposPerfil,
       arrEstadosUsuario,
-      arrOficinas: result.data.dat,
     };
 
     res.render("admin/usuarios/add", { user, datos });
@@ -70,25 +67,21 @@ export const editPage = async (req, res) => {
       userid: req.params.userid,
     });
     const usuario = {
-      idusua: result.data.idusua,
-      nomusu: result.data.nomusu,
-      ofiusu: result.data.ofiusu,
-      rolusu: result.data.rolusu,
-      userid: result.data.userid,
-      emausu: result.data.emausu,
-      perusu: result.data.perusu,
-      telusu: result.data.telusu,
-      stausu: result.data.stausu,
+      idusua: result.data.IDUSUA,
+      nomusu: result.data.NOMUSU,
+      ofiusu: result.data.OFIUSU,
+      rolusu: result.data.ROLUSU,
+      userid: result.data.USERID,
+      emausu: result.data.EMAUSU,
+      perusu: result.data.PERUSU,
+      telusu: result.data.TELUSU,
+      stausu: result.data.STAUSU,
     };
-
-    // oficinas
-    const ret = await axios.get("http://localhost:8000/api/oficinas");
     const datos = {
       usuario,
       arrTiposRol,
       arrTiposPerfil,
       arrEstadosUsuario,
-      arrOficinas: ret.data.dat,
     };
 
     res.render("admin/usuarios/edit", { user, datos });
@@ -104,10 +97,9 @@ export const perfilPage = async (req, res) => {
   const user = req.user;
 
   try {
-    const result = await axios.get(
-      `http://localhost:8000/api/usuarios/${user.id}`
-    );
-
+    const result = await axios.post("http://localhost:8000/api/usuario", {
+      userid: req.params.userid,
+    });
     const usuario = {
       idusua: result.data.IDUSUA,
       nomusu: result.data.NOMUSU,
@@ -116,12 +108,8 @@ export const perfilPage = async (req, res) => {
       emausu: result.data.EMAUSU,
       telusu: result.data.TELUSU,
     };
-
-    // oficinas
-    const ret = await axios.get("http://localhost:8000/api/oficinas");
     const datos = {
       usuario,
-      arrOficinas: ret.data,
     };
     res.render("admin/usuarios/perfil", { user, datos });
   } catch (error) {
@@ -132,8 +120,10 @@ export const perfilPage = async (req, res) => {
     });
   }
 };
-export const add = async (req, res) => {
+export const insert = async (req, res) => {
   const user = req.user;
+  const randomString = Math.random().toString().slice(2, 6);
+  const salt = await bcrypt.genSalt(10);
   const usuario = {
     nomusu: req.body.nomusu,
     ofiusu: req.body.ofiusu,
@@ -145,15 +135,22 @@ export const add = async (req, res) => {
     stausu: req.body.stausu,
   };
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.crearUsuario,
+    usumov: user.id,
+    tipmov: tiposMovimiento.crearUsuario,
   };
+  const password = usuario.userid + randomString;
+  const passHash = await bcrypt.hash(password, salt);
+
+  usuario.pwdusu = passHash;
 
   try {
-    await axios.post("http://localhost:8000/api/usuarios/insert", {
-      usuario,
-      movimiento,
-    });
+    const result = await axios.post(
+      "http://localhost:8000/api/usuarios/insert",
+      {
+        usuario,
+        movimiento,
+      }
+    );
 
     res.redirect("/admin/usuarios");
   } catch (error) {
@@ -168,7 +165,7 @@ export const add = async (req, res) => {
     });
   }
 };
-export const updateUsuario = async (req, res) => {
+export const update = async (req, res) => {
   const user = req.user;
 
   const usuario = {
@@ -183,8 +180,8 @@ export const updateUsuario = async (req, res) => {
     stausu: req.body.stausu,
   };
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.crearUsuario,
+    usumov: user.id,
+    tipmov: tiposMovimiento.modificarUsuario,
   };
 
   try {
@@ -208,14 +205,14 @@ export const updateUsuario = async (req, res) => {
     });
   }
 };
-export const deleteUsuario = async (req, res) => {
+export const remove = async (req, res) => {
   const user = req.user;
   const usuario = {
     idusua: req.body.idusua,
   };
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.crearUsuario,
+    usumov: user.id,
+    tipmov: tiposMovimiento.borrarUsuario,
   };
 
   try {
@@ -296,7 +293,7 @@ export const updatePerfil = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
       httpOnly: true,
     };
-    console.log(accessToken);
+
     res.cookie("auth", accessToken, options);
     res.redirect("/admin");
   } catch (error) {

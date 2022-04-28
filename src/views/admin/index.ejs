@@ -46,11 +46,8 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="/admin/usuarios/perfil/<%- user.id %>" class="dropdown-item">
+                <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
                   <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
-                </a>
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
-                  <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
@@ -154,44 +151,6 @@
             </div>
           </div>
         </footer>
-      </div>
-    </div>
-
-    <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title mt-0">Cambio de contraseña</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form action="/admin/cambio" method="POST" onsubmit="return validateChange();">
-            <div class="modal-body">
-              <div class="row">
-                <div class="mb-3">
-                  <label class="form-label required">Actualizar contraseña</label>
-                  <span class="input-text">
-                    <input
-                    type="password"
-                    name="pwdusu"
-                    id="pwdusu"
-                    class="form-control"
-                    value=""
-                    autocomplete="off"
-                    autofocus 
-                    />                  
-                    <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
-                    <div class="invalid-feedback d-none"></div>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <a href="/admin/" class="btn btn-link">Cancelar</a>
-              <input type="hidden" id="idchan" name="idusua" value="">
-              <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
-            </div>
-          </form>
-        </div>
       </div>
     </div>
 

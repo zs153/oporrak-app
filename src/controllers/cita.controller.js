@@ -12,7 +12,7 @@ export const mainPage = async (req, res) => {
   const ofic = decodeURIComponent(req.cookies.oficina);
   const cita = {
     stacit: estadosCita.asignado,
-    oficit: ofic === undefined ? user.oficina : ofic,
+    oficit: ofic === "undefined" ? user.oficina : ofic,
   };
   const verTodo = false;
 
@@ -63,7 +63,7 @@ export const editPage = async (req, res) => {
     const datos = {
       documento,
     };
-    console.log(datos);
+
     res.render("admin/citas/edit", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";

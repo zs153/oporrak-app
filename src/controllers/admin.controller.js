@@ -6,7 +6,42 @@ import { tiposMovimiento } from "../public/js/enumeraciones";
 export const mainPage = async (req, res) => {
   const user = req.user;
 
-  res.render("admin/index", { user });
+  try {
+    const result = await axios.post("http://localhost:8000/api/usuario", {
+      userid: req.params.userid,
+    });
+
+    console.log(result.data);
+    const usuario = {
+      idusua: result.data.IDUSUA,
+      nomusu: result.data.NOMUSU,
+      ofiusu: result.data.OFIUSU,
+      rolusu: result.data.ROLUSU,
+      userid: result.data.USERID,
+      emausu: result.data.EMAUSU,
+      perusu: result.data.PERUSU,
+      telusu: result.data.TELUSU,
+      stausu: result.data.STAUSU,
+    };
+    const datos = {
+      usuario,
+      arrTiposRol,
+      arrTiposPerfil,
+    };
+
+    res.render("admin/perfil", { user, datos });
+  } catch (error) {
+    const msg = "No se ha podido acceder a los datos de la aplicación.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+};
+export const perfilPage = async (req, res) => {
+  const user = req.user;
+
+  res.render("admin/perfil", { user });
 };
 export const estadisticaPage = async (req, res) => {
   const user = req.user;

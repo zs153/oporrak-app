@@ -7,6 +7,7 @@ import {
   changePassword,
   updatePerfil,
   errorPage,
+  perfilPage,
 } from "../controllers/admin.controller";
 import authRoutes, { verifyTokenAndAdmin } from "../middleware/auth";
 
@@ -16,12 +17,11 @@ const adminRouter = express.Router();
 adminRouter.get("/", authRoutes, mainPage);
 adminRouter.get("/estadistica", verifyTokenAndAdmin, estadisticaPage);
 adminRouter.get("/estadistica/acumulados", verifyTokenAndAdmin, acumuladosPage);
+adminRouter.get("/perfil/:id", authRoutes, perfilPage);
+
 // procedures
-adminRouter.post("/update", authRoutes, updatePerfil);
 adminRouter.post("/cambio", authRoutes, changePassword);
 adminRouter.post("/estadistica", verifyTokenAndAdmin, estadistica);
-adminRouter.post("/cambio", authRoutes, changePassword);
-adminRouter.post("/updatePerfil", authRoutes, updatePerfil);
 // error
 adminRouter.post("/error400", errorPage);
 
