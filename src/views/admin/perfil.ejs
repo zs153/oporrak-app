@@ -13,12 +13,37 @@
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <style>
-    .page {
+    #tabs #perfil,
+    #tabs #password {
       display: none;
     }
-
-    .page:target {
-      display: initial;
+    #tabs input[type=radio] {
+      display: none;
+    }
+    #tabs label {
+      display: inline-block;
+      margin: 0;
+      padding: 8px;
+      font-weight: 500;
+      color: #232e3c
+    }
+    #tabs label:before {
+      font-family: Nunito;
+      font-weight: normal;
+      margin-right: 10px;
+    }
+    #tabs label:hover {
+      color: #888;
+      cursor: pointer;
+    }
+    #tabs input:checked + label {
+      color: rgb(35,46,60,0.7);
+      border-bottom: 2px solid #206bc4;
+      /* width: 20%; */
+    }
+    #tab1:checked ~ #perfil,
+    #tab2:checked ~ #password {
+      display: block;
     }
   </style>
 </head>
@@ -115,105 +140,116 @@
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
-          <div class="navbar-expand-md">
-            <div class="navbar">
-              <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#perfil" data-toggle="pill">Perfil</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#password" data-toggle="pill">Camio de contraseña</a>
-                </li>
-              </ul>
+          <div id="tabs">
+            <input type="radio" id="tab1" name="tabs" checked>
+            <label for="tab1">Perfil</label>
+            <input type="radio" id="tab2" name="tabs">
+            <label for="tab2">Cambiar contraseña</label>
+            <div id="perfil">
+              <div class="card">
+                <form action="/admin/usuarios/perfil" method="POST" onsubmit="return validate();">
+                  <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
+                  <div class="card-header">
+                    Perfil
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <label class="form-label">UserID</label>
+                          <input type="text" name="userid" id="userid" class="form-control" onkeyup="this.value = this.value.toLowerCase();" value="<%- datos.usuario.userid %>" readonly/>
+                        </div>
+                      </div>
+                      <div class="col-10">
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Nombre</label>
+                            <input type="text" name="nomusu" id="nomusu" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.usuario.nomusu %>" autofocus/>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-10">
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Correo electrónico</label>
+                            <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.emausu %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <label class="form-label required">Teléfono</label>
+                            <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.telusu %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="mb-1">
+                          <div class="form-label">Oficina</div>
+                          <select class="form-select" id="cboofi" name="ofiusu" value="<%- datos.usuario.ofiusu %>">
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer text-end">
+                    <div class="d-flex">
+                      <a href="/admin" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar perfil</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div id="password">
+              <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                  <div class="card">
+                    <form action="/admin/change" method="POST" onsubmit="return validate();">
+                      <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
+                      <div class="card-header">
+                        Contraseña
+                      </div>
+                      <div class="card-body">
+                        <div class="mb-1">
+                          <label class="form-label required">Nueva contraseña</label>
+                          <span class="input-text">
+                            <input
+                            type="password"
+                            name="pwdusu"
+                            id="pwdusu"
+                            class="form-control"
+                            value=""
+                            autocomplete="off"
+                            autofocus
+                            required
+                            />                  
+                            <i id="togglePassword" class="bi bi-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="card-footer text-end">
+                        <div class="d-flex">
+                          <a href="/admin" class="btn btn-link">Cancelar</a>
+                          <button type="submit" class="btn btn-primary ms-auto" id="btnPassword">Actualizar contraseña</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-3"></div>
+              </div>
             </div>
           </div>
-
-            <div class="card page" id="perfil">
-              <form action="/admin/usuarios/perfil" method="POST" onsubmit="return validate();">
-                <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
-                <div class="card-header">
-                  Perfil
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-2">
-                      <div class="mb-1">
-                        <label class="form-label">UserID</label>
-                        <input type="text" name="userid" id="userid" class="form-control" onkeyup="this.value = this.value.toLowerCase();" value="<%- datos.usuario.userid %>" readonly/>
-                      </div>
-                    </div>
-                    <div class="col-10">
-                      <div class="mb-1">
-                        <div class="input-control">
-                          <label class="form-label required">Nombre</label>
-                          <input type="text" name="nomusu" id="nomusu" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.usuario.nomusu %>" autofocus/>
-                          <div class="invalid-feedback"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-10">
-                      <div class="mb-1">
-                        <div class="input-control">
-                          <label class="form-label required">Correo electrónico</label>
-                          <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.emausu %>" />
-                          <div class="invalid-feedback"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-2">
-                      <div class="mb-1">
-                        <div class="input-control">
-                          <label class="form-label required">Teléfono</label>
-                          <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.telusu %>" />
-                          <div class="invalid-feedback"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="mb-1">
-                        <div class="form-label">Oficina</div>
-                        <select class="form-select" id="cboofi" name="ofiusu" value="<%- datos.usuario.ofiusu %>">
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-footer text-end">
-                  <div class="d-flex">
-                    <a href="/admin" class="btn btn-link">Cancelar</a>
-                    <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar perfil</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="card page" id="password">
-              <form action="/admin/change" method="POST" onsubmit="return validate();">
-                <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
-                <div class="card-header">
-                  Contraseña
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-6">
-                      <div class="mb-1">
-                        <label class="form-label">Nueva contraseña</label>
-                        <input type="text" name="pwdusu" id="pwdusu" class="form-control" value="" autofocus/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-footer text-end">
-                  <div class="d-flex">
-                    <a href="/admin" class="btn btn-link">Cancelar</a>
-                    <button type="submit" class="btn btn-primary ms-auto" id="btnPassword">Actualizar contraseña</button>
-                  </div>
-                </div>
-              </form>
-            </div>
         </div>
       </div>
     </div>
@@ -230,6 +266,14 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
+  <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    togglePassword.addEventListener('click', function (e) {
+      const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwdusu.setAttribute('type', type);
+      this.classList.toggle("bi-eye");
+    });    
+  </script>
   <script>
     const nomusu = document.getElementById('nomusu')
     const emausu = document.getElementById('emausu')
