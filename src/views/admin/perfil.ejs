@@ -12,6 +12,34 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+.nav-pills .nav-link{
+  font-weight: bold;
+  padding-top: 13px;
+  text-align: center;
+  background: #343436;
+  color: #fff;
+  border-radius: 30px;
+  height: 100px;
+}
+.nav-pills .nav-link.active{
+  background: #fff;
+  color: #000;
+}    
+.tab-content{
+  /* position: absolute;
+  width: 450px;
+  height: auto;
+  margin-top: -50px; */
+  background: #fff;
+  color: #000;
+  border-radius: 30px;
+  z-index: 1000;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  margin-bottom: 50px;
+}
+  </style>
 </head>
 
 <body class="antialiased">
@@ -33,7 +61,7 @@
       <div class="navbar navbar-light">
         <div class="container-xl">
           <ul class="navbar-nav">
-            <li class="nav-item">
+            <li class="nav-item active">
               <a class="nav-link" href="/" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="bi-house"></i>
@@ -72,32 +100,32 @@
                 </span>
               </a>
             </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                  <span>Administración</span>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
+                <span>Administración</span>
+              </a>
+              <div class="dropdown-menu">
+                <a href="/admin/oficinas" class="dropdown-item">
+                  <i class="bi bi-building dropdown-item-icon"></i>Oficinas
                 </a>
-                <div class="dropdown-menu">
-                  <a href="/admin/oficinas" class="dropdown-item">
-                    <i class="bi bi-building dropdown-item-icon"></i>Oficinas
-                  </a>
-                  <a href="/admin/tipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
-                  </a>
-                  <a href="/admin/subtipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subipos
-                  </a>
-                  <a href="/admin/usuarios" class="dropdown-item">
-                    <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                  </a>
-                  <a href="/admin/smss" class="dropdown-item">
-                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="/admin/estadistica" class="dropdown-item">
-                    <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                  </a>
-                </div>
-              </li>
+                <a href="/admin/tipos" class="dropdown-item">
+                  <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
+                </a>
+                <a href="/admin/subtipos" class="dropdown-item">
+                  <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subipos
+                </a>
+                <a href="/admin/usuarios" class="dropdown-item">
+                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                </a>
+                <a href="/admin/smss" class="dropdown-item">
+                  <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="/admin/estadistica" class="dropdown-item">
+                  <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
+                </a>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -106,83 +134,105 @@
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards">
-            <div class="col-12">
-              <div class="card">
-                <% if(typeof alerts !='undefined') { %>
-                  <% alerts.map(function (alert) { %>
-                    <div
-                      class="alert alert-warning alert-dismissible fade show"
-                      role="alert"
-                    >
-                      <%- alert.msg %>
-                    </div>
-                  <% }) %>
-                <% } %>
-                <form action="/admin/usuarios/perfil" method="POST" onsubmit="return validate();">
-                  <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
-                  <div class="card-header">
-                    Perfil
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-2">
-                        <div class="mb-1">
-                          <label class="form-label">UserID</label>
-                          <input type="text" name="userid" id="userid" class="form-control" onkeyup="this.value = this.value.toLowerCase();" value="<%- datos.usuario.userid %>" readonly/>
-                        </div>
-                      </div>
-                      <div class="col-10">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Nombre</label>
-                            <input type="text" name="nomusu" id="nomusu" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.usuario.nomusu %>" autofocus/>
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
+          <div class="navbar-expand-md">
+            <div class="navbar">
+              <ul class="navbar-nav nav-pills">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#perfil" data-toggle="pill">Perfil</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#password" data-toggle="pill">Camio de contraseña</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tab-content">
+            <div class="card container tab-pane active" id="perfil">
+              <form action="/admin/usuarios/perfil" method="POST" onsubmit="return validate();">
+                <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
+                <div class="card-header">
+                  Perfil
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-2">
+                      <div class="mb-1">
+                        <label class="form-label">UserID</label>
+                        <input type="text" name="userid" id="userid" class="form-control" onkeyup="this.value = this.value.toLowerCase();" value="<%- datos.usuario.userid %>" readonly/>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-10">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Correo electrónico</label>
-                            <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.emausu %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Teléfono</label>
-                            <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.telusu %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="mb-1">
-                          <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofiusu" value="<%- datos.usuario.ofiusu %>">
-                            <% datos.arrOficinas.map(element => { %> 
-                              <option value="<%= element.IDOFIC %>" <%- element.IDOFIC == datos.usuario.ofiusu ? " selected":"" %>><%= element.DESOFI %></option>
-                            <% }) %> 
-                          </select>
+                    <div class="col-10">
+                      <div class="mb-1">
+                        <div class="input-control">
+                          <label class="form-label required">Nombre</label>
+                          <input type="text" name="nomusu" id="nomusu" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.usuario.nomusu %>" autofocus/>
+                          <div class="invalid-feedback"></div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="card-footer text-end">
-                    <div class="d-flex">
-                      <a href="/admin" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar perfil</button>
+                  <div class="row">
+                    <div class="col-10">
+                      <div class="mb-1">
+                        <div class="input-control">
+                          <label class="form-label required">Correo electrónico</label>
+                          <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.emausu %>" />
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="mb-1">
+                        <div class="input-control">
+                          <label class="form-label required">Teléfono</label>
+                          <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.telusu %>" />
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </form>
-              </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="mb-1">
+                        <div class="form-label">Oficina</div>
+                        <select class="form-select" id="cboofi" name="ofiusu" value="<%- datos.usuario.ofiusu %>">
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer text-end">
+                  <div class="d-flex">
+                    <a href="/admin" class="btn btn-link">Cancelar</a>
+                    <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar perfil</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="card" id="password">
+              <form action="/admin/change" method="POST" onsubmit="return validate();">
+                <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
+                <div class="card-header">
+                  Contraseña
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="mb-1">
+                        <label class="form-label">Nueva contraseña</label>
+                        <input type="text" name="pwdusu" id="pwdusu" class="form-control" value="" autofocus/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer text-end">
+                  <div class="d-flex">
+                    <a href="/admin" class="btn btn-link">Cancelar</a>
+                    <button type="submit" class="btn btn-primary ms-auto" id="btnPassword">Actualizar contraseña</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -249,6 +299,33 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
+  </script>
+  <script>
+    const Oficinas = () => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const oficinas = JSON.parse(xhr.response)
+
+          const cbo = document.getElementById('cboofi')
+
+          oficinas.map((itm) => {
+            const option = document.createElement('option')
+            option.value = itm.IDOFIC
+            option.text = itm.DESOFI
+            if (itm.IDOFIC === <%- datos.usuario.ofiusu %>) {
+              option.selected = true
+            }
+            cbo.appendChild(option)
+          })
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/oficinas', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send()
+    }
+    Oficinas();
   </script>
 </body>
 </html>

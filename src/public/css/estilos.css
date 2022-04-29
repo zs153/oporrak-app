@@ -4436,6 +4436,26 @@ Form hint
   border-color: #206bc4;
 }
 
+.nav-bordered {
+  border-bottom: 1px solid #e6e7e9;
+}
+.nav-bordered .nav-item + .nav-item {
+  margin-left: 1.25rem;
+}
+.nav-bordered .nav-link {
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0 0 -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: #626976;
+}
+.nav-bordered .nav-link.active,
+.nav-bordered .nav-item.show .nav-link {
+  color: #206bc4;
+  border-color: #206bc4;
+}
+
 .dropup,
 .dropend,
 .dropdown,

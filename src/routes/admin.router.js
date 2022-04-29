@@ -5,7 +5,6 @@ import {
   estadistica,
   acumuladosPage,
   changePassword,
-  updatePerfil,
   errorPage,
   perfilPage,
 } from "../controllers/admin.controller";
@@ -17,7 +16,7 @@ const adminRouter = express.Router();
 adminRouter.get("/", authRoutes, mainPage);
 adminRouter.get("/estadistica", verifyTokenAndAdmin, estadisticaPage);
 adminRouter.get("/estadistica/acumulados", verifyTokenAndAdmin, acumuladosPage);
-adminRouter.get("/perfil/:id", authRoutes, perfilPage);
+adminRouter.get("/perfil/:userid", authRoutes, perfilPage);
 
 // procedures
 adminRouter.post("/cambio", authRoutes, changePassword);

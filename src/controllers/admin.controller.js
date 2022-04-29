@@ -1,17 +1,23 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { tiposMovimiento } from "../public/js/enumeraciones";
+import {
+  tiposMovimiento,
+  arrTiposRol,
+  arrTiposPerfil,
+} from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
-
+  res.render("admin/index", { user });
+};
+export const perfilPage = async (req, res) => {
+  const user = req.user;
   try {
     const result = await axios.post("http://localhost:8000/api/usuario", {
-      userid: req.params.userid,
+      userid: user.userID,
     });
 
-    console.log(result.data);
     const usuario = {
       idusua: result.data.IDUSUA,
       nomusu: result.data.NOMUSU,
@@ -37,11 +43,6 @@ export const mainPage = async (req, res) => {
       alerts: [{ msg }],
     });
   }
-};
-export const perfilPage = async (req, res) => {
-  const user = req.user;
-
-  res.render("admin/perfil", { user });
 };
 export const estadisticaPage = async (req, res) => {
   const user = req.user;
