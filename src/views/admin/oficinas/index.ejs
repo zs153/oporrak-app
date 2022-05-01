@@ -11,6 +11,21 @@
     <!-- custom -->
     <link rel="stylesheet" href="/css/estilos.min.css">
     <link rel="stylesheet" href="/css/navbar.css">
+    <style>
+      .sortable th {
+        cursor: pointer;
+      }
+      .sortable .th-sort-asc::after {
+        content: "\25b4";
+      }
+      .sortable .th-sort-desc::after {
+        content: "\25be";
+      }
+      .sortable .th-sort-asc::after,
+      .sortable .th-sort-desc::after {
+        margin-left: 5px;
+      }
+    </style>
   </head>
   <body class="antialiased">
     <div class="wrapper">
@@ -24,6 +39,36 @@
               <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
             </a>
           </h1>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="nav-item dropdown d-none d-md-flex me-3">
+              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
+                <span class="badge bg-white"></span>
+                <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
+                <div class="card">
+                  <div class="card-body">
+                    <ul id="messages" style="list-style: none;"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                <div class="d-none d-xl-block">
+                  <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
+                  <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -113,7 +158,7 @@
                       <div class="d-flex">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" onkeyup="filtroOficinas();" placeholder="Buscar..."
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarOficinaBox" onkeyup="filtroOficinas();" placeholder="Buscar..."
                             aria-label="Buscar en oficinas">
                         </div>
                         <a href="/admin/oficinas/add" class="btn btn-primary">
@@ -128,15 +173,15 @@
                     </div>                    
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-striped table-fixHead" id="tblOficinas">
+                    <table class="table table-vcenter table-striped table-fixHead sortable" id="tblOficinas">
                       <thead>
-                      <tr>
+                      <tr class="header">
                         <th>Descipción</th>
                         <th class="w-2"></th>
                       </tr>
                       </thead>
                       <tbody>
-                        <% oficinas.map(element => { %>
+                        <% datos.oficinas.map(element => { %>
                           <tr>
                             <td>
                               <div class="d-flex py-1 align-items-center">
@@ -229,25 +274,52 @@
 
     <script src="/js/ayuda.js"></script>
     <script>
-      function filtroOficinas() {
-        const input = document.getElementById("buscarUserBox");
-        const filter = input.value.toUpperCase();
-        const table = document.getElementById("tblOficinas");
-        const tr = table.getElementsByTagName("tr");
-  
-        for (let i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-
-          if (td) {
-            const txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
-            }
-          }
+      const filtroOficinas = () => {
+        const trs = document.querySelectorAll('#tblOficinas tr:not(.header)')
+        const filter = document.querySelector('#buscarOficinaBox').value
+        const regex = new RegExp(filter, 'i')
+        const isFoundInTds = (td) => regex.test(td.innerText)
+        const isFound = childrenArr => childrenArr.some(isFoundInTds)
+        const setTrStyleDisplay = ({ style, children }) => {
+          style.display = isFound([
+            ...children
+          ]) ? '' : 'none' 
         }
-      }
+        
+        trs.forEach(setTrStyleDisplay)
+      }      
     </script>
+    <script>
+      function sortTableByColumn(table, column, asc = true) {
+        const dirModifier = asc ? 1 : -1;
+        const tBody = table.tBodies[0];
+        const rows = Array.from(tBody.querySelectorAll("tr"));
+
+        const sortedRows = rows.sort((a, b) => {
+          const aColText = a.cells[column].textContent;
+          const bColText = b.cells[column].textContent;
+
+          return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+        });
+
+        for(let row of sortedRows) {
+          tBody.appendChild( row );
+        }
+
+        table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
+        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-asc", asc);
+        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-desc", !asc);
+      }
+
+      document.querySelectorAll(".sortable th").forEach(headerCell => {
+        headerCell.addEventListener("click", () => {
+          const tableElement = headerCell.parentElement.parentElement.parentElement;
+          const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+          const currentIsAscending = headerCell.classList.contains("th-sort-asc");
+          
+          sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+        });
+      });
+    </script>    
   </body>
 </html>

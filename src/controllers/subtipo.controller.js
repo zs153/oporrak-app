@@ -1,163 +1,162 @@
-import axios from "axios";
+import axios from 'axios'
 import {
   origenTipo,
   arrOrigenTipo,
   tiposMovimiento,
-} from "../public/js/enumeraciones";
+} from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
 
   try {
-    const result = await axios.get("http://localhost:8000/api/subtipos");
-
-    res.render("admin/subtipos", { user, subtipos: result.data.dat });
+    const result = await axios.post('http://localhost:8000/api/subtipos')
+    const datos = {
+      subtipos: result.data,
+      arrOrigenTipo,
+    }
+    res.render('admin/subtipos', { user, datos })
   } catch (error) {
-    const msg = "No se ha podido acceder a los datos de la aplicación.";
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const addPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const subtipo = {
     idsubt: 0,
-    dessub: "",
+    dessub: '',
     idtipo: 0,
-  };
+  }
 
   try {
-    const resultTipos = await axios.get("http://localhost:8000/api/tipos");
     const datos = {
       subtipo,
-      arrTipos: resultTipos.data.dat,
-    };
+    }
 
-    res.render("admin/subtipos/add", { user, datos });
+    res.render('admin/subtipos/add', { user, datos })
   } catch (error) {
-    const msg = "No se ha podido acceder a los datos de la aplicación.";
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const editPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
 
   try {
-    const resultTipos = await axios.get("http://localhost:8000/api/tipos");
-    const result = await axios.post("http://localhost:8000/api/subtipo", {
+    const result = await axios.post('http://localhost:8000/api/subtipo', {
       idsubt: req.params.id,
-    });
+    })
 
     const subtipo = {
-      idsubt: result.data.idsubt,
-      dessub: result.data.dessub,
-      idtipo: result.data.idtipo,
-      idtold: result.data.idtipo,
-    };
+      idsubt: result.data.IDSUBT,
+      dessub: result.data.DESSUB,
+      idtipo: result.data.IDTIPO,
+      idtold: result.data.IDTIPO,
+    }
     const datos = {
       subtipo,
-      arrTipos: resultTipos.data.dat,
-    };
+    }
 
-    res.render("admin/subtipos/edit", { user, datos });
+    res.render('admin/subtipos/edit', { user, datos })
   } catch (error) {
-    const msg = "No se ha podido acceder a los datos de la aplicación.";
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const insertSubtipo = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const subtipo = {
     dessub: req.body.dessub,
     idtipo: req.body.idtipo,
-  };
+  }
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.crearSubtipo,
-  };
+    usumov: user.id,
+    tipmov: tiposMovimiento.crearSubtipo,
+  }
 
   try {
-    await axios.post("http://localhost:8000/api/subtipos/insert", {
+    await axios.post('http://localhost:8000/api/subtipos/insert', {
       subtipo,
       movimiento,
-    });
+    })
 
-    res.redirect("/admin/subtipos");
+    res.redirect('/admin/subtipos')
   } catch (error) {
-    let msg = "No se ha podido crear el subtipo.";
+    let msg = 'No se ha podido crear el subtipo.'
 
     if (error.response.data.errorNum === 20100) {
-      msg = "El subtipo ya existe.";
+      msg = 'El subtipo ya existe.'
     }
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const updateSubtipo = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const subtipo = {
     idsubt: req.body.idsubt,
     dessub: req.body.dessub,
     idtold: req.body.idtold,
     idtipo: req.body.idtipo,
-  };
+  }
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.modificarSubtipo,
-  };
+    usumov: user.id,
+    tipmov: tiposMovimiento.modificarSubtipo,
+  }
 
   try {
-    await axios.post("http://localhost:8000/api/subtipos/update", {
+    await axios.post('http://localhost:8000/api/subtipos/update', {
       subtipo,
       movimiento,
-    });
+    })
 
-    res.redirect("/admin/subtipos");
+    res.redirect('/admin/subtipos')
   } catch (error) {
     let msg =
-      "No se han podido modificar los datos del subtipo. Verifique los datos introducidos";
+      'No se han podido modificar los datos del subtipo. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = "El subtipo ya existe";
+      msg = 'El subtipo ya existe'
     }
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const deleteSubtipo = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const subtipo = {
     idsubt: req.body.idsubt,
-  };
+  }
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.borrarSubtipo,
-  };
+    usumov: user.id,
+    tipmov: tiposMovimiento.borrarSubtipo,
+  }
 
   try {
-    await axios.post("http://localhost:8000/api/subtipos/delete", {
+    await axios.post('http://localhost:8000/api/subtipos/delete', {
       subtipo,
       movimiento,
-    });
+    })
 
-    res.redirect("/admin/subtipos");
+    res.redirect('/admin/subtipos')
   } catch (error) {
-    const msg = "No se ha podido elminar el subtipo.";
+    const msg = 'No se ha podido elminar el subtipo.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}

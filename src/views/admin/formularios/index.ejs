@@ -61,11 +61,8 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="/admin/usuarios/perfil/<%- user.id %>" class="dropdown-item">
+                <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
                   <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
-                </a>
-                <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
-                  <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
                 </a>
                 <a href="#" class="dropdown-item" onclick="checkItem(this)">
                     <% if (datos.verTodo ) { %>
@@ -73,7 +70,7 @@
                     <% } else { %>
                       <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
                     <% } %>
-                </a>
+                </a>                
                 <div class="dropdown-divider"></div>
                 <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
               </div>
@@ -678,7 +675,7 @@
         const trs = document.querySelectorAll('#tblDocumentos tr:not(.header)')
         const filter = document.querySelector('#buscarDocBox').value
         const regex = new RegExp(filter, 'i')
-        const isFoundInTds = td => regex.test(td.innerHTML)
+        const isFoundInTds = (td) => regex.test(td.innerHTML)
         const isFound = childrenArr => childrenArr.some(isFoundInTds)
         const setTrStyleDisplay = ({ style, children }) => {
           style.display = isFound([
@@ -687,7 +684,19 @@
         }
         
         trs.forEach(setTrStyleDisplay)
+      }
+      const filtroColumnaDocumentos = (columna) => {
+        const trs = document.querySelectorAll('#tableId tr:not(.header)');
+        const filter = document.querySelector('#myInput').value;
+        const regex = new RegExp(filter, 'i');
+        const isFoundInTds = (td) => regex.test(td.innerText);
+        const setTrStyleDisplay = ({ style, children }) => {
+            style.display = isFoundInTds(children[columna]) ? '' : 'none';
+        };
+
+        trs.forEach(setTrStyleDisplay);
       }      
+
     </script>
     <script>
       function sortTableByColumn(table, column, asc = true) {
