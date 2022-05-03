@@ -329,30 +329,39 @@
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="modal-status bg-primary"></div>
-          <div class="modal-body text-center py-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-blue icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M12 9v2m0 4v.01"></path>
-              <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
-            </svg>
-            <h3>Asignar cita</h3>
-            <div id="texasi"></div>
-          </div>
-          <div class="modal-footer">
-            <div class="w-100">
-              <div class="row">
-                <div class="col">
-                  <a href="/admin/citas" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
-                </div>
-                <div class="col">
-                  <form action="/admin/citas/asignar" method="POST">
-                    <input type="hidden" id="asign" name="idcita" value="">
-                    <button type="submit" class="btn btn-primary w-100">Asignar cita</button>
-                  </form>
+          <form action="/admin/citas/asignar" method="POST">
+            <div class="modal-body text-center py-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-blue icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M12 9v2m0 4v.01"></path>
+                <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
+              </svg>
+              <h3>Asignar cita</h3>
+              <div id="texasi"></div>
+
+              <div class="mb-1">
+                <div class="form-label text-start">Tipo</div>
+                <div class="input-control">
+                  <select class="form-select form-control" id="cbotip" name="tipdoc" >
+                  </select>
+                  <div class="invalid-feedback"></div>
                 </div>
               </div>
             </div>
-          </div>
+            <div class="modal-footer">
+              <div class="w-100">
+                <div class="row">
+                  <div class="col">
+                    <a href="/admin/citas" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                  </div>
+                  <div class="col">
+                    <input type="hidden" id="asign" name="idcita" value="">
+                    <button type="submit" class="btn btn-primary w-100">Asignar cita</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -478,5 +487,31 @@
       }
       Oficinas();
     </script>
+  <script>
+    let tipos;
+    const Tipos = () => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          tipos = JSON.parse(xhr.response)
+
+          const cbo = document.getElementById('cbotip')
+
+          tipos.map((itm) => {
+            const option = document.createElement('option')
+            option.value = itm.IDTIPO
+            option.text = itm.DESTIP
+
+            cbo.appendChild(option)
+          })
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send()
+    }
+    Tipos();
+  </script>
   </body>
 </html>

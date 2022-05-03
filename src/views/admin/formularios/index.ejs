@@ -186,8 +186,8 @@
                         <th class="w-4"></th>
                         <th class="w-8">Oficina</th>
                         <th class="w-6">Fecha</th>
-                        <th class="w-7">Referencia</th>
-                        <th class="w-7">NIF</th>
+                        <th class="w-8">Referencia</th>
+                        <th class="w-6">NIF</th>
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Observaciones</th>
@@ -232,14 +232,14 @@
                                 </div>
                               </div>
                             </td>
-                            <td class="w-7">
+                            <td class="w-8">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.REFDOC %></div>
                                 </div>
                               </div>
                             </td>
-                            <td class="w-7">
+                            <td class="w-6">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.NIFCON %></div>
@@ -592,7 +592,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form action="/admin/formularios/sms" method="POST" onsubmit="return validateSms();">
-            <input type="hidden" name="docsms" id="idsmss">
+            <input type="hidden" name="iddocu" id="idsmss">
             <div class="modal-body">
               <div class="card-body">
                 <div class="row">
@@ -641,7 +641,7 @@
           window.location.href = 'http://localhost:4000/admin/formularios/vertodo'
         <% } %>
       }
-     </script>
+    </script>
     <script>
       function focoRes() {
         const ele = document.getElementById('texsms')
@@ -652,7 +652,7 @@
         const ele = document.getElementById('modsms')
 
         ele.focus()
-      }        
+      }
     </script>
     <script>
       const messages = document.getElementById('messages')
@@ -685,18 +685,6 @@
         
         trs.forEach(setTrStyleDisplay)
       }
-      const filtroColumnaDocumentos = (columna) => {
-        const trs = document.querySelectorAll('#tableId tr:not(.header)');
-        const filter = document.querySelector('#myInput').value;
-        const regex = new RegExp(filter, 'i');
-        const isFoundInTds = (td) => regex.test(td.innerText);
-        const setTrStyleDisplay = ({ style, children }) => {
-            style.display = isFoundInTds(children[columna]) ? '' : 'none';
-        };
-
-        trs.forEach(setTrStyleDisplay);
-      }      
-
     </script>
     <script>
       function sortTableByColumn(table, column, asc = true) {
@@ -731,18 +719,7 @@
       });
     </script>    
     <script>
-      const togglePassword = document.querySelector('#togglePassword');
-      const pwdusu = document.getElementById('pwdusu')
       const modsms = document.getElementById('modsms')
-      const nomusu = document.getElementById('nomusu')
-      const emausu = document.getElementById('emausu')
-      const telusu = document.getElementById('telusu')
-
-      togglePassword.addEventListener('click', function (e) {
-        const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
-        pwdusu.setAttribute('type', type);
-        this.classList.toggle("bi-eye");
-      });
 
       const validateSms = () => {
         const modsmsValue = modsms.value.trim()
@@ -756,55 +733,7 @@
 
         return true
       }
-      const validateChange = () => {
-        const pwdusuValue = pwdusu.value.trim()
 
-        if (pwdusuValue === '') {
-          setError(pwdusu, 'Contraseña requerida')
-          setTimeout(function () {
-            setSuccess(pwdusu)
-          }, 3000)          
-          return false
-        } else {
-          setSuccess(pwdusu)
-        }
-
-        return true
-      }
-      const validatePerfil = () => {
-        const nomusuValue = nomusu.value.trim()
-        const emausuValue = emausu.value.trim()
-        const telusuValue = telusu.value.trim()
-
-        if (nomusuValue === '') {
-          setError(nomusu, 'Nombre requerido')
-          setTimeout(function () {
-            setSuccess(nomusu)
-          }, 3000)             
-          return false
-        } else {
-          setSuccess(nomusu)
-        }
-        if (emausuValue === '') {
-          setError(emausu, 'Email requerido')
-          setTimeout(function () {
-            setSuccess(emausu)
-          }, 3000)             
-          return false
-        } else {
-          setSuccess(emausu)
-        }
-        if (telusuValue === '') {
-          setError(telusu, 'Teléfono requerido')
-          setTimeout(function () {
-            setSuccess(telusu)
-          }, 3000)             
-          return false
-        } else {
-          setSuccess(telusu)
-        }
-        return true
-      }
       const setSuccess = (element) => {
         const inputControl = element.parentElement;
         const errorDisplay = inputControl.querySelector('.invalid-feedback');
