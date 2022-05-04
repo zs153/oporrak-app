@@ -1,67 +1,68 @@
-import axios from "axios";
+import axios from 'axios'
 import {
   arrEstadosSms,
   estadosSms,
   tiposMovimiento,
   tiposRol,
-} from "../public/js/enumeraciones";
+} from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
-    stasms: estadosSms.enviado,
-  };
-  const verTodo = false;
+    stasms: estadosSms.pendiente,
+  }
+  const verTodo = false
 
   try {
-    const result = await axios.post("http://localhost:8000/api/smss", {
+    const result = await axios.post('http://localhost:8000/api/smss', {
       sms,
-    });
+    })
     const datos = {
       smss: result.data,
       tiposRol,
-    };
+      verTodo,
+    }
 
-    res.render("admin/smss", { user, datos });
+    res.render('admin/smss', { user, datos })
   } catch (error) {
-    const msg = "No se ha podido acceder a los datos de la aplicación.";
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const addPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
     idsmss: 0,
-    texsms: "",
-    movsms: "",
+    texsms: '',
+    movsms: '',
     stasms: estadosSms.pendiente,
-  };
+  }
 
   try {
     const datos = {
       sms,
       arrEstadosSms,
-    };
+    }
 
-    res.render("admin/smss/add", { user, datos });
+    res.render('admin/smss/add', { user, datos })
   } catch (error) {
-    const msg = "No se ha podido acceder a los datos de la aplicación.";
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const editPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
 
   try {
-    const result = await axios.post("http://localhost:8000/api/sms", {
+    const result = await axios.post('http://localhost:8000/api/sms', {
       idsmss: req.params.id,
-    });
+    })
 
     if (result) {
       const sms = {
@@ -70,122 +71,150 @@ export const editPage = async (req, res) => {
         movsms: result.data.MOVSMS,
         stasms: result.data.STASMS,
         refdoc: result.data.REFDOC,
-      };
+      }
       const datos = {
         sms,
         arrEstadosSms,
-      };
+      }
 
-      res.render("admin/smss/edit", { user, datos });
+      res.render('admin/smss/edit', { user, datos })
     }
   } catch (error) {
-    const msg = "No se ha podido acceder a los datos de la aplicación.";
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const insertSms = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
     texsms: req.body.texsms,
-  };
+  }
   const movimiento = {
     usumov: user.id,
     tipmov: tiposMovimiento.crearSms,
-  };
+  }
   const formulario = {
     refdoc: req.body.refdoc,
-  };
+  }
 
   try {
     // referencia
     const result = await axios.post(
-      "http://localhost:8000/api/formularios/referencia",
+      'http://localhost:8000/api/formularios/referencia',
       {
         formulario,
       }
-    );
+    )
 
     if (result) {
-      formulario.iddocu = result.data.IDDOCU;
-      sms.movsms = result.data.MOVCON;
-      sms.stasms = estadosSms.pendiente;
+      formulario.iddocu = result.data.IDDOCU
+      sms.movsms = result.data.MOVCON
+      sms.stasms = estadosSms.pendiente
 
-      await axios.post("http://localhost:8000/api/smss/insert", {
+      await axios.post('http://localhost:8000/api/smss/insert', {
         sms,
         formulario,
         movimiento,
-      });
+      })
 
-      res.redirect("/admin/smss");
+      res.redirect('/admin/smss')
     }
   } catch (error) {
-    let msg = "No se ha podido crear el sms. Verifique la referencia";
+    let msg = 'No se ha podido crear el sms. Verifique la referencia'
 
     if (error.response.data.errorNum === 20100) {
-      msg = "El sms ya existe.";
+      msg = 'El sms ya existe.'
     }
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const updateSms = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
     idsmss: req.body.idsmss,
     texsms: req.body.texsms,
+    movsms: req.body.movsms,
     stasms: req.body.stasms,
-  };
+  }
   const movimiento = {
     usumov: user.id,
     tipmov: tiposMovimiento.modificarSms,
-  };
+  }
 
   try {
-    const result = await axios.post("http://localhost:8000/api/smss/update", {
+    const result = await axios.post('http://localhost:8000/api/smss/update', {
       sms,
       movimiento,
-    });
+    })
 
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   } catch (error) {
     let msg =
-      "No se han podido modificar los datos del sms. Verifique los datos introducidos";
+      'No se han podido modificar los datos del sms. Verifique los datos introducidos'
 
     if (error.response.data.errorNum === 20100) {
-      msg = "El sms ya existe";
+      msg = 'El sms ya existe'
     }
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
 export const deleteSms = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   const sms = {
     idsmss: req.body.idsmss,
-  };
+  }
   const movimiento = {
     usumov: user.id,
     tipmov: tiposMovimiento.borrarSms,
-  };
+  }
 
   try {
-    const result = await axios.post("http://localhost:8000/api/smss/delete", {
+    const result = await axios.post('http://localhost:8000/api/smss/delete', {
       sms,
       movimiento,
-    });
+    })
 
-    res.redirect("/admin/smss");
+    res.redirect('/admin/smss')
   } catch (error) {
-    const msg = "No se ha podido elminar el sms.";
+    const msg = 'No se ha podido elminar el sms.'
 
-    res.render("admin/error400", {
+    res.render('admin/error400', {
       alerts: [{ msg }],
-    });
+    })
   }
-};
+}
+export const verTodo = async (req, res) => {
+  const user = req.user
+  const sms = {
+    stasms: estadosSms.pendiente + estadosSms.enviado,
+  }
+  const verTodo = true
+
+  try {
+    const result = await axios.post('http://localhost:8000/api/smss', {
+      sms,
+    })
+
+    const datos = {
+      smss: result.data,
+      tiposRol,
+      verTodo,
+    }
+
+    res.render('admin/smss', { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
