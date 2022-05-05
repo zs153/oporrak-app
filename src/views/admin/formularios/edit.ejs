@@ -383,7 +383,7 @@
         }, 3000)
         return false
       } else {
-        const pattern = /^(X[0-9]{7}[A-Z]{1})|(Y[0-9]{8}[A-Z]{1})$/
+        const pattern = /^([X-Y][0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
 
         if (!pattern.test(nifconValue)){
           setError(nifcon, 'Introduzca NIF/NIE válido')
