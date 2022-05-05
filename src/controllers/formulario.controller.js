@@ -1,10 +1,8 @@
 import axios from 'axios'
-import jwt from 'jsonwebtoken'
 import {
   estadosDocumento,
   estadosSms,
   tiposMovimiento,
-  tiposVisualizacion,
   tiposRol,
 } from '../public/js/enumeraciones'
 
@@ -26,6 +24,7 @@ export const mainPage = async (req, res) => {
       estadosDocumento,
       verTodo,
     }
+
     res.render('admin/formularios', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -72,10 +71,13 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
+  const formulario = {
+    iddocu: req.params.id,
+  }
 
   try {
     const result = await axios.post('http://localhost:8000/api/formulario', {
-      iddocu: req.params.id,
+      formulario,
     })
 
     const documento = {
@@ -97,7 +99,7 @@ export const editPage = async (req, res) => {
     const datos = {
       documento,
     }
-    console.log(documento)
+
     res.render('admin/formularios/edit', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -302,7 +304,7 @@ export const resol = async (req, res) => {
           usumov: user.id,
           tipmov: tiposMovimiento.crearSms,
         }
-        console.log(sms, documento, movimiento)
+
         try {
           const result = await axios.post(
             'http://localhost:8000/api/formularios/sms/insert',

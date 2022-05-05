@@ -299,61 +299,7 @@
         toggleBadge.classList.toggle('d-none')
       }
     })
-  </script>
-  <script>
-    const eleNif = document.getElementById('nifcon')
-    const eleNombre = document.getElementById('nomcon')
-    const eleDiscri = document.getElementById('iddisc')
-
-    eleNif.addEventListener('blur', async () => {
-      if (eleNif.value !== '') {
-        const xhr = new XMLHttpRequest();
-
-        xhr.onload = function() {
-          if (xhr.status === 200) {
-            const gentes = JSON.parse(xhr.response)
-            const discriminantes = document.getElementById('iddisc')
-            console.log(gentes)
-            if (gentes.length > 1) {
-              discriminantes.innerHTML = ''
-              gentes.map((item) => {
-                const li = document.createElement('li')
-                li.textContent = item.NIFGEN + ` ${item.DISGEN} ` + item.NOMGEN
-                discriminantes.appendChild(li)
-              })
-              const li = document.createElement('li')
-              li.textContent = 'Introduzca discriminante'
-              discriminantes.appendChild(li)
-              
-              eleDiscri.style.display = 'block'
-              eleNif.focus()
-            } else {
-              if (gentes.NOMGEN) {
-                eleNombre.value = gentes.NOMGEN
-              } else {
-                eleNombre.value = ''
-              }
-              eleDiscri.style.display = 'none'
-            }
-          } else {
-            eleNombre.value = ''
-          }
-        };
-        try {
-          /*
-          En producción no reconoce la dirección localhost
-          Hay que cambiarla a mano por la del servidor de produccion
-          en este caso http://172.27.25.44:8000/api/gente
-          */
-          xhr.open('POST', 'http://localhost:8000/api/gente', true);
-          xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');     
-          xhr.send(JSON.stringify({nifgen: eleNif.value}))
-        } catch (error) {
-          eleNombre.value = ''
-        }
-      }
-    })
-  </script>  
+  </script> 
   <script>
     const nifcon = document.getElementById('nifcon')
     const nomcon = document.getElementById('nomcon')
