@@ -7,10 +7,19 @@ import {
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const tipo = {
+    orgtip: origenTipo.formulario,
+  }
+  const verTodo = false
 
   try {
-    const result = await axios.post('http://localhost:8000/api/tipos')
-    const datos = { tipos: result.data, arrOrigenTipo }
+    const result = await axios.post('http://localhost:8000/api/tipos', {
+      tipo,
+    })
+    const datos = {
+      documentos: result.data,
+      verTodo,
+    }
 
     res.render('admin/tipos', { user, datos })
   } catch (error) {
@@ -47,20 +56,23 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
+  const tipo = {
+    idtipo: req.params.id,
+  }
 
   try {
     const result = await axios.post('http://localhost:8000/api/tipo', {
-      idtipo: req.params.id,
+      tipo,
     })
 
-    const tipo = {
+    const documento = {
       idtipo: result.data.IDTIPO,
       destip: result.data.DESTIP,
       ayutip: result.data.AYUTIP,
       orgtip: result.data.ORGTIP,
     }
     const datos = {
-      tipo,
+      documento,
       arrOrigenTipo,
     }
 
@@ -73,6 +85,7 @@ export const editPage = async (req, res) => {
     })
   }
 }
+
 export const insertTipo = async (req, res) => {
   const user = req.user
   const tipo = {
