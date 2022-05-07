@@ -35,26 +35,20 @@
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
               <div class="card">
                 <div class="card-body">
-                    <ul id="messages" style="list-style: none;"></ul>
+                  <ul id="messages" style="list-style: none;"></ul>
                 </div>
               </div>
             </div>
           </div>
           <div class="nav-item dropdown">
-            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
-              aria-label="Open user menu">
+            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <div class="d-none d-xl-block">
-                <span class="avatar avatar-sm avatar-rounded">
-                  <h5><%- user.userID %></h5>
-                </span>
+                <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <a href="#" class="dropdown-item" onclick="{document.getElementById('idperf').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-perfil">
+              <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
                 <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
-              </a>
-              <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
-                <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
               </a>
               <div class="dropdown-divider"></div>
               <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
@@ -191,9 +185,6 @@
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
                           <select class="form-select" id="cbotip" name="tipfra" value="<%- datos.documento.tipfra %>">
-                            <% datos.arrTipos.map(element => { %> 
-                              <option value="<%- element.IDTIPO %>" <%- element.IDTIPO == datos.documento.tipfra ? " selected":"" %>><%- element.DESTIP %></option>
-                            <% }) %> 
                           </select>
                         </div>
                       </div>
@@ -227,9 +218,6 @@
                         <div class="mb-1">
                           <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="ofifra" value="<%- datos.documento.ofifra %>">
-                            <% datos.arrOficinas.map(element => { %> 
-                              <option value="<%- element.IDOFIC %>"<%- element.IDOFIC == datos.documento.ofifra ? " selected":"" %>><%= element.DESOFI %></option>
-                            <% }) %> 
                           </select>
                         </div>
                       </div>
@@ -290,93 +278,6 @@
     </footer>
   </div>
 
-  <div class="modal modal-blur fade" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title mt-0">Perfil de usuario</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/admin/fraudes/updatePerfil" method="POST" onsubmit="return validatePerfil();">
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-2">
-                <div class="mb-1">
-                  <label class="form-label">UserID</label>
-                  <input type="text" name="userid" id="userid" class="form-control" value="<%- user.userID %>" readonly/>
-                </div>
-              </div>
-              <div class="col-10">
-                <div class="mb-1">
-                  <label class="form-label required">Nombre</label>
-                  <input type="text" name="nomusu" id="nomusu" class="form-control" value="<%- user.nombre %>" />
-                  <div class="invalid-feedback"></div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-10">
-                <div class="mb-1">
-                  <label class="form-label required">Correo electrónico</label>
-                  <input type="email" name="emausu" id="emausu" class="form-control" value="<%- user.email %>" />
-                  <div class="invalid-feedback"></div>
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="mb-1">
-                  <label class="form-label required">Teléfono</label>
-                  <input type="text" name="telusu" id="telusu" class="form-control" value="<%- user.telefono %>" />
-                  <div class="invalid-feedback"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-            <input type="hidden" id="idperf" name="idperf" value="">
-            <button type="submit" class="btn btn-primary ms-auto">Actualizar perfil</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal modal-blur fade" id="modal-change" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title mt-0">Cambio de contraseña</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/admin/fraudes/cambio" method="POST" onsubmit="return validateChange();">
-          <div class="modal-body">
-            <div class="row">
-              <div class="mb-1">
-                <label class="form-label required">Actualizar contraseña</label>
-                <span class="input-text">
-                  <input
-                  type="password"
-                  name="pwdusu"
-                  id="pwdusu"
-                  class="form-control"
-                  value=""
-                  autocomplete="off"
-                  autofocus 
-                  />                  
-                  <div class="invalid-feedback d-none"></div>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-            <input type="hidden" id="idchan" name="idusua" value="">
-            <button type="submit" class="btn btn-primary ms-auto">Actualizar contraseña</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 
   <script src="/js/ayuda.js"></script>
   <script src="/socket.io/socket.io.js"></script>
@@ -397,36 +298,11 @@
     })
   </script>
   <script>
-    const combo = document.getElementById('cbotip')
-    const e = document.getElementById('tipayu')
-    const arr = <%- JSON.stringify(datos.arrTipos) %>;
-
-    // inicial
-    arr.map(element => {
-      if(element.IDTIPO == combo.value) {
-        document.getElementById('tipayu').innerText = element.AYUTIP
-      }
-    });
-
-    combo.addEventListener('change', () => {
-      arr.map(element => {
-        if(element.IDTIPO == combo.value) {
-          document.getElementById('tipayu').innerText = element.AYUTIP
-        }
-      });
-    })
-  </script>
-  <script>
     const nifcon = document.getElementById('nifcon')
     const nomcon = document.getElementById('nomcon')
     const movcon = document.getElementById('movcon')
     const ejefra = document.getElementById('ejefra')
     const fecfra = document.getElementById('fecfra')
-    const pwdusu = document.getElementById('pwdusu')
-    const modsms = document.getElementById('modsms')
-    const nomusu = document.getElementById('nomusu')
-    const emausu = document.getElementById('emausu')
-    const telusu = document.getElementById('telusu')
     
     const validate = () => {
       const nifconValue = nifcon.value.trim()
@@ -439,7 +315,7 @@
         setError(nifcon, 'NIF/NIE requerido')
         return false
       } else {
-        const pattern = /^(X[0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
+        const pattern = /^([X-Y][0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
 
         if (!pattern.test(nifconValue)){
           setError(nifcon, 'Introduzca NIF/NIE válido')
@@ -514,43 +390,7 @@
 
       return true
     }
-    const validateChange = () => {
-      const pwdusuValue = pwdusu.value.trim()
 
-      if (pwdusuValue === '') {
-        setError(pwdusu, 'Contraseña requerida')
-        return false
-      } else {
-        setSuccess(pwdusu)
-      }
-
-      return true
-    }
-    const validatePerfil = () => {
-      const nomusuValue = nomusu.value.trim()
-      const emausuValue = emausu.value.trim()
-      const telusuValue = telusu.value.trim()
-
-      if (nomusuValue === '') {
-        setError(nomusu, 'Nombre requerido')
-        return false
-      } else {
-        setSuccess(nomusu)
-      }
-      if (emausuValue === '') {
-        setError(emausu, 'Email requerido')
-        return false
-      } else {
-        setSuccess(emausu)
-      }
-      if (telusuValue === '') {
-        setError(telusu, 'Teléfono requerido')
-        return false
-      } else {
-        setSuccess(telusu)
-      }
-      return true
-    }
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
@@ -567,6 +407,61 @@
       inputControl.classList.remove('is-valid');
       element.classList.add('is-invalid');
     }
+  </script>
+  <script>
+    let tipos;
+    const Tipos = () => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          tipos = JSON.parse(xhr.response)
+
+          const cbo = document.getElementById('cbotip')
+
+          tipos.map((itm) => {
+            const option = document.createElement('option')
+            option.value = itm.IDTIPO
+            option.text = itm.DESTIP
+            if (itm.IDTIPO === <%- datos.documento.tipfra %>) {
+              option.selected = true
+            }
+            cbo.appendChild(option)
+          })
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send()
+    }
+    Tipos();
+  </script>
+  <script>
+    const Oficinas = () => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const oficinas = JSON.parse(xhr.response)
+
+          const cbo = document.getElementById('cboofi')
+
+          oficinas.map((itm) => {
+            const option = document.createElement('option')
+            option.value = itm.IDOFIC
+            option.text = itm.DESOFI
+            if (itm.IDOFIC === <%- datos.documento.ofifra %>) {
+              option.selected = true
+            }
+            cbo.appendChild(option)
+          })
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/oficinas', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send()
+    }
+    Oficinas();
   </script>
 </body>
 </html>

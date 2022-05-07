@@ -165,7 +165,7 @@
                       <div class="d-flex">
                         <div class="me-3">
                           <select class="form-select" id="cboofi" name="ofiusu" value="">
-                            <option value="-1">TODAS LAS OFICINAS</option>
+                            <option value="0">TODAS LAS OFICINAS</option>
                           </select>
                         </div>
 
@@ -182,10 +182,9 @@
                       <thead>
                       <tr class="header">
                         <th class="w-4"></th>
-                        <th class="w-6">Origen</th>
+                        <th class="w-5">Origen</th>
                         <th class="w-8">Oficina</th>
-                        <th class="w-6">Fecha</th>
-                        <th class="w-5">Hora</th>
+                        <th class="w-10">Fecha</th>
                         <th class="w-6">NIF</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
@@ -198,22 +197,22 @@
                         <% datos.citas.map(element => { %>
                           <tr>
                             <td class="w-4">
-                              <div class="align-items-center py-2">                                
+                              <div class="align-items-center py-1">                                
                                 <% if (element.STACIT === 0) { %>
-                                  <span class="avatar avatar-sm avatar-rounded bg-red-lt">
-                                    <h6>D</h6>
+                                  <span class="avatar avatar-rounded bg-red-lt">
+                                    <h5>D</h5>
                                   </span>
                                 <% } else { %>
-                                  <span class="avatar avatar-sm avatar-rounded bg-green-lt">
-                                    <h6>T</h6>
+                                  <span class="avatar avatar-rounded bg-green-lt">
+                                    <h5>T</h5>
                                   </span>
                                 <% } %>
                               </div>
                             </td>
-                            <td class="w-6">
+                            <td class="w-5 px-3">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.ORGCIT.slice(0,8) %></div>
+                                  <div class="font-weight-medium"><%- element.ORGCIT.slice(0,4) %></div>
                                 </div>
                               </div>
                             </td>                            
@@ -224,17 +223,10 @@
                                 </div>
                               </div>
                             </td>
-                            <td class="w-6">
+                            <td class="w-10">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.STRFEC %></div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="w-5">
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.HORCIT %></div>
+                                  <div class="font-weight-medium"><%- element.STRFEC %> <%- element.HORCIT %></div>
                                 </div>
                               </div>
                             </td>
@@ -444,7 +436,7 @@
     <script>
       const elem = document.getElementById('cboofi');
       elem.onchange = (event) => {
-        window.location.href = `http://localhost:4000/admin/citas/oficina/${event.target.value}`
+        window.location.href = `http://localhost:4000/admin/citas`        
         setCookie('oficina', event.target.value, .5) // medio dia
       }
 
@@ -487,31 +479,31 @@
       }
       Oficinas();
     </script>
-  <script>
-    let tipos;
-    const Tipos = () => {
-      const xhr = new XMLHttpRequest();
+    <script>
+      let tipos;
+      const Tipos = () => {
+        const xhr = new XMLHttpRequest();
 
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          tipos = JSON.parse(xhr.response)
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            tipos = JSON.parse(xhr.response)
 
-          const cbo = document.getElementById('cbotip')
+            const cbo = document.getElementById('cbotip')
 
-          tipos.map((itm) => {
-            const option = document.createElement('option')
-            option.value = itm.IDTIPO
-            option.text = itm.DESTIP
+            tipos.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDTIPO
+              option.text = itm.DESTIP
 
-            cbo.appendChild(option)
-          })
-        }
-      };
-      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send()
-    }
-    Tipos();
-  </script>
+              cbo.appendChild(option)
+            })
+          }
+        };
+        xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send()
+      }
+      Tipos();
+    </script>
   </body>
 </html>

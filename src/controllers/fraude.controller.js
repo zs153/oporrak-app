@@ -80,20 +80,21 @@ export const editPage = async (req, res) => {
     })
 
     const documento = {
-      iddocu: result.data.IDFRAU,
-      fecdoc: result.data.FECFRA,
+      idfrau: result.data.IDFRAU,
+      fecfra: result.data.FECFRA,
       nifcon: result.data.NIFCON,
       nomcon: result.data.NOMCON,
       emacon: result.data.EMACON,
       telcon: result.data.TELCON,
       movcon: result.data.MOVCON,
-      refdoc: result.data.REFFRA,
-      tipdoc: result.data.TIPFRA,
-      ejedoc: result.data.EJEFRA,
-      ofidoc: result.data.OFIFRA,
-      obsdoc: result.data.OBSFRA,
-      fundoc: result.data.FUNFRA,
-      liqdoc: result.data.LIQFRA,
+      reffra: result.data.REFFRA,
+      tipfra: result.data.TIPFRA,
+      ejefra: result.data.EJEFRA,
+      ofifra: result.data.OFIFRA,
+      obsfra: result.data.OBSFRA,
+      funfra: result.data.FUNFRA,
+      liqfra: result.data.LIQFRA,
+      stafra: result.data.STAFRA,
     }
     const datos = {
       documento,
@@ -432,20 +433,23 @@ export const resol = async (req, res) => {
   const user = req.user
   const fraude = {
     idfrau: req.body.idfrau,
-    liqfra: user.userID,
-    stafra: estadosFraude.resuelto,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.resolverFraude,
   }
 
   try {
-    const resul = await axios.post('http://localhost:8000/api/fraude', {
+    const result = await axios.post('http://localhost:8000/api/fraude', {
       fraude,
     })
 
-    if (resul.data.STAFRA === estadosFraude.asignado) {
+    if (result.data.STAFRA === estadosFraude.asignado) {
+      const fraude = {
+        idfrau: req.body.idfrau,
+        liqfra: user.userID,
+        stafra: estadosFraude.resuelto,
+      }
+      const movimiento = {
+        usumov: user.id,
+        tipmov: tiposMovimiento.resolverFraude,
+      }
       const result = await axios.post(
         'http://localhost:8000/api/fraudes/cambio',
         {
@@ -502,12 +506,6 @@ export const remit = async (req, res) => {
   const user = req.user
   const fraude = {
     idfrau: req.body.idfrau,
-    liqfra: user.userID,
-    stafra: estadosFraude.remitido,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.remitirFraude,
   }
 
   try {
@@ -516,6 +514,15 @@ export const remit = async (req, res) => {
     })
 
     if (resul.data.STAFRA === estadosFraude.asignado) {
+      const fraude = {
+        idfrau: req.body.idfrau,
+        liqfra: user.userID,
+        stafra: estadosFraude.remitido,
+      }
+      const movimiento = {
+        usumov: user.id,
+        tipmov: tiposMovimiento.remitirFraude,
+      }
       await axios.post('http://localhost:8000/api/fraudes/cambio', {
         fraude,
         movimiento,
@@ -619,7 +626,7 @@ export const sms = async (req, res) => {
       movimiento,
     })
 
-    res.redirect('/admin/fradues')
+    res.redirect('/admin/fraudes')
   } catch (error) {
     const msg = 'No se ha podido enviar el sms.'
 

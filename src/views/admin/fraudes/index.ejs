@@ -67,7 +67,7 @@
                 <a href="#" class="dropdown-item" onclick="{document.getElementById('idchan').value ='<%- user.id %>'}" data-bs-toggle="modal" data-bs-target="#modal-change">
                   <i class="bi bi-key dropdown-item-icon"></i>Cambiar contraseña
                 </a>
-                <a href="/admin/fraudes/ver" class="dropdown-item">
+                <a href="/admin/fraudes/vertodo" class="dropdown-item">
                     <i class="bi bi-eye dropdown-item-icon"></i>Mostrar todo
                 </a>
                 <div class="dropdown-divider"></div>
@@ -270,12 +270,12 @@
                                       </a>
                                       <ul>
                                         <li class="nav-item">
-                                          <a href="/admin/formularios/edit/<%- element.IDFRAU %>" class="nav-link">
+                                          <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
                                             <i class="bi bi-pencil dropdown-item-icon"></i>Editar documento</a>
                                           </a>
                                         </li>
                                         <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('idfrau').value ='<%- element.IDFRAU %>', document.getElementById('delfor').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                                          <a href="#" class="nav-link" onclick="{document.getElementById('idfrau').value ='<%- element.IDFRAU %>', document.getElementById('texdel').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
                                             <i class="bi bi-trash dropdown-item-icon"></i>Borrar documento
                                           </a>
                                         </li>
@@ -297,7 +297,7 @@
                                         </a>
                                         <ul>
                                           <li class="nav-item">
-                                              <a href="/admin/formularios/edit/<%- element.IDFRAU %>" class="nav-link">
+                                              <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
                                                 <i class="bi bi-pencil dropdown-item-icon"></i>Editar documento</a>
                                               </a>
                                           </li>
@@ -326,12 +326,12 @@
                                         </a>
                                         <ul>
                                           <li class="nav-item">
-                                              <a href="/admin/formularios/edit/<%- element.IDFRAU %>" class="nav-link">
+                                              <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
                                                 <i class="bi bi-pencil dropdown-item-icon"></i>Editar documento</a>
                                               </a>
                                           </li>
                                           <li class="nav-item">
-                                            <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.MOVCON %>', document.getElementById('texres').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>', document.getElementById('resdoc').value ='<%- element.IDFRAU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('movres').value ='<%- element.MOVCON %>', document.getElementById('texres').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>', document.getElementById('resfra').value ='<%- element.IDFRAU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
                                               <i class="bi bi-check2 dropdown-item-icon"></i>Resolver documento
                                             </a>
                                           </li>
@@ -395,7 +395,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>¿Desea borrar este documento?</h3>
-            <div id="deltex"></div>
+            <div id="texdel"></div>
             <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
           </div>
           <div class="modal-footer">
@@ -406,7 +406,7 @@
                 </div>
                 <div class="col">
                   <form action="/admin/fraudes/delete" method="POST">
-                    <input type="hidden" id="delfra" name="idfrau" value="">
+                    <input type="hidden" id="idfrau" name="idfrau" value="">
                     <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar fraude</button>
                   </form>
                 </div>
@@ -451,7 +451,7 @@
     </div>
 
     <div class="modal modal-blur fade" id="modal-resolver" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="modal-status bg-success"></div>
@@ -462,6 +462,34 @@
               <path d="M9 12l2 2l4 -4"></path>
             </svg> 
             <h3>Resolver fraude</h3>
+              <div id="texres"></div>
+              <div class="card-header">
+                SMS
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="mb-1">
+                      <label class="form-label text-start">Móvil</label>
+                      <input type="text" name="movsms" id="movres" class="form-control" value="" readonly/>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="mb-1">
+                      <label class="form-label text-start">Texto sms</label>
+                      <textarea autofocus name="texsms" id="texsms" class="form-control" value="" maxlength="140" rows="3" style="resize: vertical" ></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-2 text-start">
+                      <label class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" name="chkenv" id="chkenv" />
+                        <span class="form-check-label">Enviar</span>
+                      </label>
+                  </div>
+                </div>
+              </div>              
           </div>
           <div class="modal-footer">
             <div class="w-100">
@@ -471,7 +499,7 @@
                 </div>
                 <div class="col">
                   <form action="/admin/fraudes/resolver" method="POST">
-                    <input type="hidden" id="resol" name="idfrau" value="">
+                    <input type="hidden" id="resfra" name="idfrau" value="">
                     <button type="submit" class="btn btn-success w-100">Resolver fraude</button>
                   </form>
                 </div>
@@ -494,6 +522,7 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>Remitir fraude</h3>
+            <div id="texrem"></div>
           </div>
           <div class="modal-footer">
             <div class="w-100">
@@ -525,7 +554,8 @@
               <path d="M12 9v2m0 4v.01"></path>
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
-            <h3>Desasignar fraude</h3>
+            <h3>Desasignar documento</h3>
+            <div id="texdes"></div>
           </div>
           <div class="modal-footer">
             <div class="w-100">
@@ -536,7 +566,7 @@
                 <div class="col">
                   <form action="/admin/fraudes/desasignar" method="POST">
                     <input type="hidden" id="desasig" name="idfrau" value="">
-                    <button type="submit" class="btn btn-danger w-100">Desasignar fraude</button>
+                    <button type="submit" class="btn btn-danger w-100">Desasignar documento</button>
                   </form>
                 </div>
               </div>
@@ -554,7 +584,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form action="/admin/fraudes/sms" method="POST" onsubmit="return validateSms();">
-            <input type="hidden" name="frasms" id="idsmss">
+            <input type="hidden" name="idfrau" id="idsmss">
             <div class="modal-body">
               <div class="card-body">
                 <div class="row">
@@ -562,6 +592,12 @@
                     <div class="mb-1">
                       <label class="form-label">Movil</label>
                       <input type="text" name="movsms" id="movsms" class="form-control" value="" readonly/>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="mb-1">
+                      <label class="form-label">Nombre</label>
+                      <input type="text" name="nomcon" id="nomsms" class="form-control" value="" readonly/>
                     </div>
                   </div>
                 </div>
@@ -608,7 +644,7 @@
     <script>
       function checkItem(elem) {
         <% if (datos.verTodo) { %>
-          window.location.href = 'http://localhost:4000/admin/formularios'          
+          window.location.href = 'http://localhost:4000/admin/fraudes'          
         <% } else { %>
           window.location.href = 'http://localhost:4000/admin/fraudes/vertodo'
         <% } %>
