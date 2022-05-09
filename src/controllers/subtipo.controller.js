@@ -56,7 +56,6 @@ export const editPage = async (req, res) => {
     const result = await axios.post('http://localhost:8000/api/subtipo', {
       subtipo,
     })
-    console.log(result.data)
     const documento = {
       idsubt: result.data.IDSUBT,
       dessub: result.data.DESSUB,

@@ -279,7 +279,7 @@ export const ejercicioPage = async (req, res) => {
 // procs
 export const insert = async (req, res) => {
   const user = req.user
-  const referencia = 'Z' + randomString(10, '1234567890YMGS')
+  const referencia = 'F' + randomString(10, '1234567890YMGS')
   const fraude = {
     fecfra: req.body.fecfra,
     nifcon: req.body.nifcon,
@@ -395,22 +395,26 @@ export const remove = async (req, res) => {
 }
 export const asign = async (req, res) => {
   const user = req.user
-  const fraude = {
+  let fraude = {
     idfrau: req.body.idfrau,
-    liqfra: user.userID,
-    stafra: estadosFraude.asignado,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.asignarFraude,
   }
 
   try {
-    const resul = await axios.post('http://localhost:8000/api/fraude', {
+    const result = await axios.post('http://localhost:8000/api/fraude', {
       fraude,
     })
 
-    if (resul.data.STAFRA === estadosFraude.pendiente) {
+    fraude = {
+      idfrau: result.data.IDFRAU,
+      liqfra: user.userID,
+      stafra: estadosFraude.asignado,
+    }
+    const movimiento = {
+      usumov: user.id,
+      tipmov: tiposMovimiento.asignarFraude,
+    }
+
+    if (result.data.STAFRA === estadosFraude.pendiente) {
       const result = await axios.post(
         'http://localhost:8000/api/fraudes/cambio',
         {

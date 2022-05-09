@@ -387,18 +387,13 @@
     </script>
     <script>
       const filtroCitas = () => {
-        const trs = document.querySelectorAll('#tblCitas tr:not(.header)')
-        const filter = document.querySelector('#buscarCitBox').value
-        const regex = new RegExp(filter, 'i')
-        const isFoundInTds = td => regex.test(td.innerText)
-        const isFound = childrenArr => childrenArr.some(isFoundInTds)
-        const setTrStyleDisplay = ({ style, children }) => {
-          style.display = isFound([
-            ...children
-          ]) ? '' : 'none' 
-        }
-        
-        trs.forEach(setTrStyleDisplay)
+        const filter = document.querySelector('#buscarCitBox').value.toUpperCase()
+
+        document.querySelectorAll('#tblCitas tr:not(.header)').forEach((tr) => {
+          const anyMatch = [...tr.children]
+            .some(td => td.textContent.toUpperCase().includes(filter));
+          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
+        });      
       }      
     </script>
     <script>

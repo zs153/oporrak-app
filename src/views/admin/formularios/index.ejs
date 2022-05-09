@@ -424,7 +424,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal modal-blur fade" id="modal-asignar" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -457,7 +456,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal modal-blur fade" id="modal-resolver" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -517,7 +515,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal modal-blur fade" id="modal-remitir" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -550,7 +547,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal modal-blur fade" id="modal-desasignar" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -583,7 +579,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal modal-blur fade" id="modal-sms" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -672,18 +667,13 @@
     </script>     
     <script>
       const filtroDocumentos = () => {
-        const trs = document.querySelectorAll('#tblDocumentos tr:not(.header)')
-        const filter = document.querySelector('#buscarDocBox').value
-        const regex = new RegExp(filter, 'i')
-        const isFoundInTds = (td) => regex.test(td.innerHTML)
-        const isFound = childrenArr => childrenArr.some(isFoundInTds)
-        const setTrStyleDisplay = ({ style, children }) => {
-          style.display = isFound([
-            ...children
-          ]) ? '' : 'none' 
-        }
-        
-        trs.forEach(setTrStyleDisplay)
+        const filter = document.querySelector('#buscarDocBox').value.toUpperCase()
+
+        document.querySelectorAll('#tblDocumentos tr:not(.header)').forEach((tr) => {
+          const anyMatch = [...tr.children]
+            .some(td => td.textContent.toUpperCase().includes(filter));
+          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
+        });        
       }
     </script>
     <script>

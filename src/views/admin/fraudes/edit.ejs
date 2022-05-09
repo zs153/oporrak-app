@@ -230,7 +230,7 @@
                       <div class="col-2">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Movil</label>
+                            <label class="form-label">Movil</label>
                             <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
                             <div class="invalid-feedback"></div>
                           </div>
@@ -300,63 +300,38 @@
   <script>
     const nifcon = document.getElementById('nifcon')
     const nomcon = document.getElementById('nomcon')
-    const movcon = document.getElementById('movcon')
     const ejefra = document.getElementById('ejefra')
     const fecfra = document.getElementById('fecfra')
     
     const validate = () => {
       const nifconValue = nifcon.value.trim()
       const nomconValue = nomcon.value.trim()
-      const movconValue = movcon.value.trim()
       const ejefraValue = ejefra.value.trim()
       const fecfraValue = fecfra.value.trim()
 
       if (nifconValue === '') {
         setError(nifcon, 'NIF/NIE requerido')
+        setTimeout(function () {
+          setSuccess(nifcon)
+        }, 3000)
         return false
-      } else {
-        const pattern = /^([X-Y][0-9]{7}[A-Z]{1})|([0-9]{8}[A-Z]{1})$/
-
-        if (!pattern.test(nifconValue)){
-          setError(nifcon, 'Introduzca NIF/NIE válido')
-          return false
-        }
-
-        const strBase = "TRWAGMYFPDXBNJZSQVHLCKET";
-        const primeraPosicion = nifconValue.slice(0, 1);
-        const letraNif = nifconValue.slice(8);
-        let nuevoNif = nifconValue;
-
-        if (isNaN(primeraPosicion)) {
-          nuevoNif = nifconValue.slice(1);
-          if (primeraPosicion === 'X') {
-            nuevoNif = '0' + nuevoNif;
-          } else if (primeraPosicion === "Y") {
-            nuevoNif = "1" + nuevoNif;
-          } else if (primeraPosicion === "Z") {
-            nuevoNif = "2" + nuevoNif;
-          }
-        }
-
-        const dniNumero = nuevoNif.slice(0, 8);
-        const pos = parseInt(dniNumero) % 23;
-        const letra = strBase.slice(pos, pos + 1);
-        const isValid = letraNif === letra
-
-        if(isValid === false) {
-          setError(nifcon, 'Introduzca NIF/NIE válido')
-          return false
-        }
+      } else {º
         setSuccess(nifcon)
       }
       if (nomconValue === '') {
         setError(nomcon, 'Nombre requerido')
+        setTimeout(function () {
+          setSuccess(nomcon)
+        }, 3000)
         return false
       } else {
         setSuccess(nomcon)
       }
       if (ejefraValue === '') {
         setError(ejefra, 'Ejercicio requerido')
+        setTimeout(function () {
+          setSuccess(ejefra)
+        }, 3000)
         return false
       } else {
         const pattern = /^([0-9]{4})$/
@@ -364,28 +339,21 @@
 
         if(isValid === false) {
           setError(ejefra, 'Introduzca ejercicio válido')
+          setTimeout(function () {
+            setSuccess(ejefra)
+          }, 3000)
           return false
         }
         setSuccess(ejefra)        
       }
       if (isNaN(Date.parse(fecfraValue))) {
         setError(fecfra, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(fecfra)
+        }, 3000)
         return false
       } else {
         setSuccess(fecfra)        
-      }      
-      if (movconValue === '') {
-        setError(movcon, 'Movil requerido')
-        return false
-      } else {
-        const pattern = /^([6]{1})([0-9]{8})|(7[1-4]{1})([0-9]{7})$/
-        const isValid = pattern.test(movconValue)
-
-        if(isValid === false) {
-          setError(movcon, 'Introduzca movil válido')
-          return false
-        }
-        setSuccess(movcon)
       }
 
       return true
