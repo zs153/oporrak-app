@@ -11,9 +11,10 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.post('http://localhost:8000/api/subtipos')
     const datos = {
-      subtipos: result.data,
+      documentos: result.data,
       arrOrigenTipo,
     }
+
     res.render('admin/subtipos', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -25,7 +26,7 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const subtipo = {
+  const documento = {
     idsubt: 0,
     dessub: '',
     idtipo: 0,
@@ -33,7 +34,7 @@ export const addPage = async (req, res) => {
 
   try {
     const datos = {
-      subtipo,
+      documento,
     }
 
     res.render('admin/subtipos/add', { user, datos })
@@ -47,20 +48,22 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
+  const subtipo = {
+    idsubt: req.params.id,
+  }
 
   try {
     const result = await axios.post('http://localhost:8000/api/subtipo', {
-      idsubt: req.params.id,
+      subtipo,
     })
-
-    const subtipo = {
+    console.log(result.data)
+    const documento = {
       idsubt: result.data.IDSUBT,
       dessub: result.data.DESSUB,
       idtipo: result.data.IDTIPO,
-      idtold: result.data.IDTIPO,
     }
     const datos = {
-      subtipo,
+      documento,
     }
 
     res.render('admin/subtipos/edit', { user, datos })
@@ -107,7 +110,6 @@ export const updateSubtipo = async (req, res) => {
   const subtipo = {
     idsubt: req.body.idsubt,
     dessub: req.body.dessub,
-    idtold: req.body.idtold,
     idtipo: req.body.idtipo,
   }
   const movimiento = {

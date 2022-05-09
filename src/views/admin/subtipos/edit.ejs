@@ -150,7 +150,7 @@
                   <% }) %> 
                 <% } %>                   
                 <form action="/admin/subtipos/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" id="idsubt" name="idsubt" value="<%- datos.subtipo.idsubt %>">
+                  <input type="hidden" id="idsubt" name="idsubt" value="<%- datos.documento.idsubt %>">
                   <div class="card-header">
                     Tipo
                   </div>
@@ -160,7 +160,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="dessub" id="dessub" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.subtipo.dessub %>" autofocus/>
+                            <input type="text" name="dessub" id="dessub" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.dessub %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -169,8 +169,8 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label">Tipo</label>
-                            <input type="hidden" id="idtold" name="idtold" value="<%- datos.subtipo.idtold %>">
-                            <select class="form-select" id="cboorg" name="idtipo" value="<%- datos.subtipo.idtipo %>">
+                            <input type="hidden" id="idtold" name="idtold" value="<%- datos.documento.idtold %>">
+                            <select class="form-select" id="cboorg" name="idtipo" value="<%- datos.documento.idtipo %>">
                             </select>
                             <div class="invalid-feedback"></div>
                           </div>
@@ -251,7 +251,7 @@
             const option = document.createElement('option')
             option.value = itm.IDTIPO
             option.text = itm.DESTIP
-            if (itm.IDTIPO === <%- datos.subtipo.idtipo %>) {
+            if (itm.IDTIPO === <%- datos.documento.idtipo %>) {
               option.selected = true
             }
             cbo.appendChild(option)

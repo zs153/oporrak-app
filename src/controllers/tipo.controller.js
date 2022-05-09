@@ -18,6 +18,7 @@ export const mainPage = async (req, res) => {
     })
     const datos = {
       documentos: result.data,
+      arrOrigenTipo,
       verTodo,
     }
 
