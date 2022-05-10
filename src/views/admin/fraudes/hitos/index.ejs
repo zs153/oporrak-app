@@ -11,6 +11,32 @@
     <!-- custom -->
     <link rel="stylesheet" href="/css/estilos.min.css">
     <link rel="stylesheet" href="/css/navbar.css">
+    <style>
+      .sortable th {
+        cursor: pointer;
+      }
+      .sortable .th-sort-asc::after {
+        content: "\25b4";
+      }
+      .sortable .th-sort-desc::after {
+        content: "\25be";
+      }
+      .sortable .th-sort-asc::after,
+      .sortable .th-sort-desc::after {
+        margin-left: 5px;
+      }
+      .subtitulo {
+        position: absolute;
+        top: 2rem;
+        bottom: 0;
+        left: 1rem;
+        align-items: center;
+        justify-content: center;
+        color: #656d77;
+        pointer-events: none;
+        font-size: 0.8em;
+      }      
+    </style>
   </head>
   <body class="antialiased">
     <div class="wrapper">
@@ -24,6 +50,43 @@
               <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
             </a>
           </h1>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="nav-item dropdown d-none d-md-flex me-3">
+              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
+                <span class="badge bg-white"></span>
+                <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
+                <div class="card">
+                  <div class="card-body">
+                    <ul id="messages" style="list-style: none;"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                <div class="d-none d-xl-block">
+                  <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
+                  <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
+                </a>
+                <a href="#" class="dropdown-item" onclick="checkItem(this)">
+                    <% if (datos.verTodo ) { %>
+                      <i class='bi bi-eye-slash dropdown-item-icon'></i>Solo pendientes
+                    <% } else { %>
+                      <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
+                    <% } %>
+                </a>                
+                <div class="dropdown-divider"></div>
+                <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -95,7 +158,7 @@
                     <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
                   </a>
                 </div>
-              </li>
+              </li>            
             </ul>
           </div>
         </div>
@@ -104,53 +167,21 @@
       <div class="page-wrapper">
         <div class="page-body">
           <div class="container-xl">
-            <div class="row row-cards">
+            <div class="row">
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    Fraude
-                  </div>
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col">
-                        <div class="page-subtitle">
-                          <div class="row">
-                            <div class="col-auto">
-                              <label class="form-label">Referencia</label>
-                              <div class="text-muted">
-                                <a href="/admin/fraudes/edit/<%- datos.fraude.idfrau %>" class="text-reset"><%- datos.fraude.reffra %></a>
-                              </div>
-                            </div>
-                            <div class="col-auto">
-                              <label class="form-label">NIF/NIE</label>
-                              <div class="text-muted">
-                                <%- datos.fraude.nifcon %> 
-                              </div>
-                            </div>
-                            <div class="col-auto">
-                              <label class="form-label">Nombre</label>
-                              <div class="text-muted">
-                                <%- datos.fraude.nomcon %> 
-                              </div>
-                            </div>
-                            <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div class="card-header">                    
-                    Hitos
+                    <h3 class="card-title">Hitos</h3>
+                    <p class="subtitulo">
+                      <%- datos.fraude.NIFCON %> <%- datos.fraude.NOMCON %>
+                    </p>                    
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarSMSBox" onkeyup="filtroSmss();" placeholder="Buscar..."
-                            aria-label="Buscar en sms">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarSMSBox" onkeyup="filtroSmss();" placeholder="Buscar..." aria-label="Buscar en sms">
                         </div>
-                        <a href="/admin/fraudes/hitos/add/<%- datos.fraude.idfrau %>" class="btn btn-primary">
+                        <a href="/admin/fraudes/hitos/add/<%- datos.fraude.IDFRAU %>" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -159,31 +190,30 @@
                           Nuevo
                         </a>
                       </div>
-                    </div>                    
+                    </div>
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-striped table-fixHead" id="tblSmss">
+                    <table class="table table-vcenter table-striped table-fixHead sortable" id="tblHitos">
                       <thead>
-                      <tr>
-                        <th></th>
-                        <th>Fecha</th>
+                      <tr class="header">
+                        <th class="w-4"></th>
+                        <th class="w-8 px-3">Fecha</th>
                         <th>Tipo</th>
-                        <th>Observación</th>
-                        <th>Importe</th>
-                        <th class="w-2"></th>
+                        <th>Subtipo</th>
+                        <th>Observaciones</th>
+                        <th class="w-9">Valor</th>
+                        <th class="w-4"></th>
                       </tr>
                       </thead>
                       <tbody>
                         <% datos.hitos.map(element => { %>
                           <tr>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">                                
-                                <span class="avatar me-2 avatar-rounded">
-                                  <h6><%- element.IDHITO %></h6>
-                                </span>
-                              </div>
-                            </td>
-                            <td>
+                            <td class="w-4">
+                              <span class="avatar avatar-rounded bg-green-lt">
+                                <h5>H</h5>
+                              </span>
+                            </td>                            
+                            <td class="w-8 px-3">
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.STRFEC %></div>
@@ -191,7 +221,7 @@
                               </div>
                             </td>
                             <td>
-                              <div class="d-flex py-1 align-items-center"></div>
+                              <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.DESTIP %></div>
                                 </div>
@@ -200,18 +230,27 @@
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.OBSHIT.length > 20 ? element.OBSHIT.slice(0,20) + '...' : element.OBSHIT %></div>
+                                  <div class="font-weight-medium"><%- element.DESSUB %></div>
                                 </div>
                               </div>
                             </td>
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.STRIMP %></div>
+                                  <% if (element.OBSHIT !== null) { %>
+                                    <div class="font-weight-medium"><%- element.OBSHIT.length > 30 ? element.OBSHIT.slice(0,30) + '...': element.OBSHIT %></div>
+                                  <% }%>
                                 </div>
                               </div>
-                            </td>                            
-                            <td class="text-end w-2">
+                            </td>
+                            <td class="w-9">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.IMPHIT %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="text-end w-4">
                               <ul class="dots-menu">
                                 <li class="nav-item drop-right">
                                   <a href="#" class="nav-link">
@@ -219,17 +258,17 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/fraudes/hitos/edit/<%- datos.fraude.idfrau %>/<%- element.IDHITO %>" class="nav-link">
-                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar hito</a>
-                                        </a>
+                                      <a href="/admin/fraudes/hitos/edit/<%- element.IDHITO %>" class="nav-link">
+                                        <i class="bi bi-pencil dropdown-item-icon"></i>Editar hito</a>
+                                      </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('texhit').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
-                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar sms
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('delhit').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESHIT %></p><p><%- element.OBSHIT %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
                                       </a>
                                     </li>
                                   </ul>
-                                </li>
+                                </li>                              
                               </ul>
                             </td>
                           </tr>
@@ -291,31 +330,65 @@
     </div>
 
     <script src="/js/ayuda.js"></script>
+    <script src="/socket.io/socket.io.js"></script>    
     <script>
-      function filtroHitos() {
-        const input = document.getElementById("buscarHitoBox");
-        const filter = input.value.toUpperCase();
-        const table = document.getElementById("tblHitos");
-        const tr = table.getElementsByTagName("tr");
-        let arrTd
-        let td
-        let match = true
+      const messages = document.getElementById('messages')
+      const socket = io()
 
-        for (let i = 0; i < tr.length; i++) {
-          arrTd = tr[i].getElementsByTagName("td");
-          for(let j = 0; j < arrTd.length; j++) {
-            td = arrTd[j]
-            if (td) {
-              if (td.innerText.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-                break
-              } else {
-                tr[i].style.display = "none";
-              }
-            }
-          }
+      socket.on('receive-message', msg => {
+        const li = document.createElement('li')
+        li.textContent = msg
+        messages.appendChild(li)
+
+        const toggleBadge = document.querySelector('#toggleBadge');
+        const numeroMensajes = messages.getElementsByTagName("li").length
+        if (numeroMensajes === 1) {
+          toggleBadge.classList.toggle('d-none')
         }
+      })
+    </script>
+    <script>
+      function filtroFraudes() {
+        const filter = document.querySelector('#buscarHitoBox').value.toUpperCase()
+
+        document.querySelectorAll('#tblHitos tr:not(.header)').forEach((tr) => {
+          const anyMatch = [...tr.children]
+            .some(td => td.textContent.toUpperCase().includes(filter));
+          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
+        });
       }
     </script>
+    <script>
+      function sortTableByColumn(table, column, asc = true) {
+        const dirModifier = asc ? 1 : -1;
+        const tBody = table.tBodies[0];
+        const rows = Array.from(tBody.querySelectorAll("tr"));
+
+        const sortedRows = rows.sort((a, b) => {
+          const aColText = a.cells[column].textContent;
+          const bColText = b.cells[column].textContent;
+
+          return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+        });
+
+        for(let row of sortedRows) {
+          tBody.appendChild( row );
+        }
+
+        table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
+        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-asc", asc);
+        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-desc", !asc);
+      }
+
+      document.querySelectorAll(".sortable th").forEach(headerCell => {
+        headerCell.addEventListener("click", () => {
+          const tableElement = headerCell.parentElement.parentElement.parentElement;
+          const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+          const currentIsAscending = headerCell.classList.contains("th-sort-asc");
+          
+          sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+        });
+      });
+    </script>  
   </body>
 </html>

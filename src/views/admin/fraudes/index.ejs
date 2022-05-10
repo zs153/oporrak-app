@@ -11,21 +11,21 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
-    <style>
-      .sortable th {
-        cursor: pointer;
-      }
-      .sortable .th-sort-asc::after {
-        content: "\25b4";
-      }
-      .sortable .th-sort-desc::after {
-        content: "\25be";
-      }
-      .sortable .th-sort-asc::after,
-      .sortable .th-sort-desc::after {
-        margin-left: 5px;
-      }
-    </style>
+  <style>
+    .sortable th {
+      cursor: pointer;
+    }
+    .sortable .th-sort-asc::after {
+      content: "\25b4";
+    }
+    .sortable .th-sort-desc::after {
+      content: "\25be";
+    }
+    .sortable .th-sort-asc::after,
+    .sortable .th-sort-desc::after {
+      margin-left: 5px;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -161,20 +161,19 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  Fraudes
+                  <h3 class="card-title">Fraudes</h3>
                   <div class="col-auto ms-auto">
                     <div class="d-flex">
                       <div class="input-icon me-3">
                         <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarFraudeBox" onkeyup="filtroFraudes();" placeholder="Buscar..."
-                          aria-label="Buscar en fraudes">
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarFraudeBox" onkeyup="filtroFraudes();" placeholder="Buscar..." aria-label="Buscar en fraudes">
                       </div>
                       <a href="/admin/fraudes/add" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                           <line x1="12" y1="5" x2="12" y2="19"></line>
                           <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg>
+                        </svg>
                         Nuevo
                       </a>
                     </div>
@@ -204,19 +203,19 @@
                                   <span class="avatar avatar-rounded bg-red-lt">
                                     <h6><%- element.LIQFRA %></h6>
                                   </span>
-                                <% } else if (element.STAFRA === 1) { %>
+                              <% } else if (element.STAFRA === 1) { %>
                                   <span class="avatar avatar-rounded bg-blue-lt">
                                     <h6><%- element.LIQFRA %></h6>
                                   </span>
-                                <% } else if (element.STAFRA === 2) { %>
+                              <% } else if (element.STAFRA === 2) { %>
                                   <span class="avatar avatar-rounded bg-green-lt">
                                     <h6><%- element.LIQFRA %></h6>
                                   </span>
-                                <% } else { %>
+                              <% } else { %>
                                   <span class="avatar avatar-rounded bg-orange-lt">
                                     <h6><%- element.LIQFRA %></h6>
                                   </span>
-                                <% } %>
+                              <% } %>
                             </div>
                           </td>
                           <td class="w-8 px-3">
@@ -284,7 +283,7 @@
                                         </a>
                                       </li>
                                       <li class="nav-item">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('IDFRAU').value ='<%- element.IDFRAU %>', document.getElementById('delfor').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                                        <a href="#" class="nav-link" onclick="{document.getElementById('idfrau').value ='<%- element.IDFRAU %>', document.getElementById('delfor').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
                                           <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
                                         </a>
                                       </li>
@@ -307,7 +306,7 @@
                                       <ul>
                                         <li class="nav-item">
                                             <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                              <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude</a>
+                                              <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -335,9 +334,9 @@
                                       </a>
                                       <ul>
                                         <li class="nav-item">
-                                            <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                              <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude</a>
-                                            </a>
+                                          <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
+                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude</a>
+                                          </a>
                                         </li>
                                         <li class="nav-item">
                                           <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.MOVCON %>', document.getElementById('texres').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>', document.getElementById('resdoc').value ='<%- element.IDFRAU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
@@ -353,6 +352,17 @@
                                           <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDFRAU %>', document.getElementById('texdes').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
                                             <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
                                           </a>
+                                        </li>
+                                        <li class="nav-item list-divider"></li>
+                                        <li class="nav-item ">
+                                            <a href="/admin/fraudes/vinculos/<%- element.IDFRAU %>" class="nav-link">
+                                              <i class="bi bi-link-45deg dropdown-item-icon"></i>Vínculos
+                                            </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="/admin/fraudes/hitos/<%- element.IDFRAU %>" class="nav-link">
+                                              <i class="bi bi-flag dropdown-item-icon"></i>Hitos
+                                            </a>
                                         </li>
                                         <li class="nav-item list-divider"></li>
                                         <li class="nav-item ">

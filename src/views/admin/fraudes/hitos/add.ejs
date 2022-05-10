@@ -155,7 +155,7 @@
                   </div>
                   <div class="card-body">                    
                     <div class="row">
-                      <div class="col-5">
+                      <div class="col-7">
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
                           <select class="form-select" id="cbotip" name="tiphit">
@@ -169,9 +169,11 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-2">
+                    </div>
+                    <div class="row">
+                      <div class="col-3">
                         <div class="mb-1">
-                          <div class="form-label">Importe</div>
+                          <div class="form-label">Valor</div>
                           <input type="text" name="imphit" id="imphit" class="form-control" onkeyup="this.value=this.value.replace('.',',')" />
                         </div>
                       </div>
@@ -180,7 +182,7 @@
                       <div class="col-12">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Observaciones</label>
+                            <label class="form-label">Observaciones</label>
                             <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"></textarea>
                             <div class="invalid-feedback"></div>
                           </div>
@@ -232,112 +234,73 @@
     })
   </script>
   <script>
-    const arrSubtipos = <%- JSON.stringify(datos.subtipos) %>
     const selectTipos = document.querySelector('#cbotip');
     const selectSubtipos = document.querySelector('#cbosub')    
     
     selectTipos.addEventListener('change', (event) => {
       const options = document.querySelectorAll('#cbosub option');
       const idTipo = selectTipos.value
-      
-      options.forEach(o => o.remove());
-      
-      arrSubtipos.filter(item => item.IDTIPO == idTipo).map((itm) => {
-        const option = document.createElement('option')
-        option.value = itm.IDSUBT
-        option.text = itm.DESSUB
-        selectSubtipos.appendChild(option)
-      })
+
+      SubTipos(idTipo);
     });
   </script>
   <script>
-    const obshit = document.getElementById('obshit')
-
-    const validate = () => {
-      const obshitValue = obshit.value.trim()
-
-      if (obshitValue === '') {
-        setError(obshit, 'Observaciones requerida')
-        return false
-      } else {
-        setSuccess(obshit)
-      }
-
-      return true
-    }
-
-    const setSuccess = (element) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = '';
-      inputControl.classList.add('is-valid');
-      element.classList.remove('is-invalid');
-    }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = message;
-      element.classList.add('is-invalid');
-      inputControl.classList.remove('is-valid');
-    }
-  </script>
-  <script>
-    let tipos;
     const Tipos = () => {
       const xhr = new XMLHttpRequest();
 
       xhr.onload = function() {
         if (xhr.status === 200) {
-          tipos = JSON.parse(xhr.response)
-
+          const tipos = JSON.parse(xhr.response)
           const cbo = document.getElementById('cbotip')
 
           tipos.map((itm) => {
             const option = document.createElement('option')
             option.value = itm.IDTIPO
             option.text = itm.DESTIP
-            if (itm.IDTIPO === <%- datos.documento.tipfra %>) {
-              option.selected = true
-            }
+
             cbo.appendChild(option)
-          })
+          });
+
+          SubTipos(cbo.value)
         }
       };
       xhr.open('POST', 'http://localhost:8000/api/tipos', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send()
+      xhr.send(JSON.stringify({tipo: {orgtip: <%- datos.origenTipo.hito %>}}))
     }
     Tipos();
   </script>
   <script>
-    let tipos;
-    const SubTipos = () => {
+    const SubTipos = (idTipo) => {
       const xhr = new XMLHttpRequest();
 
       xhr.onload = function() {
         if (xhr.status === 200) {
-          tipos = JSON.parse(xhr.response)
-
+          const subtipos = JSON.parse(xhr.response)
           const cbo = document.getElementById('cbosub')
 
-          tipos.map((itm) => {
-            const option = document.createElement('option')
-            option.value = itm.IDSUBT
-            option.text = itm.DESSUB
-            if (itm.IDSUBT === <%- datos.documento.idsubt %>) {
-              option.selected = true
-            }
-            cbo.appendChild(option)
-          })
+          if (cbo.options.length > 0) {
+            const options = document.querySelectorAll('#cbosub option');
+            options.forEach(o => o.remove());
+          }
+          if (subtipos.length > 0) {
+            subtipos.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDSUBT
+              option.text = itm.DESSUB
+              
+              cbo.appendChild(option)
+            })
+            cbo.removeAttribute('disabled')
+          } else {
+            cbo.setAttribute("disabled", "disabled");
+          }
         }
       };
-      xhr.open('POST', 'http://localhost:8000/api/subtipos', true);
+      xhr.open('POST', 'http://localhost:8000/api/subtipos/tipo', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send()
+      xhr.send(JSON.stringify({tipo: {idtipo: idTipo}}))
     }
-    SubTipos();
   </script>  
 </body>
 </html>
