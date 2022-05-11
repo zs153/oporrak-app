@@ -156,12 +156,20 @@
                     Tipos
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
+                        <div class="me-3">
+                          <select class="form-select" id="cbotip" name="orgtip" value="">
+                            <% datos.arrOrigenTipo.map(element => { %> 
+                              <option value="<%- element.id %>" <%- element.id === parseInt(datos.tipo.orgtip) ? "selected" : "" %>><%= element.des %></option>
+                              <% }) %> 
+                            </select>
+                        </div>
+
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
                           <input type="text" class="form-control d-inline-block me-3" id="buscarTipoBox" onkeyup="filtroTipos();" placeholder="Buscar..."
                             aria-label="Buscar en tipos">
                         </div>
-                        <a href="/admin/tipos/add" class="btn btn-primary">
+                        <a href="/admin/tipos/add/<%- datos.tipo.orgtip %>" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -177,7 +185,6 @@
                       <thead>
                       <tr class="header">
                         <th>Descripción</th>
-                        <th class="w-15">Origen</th>
                         <th class="w-4"></th>
                       </tr>
                       </thead>
@@ -189,19 +196,12 @@
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.DESTIP %></div>
                                   <div class="text-muted">
-                                    <small class="text-reset">Texto ayuda: <%- element.AYUTIP %></small>
+                                    <% if (element.ORGTIP === datos.origenTipo.formulario) { %>
+                                      <small class="text-reset">Texto ayuda: <%- element.AYUTIP %></small>
+                                    <% } %>
                                   </div>
                                 </div>
                               </div>
-                            </td>
-                            <td class="w-15">
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium">
-                                    <%- datos.arrOrigenTipo[element.ORGTIP].des %>
-                                  </div>
-                                </div>
-                              </div>                              
                             </td>
                             <td class="text-end w-4">
                               <ul class="dots-menu">
@@ -283,22 +283,34 @@
     </div>
 
     <script src="/js/ayuda.js"></script>
+    <script src="/socket.io/socket.io.js"></script>    
+    <script>
+      const messages = document.getElementById('messages')
+      const socket = io()
+
+      socket.on('receive-message', msg => {
+        const li = document.createElement('li')
+        li.textContent = msg
+        messages.appendChild(li)
+
+        const toggleBadge = document.querySelector('#toggleBadge');
+        const numeroMensajes = messages.getElementsByTagName("li").length
+        if (numeroMensajes === 1) {
+          toggleBadge.classList.toggle('d-none')
+        }
+      })
+    </script>
     <script>
       const filtroTipos = () => {
-        const trs = document.querySelectorAll('#tblTipos tr:not(.header)')
-        const filter = document.querySelector('#buscarTipoBox').value
-        const regex = new RegExp(filter, 'i')
-        const isFoundInTds = td => regex.test(td.innerHTML)
-        const isFound = childrenArr => childrenArr.some(isFoundInTds)
-        const setTrStyleDisplay = ({ style, children }) => {
-          style.display = isFound([
-            ...children
-          ]) ? '' : 'none' 
-        }
-        
-        trs.forEach(setTrStyleDisplay)
+        const filter = document.querySelector('#buscarTipoBox').value.toUpperCase()
+
+        document.querySelectorAll('#tblTipos tr:not(.header)').forEach((tr) => {
+          const anyMatch = [...tr.children]
+            .some(td => td.textContent.toUpperCase().includes(filter));
+          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
+        });      
       }      
-    </script>
+    </script>    
     <script>
       function sortTableByColumn(table, column, asc = true) {
         const dirModifier = asc ? 1 : -1;
@@ -330,6 +342,35 @@
           sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
         });
       });
+    </script>
+    <script>
+      const elem = document.getElementById('cbotip');
+      elem.onchange = (event) => {
+        window.location.href = `http://localhost:4000/admin/tipos/${event.target.value}`
+      }
+    </script>
+    <script>
+      const Tipos = (origen) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const tipos = JSON.parse(xhr.response)
+            const cbo = document.getElementById('cbotip')
+
+            tipos.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDTIPO
+              option.text = itm.DESTIP
+
+              cbo.appendChild(option)
+            })
+          }
+        };
+        xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify({tipo: {orgtip: origen}}));
+      }
     </script>
   </body>
 </html>

@@ -4,13 +4,28 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Subtipos</title>
+    <title>subtipos</title>
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <!-- bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap-icons.css">
     <!-- custom -->
     <link rel="stylesheet" href="/css/estilos.min.css">
     <link rel="stylesheet" href="/css/navbar.css">
+    <style>
+      .sortable th {
+        cursor: pointer;
+      }
+      .sortable .th-sort-asc::after {
+        content: "\25b4";
+      }
+      .sortable .th-sort-desc::after {
+        content: "\25be";
+      }
+      .sortable .th-sort-asc::after,
+      .sortable .th-sort-desc::after {
+        margin-left: 5px;
+      }
+    </style>
   </head>
   <body class="antialiased">
     <div class="wrapper">
@@ -108,11 +123,11 @@
                   <a href="/admin/oficinas" class="dropdown-item">
                     <i class="bi bi-building dropdown-item-icon"></i>Oficinas
                   </a>
-                  <a href="/admin/tipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
-                  </a>
                   <a href="/admin/subtipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subtipos
+                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>subtipos
+                  </a>
+                  <a href="/admin/subsubtipos" class="dropdown-item">
+                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subipos
                   </a>
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
@@ -138,15 +153,20 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    Subtipos
+                    <h3 class="card-title">Subtipos</h3>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
+                        <div class="input-icon me-3">
+                          <select class="form-select" name="idtipo" id="cbotip"></select>
+                        </div>
+
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
                           <input type="text" class="form-control d-inline-block me-3" id="buscarSubtipoBox" onkeyup="filtroSubtipos();" placeholder="Buscar..."
                             aria-label="Buscar en subtipos">
                         </div>
-                        <a href="/admin/subtipos/add" class="btn btn-primary">
+
+                        <a href=`/admin/subtipos/add/${}` class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -158,12 +178,11 @@
                     </div>                     
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-striped table-fixHead" id="tblSubtipos">
+                    <table class="table table-vcenter table-striped table-fixHead sortable" id="tblSubtipos">
                       <thead>
-                      <tr>
+                      <tr class="header">
                         <th>Descripción</th>
-                        <th>Tipo</th>
-                        <th class="w-2"></th>
+                        <th class="w-4"></th>
                       </tr>
                       </thead>
                       <tbody>
@@ -179,14 +198,7 @@
                                 </div>
                               </div>
                             </td>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.DESTIP %></div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="text-end w-2">
+                            <td class="text-end w-4">
                               <ul class="dots-menu">
                                 <li class="nav-item drop-right">
                                   <a href="#" class="nav-link">
@@ -194,12 +206,12 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/subtipos/edit/<%- element.IDSUBT %>" class="nav-link">
-                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar subtipo
+                                        <a href="/admin/subtipos/edit/<%- element.idtipo %>" class="nav-link">
+                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar subtipo</a>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idsubt').value ='<%- element.IDSUBT %>', document.getElementById('deltip').innerText ='<%- element.DESSUB %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idsubt').value ='<%- element.idsubt %>', document.getElementById('deltip').innerText ='<%- element.DESSUB %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar subtipo
                                       </a>
                                     </li>
@@ -242,7 +254,7 @@
               <path d="M12 9v2m0 4v.01"></path>
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
-            <h3>¿Desea borrar este tipo?</h3>
+            <h3>¿Desea borrar este subtipo?</h3>
             <div id="deltip"></div>
             <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
           </div>
@@ -255,7 +267,7 @@
                 <div class="col">
                   <form action="/admin/subtipos/delete" method="POST">
                     <input type="hidden" id="idsubt" name="idsubt" value="">
-                    <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar tipo</button>
+                    <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar subtipo</button>
                   </form>
                 </div>
               </div>
@@ -266,31 +278,120 @@
     </div>
 
     <script src="/js/ayuda.js"></script>
+    <script src="/socket.io/socket.io.js"></script>    
     <script>
-      function filtroSubtipos() {
-        const input = document.getElementById("buscarSubtipoBox");
-        const filter = input.value.toUpperCase();
-        const table = document.getElementById("tblSubtipos");
-        const tr = table.getElementsByTagName("tr");
-        let arrTd
-        let td
-        let match = true
+      const messages = document.getElementById('messages')
+      const socket = io()
 
-        for (let i = 0; i < tr.length; i++) {
-          arrTd = tr[i].getElementsByTagName("td");
-          for(let j = 0; j < arrTd.length; j++) {
-            td = arrTd[j]
-            if (td) {
-              if (td.innerText.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-                break
-              } else {
-                tr[i].style.display = "none";
-              }
-            }
-          }
+      socket.on('receive-message', msg => {
+        const li = document.createElement('li')
+        li.textContent = msg
+        messages.appendChild(li)
+
+        const toggleBadge = document.querySelector('#toggleBadge');
+        const numeroMensajes = messages.getElementsByTagName("li").length
+        if (numeroMensajes === 1) {
+          toggleBadge.classList.toggle('d-none')
         }
+      })
+    </script>
+    <script>
+      const filtroSubtipos = () => {
+        const filter = document.querySelector('#buscarSubtipoBox').value.toUpperCase()
+
+        document.querySelectorAll('#tblSubtipos tr:not(.header)').forEach((tr) => {
+          const anyMatch = [...tr.children]
+            .some(td => td.textContent.toUpperCase().includes(filter));
+          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
+        });      
+      }      
+    </script>    
+    <script>
+      function sortTableByColumn(table, column, asc = true) {
+        const dirModifier = asc ? 1 : -1;
+        const tBody = table.tBodies[0];
+        const rows = Array.from(tBody.querySelectorAll("tr"));
+
+        const sortedRows = rows.sort((a, b) => {
+          const aColText = a.cells[column].textContent;
+          const bColText = b.cells[column].textContent;
+
+          return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+        });
+
+        for(let row of sortedRows) {
+          tBody.appendChild( row );
+        }
+
+        table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
+        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-asc", asc);
+        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-desc", !asc);
+      }
+
+      document.querySelectorAll(".sortable th").forEach(headerCell => {
+        headerCell.addEventListener("click", () => {
+          const tableElement = headerCell.parentElement.parentElement.parentElement;
+          const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+          const currentIsAscending = headerCell.classList.contains("th-sort-asc");
+          
+          sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+        });
+      });
+    </script>
+    <script>
+      const elem = document.getElementById('cbotip');
+      elem.onchange = (event) => {
+        window.location.href = `http://localhost:4000/admin/subtipos/${event.target.value}`
       }
     </script>
-  </body>
+    <script>
+      const Tipos = () => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const tipos = JSON.parse(xhr.response)
+            const cbo = document.getElementById('cbotip')
+
+            tipos.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDTIPO
+              option.text = itm.DESTIP
+
+              cbo.appendChild(option)
+            })
+
+            Subtipos(cbo.value);
+          }
+        };
+        xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send();
+      }
+      Tipos();
+    </script>
+    <script>
+      const Subtipos = (idTipo) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const tipos = JSON.parse(xhr.response)
+            const cbo = document.getElementById('cbotip')
+
+            tipos.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDTIPO
+              option.text = itm.DESTIP
+
+              cbo.appendChild(option)
+            })
+          }
+        };
+        xhr.open('POST', 'http://localhost:8000/api/subtipos/tipo', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify({tipo : {idtipo: idTipo}}));
+      }
+    </script>
+</body>
 </html>

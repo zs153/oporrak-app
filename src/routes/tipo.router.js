@@ -12,8 +12,8 @@ import {
 const tipoRouter = express.Router();
 
 // paginas
-tipoRouter.get("/tipos", verifyTokenAndAdmin, mainPage);
-tipoRouter.get("/tipos/add", verifyTokenAndAdmin, addPage);
+tipoRouter.get("/tipos/:org?", verifyTokenAndAdmin, mainPage);
+tipoRouter.get("/tipos/add/:org", verifyTokenAndAdmin, addPage);
 tipoRouter.get("/tipos/edit/:id", verifyTokenAndAdmin, editPage);
 
 // procedures

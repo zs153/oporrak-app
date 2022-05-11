@@ -11,6 +11,15 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    .subtitulo {
+      position: absolute;
+      top: 1.5rem;
+      color: #656d77;
+      pointer-events: none;
+      font-size: 0.8em;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -149,38 +158,34 @@
                   <% }) %>
                 <% } %>                
                 <form action="/admin/tipos/insert" method="POST" onsubmit="return validate();">
+                  <input type="hidden" name="orgtip" id="orgtip" value = <%- datos.tipo.orgtip %>>
                   <div class="card-header">
-                    Tipo
+                    <h3 class="card-title">Nuevo tipo</h3>
+                    <p class="subtitulo">
+                      Origen: <%- datos.origen.des %>
+                    </p>
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-8">
-                        <div class="mb-1">
-                          <label class="form-label required">Descripción</label>
-                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.documento.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
-                          <div class="invalid-feedback"></div>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <label class="form-label">Origen</label>
-                          <select class="form-select" id="cboorg" name="orgtip" value="<%- datos.documento.orgtip %>">
-                            <% datos.arrOrigenTipo.map(element => { %> 
-                              <option value="<%- element.id %>" <%- element.id == datos.documento.orgtip ? " selected":"" %>><%- element.des %></option>
-                            <% }) %> 
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                          <label class="form-label required">Texto ayuda</label>
-                          <textarea type="text" name="ayutip" id="ayutip" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.ayutip %></textarea>
+                          <label class="form-label required">Descripción</label>
+                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
                           <div class="invalid-feedback"></div>
                         </div>
                       </div>
                     </div>
+                    <% if (datos.tipo.orgtip === datos.origenTipo.formulario) { %>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="mb-1">
+                            <label class="form-label required">Texto ayuda</label>
+                            <textarea type="text" name="ayutip" id="ayutip" class="form-control" rows="3" style="resize: vertical"><%- datos.tipo.ayutip %></textarea>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
+                      </div>
+                    <% } %>
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">

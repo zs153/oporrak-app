@@ -90,6 +90,10 @@ export const origenTipo = {
   hito: 3,
   otros: 4,
 };
+export const tiposLiquidacion = {
+  ingresar: 1,
+  devolver: 2,
+};
 
 /* arrays */
 export const arrTiposRol = [
@@ -123,7 +127,12 @@ export const arrEstadosFraude = [
   { ID: 3, DES: "REMITIDO", LIT: "REM" },
 ];
 export const arrOrigenTipo = [
-  { id: 0, des: "FORMULARIO" },
-  { id: 1, des: "FRAUDE" },
-  { id: 2, des: "HITO" },
+  { id: 1, des: "FORMULARIO" },
+  { id: 2, des: "FRAUDE" },
+  { id: 3, des: "HITO" },
+  { id: 4, des: "OTROS" },
+];
+export const arrTiposLiquidacion = [
+  { id: 1, des: "INFRESAR" },
+  { id: 2, des: "DEVOLVER" },
 ];

@@ -475,14 +475,12 @@
       Oficinas();
     </script>
     <script>
-      let tipos;
       const Tipos = () => {
         const xhr = new XMLHttpRequest();
 
         xhr.onload = function() {
           if (xhr.status === 200) {
-            tipos = JSON.parse(xhr.response)
-
+            const tipos = JSON.parse(xhr.response)
             const cbo = document.getElementById('cbotip')
 
             tipos.map((itm) => {
