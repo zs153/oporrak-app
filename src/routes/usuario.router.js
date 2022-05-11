@@ -1,5 +1,5 @@
-import express from "express";
-import authRoutes, { verifyTokenAndAdmin } from "../middleware/auth";
+import express from 'express'
+import authRoutes from '../middleware/auth'
 import {
   mainPage,
   addPage,
@@ -11,22 +11,22 @@ import {
   changePassword,
   updatePerfil,
   enviarNotificacion,
-} from "../controllers/usuario.controller";
+} from '../controllers/usuario.controller'
 
-const usuarioRouter = express.Router();
+const usuarioRouter = express.Router()
 
 // pages
-usuarioRouter.get("/usuarios", verifyTokenAndAdmin, mainPage);
-usuarioRouter.get("/usuarios/add", verifyTokenAndAdmin, addPage);
-usuarioRouter.get("/usuarios/edit/:userid", verifyTokenAndAdmin, editPage);
-usuarioRouter.get("/usuarios/perfil/:id", verifyTokenAndAdmin, perfilPage);
+usuarioRouter.get('/usuarios', authRoutes, mainPage)
+usuarioRouter.get('/usuarios/add', authRoutes, addPage)
+usuarioRouter.get('/usuarios/edit/:userid', authRoutes, editPage)
+usuarioRouter.get('/usuarios/perfil/:id', authRoutes, perfilPage)
 
 // procedures
-usuarioRouter.post("/usuarios/insert", verifyTokenAndAdmin, insert);
-usuarioRouter.post("/usuarios/update", verifyTokenAndAdmin, update);
-usuarioRouter.post("/usuarios/delete", verifyTokenAndAdmin, remove);
-usuarioRouter.post("/usuarios/notificacion", authRoutes, enviarNotificacion);
-usuarioRouter.post("/usuarios/change", authRoutes, changePassword);
-usuarioRouter.post("/usuarios/perfil", authRoutes, updatePerfil);
+usuarioRouter.post('/usuarios/insert', authRoutes, insert)
+usuarioRouter.post('/usuarios/update', authRoutes, update)
+usuarioRouter.post('/usuarios/delete', authRoutes, remove)
+usuarioRouter.post('/usuarios/notificacion', authRoutes, enviarNotificacion)
+usuarioRouter.post('/usuarios/change', authRoutes, changePassword)
+usuarioRouter.post('/usuarios/perfil', authRoutes, updatePerfil)
 
-export default usuarioRouter;
+export default usuarioRouter

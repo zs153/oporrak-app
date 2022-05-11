@@ -1,5 +1,5 @@
-import express from "express";
-import { verifyTokenAndAdmin } from "../middleware/auth";
+import express from 'express'
+import authRoutes from '../middleware/auth'
 import {
   mainPage,
   addPage,
@@ -7,18 +7,18 @@ import {
   insertTipo,
   updateTipo,
   deleteTipo,
-} from "../controllers/tipo.controller";
+} from '../controllers/tipo.controller'
 
-const tipoRouter = express.Router();
+const tipoRouter = express.Router()
 
 // paginas
-tipoRouter.get("/tipos/:org?", verifyTokenAndAdmin, mainPage);
-tipoRouter.get("/tipos/add/:org", verifyTokenAndAdmin, addPage);
-tipoRouter.get("/tipos/edit/:id", verifyTokenAndAdmin, editPage);
+tipoRouter.get('/tipos/:org?', authRoutes, mainPage)
+tipoRouter.get('/tipos/add/:org', authRoutes, addPage)
+tipoRouter.get('/tipos/edit/:id', authRoutes, editPage)
 
 // procedures
-tipoRouter.post("/tipos/insert", verifyTokenAndAdmin, insertTipo);
-tipoRouter.post("/tipos/update", verifyTokenAndAdmin, updateTipo);
-tipoRouter.post("/tipos/delete", verifyTokenAndAdmin, deleteTipo);
+tipoRouter.post('/tipos/insert', authRoutes, insertTipo)
+tipoRouter.post('/tipos/update', authRoutes, updateTipo)
+tipoRouter.post('/tipos/delete', authRoutes, deleteTipo)
 
-export default tipoRouter;
+export default tipoRouter

@@ -149,26 +149,17 @@
                   <% }) %>
                 <% } %>                
                 <form action="/admin/subtipos/insert" method="POST" onsubmit="return validate();">
+                  <input type="hidden" id="idtipo" name="idtipo" value="<%- datos.tipo.idtipo %>">
                   <div class="card-header">
                     Subtipo
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-8">
+                      <div class="col-12">
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="dessub" id="dessub" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.dessub %>" autofocus/>
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label">Tipo</label>
-                            <select class="form-select" id="cboorg" name="idtipo" value="<%- datos.documento.idtipo %>">
-                            </select>
+                            <input type="text" name="dessub" id="dessub" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.tipo.dessub %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -233,33 +224,6 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
-  </script>
-  <script>
-    const Tipos = () => {
-      const xhr = new XMLHttpRequest();
-
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const oficinas = JSON.parse(xhr.response)
-
-          const cbo = document.getElementById('cboorg')
-
-          oficinas.map((itm) => {
-            const option = document.createElement('option')
-            option.value = itm.IDTIPO
-            option.text = itm.DESTIP
-            if (itm.IDTIPO === <%- datos.documento.idtipo %>) {
-              option.selected = true
-            }
-            cbo.appendChild(option)
-          })
-        }
-      };
-      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send()
-    }
-    Tipos();
   </script>
 </body>
 </html>
