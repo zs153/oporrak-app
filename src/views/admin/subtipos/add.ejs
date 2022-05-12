@@ -110,10 +110,7 @@
                     <i class="bi bi-building dropdown-item-icon"></i>Oficinas
                   </a>
                   <a href="/admin/tipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Tipos
-                  </a>
-                  <a href="/admin/subtipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subtipos
+                    <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
                   </a>
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
@@ -151,7 +148,7 @@
                 <form action="/admin/subtipos/insert" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idtipo" name="idtipo" value="<%- datos.tipo.idtipo %>">
                   <div class="card-header">
-                    Subtipo
+                    <h3 class="card-title">Subtipo</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -159,7 +156,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="dessub" id="dessub" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.tipo.dessub %>" autofocus/>
+                            <input type="text" name="dessub" id="dessub" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.subtipo.dessub %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -168,7 +165,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/subtipos" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/subtipos/tipo/<%- datos.tipo.idtipo %>" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear nuevo subtipo</button>
                     </div>
                   </div>
@@ -192,6 +189,23 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
+  <script src="/socket.io/socket.io.js"></script>    
+  <script>
+    const messages = document.getElementById('messages')
+    const socket = io()
+
+    socket.on('receive-message', msg => {
+      const li = document.createElement('li')
+      li.textContent = msg
+      messages.appendChild(li)
+
+      const toggleBadge = document.querySelector('#toggleBadge');
+      const numeroMensajes = messages.getElementsByTagName("li").length
+      if (numeroMensajes === 1) {
+        toggleBadge.classList.toggle('d-none')
+      }
+    })
+  </script>
   <script>
     const dessub = document.getElementById('dessub')
 

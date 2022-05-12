@@ -137,9 +137,6 @@
                   <a href="/admin/tipos" class="dropdown-item">
                     <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
                   </a>
-                  <a href="/admin/subtipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subipos
-                  </a>
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
                   </a>
@@ -200,7 +197,7 @@
                       </tr>
                       </thead>
                       <tbody>
-                        <% datos.documentos.map(element => { %>
+                        <% datos.tipos.map(element => { %>
                           <tr>
                             <td>
                               <div class="d-flex py-1 align-items-center">
@@ -222,9 +219,9 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/tipos/edit/<%- element.IDTIPO %>" class="nav-link">
-                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar tipo</a>
-                                        </a>
+                                      <a href="/admin/tipos/edit/<%- element.IDTIPO %>" class="nav-link">
+                                        <i class="bi bi-pencil dropdown-item-icon"></i>Editar tipo
+                                      </a>
                                     </li>
                                     <li class="nav-item">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('idtipo').value ='<%- element.IDTIPO %>', document.getElementById('deltip').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
@@ -233,16 +230,9 @@
                                     </li>
                                     <li class="nav-item list-divider"></li>                                    
                                     <li class="nav-item">
-                                      <form action="/admin/subtipos" method="POST">
-                                        <input type="hidden" name="idtipo" id="idtipo" value = <%- element.IDTIPO %>>
-                                        <input type="hidden" name="destip" id="destip" value = <%- element.DESTIP %>>
-                                        <button type="submit" class="btn-link nav-link">
-                                          <i class="bi bi-diagram-3 dropdown-item-icon"></i>Subtipos</a>
-                                        </button>
-                                        <!-- <a href="/admin/subtipos/<%- element.IDTIPO %>/<%- element.DESTIP %>" class="nav-link">
-                                          <i class="bi bi-diagram-3 dropdown-item-icon"></i>Subtipos</a>
-                                        </a> -->
-                                      </form>
+                                      <a href="/admin/subtipos/tipo/<%- element.IDTIPO %>" class="nav-link">
+                                        <i class="bi bi-diagram-3 dropdown-item-icon"></i>Subtipos
+                                      </a>
                                     </li>
                                   </ul>
                                 </li>
@@ -334,7 +324,18 @@
           anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
         });      
       }      
-    </script>    
+    </script>
+    <script>
+      const filtroSubtipos = () => {
+        const filter = document.querySelector('#buscarSubtipoBox').value.toUpperCase()
+
+        document.querySelectorAll('#tblSubtipos tr:not(.header)').forEach((tr) => {
+          const anyMatch = [...tr.children]
+            .some(td => td.textContent.toUpperCase().includes(filter));
+          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
+        });      
+      }      
+    </script>  
     <script>
       function sortTableByColumn(table, column, asc = true) {
         const dirModifier = asc ? 1 : -1;
@@ -371,29 +372,6 @@
       const elem = document.getElementById('cbotip');
       elem.onchange = (event) => {
         window.location.href = `http://localhost:4000/admin/tipos/${event.target.value}`
-      }
-    </script>
-    <script>
-      const Tipos = (origen) => {
-        const xhr = new XMLHttpRequest();
-
-        xhr.onload = function() {
-          if (xhr.status === 200) {
-            const tipos = JSON.parse(xhr.response)
-            const cbo = document.getElementById('cbotip')
-
-            tipos.map((itm) => {
-              const option = document.createElement('option')
-              option.value = itm.IDTIPO
-              option.text = itm.DESTIP
-
-              cbo.appendChild(option)
-            })
-          }
-        };
-        xhr.open('POST', 'http://localhost:8000/api/tipos', true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify({tipo: {orgtip: origen}}));
       }
     </script>
   </body>

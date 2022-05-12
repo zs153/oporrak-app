@@ -130,11 +130,8 @@
                   <a href="/admin/oficinas" class="dropdown-item">
                     <i class="bi bi-building dropdown-item-icon"></i>Oficinas
                   </a>
-                  <a href="/admin/subtipos" class="dropdown-item">
-                    <i class="bi bi-signpost dropdown-item-icon"></i>subtipos
-                  </a>
-                  <a href="/admin/subsubtipos" class="dropdown-item">
-                    <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subipos
+                  <a href="/admin/tipos" class="dropdown-item">
+                    <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
                   </a>
                   <a href="/admin/usuarios" class="dropdown-item">
                     <i class="bi bi-people dropdown-item-icon"></i>Usuarios
@@ -162,7 +159,7 @@
                   <div class="card-header">
                     <h3 class="card-title">Subtipos</h3>
                     <p class="subtitulo">
-                      Tipo: <%- datos.tipo.destip %>
+                      Tipo: <%- datos.tipo.DESTIP %>
                     </p>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
@@ -171,8 +168,7 @@
                           <input type="text" class="form-control d-inline-block me-3" id="buscarSubtipoBox" onkeyup="filtroSubtipos();" placeholder="Buscar..."
                             aria-label="Buscar en subtipos">
                         </div>
-
-                        <a href="/admin/subtipos/add/tipo/<%- datos.tipo.idtipo %>" class="btn btn-primary">
+                        <a href="/admin/subtipos/add/tipo/<%- datos.tipo.IDTIPO  %>" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -212,12 +208,12 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                        <a href="/admin/subtipos/edit/<%- element.idsubt %>" class="nav-link">
+                                        <a href="/admin/subtipos/edit/tipo/<%- datos.tipo.IDTIPO %>/<%- element.IDSUBT %>" class="nav-link">
                                           <i class="bi bi-pencil dropdown-item-icon"></i>Editar subtipo</a>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idsubt').value ='<%- element.idsubt %>', document.getElementById('deltip').innerText ='<%- element.DESSUB %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idsubt').value ='<%- element.IDSUBT %>', document.getElementById('deltip').innerText ='<%- element.DESSUB %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar subtipo
                                       </a>
                                     </li>
@@ -268,11 +264,12 @@
             <div class="w-100">
               <div class="row">
                 <div class="col">
-                  <a href="/admin/subtipos" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                  <a href="/admin/subtipos/tipo/<%- datos.tipo.idtipo %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                 </div>
                 <div class="col">
                   <form action="/admin/subtipos/delete" method="POST">
                     <input type="hidden" id="idsubt" name="idsubt" value="">
+                    <input type="hidden" id="idtipo" name="idtipo" value="<%- datos.tipo.IDTIPO %>">
                     <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar subtipo</button>
                   </form>
                 </div>

@@ -10,14 +10,13 @@ export const mainPage = async (req, res) => {
   const tipo = {
     orgtip: req.params.org ? req.params.org : origenTipo.formulario,
   };
-  const verTodo = false;
 
   try {
     const result = await axios.post("http://localhost:8000/api/tipos", {
       tipo,
     });
     const datos = {
-      documentos: result.data,
+      tipos: result.data,
       tipo,
       origenTipo,
       arrOrigenTipo,
