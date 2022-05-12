@@ -161,7 +161,7 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    Tipos
+                    <h3 class="card-title">Tipos</h3>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
                         <div class="me-3">
@@ -281,11 +281,12 @@
             <div class="w-100">
               <div class="row">
                 <div class="col">
-                  <a href="/admin/tipos" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                  <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                 </div>
                 <div class="col">
                   <form action="/admin/tipos/delete" method="POST">
                     <input type="hidden" id="idtipo" name="idtipo" value="">
+                    <input type="hidden" id="orgtip" name="orgtip" value="<%- datos.tipo.orgtip %>">
                     <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar tipo</button>
                   </form>
                 </div>

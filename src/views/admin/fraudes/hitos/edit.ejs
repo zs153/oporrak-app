@@ -116,34 +116,33 @@
                   <% }) %>
                 <% } %>
                 <form action="/admin/fraudes/hitos/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" id="idhito" name="idhito" value="<%- datos.hito.idhito %>">
+                  <input type="hidden" id="idhito" name="idhito" value="<%- datos.hito.IDHITO %>">
                   <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
                   <div class="card-header">
                     Hito
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-5">
+                      <div class="col-7">
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tiphit" value="<%- datos.hito.tiphit %>">
-                            <% datos.tipos.map(element => { %> 
-                              <option value="<%- element.IDTIPO %>"><%= element.DESTIP %></option>
-                            <% }) %> 
+                          <select class="form-select" id="cbotip" name="tiphit">
                           </select>
                         </div>
                       </div>
                       <div class="col-5">
                         <div class="mb-1">
                           <div class="form-label">Subtipo</div>
-                          <select class="form-select" id="cbosub" name="subthi" value="<%- datos.hito.subthi %>">
+                          <select class="form-select" id="cbosub" name="subthi">
                           </select>
                         </div>
                       </div>
-                      <div class="col-2">
+                    </div>
+                    <div class="row">
+                      <div class="col-3">
                         <div class="mb-1">
-                          <div class="form-label">Importe</div>
-                          <input type="text" name="imphit" id="imphit" class="form-control" onkeyup="this.value=this.value.replace('.',',')" value="<%- datos.hito.imphit %>" />
+                          <div class="form-label">Valor</div>
+                          <input type="text" name="imphit" id="imphit" class="form-control" onkeyup="this.value=this.value.replace('.',',')" />
                         </div>
                       </div>
                     </div>
@@ -152,7 +151,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Observaciones</label>
-                            <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"><%- datos.hito.obshit %></textarea>
+                            <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"><%- datos.hito.OBSHIT %></textarea>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -162,7 +161,7 @@
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/fraudes/hitos/<%- datos.fraude.idfrau %>" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Añadir hito</button>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Editar hito</button>
                     </div>
                   </div>
                 </form>
@@ -185,56 +184,93 @@
     </footer>
   </div>
   <script src="/js/ayuda.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script>
-    const arrSubtipos = <%- JSON.stringify(datos.subtipos) %>
+    const messages = document.getElementById('messages')
+    const socket = io()
+
+    socket.on('receive-message', msg => {
+      const li = document.createElement('li')
+      li.textContent = msg
+      messages.appendChild(li)
+
+      const toggleBadge = document.querySelector('#toggleBadge');
+      const numeroMensajes = messages.getElementsByTagName("li").length
+      if (numeroMensajes === 1) {
+        toggleBadge.classList.toggle('d-none')
+      }
+    })
+  </script>
+  <script>
     const selectTipos = document.querySelector('#cbotip');
     const selectSubtipos = document.querySelector('#cbosub')    
     
     selectTipos.addEventListener('change', (event) => {
       const options = document.querySelectorAll('#cbosub option');
       const idTipo = selectTipos.value
-      
-      options.forEach(o => o.remove());
-      
-      arrSubtipos.filter(item => item.IDTIPO == idTipo).map((itm) => {
-        const option = document.createElement('option')
-        option.value = itm.IDSUBT
-        option.text = itm.DESSUB
-        selectSubtipos.appendChild(option)
-      })
-    });    
+
+      SubTipos(idTipo);
+    });
+  </script>  
+  <script>
+    const Tipos = () => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const tipos = JSON.parse(xhr.response)
+          const cbo = document.getElementById('cbotip')
+
+          tipos.map((itm) => {
+            const option = document.createElement('option')
+            option.value = itm.IDTIPO
+            option.text = itm.DESTIP
+            
+            if (itm.IDTIPO === <%- datos.hito.TIPHIT %>) {
+              option.selected = true
+            }
+            cbo.appendChild(option)
+          });
+
+          SubTipos(cbo.value)
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify({tipo: {orgtip: <%- datos.origenTipo.hito %>}}))
+    }
+    Tipos();
   </script>
   <script>
-    const obshit = document.getElementById('obshit')
+    const SubTipos = (idTipo) => {
+      const xhr = new XMLHttpRequest();
 
-    const validate = () => {
-      const obshitValue = obshit.value.trim()
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const subtipos = JSON.parse(xhr.response)
+          const cbo = document.getElementById('cbosub')
 
-      if (obshitValue === '') {
-        setError(obshit, 'Observaciones requerida')
-        return false
-      } else {
-        setSuccess(obshit)
-      }
-
-      return true
-    }
-
-    const setSuccess = (element) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = '';
-      inputControl.classList.add('is-valid');
-      element.classList.remove('is-invalid');
-    }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = message;
-      element.classList.add('is-invalid');
-      inputControl.classList.remove('is-valid');
+          if (cbo.options.length > 0) {
+            const options = document.querySelectorAll('#cbosub option');
+            options.forEach(o => o.remove());
+          }
+          if (subtipos.length > 0) {
+            subtipos.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDSUBT
+              option.text = itm.DESSUB
+              
+              cbo.appendChild(option)
+            })
+            cbo.removeAttribute('disabled')
+          } else {
+            cbo.setAttribute("disabled", "disabled");
+          }
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/subtipos/tipo', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify({tipo: {idtipo: idTipo}}))
     }
   </script>
   <script>

@@ -157,10 +157,7 @@
                 <form action="/admin/tipos/insert" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="orgtip" id="orgtip" value = <%- datos.tipo.orgtip %>>
                   <div class="card-header">
-                    <h3 class="card-title">Nuevo tipo</h3>
-                    <p class="subtitulo">
-                      Origen: <%- datos.origen.des %>
-                    </p>
+                    <h3 class="card-title">Tipo</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -186,7 +183,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/tipos" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/tipos/<%- datos.origen.id %>" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear nuevo tipo</button>
                     </div>
                   </div>

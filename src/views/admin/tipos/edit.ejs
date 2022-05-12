@@ -147,22 +147,22 @@
                   <% }) %> 
                 <% } %>                   
                 <form action="/admin/tipos/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" name="idtipo" id="idtipo" value = <%- datos.documento.idtipo %>>
-                  <input type="hidden" name="orgtip" id="orgtip" value = <%- datos.documento.orgtip %>>
+                  <input type="hidden" name="idtipo" id="idtipo" value = <%- datos.tipo.idtipo %>>
+                  <input type="hidden" name="orgtip" id="orgtip" value = <%- datos.tipo.orgtip %>>
                   <div class="card-header">
-                    Tipo
+                    <h3 class="card-title">Tipo</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.documento.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
+                            <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
                             <div class="invalid-feedback"></div>
                         </div>
                       </div>
                     </div>
-                    <% if (datos.documento.orgtip === datos.origenTipo.formulario) { %>
+                    <% if (datos.tipo.orgtip === datos.origenTipo.formulario) { %>
                       <div class="row">
                         <div class="col-12">
                           <div class="mb-1">
@@ -176,7 +176,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/tipos" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/tipos/<%- datos.tipo.orgtip %>" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Modificar tipo</button>
                     </div>
                   </div>
