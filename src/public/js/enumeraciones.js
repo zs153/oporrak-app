@@ -40,6 +40,7 @@ export const tiposMovimiento = {
   crearCita: 38,
   modificarCita: 39,
   borrarCita: 40,
+  archivadoSancion: 41,
   cambioPassword: 60,
   olvidoPassword: 61,
   restablecerPassword: 62,
@@ -84,6 +85,11 @@ export const estadosSms = {
   pendiente: 0,
   enviado: 1,
 };
+export const estadosHito = {
+  pasivo: 0,
+  activo: 1,
+};
+
 export const origenTipo = {
   formulario: 1,
   fraude: 2,
@@ -93,6 +99,11 @@ export const origenTipo = {
 export const tiposLiquidacion = {
   ingresar: 1,
   devolver: 2,
+};
+export const tiposImporte = {
+  sinImporte: 0,
+  importeLiquidacion: 1,
+  importeSancion: 2,
 };
 
 /* arrays */
@@ -135,4 +146,9 @@ export const arrOrigenTipo = [
 export const arrTiposLiquidacion = [
   { id: 1, des: "INFRESAR" },
   { id: 2, des: "DEVOLVER" },
+];
+export const arrTiposImporte = [
+  { id: 0, des: "SIN IMPORTE" },
+  { id: 1, des: "IMPORTE DE LIQUIDACION" },
+  { id: 2, des: "IMPORTE DE SANCION" },
 ];

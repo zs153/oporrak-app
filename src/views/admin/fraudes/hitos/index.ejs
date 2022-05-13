@@ -206,9 +206,15 @@
                         <% datos.hitos.map(element => { %>
                           <tr>
                             <td class="w-4">
-                              <span class="avatar avatar-rounded bg-green-lt">
-                                <h5>H</h5>
-                              </span>
+                              <% if (element.STAHIT === datos.estadosHito.pasivo) { %>
+                                  <span class="avatar avatar-rounded bg-red-lt">
+                                    <h6>ARCH</h6>
+                                  </span>
+                                <% } else { %>
+                                  <span class="avatar avatar-rounded bg-green-lt">
+                                    <h6>OK</h6>
+                                  </span>
+                                <% } %>
                             </td>                            
                             <td class="w-8 px-3">
                               <div class="d-flex py-1 align-items-center">
@@ -256,16 +262,24 @@
                                   <ul>
                                     <li class="nav-item">
                                       <a href="/admin/fraudes/hitos/edit/<%- datos.fraude.IDFRAU %>/<%- element.IDHITO %>" class="nav-link">
-                                        <i class="bi bi-pencil dropdown-item-icon"></i>Editar hito</a>
+                                        <i class="bi bi-pencil dropdown-item-icon"></i>Editar hito
                                       </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('delhit').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESHIT %></p><p><%- element.OBSHIT %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
-                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('delhit').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar hito
                                       </a>
                                     </li>
+                                    <% if(element.TIPIMP === datos.tiposImporte.importeSancion && element.STAHIT === datos.estadosHito.activo) { %>
+                                    <li class="nav-item list-divider"></li>
+                                    <li class="nav-item">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('archito').value ='<%- element.IDHITO %>'}" data-bs-toggle="modal" data-bs-target="#modal-archivo">
+                                        <i class="bi bi-archive dropdown-item-icon"></i>Archivado de sanción
+                                      </a>
+                                    </li>
+                                    <% } %>
                                   </ul>
-                                </li>                              
+                                </li>
                               </ul>
                             </td>
                           </tr>
@@ -292,7 +306,7 @@
       </div>
     </div>
     
-    <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-borrar" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -304,18 +318,19 @@
               <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
             </svg>
             <h3>¿Desea borrar este hito?</h3>
-            <h5><span id="texhit"></span></h5>
+            <div id="delhit"></div>
             <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
           </div>
           <div class="modal-footer">
             <div class="w-100">
               <div class="row">
                 <div class="col">
-                  <a href="/admin/fraudes/hitos/<%- datos.fraude.idfrau %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                  <a href="/admin/fraudes/hitos/<%- datos.fraude.IDFRAU %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                 </div>
                 <div class="col">
                   <form action="/admin/fraudes/hitos/delete" method="POST">
                     <input type="hidden" id="idhito" name="idhito" value="">
+                    <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.IDFRAU %>">
                     <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar hito</button>
                   </form>
                 </div>
@@ -325,6 +340,39 @@
         </div>
       </div>
     </div>
+    <div class="modal modal-blur fade" id="modal-archivo" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-primary"></div>
+        <div class="modal-body text-center py-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-blue icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 9v2m0 4v.01"></path>
+            <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
+          </svg>
+          <h3>Archivado de sanción</h3>
+          <div id="texasi"></div>
+        </div>
+        <div class="modal-footer">
+          <div class="w-100">
+            <div class="row">
+              <div class="col">
+                <a href="/admin/fraudes/hitos/<%- datos.fraude.IDFRAU %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+              </div>
+              <div class="col">
+                <form action="/admin/fraudes/hitos/archivado" method="POST">
+                  <input type="hidden" id="archito" name="idhito" value="">
+                    <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.IDFRAU %>">                  
+                  <button type="submit" class="btn btn-primary w-100">Archivado de sanción</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>    
 
     <script src="/js/ayuda.js"></script>
     <script src="/socket.io/socket.io.js"></script>    
