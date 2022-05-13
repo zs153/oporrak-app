@@ -341,19 +341,19 @@
                                           </a>
                                         </li>
                                         <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('remit').value ='<%- element.IDFRAU %>', document.getElementById('texrem').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-remitir">
-                                            <i class="bi bi-box-arrow-right dropdown-item-icon"></i>Remitir fraude
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
                                           <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDFRAU %>', document.getElementById('texdes').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
                                             <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
                                           </a>
                                         </li>
                                         <li class="nav-item list-divider"></li>
                                         <li class="nav-item ">
-                                            <a href="/admin/fraudes/vinculos/<%- element.IDFRAU %>" class="nav-link">
-                                              <i class="bi bi-link-45deg dropdown-item-icon"></i>Vínculos
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('liquid').value ='<%- element.IDFRAU %>', document.getElementById('texliq').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-liqui">
+                                              <i class="bi bi-pencil-square dropdown-item-icon"></i>Propuesta de liquidación
+                                            </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="#" class="nav-link" onclick="{document.getElementById('sancion').value ='<%- element.IDFRAU %>', document.getElementById('texsan').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-sanci">
+                                              <i class="bi bi-lightning dropdown-item-icon"></i>Propuesta de sanción
                                             </a>
                                         </li>
                                         <li class="nav-item ">
@@ -523,36 +523,88 @@
       </div>
     </div>
   </div>
-  <div class="modal modal-blur fade" id="modal-remitir" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+  <div class="modal modal-blur fade" id="modal-liqui" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="modal-status bg-warning"></div>
-        <div class="modal-body text-center py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-orange icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M12 9v2m0 4v.01"></path>
-            <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
-          </svg>
-          <h3>Remitir fraude</h3>
-          <div id="texrem"></div>
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title mt-0">Propuesta de liquidación</h5>
         </div>
-        <div class="modal-footer">
-          <div class="w-100">
-            <div class="row">
-              <div class="col">
-                <a href="/admin/fraudes" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
-              </div>
-              <div class="col">
-                <form action="/admin/fraudes/remitir" method="POST">
-                  <input type="hidden" id="remit" name="idfrau" value="">
-                  <button type="submit" class="btn btn-warning w-100">Remitir fraude</button>
-                </form>
+        <form action="/admin/fraudes/liquidacion" method="POST" onsubmit="return validateSms();">
+          <input type="hidden" name="idfrau" id="liquid">
+          <div class="modal-body">
+            <div class="text-center" id="texliq"></div>
+            <div class="card-header">
+              Propuesta
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class="mb-1">
+                    <label class="form-label">Importe</label>
+                    <input type="text" name="imppro" id="imppro" class="form-control" value=""/>
+                    <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="mb-1">
+                    <label class="form-label">Observaciones</label>
+                    <textarea name="obspro" id="obspro" class="form-control" value="" maxlength="1024" rows="5" style="resize: vertical"></textarea>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+            <button type="submit" class="btn btn-primary ms-auto">Generar propuesta</button>              
+          </div>
+        </form>
       </div>
+
+    </div>
+  </div>
+  <div class="modal modal-blur fade" id="modal-sanci" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title mt-0">Propuesta de sanción</h5>
+        </div>
+        <form action="/admin/fraudes/sancion" method="POST" onsubmit="return validateSms();">
+          <input type="hidden" name="idfrau" id="sancion">
+          <div class="modal-body">
+            <div class="text-center" id="texsan"></div>
+            <div class="card-header">
+              Propuesta
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class="mb-1">
+                    <label class="form-label">Importe</label>
+                    <input type="text" name="imppro" id="imppro" class="form-control" value=""/>
+                    <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="mb-1">
+                    <label class="form-label">Observaciones</label>
+                    <textarea name="obspro" id="obssan" class="form-control" value="" maxlength="1024" rows="5" style="resize: vertical"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+            <button type="submit" class="btn btn-primary ms-auto">Generar sanción</button>              
+          </div>
+        </form>
+      </div>
+
     </div>
   </div>
   <div class="modal modal-blur fade" id="modal-desasignar" tabindex="-1" role="dialog" aria-hidden="true">

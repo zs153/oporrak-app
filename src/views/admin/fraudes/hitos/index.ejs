@@ -26,10 +26,7 @@
         margin-left: 5px;
       }
       .subtitulo {
-        position: absolute;
-        top: 2rem;
-        bottom: 0;
-        left: 1rem;
+        margin: 0;
         align-items: center;
         justify-content: center;
         color: #656d77;
@@ -162,16 +159,18 @@
       </div>
 
       <div class="page-wrapper">
-        <div class="page-body">
-          <div class="container-xl">
+        <div class="container-xl">
+          <div class="page-body">
             <div class="row">
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title">Hitos</h3>
-                    <p class="subtitulo">
-                      <%- datos.fraude.NIFCON %> <%- datos.fraude.NOMCON %>
-                    </p>                    
+                    <div>
+                      <h3 class="card-title">Hitos</h3>
+                      <p class="subtitulo">
+                        <%- datos.fraude.NIFCON %> <%- datos.fraude.NOMCON %>
+                      </p>                    
+                    </div>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
                         <div class="input-icon me-3">
