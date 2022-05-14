@@ -132,7 +132,7 @@
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards">
+          <div class="row">
             <div class="col-12">
               <div class="card">
                   <% if(typeof alerts !='undefined' ) { %>
@@ -147,7 +147,7 @@
                 <% } %>
                 <form id="form" action="/admin/fraudes/insert" method="POST" onsubmit="return validate();">
                   <div class="card-header">
-                    Fraude
+                    <h3 class="card-title">Fraude</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">

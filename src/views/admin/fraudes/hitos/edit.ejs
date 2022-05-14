@@ -25,6 +25,43 @@
             <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
           </a>
         </h1>
+        <div class="navbar-nav flex-row order-md-last">
+          <div class="nav-item dropdown d-none d-md-flex me-3">
+            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+              <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
+              <span class="badge bg-white"></span>
+              <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
+              <div class="card">
+                <div class="card-body">
+                  <ul id="messages" style="list-style: none;"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+              <div class="d-none d-xl-block">
+                <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
+                <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
+              </a>
+              <a href="#" class="dropdown-item" onclick="checkItem(this)">
+                  <% if (datos.verTodo ) { %>
+                    <i class='bi bi-eye-slash dropdown-item-icon'></i>Solo pendientes
+                  <% } else { %>
+                    <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
+                  <% } %>
+              </a>                
+              <div class="dropdown-divider"></div>
+              <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -71,29 +108,29 @@
                 </span>
               </a>
             </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                  <span>Administración</span>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
+                <span>Administración</span>
+              </a>
+              <div class="dropdown-menu">
+                <a href="/admin/oficinas" class="dropdown-item">
+                  <i class="bi bi-building dropdown-item-icon"></i>Oficinas
                 </a>
-                <div class="dropdown-menu">
-                  <a href="/admin/oficinas" class="dropdown-item">
-                    <i class="bi bi-building dropdown-item-icon"></i>Oficinas
-                  </a>
-                  <a href="/admin/tipos" class="dropdown-item">
-                    <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
-                  </a>
-                  <a href="/admin/usuarios" class="dropdown-item">
-                    <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                  </a>
-                  <a href="/admin/smss" class="dropdown-item">
-                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="/admin/estadistica" class="dropdown-item">
-                    <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                  </a>
-                </div>
-              </li>
+                <a href="/admin/tipos" class="dropdown-item">
+                  <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
+                </a>
+                <a href="/admin/usuarios" class="dropdown-item">
+                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                </a>
+                <a href="/admin/smss" class="dropdown-item">
+                  <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="/admin/estadistica" class="dropdown-item">
+                  <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
+                </a>
+              </div>
+            </li>            
           </ul>
         </div>
       </div>
@@ -101,8 +138,8 @@
 
     <div class="page-wrapper">
       <div class="page-body">
-        <div class="container-md">
-          <div class="row row-deck row-cards">
+        <div class="container-xl">
+          <div class="row">
             <div class="col-12">
               <div class="card">
                 <% if(typeof alerts !='undefined') { %> 
@@ -123,28 +160,28 @@
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-7">
+                      <div class="col-8">
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
                           <select class="form-select" id="cbotip" name="tiphit">
                           </select>
                         </div>
                       </div>
-                      <div class="col-5">
+                      <div class="col-4">
                         <div class="mb-1">
-                          <div class="form-label">Subtipo</div>
-                          <select class="form-select" id="cbosub" name="subthi">
-                          </select>
+                          <div class="input-control required">
+                            <label class="form-label required">Importe</label>
+                            <input type="text" name="imphit" id="imphit" class="form-control" value="<%- datos.hito.IMPHIT %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label required">Observaciones</label>
-                            <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"><%- datos.hito.OBSHIT %></textarea>
-                            <div class="invalid-feedback"></div>
+                          <label class="form-label">Observaciones</label>
+                          <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"><%- datos.hito.OBSHIT %></textarea>
                           </div>
                         </div>
                       </div>
@@ -194,17 +231,6 @@
     })
   </script>
   <script>
-    const selectTipos = document.querySelector('#cbotip');
-    const selectSubtipos = document.querySelector('#cbosub')    
-    
-    selectTipos.addEventListener('change', (event) => {
-      const options = document.querySelectorAll('#cbosub option');
-      const idTipo = selectTipos.value
-
-      SubTipos(idTipo);
-    });
-  </script>  
-  <script>
     const Tipos = () => {
       const xhr = new XMLHttpRequest();
 
@@ -215,61 +241,29 @@
 
           tipos.map((itm) => {
             const option = document.createElement('option')
-            option.value = itm.IDTIPO
-            option.text = itm.DESTIP
+            option.value = itm.IDTHIT
+            option.text = itm.DESTHI
+            option.setAttribute('data-foo', itm.ANUSAN)
             
-            if (itm.IDTIPO === <%- datos.hito.TIPHIT %>) {
+            if (itm.IDTHIT === <%- datos.hito.TIPHIT %>) {
               option.selected = true
             }
+
             cbo.appendChild(option)
           });
-
-          SubTipos(cbo.value)
         }
       };
       xhr.open('POST', 'http://localhost:8000/api/tipos', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify({tipo: {orgtip: <%- datos.origenTipo.hito %>}}))
+      xhr.send()
     }
     Tipos();
   </script>
   <script>
-    const SubTipos = (idTipo) => {
-      const xhr = new XMLHttpRequest();
-
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const subtipos = JSON.parse(xhr.response)
-          const cbo = document.getElementById('cbosub')
-
-          if (cbo.options.length > 0) {
-            const options = document.querySelectorAll('#cbosub option');
-            options.forEach(o => o.remove());
-          }
-          if (subtipos.length > 0) {
-            subtipos.map((itm) => {
-              const option = document.createElement('option')
-              option.value = itm.IDSUBT
-              option.text = itm.DESSUB
-              
-              cbo.appendChild(option)
-            })
-            cbo.removeAttribute('disabled')
-          } else {
-            cbo.setAttribute("disabled", "disabled");
-          }
-        }
-      };
-      xhr.open('POST', 'http://localhost:8000/api/subtipos/tipo', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify({tipo: {idtipo: idTipo}}))
-    }
-  </script>
-  <script>
-    function numbersOnly(event) {
-      var key = event.keyCode;
-      return ((key >= 96 && key <= 105) || (key >= 48 && key <= 57) || key == 188 || key==46 || key==8);
-    };    
-  </script>
+    const input = document.querySelector('#imphit');
+    input.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
+    });
+  </script>  
 </body>
 </html>

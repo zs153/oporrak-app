@@ -32,6 +32,12 @@
         color: #656d77;
         pointer-events: none;
         font-size: 0.8em;
+      }
+      .table-fixHead tbody {
+        overflow-y: scroll;
+        height: 25vh;
+        display: block;
+        flex: 1 1 auto;
       }      
     </style>
   </head>
@@ -161,7 +167,7 @@
       <div class="page-wrapper">
         <div class="container-xl">
           <div class="page-body">
-            <div class="row">
+            <div class="row row-deck row-cards">
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
@@ -195,7 +201,6 @@
                         <th class="w-4"></th>
                         <th class="w-8 px-3">Fecha</th>
                         <th>Tipo</th>
-                        <th>Subtipo</th>
                         <th>Observaciones</th>
                         <th class="w-9">Valor</th>
                         <th class="w-4"></th>
@@ -205,15 +210,27 @@
                         <% datos.hitos.map(element => { %>
                           <tr>
                             <td class="w-4">
-                              <% if (element.STAHIT === datos.estadosHito.pasivo) { %>
-                                  <span class="avatar avatar-rounded bg-red-lt">
-                                    <h6>ARCH</h6>
-                                  </span>
-                                <% } else { %>
-                                  <span class="avatar avatar-rounded bg-green-lt">
-                                    <h6>OK</h6>
-                                  </span>
-                                <% } %>
+                              <% if (element.STAHIT === datos.estadosHito.liquidacionAnulada) { %>
+                                <span class="avatar avatar-rounded bg-red-lt">
+                                  <h6>LIQ</h6>
+                                  <h6>AN</h6>
+                                </span>
+                              <% } else if (element.STAHIT === datos.estadosHito.liquidacionActiva) { %>
+                                <span class="avatar avatar-rounded bg-blue-lt">
+                                  <h6>LIQ</h6>
+                                  <h6>OK</h6>
+                                </span>
+                              <% } else if (element.STAHIT === datos.estadosHito.sancionAnulada) { %>
+                                <span class="avatar avatar-rounded bg-red-lt">
+                                  <h6>SAN</h6>
+                                  <h6>ANU</h6>
+                                </span>
+                              <% } else { %>
+                                <span class="avatar avatar-rounded bg-green-lt">
+                                  <h6>SAN</h6>
+                                  <h6>OK</h6>
+                                </span>
+                              <% } %>
                             </td>                            
                             <td class="w-8 px-3">
                               <div class="d-flex py-1 align-items-center">
@@ -225,14 +242,7 @@
                             <td>
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.DESTIP %></div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.DESSUB %></div>
+                                  <div class="font-weight-medium"><%- element.DESTHI %></div>
                                 </div>
                               </div>
                             </td>
@@ -265,11 +275,11 @@
                                       </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('delhit').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('delhit').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrarHito">
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar hito
                                       </a>
                                     </li>
-                                    <% if(element.TIPIMP === datos.tiposImporte.importeSancion && element.STAHIT === datos.estadosHito.activo) { %>
+                                    <% if(element.STAHIT === datos.estadosHito.sancionActiva) { %>
                                     <li class="nav-item list-divider"></li>
                                     <li class="nav-item">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('archito').value ='<%- element.IDHITO %>'}" data-bs-toggle="modal" data-bs-target="#modal-archivo">
@@ -288,6 +298,100 @@
                   </div>
                 </div>
               </div>
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div>
+                      <h3 class="card-title">Eventos</h3>
+                      <p class="subtitulo">
+                        <%- datos.fraude.NIFCON %> <%- datos.fraude.NOMCON %>
+                      </p>
+                    </div>
+                    <div class="col-auto ms-auto">
+                      <div class="d-flex">
+                        <div class="input-icon me-3">
+                          <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarSMSBox" onkeyup="filtroSmss();" placeholder="Buscar..." aria-label="Buscar en sms">
+                        </div>
+                        <a href="/admin/fraudes/hitos/eventos/add/<%- datos.fraude.IDFRAU %>" class="btn btn-primary">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                          </svg>
+                          Nuevo
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-vcenter table-striped table-fixHead sortableEventos" id="tblEventos">
+                      <thead>
+                      <tr class="header">
+                        <th class="w-4"></th>
+                        <th class="w-8 px-3">Fecha</th>
+                        <th>Tipo</th>
+                        <th>Observaciones</th>
+                        <th class="w-4"></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <% datos.eventos.map(element => { %>
+                          <tr>
+                            <td class="w-4">
+                              <span class="avatar avatar-rounded bg-green-lt">
+                                <h5>OK</h5>
+                              </span>
+                            </td>                            
+                            <td class="w-8 px-3">
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.STRFEC %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.DESTIP %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium"><%- element.OBSHIT %></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="text-end w-4">
+                              <ul class="dots-menu">
+                                <li class="nav-item drop-right">
+                                  <a href="#" class="nav-link">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                  </a>
+                                  <ul>
+                                    <li class="nav-item">
+                                      <a href="/admin/fraudes/hitos/eventos/edit/<%- datos.evento.IDEVEN %>/<%- element.IDHITO %>" class="nav-link">
+                                        <i class="bi bi-pencil dropdown-item-icon"></i>Editar evento
+                                      </a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a href="#" class="nav-link" onclick="{document.getElementById('ideven').value ='<%- element.IDEVEN %>', document.getElementById('deleve').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrarEvento">
+                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar evento
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>              
             </div>
           </div>
         </div>
@@ -305,7 +409,41 @@
       </div>
     </div>
     
-    <div class="modal modal-blur fade" id="modal-borrar" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-borrarHito" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-danger"></div>
+          <div class="modal-body text-center py-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M12 9v2m0 4v.01"></path>
+              <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
+            </svg>
+            <h3>¿Desea borrar este hito?</h3>
+            <div id="delhit"></div>
+            <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col">
+                  <a href="/admin/fraudes/hitos/<%- datos.fraude.IDFRAU %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                </div>
+                <div class="col">
+                  <form action="/admin/fraudes/hitos/delete" method="POST">
+                    <input type="hidden" id="idhito" name="idhito" value="">
+                    <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.IDFRAU %>">
+                    <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar hito</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-borrarEvento" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

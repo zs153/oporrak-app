@@ -131,8 +131,8 @@
 
     <div class="page-wrapper">
       <div class="page-body">
-        <div class="container-md">
-          <div class="row row-deck row-cards">
+        <div class="container-xl">
+          <div class="row">
             <div class="col-12">
               <div class="card">
                 <% if(typeof alerts !='undefined') { %> 
@@ -147,34 +147,34 @@
                 <% } %>
                 <form action="/admin/fraudes/hitos/insert" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
+                  <input type="hidden" id="anusan" name="anusan" value="">
                   <div class="card-header">
                     <h3 class="card-title">Hito</h3>
                   </div>
-                  <div class="card-body">                    
+                  <div class="card-body">
                     <div class="row">
-                      <div class="col-7">
+                      <div class="col-8">
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
                           <select class="form-select" id="cbotip" name="tiphit">
                           </select>
                         </div>
                       </div>
-                      <div class="col-5">
+                      <div class="col-4">
                         <div class="mb-1">
-                          <div class="form-label">Subtipo</div>
-                          <select class="form-select" id="cbosub" name="subthi">
-                          </select>
+                          <div class="input-control required">
+                            <label class="form-label required">Importe</label>
+                            <input type="text" name="imphit" id="imphit" class="form-control" value="<%- datos.hito.IMPHIT %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                          <div class="input-control">
-                            <label class="form-label">Observaciones</label>
-                            <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"></textarea>
-                            <div class="invalid-feedback"></div>
-                          </div>
+                          <label class="form-label">Observaciones</label>
+                          <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"></textarea>
                         </div>
                       </div>
                     </div>
@@ -223,15 +223,45 @@
     })
   </script>
   <script>
-    const selectTipos = document.querySelector('#cbotip');
-    const selectSubtipos = document.querySelector('#cbosub')    
-    
-    selectTipos.addEventListener('change', (event) => {
-      const options = document.querySelectorAll('#cbosub option');
-      const idTipo = selectTipos.value
+    const imphit = document.getElementById('imphit')
+    const combo = document.getElementById('cbotip')
 
-      SubTipos(idTipo);
-    });
+    const validate = () => {
+      const imphitValue = imphit.value
+
+      if (imphitValue === '') {
+        setError(imphit, 'Nombre requerido')
+        setTimeout(function () {
+          setSuccess(imphit)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(imphit)
+      }
+
+      const selected = combo.options[combo.selectedIndex]
+      const foo = selected.getAttribute('data-foo')
+      document.getElementById('anusan').value = foo
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
   </script>
   <script>
     const Tipos = () => {
@@ -244,52 +274,25 @@
 
           tipos.map((itm) => {
             const option = document.createElement('option')
-            option.value = itm.IDTIPO
-            option.text = itm.DESTIP
+            option.value = itm.IDTHIT
+            option.text = itm.DESTHI
+            option.setAttribute('data-foo', itm.ANUSAN)
 
             cbo.appendChild(option)
           });
-
-          SubTipos(cbo.value)
         }
       };
       xhr.open('POST', 'http://localhost:8000/api/tipos', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify({tipo: {orgtip: <%- datos.origenTipo.hito %>}}))
+      xhr.send()
     }
     Tipos();
   </script>
   <script>
-    const SubTipos = (idTipo) => {
-      const xhr = new XMLHttpRequest();
-
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const subtipos = JSON.parse(xhr.response)
-          const cbo = document.getElementById('cbosub')
-
-          if (cbo.options.length > 0) {
-            const options = document.querySelectorAll('#cbosub option');
-            options.forEach(o => o.remove());
-          }
-          if (subtipos.length > 0) {
-            subtipos.map((itm) => {
-              const option = document.createElement('option')
-              option.value = itm.IDSUBT
-              option.text = itm.DESSUB
-              
-              cbo.appendChild(option)
-            })
-            cbo.removeAttribute('disabled')
-          } else {
-            cbo.setAttribute("disabled", "disabled");
-          }
-        }
-      };
-      xhr.open('POST', 'http://localhost:8000/api/subtipos/tipo', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify({tipo: {idtipo: idTipo}}))
-    }
-  </script>  
+    const input = document.querySelector('#imphit');
+    input.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
+    });
+  </script> 
 </body>
 </html>

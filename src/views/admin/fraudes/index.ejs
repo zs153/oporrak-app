@@ -276,7 +276,7 @@
                                     <ul>
                                       <li class="nav-item">
                                         <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude</a>
+                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
                                         </a>
                                       </li>
                                       <li class="nav-item">
@@ -302,9 +302,9 @@
                                       </a>
                                       <ul>
                                         <li class="nav-item">
-                                            <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                              <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
-                                            </a>
+                                          <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
+                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
+                                          </a>
                                         </li>
                                         <li class="nav-item">
                                           <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDFRAU %>', document.getElementById('texdes').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
@@ -332,7 +332,7 @@
                                       <ul>
                                         <li class="nav-item">
                                           <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude</a>
+                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
                                           </a>
                                         </li>
                                         <li class="nav-item">
@@ -345,21 +345,10 @@
                                             <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
                                           </a>
                                         </li>
-                                        <li class="nav-item list-divider"></li>
                                         <li class="nav-item ">
-                                            <a href="#" class="nav-link" onclick="{document.getElementById('liquid').value ='<%- element.IDFRAU %>', document.getElementById('texliq').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-liqui">
-                                              <i class="bi bi-pencil-square dropdown-item-icon"></i>Propuesta de liquidación
-                                            </a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a href="#" class="nav-link" onclick="{document.getElementById('sancion').value ='<%- element.IDFRAU %>', document.getElementById('texsan').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-sanci">
-                                              <i class="bi bi-lightning dropdown-item-icon"></i>Propuesta de sanción
-                                            </a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a href="/admin/fraudes/hitos/<%- element.IDFRAU %>" class="nav-link">
-                                              <i class="bi bi-flag dropdown-item-icon"></i>Hitos
-                                            </a>
+                                          <a href="/admin/fraudes/hitos/<%- element.IDFRAU %>" class="nav-link">
+                                            <i class="bi bi-flag dropdown-item-icon"></i>Hitos / Eventos
+                                          </a>
                                         </li>
                                         <li class="nav-item list-divider"></li>
                                         <li class="nav-item ">
@@ -521,90 +510,6 @@
           </div>
         </form>
       </div>
-    </div>
-  </div>
-  <div class="modal modal-blur fade" id="modal-liqui" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <h5 class="modal-title mt-0">Propuesta de liquidación</h5>
-        </div>
-        <form action="/admin/fraudes/liquidacion" method="POST" onsubmit="return validateSms();">
-          <input type="hidden" name="idfrau" id="liquid">
-          <div class="modal-body">
-            <div class="text-center" id="texliq"></div>
-            <div class="card-header">
-              Propuesta
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-4">
-                  <div class="mb-1">
-                    <label class="form-label">Importe</label>
-                    <input type="text" name="imppro" id="imppro" class="form-control" value=""/>
-                    <div class="invalid-feedback"></div>
-                  </div>
-                </div>
-                <div class="col-8">
-                  <div class="mb-1">
-                    <label class="form-label">Observaciones</label>
-                    <textarea name="obspro" id="obspro" class="form-control" value="" maxlength="1024" rows="5" style="resize: vertical"></textarea>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-            <button type="submit" class="btn btn-primary ms-auto">Generar propuesta</button>              
-          </div>
-        </form>
-      </div>
-
-    </div>
-  </div>
-  <div class="modal modal-blur fade" id="modal-sanci" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <h5 class="modal-title mt-0">Propuesta de sanción</h5>
-        </div>
-        <form action="/admin/fraudes/sancion" method="POST" onsubmit="return validateSms();">
-          <input type="hidden" name="idfrau" id="sancion">
-          <div class="modal-body">
-            <div class="text-center" id="texsan"></div>
-            <div class="card-header">
-              Propuesta
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-4">
-                  <div class="mb-1">
-                    <label class="form-label">Importe</label>
-                    <input type="text" name="imppro" id="imppro" class="form-control" value=""/>
-                    <div class="invalid-feedback"></div>
-                  </div>
-                </div>
-                <div class="col-8">
-                  <div class="mb-1">
-                    <label class="form-label">Observaciones</label>
-                    <textarea name="obspro" id="obssan" class="form-control" value="" maxlength="1024" rows="5" style="resize: vertical"></textarea>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-            <button type="submit" class="btn btn-primary ms-auto">Generar sanción</button>              
-          </div>
-        </form>
-      </div>
-
     </div>
   </div>
   <div class="modal modal-blur fade" id="modal-desasignar" tabindex="-1" role="dialog" aria-hidden="true">

@@ -45,110 +45,108 @@ export const tiposMovimiento = {
   olvidoPassword: 61,
   restablecerPassword: 62,
   registroUsuario: 63,
-};
+}
 export const tiposPerfil = {
   general: 1,
   informador: 3,
   liquidador: 8,
-};
+}
 export const tiposRol = {
   usuario: 1,
   responsable: 2,
   admin: 3,
-};
+}
 export const tiposVisualizacion = {
   todos: -1,
   pendientes: 1,
   resueltos: 2,
-};
+}
 export const estadosUsuario = {
   reserva: 0,
   activo: 1,
-};
+}
 export const estadosDocumento = {
   pendiente: 0,
   asignado: 1,
   resuelto: 2,
   remitido: 3,
-};
+}
 export const estadosFraude = {
   pendiente: 0,
   asignado: 1,
   resuelto: 2,
   remitido: 3,
-};
+}
 export const estadosCita = {
   disponible: 0,
   asignado: 1,
-};
+}
 export const estadosSms = {
   pendiente: 0,
   enviado: 1,
-};
+}
 export const estadosHito = {
-  pasivo: 0,
-  activo: 1,
-};
+  liquidacionAnulada: 0,
+  liquidacionActiva: 1,
+  sancionAnulada: 2,
+  sancionActiva: 3,
+}
 
 export const origenTipo = {
   formulario: 1,
   fraude: 2,
   hito: 3,
   otros: 4,
-};
+}
 export const tiposLiquidacion = {
   ingresar: 1,
   devolver: 2,
-};
-export const tiposImporte = {
-  sinImporte: 0,
-  importeLiquidacion: 1,
-  importeSancion: 2,
-};
+}
 
 /* arrays */
 export const arrTiposRol = [
-  { id: 1, des: "USUARIO" },
-  { id: 2, des: "RESPONSABLE" },
-  { id: 3, des: "ADMINISTRADOR" },
-];
+  { id: 1, des: 'USUARIO' },
+  { id: 2, des: 'RESPONSABLE' },
+  { id: 3, des: 'ADMINISTRADOR' },
+]
 export const arrTiposPerfil = [
-  { id: 1, des: "GENERAL" },
-  { id: 3, des: "INFORMADOR" },
-  { id: 8, des: "LIQUIDADOR" },
-];
+  { id: 1, des: 'GENERAL' },
+  { id: 3, des: 'INFORMADOR' },
+  { id: 8, des: 'LIQUIDADOR' },
+]
 export const arrEstadosUsuario = [
-  { id: 0, des: "RESERVA" },
-  { id: 1, des: "ACTIVO" },
-];
+  { id: 0, des: 'RESERVA' },
+  { id: 1, des: 'ACTIVO' },
+]
 export const arrEstadosSms = [
-  { id: 0, des: "PENDIENTE" },
-  { id: 1, des: "ENVIADO" },
-];
+  { id: 0, des: 'PENDIENTE' },
+  { id: 1, des: 'ENVIADO' },
+]
 export const arrEstadosFormulario = [
-  { ID: 0, DES: "PENDIENTE", LIT: "PEN" },
-  { ID: 1, DES: "ASIGNADO", LIT: "ASI" },
-  { ID: 2, DES: "RESUELTO", LIT: "RES" },
-  { ID: 3, DES: "REMITIDO", LIT: "REM" },
-];
+  { ID: 0, DES: 'PENDIENTE', LIT: 'PEN' },
+  { ID: 1, DES: 'ASIGNADO', LIT: 'ASI' },
+  { ID: 2, DES: 'RESUELTO', LIT: 'RES' },
+  { ID: 3, DES: 'REMITIDO', LIT: 'REM' },
+]
 export const arrEstadosFraude = [
-  { ID: 0, DES: "PENDIENTE", LIT: "PEN" },
-  { ID: 1, DES: "ASIGNADO", LIT: "ASI" },
-  { ID: 2, DES: "RESUELTO", LIT: "RES" },
-  { ID: 3, DES: "REMITIDO", LIT: "REM" },
-];
+  { ID: 0, DES: 'PENDIENTE', LIT: 'PEN' },
+  { ID: 1, DES: 'ASIGNADO', LIT: 'ASI' },
+  { ID: 2, DES: 'RESUELTO', LIT: 'RES' },
+  { ID: 3, DES: 'REMITIDO', LIT: 'REM' },
+]
 export const arrOrigenTipo = [
-  { id: 1, des: "FORMULARIO" },
-  { id: 2, des: "FRAUDE" },
-  { id: 3, des: "HITO" },
-  { id: 4, des: "OTROS" },
-];
+  { id: 1, des: 'FORMULARIO' },
+  { id: 2, des: 'FRAUDE' },
+  { id: 3, des: 'HITO' },
+  { id: 4, des: 'OTROS' },
+]
 export const arrTiposLiquidacion = [
-  { id: 1, des: "INFRESAR" },
-  { id: 2, des: "DEVOLVER" },
-];
-export const arrTiposImporte = [
-  { id: 0, des: "SIN IMPORTE" },
-  { id: 1, des: "IMPORTE DE LIQUIDACION" },
-  { id: 2, des: "IMPORTE DE SANCION" },
-];
+  { id: 1, des: 'INFRESAR' },
+  { id: 2, des: 'DEVOLVER' },
+]
+export const arrEstadosHito = [
+  { id: 0, des: 'LIQUIDACION ANULADA' },
+  { id: 0, des: 'LIQUIDACION ACTIVA' },
+  { id: 1, des: 'SANCION ANULADA' },
+  { id: 2, des: 'SANCION ACTIVA' },
+]
