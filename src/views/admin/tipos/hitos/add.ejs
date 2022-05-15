@@ -4,13 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Modificar hito</title>
+  <title>Añadir Tipo Hito</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    .subtitulo {
+      position: absolute;
+      top: 1.5rem;
+      color: #656d77;
+      pointer-events: none;
+      font-size: 0.8em;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -50,13 +59,6 @@
               <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
                 <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
               </a>
-              <a href="#" class="dropdown-item" onclick="checkItem(this)">
-                  <% if (datos.verTodo ) { %>
-                    <i class='bi bi-eye-slash dropdown-item-icon'></i>Solo pendientes
-                  <% } else { %>
-                    <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
-                  <% } %>
-              </a>                
               <div class="dropdown-divider"></div>
               <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
             </div>
@@ -98,7 +100,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/admin/fraudes" >
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="bi bi-cash"></i>
@@ -108,29 +110,29 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                <span>Administración</span>
-              </a>
-              <div class="dropdown-menu">
-                <a href="/admin/oficinas" class="dropdown-item">
-                  <i class="bi bi-building dropdown-item-icon"></i>Oficinas
+              <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
+                  <span>Administración</span>
                 </a>
-                <a href="/admin/tipos" class="dropdown-item">
-                  <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
-                </a>
-                <a href="/admin/usuarios" class="dropdown-item">
-                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                </a>
-                <a href="/admin/smss" class="dropdown-item">
-                  <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="/admin/estadistica" class="dropdown-item">
-                  <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                </a>
-              </div>
-            </li>            
+                <div class="dropdown-menu">
+                  <a href="/admin/oficinas" class="dropdown-item">
+                    <i class="bi bi-building dropdown-item-icon"></i>Oficinas
+                  </a>
+                  <a href="/admin/tipos" class="dropdown-item">
+                    <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
+                  </a>
+                  <a href="/admin/usuarios" class="dropdown-item">
+                    <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                  </a>
+                  <a href="/admin/smss" class="dropdown-item">
+                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a href="/admin/estadistica" class="dropdown-item">
+                    <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
+                  </a>
+                </div>
+              </li>          
           </ul>
         </div>
       </div>
@@ -142,8 +144,8 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <% if(typeof alerts !='undefined') { %> 
-                  <% alerts.map(function (alert) { %>
+                <% if(typeof alerts !='undefined') { %>
+                  <% alerts.map(function (alert){ %>
                     <div
                       class="alert alert-warning alert-dismissible fade show"
                       role="alert"
@@ -151,46 +153,26 @@
                       <%- alert.msg %>
                     </div>
                   <% }) %>
-                <% } %>
-                <form action="/admin/fraudes/hitos/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" id="idhito" name="idhito" value="<%- datos.hito.IDHITO %>">
-                  <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
+                <% } %>                
+                <form action="/admin/tipos/hitos/insert" method="POST" onsubmit="return validate();">
                   <div class="card-header">
-                    Hito
+                    <h3 class="card-title">Nuevo tipo de hito</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-8">
-                        <div class="mb-1">
-                          <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tiphit">
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <div class="input-control required">
-                            <label class="form-label required">Importe</label>
-                            <input type="text" name="imphit" id="imphit" class="form-control" value="<%- datos.hito.IMPHIT %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                          <label class="form-label">Observaciones</label>
-                          <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"><%- datos.hito.OBSHIT %></textarea>
-                          </div>
+                          <label class="form-label required">Descripción</label>
+                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
+                          <div class="invalid-feedback"></div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/fraudes/hitoseventos/<%- datos.fraude.idfrau %>" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Editar hito</button>
+                      <a href="/admin/tipos/hitos" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear nuevo tipo</button>
                     </div>
                   </div>
                 </form>
@@ -231,39 +213,37 @@
     })
   </script>
   <script>
-    const Tipos = () => {
-      const xhr = new XMLHttpRequest();
+    const destip = document.getElementById('destip')
 
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const tipos = JSON.parse(xhr.response)
-          const cbo = document.getElementById('cbotip')
+    const validate = () => {
+      const destipValue = destip.value.trim()
 
-          tipos.map((itm) => {
-            const option = document.createElement('option')
-            option.value = itm.IDTIPO
-            option.text = itm.DESTIP
-            option.setAttribute('data-foo', itm.ANUSAN)
-            
-            if (itm.IDTIPO === <%- datos.hito.TIPHIT %>) {
-              option.selected = true
-            }
+      if (destipValue === '') {
+        setError(destip, 'Descripción requerida')
+        return false
+      } else {
+        setSuccess(destip)
+      }
 
-            cbo.appendChild(option)
-          });
-        }
-      };
-      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send()
+      return true
     }
-    Tipos();
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
   </script>
-  <script>
-    const input = document.querySelector('#imphit');
-    input.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
-    });
-  </script>  
 </body>
 </html>

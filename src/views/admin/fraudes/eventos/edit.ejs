@@ -152,28 +152,19 @@
                     </div>
                   <% }) %>
                 <% } %>
-                <form action="/admin/fraudes/hitos/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" id="idhito" name="idhito" value="<%- datos.hito.IDHITO %>">
+                <form action="/admin/fraudes/eventos/update" method="POST" onsubmit="return validate();">
+                  <input type="hidden" id="ideven" name="ideven" value="<%- datos.evento.IDEVEN %>">
                   <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
                   <div class="card-header">
-                    Hito
+                    Evento
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-8">
+                      <div class="col-12">
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tiphit">
+                          <select class="form-select" id="cbotip" name="tipeve">
                           </select>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <div class="input-control required">
-                            <label class="form-label required">Importe</label>
-                            <input type="text" name="imphit" id="imphit" class="form-control" value="<%- datos.hito.IMPHIT %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -181,7 +172,7 @@
                       <div class="col-12">
                         <div class="mb-1">
                           <label class="form-label">Observaciones</label>
-                          <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"><%- datos.hito.OBSHIT %></textarea>
+                          <textarea type="text" name="obseve" id="obseve" class="form-control" rows="3" style="resize: vertical"><%- datos.evento.OBSEVE %></textarea>
                           </div>
                         </div>
                       </div>
@@ -190,7 +181,7 @@
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/fraudes/hitoseventos/<%- datos.fraude.idfrau %>" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Editar hito</button>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Editar evento</button>
                     </div>
                   </div>
                 </form>
@@ -243,27 +234,19 @@
             const option = document.createElement('option')
             option.value = itm.IDTIPO
             option.text = itm.DESTIP
-            option.setAttribute('data-foo', itm.ANUSAN)
-            
-            if (itm.IDTIPO === <%- datos.hito.TIPHIT %>) {
+
+            if (itm.IDTIPO === <%- datos.evento.TIPEVE %>) {
               option.selected = true
             }
-
             cbo.appendChild(option)
           });
         }
       };
-      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+      xhr.open('POST', 'http://localhost:8000/api/eventos', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send()
     }
     Tipos();
   </script>
-  <script>
-    const input = document.querySelector('#imphit');
-    input.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
-    });
-  </script>  
 </body>
 </html>

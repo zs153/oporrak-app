@@ -181,7 +181,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/fraudes/hitos/<%- datos.fraude.idfrau %>" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/fraudes/hitoseventos/<%- datos.fraude.idfrau %>" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Añadir hito</button>
                     </div>
                   </div>
@@ -224,7 +224,6 @@
   </script>
   <script>
     const imphit = document.getElementById('imphit')
-    const combo = document.getElementById('cbotip')
 
     const validate = () => {
       const imphitValue = imphit.value
@@ -238,10 +237,6 @@
       } else {
         setSuccess(imphit)
       }
-
-      const selected = combo.options[combo.selectedIndex]
-      const foo = selected.getAttribute('data-foo')
-      document.getElementById('anusan').value = foo
 
       return true
     }
@@ -264,7 +259,24 @@
     }
   </script>
   <script>
-    const Tipos = () => {
+    const Hitos = () => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const hitos = JSON.parse(xhr.response)
+
+          Tipos(hitos);
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/fraudes/hitos', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify({fraude: {idfrau: <%- datos.fraude.idfrau %>}}))
+    }
+    Hitos();
+  </script>
+  <script>
+    const Tipos = (hitos) => {
       const xhr = new XMLHttpRequest();
 
       xhr.onload = function() {
@@ -274,10 +286,13 @@
 
           tipos.map((itm) => {
             const option = document.createElement('option')
-            option.value = itm.IDTHIT
-            option.text = itm.DESTHI
+            option.value = itm.IDTIPO
+            option.text = itm.DESTIP
             option.setAttribute('data-foo', itm.ANUSAN)
 
+            if (hitos.some(el => el.TIPHIT === itm.IDTIPO)) {
+              option.setAttribute('disabled', 'disabled')
+            }
             cbo.appendChild(option)
           });
         }
@@ -286,7 +301,7 @@
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send()
     }
-    Tipos();
+    //Tipos();
   </script>
   <script>
     const input = document.querySelector('#imphit');

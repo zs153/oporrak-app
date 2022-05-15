@@ -109,8 +109,8 @@ export const editPage = async (req, res) => {
   }
 }
 
-// pages hito
-export const hitosPage = async (req, res) => {
+// page hitosevento
+export const hitoseventosPage = async (req, res) => {
   const user = req.user
   let fraude = {
     idfrau: req.params.id,
@@ -123,7 +123,7 @@ export const hitosPage = async (req, res) => {
     const htos = await axios.post('http://localhost:8000/api/fraudes/hitos', {
       fraude,
     })
-    const evts = await axios.post('http://localhost:8000/api/fraudes/eventos', {
+    const evts = await axios.post('http://localhost:8000/api/fraudes/events', {
       fraude,
     })
     const datos = {
@@ -142,6 +142,8 @@ export const hitosPage = async (req, res) => {
     })
   }
 }
+
+// pages hito
 export const addHitosPage = async (req, res) => {
   const user = req.user
   const fraude = {
@@ -176,7 +178,7 @@ export const editHitosPage = async (req, res) => {
   const fraude = {
     idfrau: req.params.idfra,
   }
-  let hito = {
+  const hito = {
     idhito: req.params.idhit,
   }
 
@@ -184,11 +186,10 @@ export const editHitosPage = async (req, res) => {
     const result = await axios.post('http://localhost:8000/api/hito', {
       hito,
     })
-    hito = result.data
 
     const datos = {
       fraude,
-      hito,
+      hito: result.data,
       origenTipo,
     }
 
@@ -235,22 +236,21 @@ export const editEventosPage = async (req, res) => {
   const fraude = {
     idfrau: req.params.idfra,
   }
-  let evento = {
+  const evento = {
     ideven: req.params.ideve,
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/evento', {
+    const result = await axios.post('http://localhost:8000/api/event', {
       evento,
     })
-    evento = result.data
 
     const datos = {
       fraude,
-      evento,
+      evento: result.data,
     }
 
-    res.render('admin/fraudes/evento/edit', { user, datos })
+    res.render('admin/fraudes/eventos/edit', { user, datos })
   } catch (error) {
     const msg =
       'No se ha podido acceder a los datos de la aplicación. Si persiste el error solicite asistencia.'
@@ -664,7 +664,7 @@ export const insertHito = async (req, res) => {
       movimiento,
     })
 
-    res.redirect(`/admin/fraudes/hitos/${fraude.idfrau}`)
+    res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`)
   } catch (error) {
     const msg = 'No se ha podido insertar el hito.'
 
@@ -695,7 +695,7 @@ export const updateHito = async (req, res) => {
       movimiento,
     })
 
-    res.redirect(`/admin/fraudes/hitos/${fraude.idfrau}`)
+    res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`)
   } catch (error) {
     const msg = 'No se ha podido actualizar el hito.'
 
@@ -723,7 +723,7 @@ export const deleteHito = async (req, res) => {
       movimiento,
     })
 
-    res.redirect(`/admin/fraudes/hitos/${fraude.idfrau}`)
+    res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`)
   } catch (error) {
     const msg = 'No se ha podido acceder borrar el hito.'
 
@@ -752,7 +752,97 @@ export const archivoHito = async (req, res) => {
       movimiento,
     })
 
-    res.redirect(`/admin/fraudes/hitos/${fraude.idfrau}`)
+    res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`)
+  } catch (error) {
+    const msg = 'No se ha podido acceder borrar el hito.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+
+// proc evento
+export const insertEvento = async (req, res) => {
+  const user = req.user
+  const fraude = {
+    idfrau: req.body.idfrau,
+  }
+  const evento = {
+    tipeve: req.body.tipeve,
+    obseve: req.body.obseve,
+  }
+  const movimiento = {
+    usumov: user.id,
+    tipmov: tiposMovimiento.crearEvento,
+  }
+
+  try {
+    await axios.post('http://localhost:8000/api/fraudes/events/insert', {
+      fraude,
+      evento,
+      movimiento,
+    })
+
+    res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`)
+  } catch (error) {
+    const msg = 'No se ha podido insertar el hito.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+export const updateEvento = async (req, res) => {
+  const user = req.user
+  const fraude = {
+    idfrau: req.body.idfrau,
+  }
+  const evento = {
+    ideven: req.body.ideven,
+    tipeve: req.body.tipeve,
+    obseve: req.body.obseve,
+  }
+  const movimiento = {
+    usumov: user.id,
+    tipmov: tiposMovimiento.modificarEvento,
+  }
+
+  try {
+    await axios.post('http://localhost:8000/api/events/update', {
+      evento,
+      movimiento,
+    })
+
+    res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`)
+  } catch (error) {
+    const msg = 'No se ha podido actualizar el hito.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+export const deleteEvento = async (req, res) => {
+  const user = req.user
+  const fraude = {
+    idfrau: req.body.idfrau,
+  }
+  const evento = {
+    ideven: req.body.ideven,
+  }
+  const movimiento = {
+    usumov: user.id,
+    tipmov: tiposMovimiento.borrarEvento,
+  }
+
+  try {
+    await axios.post('http://localhost:8000/api/events/delete', {
+      evento,
+      movimiento,
+    })
+
+    res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`)
   } catch (error) {
     const msg = 'No se ha podido acceder borrar el hito.'
 
