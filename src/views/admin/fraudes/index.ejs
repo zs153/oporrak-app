@@ -336,7 +336,7 @@
                                           </a>
                                         </li>
                                         <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('resol').value ='<%- element.MOVCON %>', document.getElementById('texres').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>', document.getElementById('resdoc').value ='<%- element.IDFRAU %>', setTimeout(focoRes,500)}" data-bs-toggle="modal" data-bs-target="#modal-resolver">
+                                          <a href="/admin/fraudes/resolver/<%- element.IDFRAU %>" class="nav-link">
                                             <i class="bi bi-check2 dropdown-item-icon"></i>Resolver fraude
                                           </a>
                                         </li>
@@ -467,33 +467,37 @@
             </svg> 
             <h3>Resolver fraude</h3>
             <div id="texres"></div>
-            <div class="card-header">
-              SMS
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-4">
-                  <div class="mb-1">
-                    <label class="form-label text-start">Móvil</label>
-                    <input type="text" name="movsms" id="resol" class="form-control" value="" readonly/>
+              <div id="cierre" >
+                cierre
+              </div>
+              <div class="card-header">
+                SMS
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="mb-1">
+                      <label class="form-label text-start">Móvil</label>
+                      <input type="text" name="movsms" id="resol" class="form-control" value="" readonly/>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="mb-1">
+                      <label class="form-label text-start">Texto sms</label>
+                      <textarea autofocus name="texsms" id="texsms" class="form-control" value="" maxlength="140" rows="3" style="resize: vertical" ></textarea>
+                    </div>
                   </div>
                 </div>
-                <div class="col-8">
-                  <div class="mb-1">
-                    <label class="form-label text-start">Texto sms</label>
-                    <textarea autofocus name="texsms" id="texsms" class="form-control" value="" maxlength="140" rows="3" style="resize: vertical" ></textarea>
+                <div class="row">
+                  <div class="col-2 text-start">
+                    <label class="form-check form-check-inline">
+                      <input type="checkbox" class="form-check-input" name="chkenv" id="chkenv" />
+                      <span class="form-check-label">Enviar</span>
+                    </label>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-2 text-start">
-                  <label class="form-check form-check-inline">
-                    <input type="checkbox" class="form-check-input" name="chkenv" id="chkenv" />
-                    <span class="form-check-label">Enviar</span>
-                  </label>
-                </div>
-              </div>
-            </div>
+
           </div>
           <div class="modal-footer">
             <div class="w-100">
@@ -731,6 +735,31 @@
       errorDisplay.innerText = message;
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
+    }
+  </script>
+  <script>
+    let retor = 0;
+    let elem = document.getElementById('cierre');
+
+    const HitosFraude = (idFraude) => {
+      const xhr = new XMLHttpRequest();
+      const fraude = {
+        idfrau: idFraude,
+      }
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const hitos = JSON.parse(xhr.response)
+          const filter = <%- datos.estadosHito.liquidacionActiva %>          
+          if(hitos.some(itm => itm.STAHIT === filter)){
+            elem.style.display = 'block'
+          } else {
+            elem.style.display = 'none'
+          }
+        }
+      };
+      xhr.open('POST', 'http://localhost:8000/api/fraudes/hitos', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify({fraude}))
     }
   </script>
 </body>

@@ -147,7 +147,7 @@
                 <% } %>
                 <form action="/admin/fraudes/hitos/insert" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
-                  <input type="hidden" id="anusan" name="anusan" value="">
+                  <input type="hidden" id="anuhit" name="anuhit" value="">
                   <div class="card-header">
                     <h3 class="card-title">Hito</h3>
                   </div>
@@ -224,6 +224,7 @@
   </script>
   <script>
     const imphit = document.getElementById('imphit')
+    const combo = document.getElementById('cbotip')
 
     const validate = () => {
       const imphitValue = imphit.value
@@ -238,6 +239,7 @@
         setSuccess(imphit)
       }
 
+      document.getElementById('anuhit').value = combo.options[combo.selectedIndex].getAttribute('data-foo')
       return true
     }
 
@@ -288,7 +290,7 @@
             const option = document.createElement('option')
             option.value = itm.IDTIPO
             option.text = itm.DESTIP
-            option.setAttribute('data-foo', itm.ANUSAN)
+            option.setAttribute('data-foo', itm.ANUHIT)
 
             if (hitos.some(el => el.TIPHIT === itm.IDTIPO)) {
               option.setAttribute('disabled', 'disabled')

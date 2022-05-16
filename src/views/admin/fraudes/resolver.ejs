@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Modificar hito</title>
+  <title>Resolver fraude</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -50,13 +50,6 @@
               <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
                 <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
               </a>
-              <a href="#" class="dropdown-item" onclick="checkItem(this)">
-                  <% if (datos.verTodo ) { %>
-                    <i class='bi bi-eye-slash dropdown-item-icon'></i>Solo pendientes
-                  <% } else { %>
-                    <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
-                  <% } %>
-              </a>                
               <div class="dropdown-divider"></div>
               <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
             </div>
@@ -108,29 +101,29 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                <span>Administración</span>
-              </a>
-              <div class="dropdown-menu">
-                <a href="/admin/oficinas" class="dropdown-item">
-                  <i class="bi bi-building dropdown-item-icon"></i>Oficinas
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
+                  <span>Administración</span>
                 </a>
-                <a href="/admin/tipos" class="dropdown-item">
-                  <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
-                </a>
-                <a href="/admin/usuarios" class="dropdown-item">
-                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                </a>
-                <a href="/admin/smss" class="dropdown-item">
-                  <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="/admin/estadistica" class="dropdown-item">
-                  <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                </a>
-              </div>
-            </li>            
+                <div class="dropdown-menu">
+                  <a href="/admin/oficinas" class="dropdown-item">
+                    <i class="bi bi-building dropdown-item-icon"></i>Oficinas
+                  </a>
+                  <a href="/admin/tipos" class="dropdown-item">
+                    <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
+                  </a>
+                  <a href="/admin/usuarios" class="dropdown-item">
+                    <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                  </a>
+                  <a href="/admin/smss" class="dropdown-item">
+                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a href="/admin/estadistica" class="dropdown-item">
+                    <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
+                  </a>
+                </div>
+              </li>
           </ul>
         </div>
       </div>
@@ -152,45 +145,28 @@
                     </div>
                   <% }) %>
                 <% } %>
-                <form action="/admin/fraudes/hitos/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" id="idhito" name="idhito" value="<%- datos.hito.IDHITO %>">
+                <form action="/admin/fraudes/resolver" method="POST">
                   <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
                   <div class="card-header">
-                    Hito
+                    <h3 class="card-title">Fraude correcto</h3>
                   </div>
+                  <% if(datos.hayLiquidacion) { %> 
                   <div class="card-body">
                     <div class="row">
                       <div class="col-8">
                         <div class="mb-1">
-                          <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tiphit">
+                          <div class="form-label">Causa cierre</div>
+                          <select class="form-select" id="cbotip" name="sitfra">
                           </select>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <div class="input-control required">
-                            <label class="form-label required">Importe</label>
-                            <input type="text" name="imphit" id="imphit" class="form-control" value="<%- datos.hito.IMPHIT %>" />
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="mb-1">
-                          <label class="form-label">Observaciones</label>
-                          <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"><%- datos.hito.OBSHIT %></textarea>
-                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <% } %> 
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/fraudes/hitoseventos/<%- datos.fraude.idfrau %>" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Editar hito</button>
+                      <a href="/admin/fraudes" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Resolver fraude</button>
                     </div>
                   </div>
                 </form>
@@ -231,7 +207,7 @@
     })
   </script>
   <script>
-    const Tipos = () => {
+    const SubTipos = () => {
       const xhr = new XMLHttpRequest();
 
       xhr.onload = function() {
@@ -243,27 +219,16 @@
             const option = document.createElement('option')
             option.value = itm.IDTIPO
             option.text = itm.DESTIP
-            option.setAttribute('data-foo', itm.ANUHIT)
-            
-            if (itm.IDTIPO === <%- datos.hito.TIPHIT %>) {
-              option.selected = true
-            }
 
             cbo.appendChild(option)
           });
         }
       };
-      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+      xhr.open('POST', 'http://localhost:8000/api/subtipos', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send()
     }
-    Tipos();
+    SubTipos();
   </script>
-  <script>
-    const input = document.querySelector('#imphit');
-    input.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
-    });
-  </script>  
 </body>
 </html>
