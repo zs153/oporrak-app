@@ -146,23 +146,64 @@
                   <% }) %>
                 <% } %>
                 <form action="/admin/fraudes/resolver" method="POST">
-                  <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.idfrau %>">
+                  <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.IDFRAU %>">
                   <div class="card-header">
-                    <h3 class="card-title">Fraude correcto</h3>
+                    <h3 class="card-title">Fraude</h3>
                   </div>
-                  <% if(datos.hayLiquidacion) { %> 
                   <div class="card-body">
                     <div class="row">
+                      <div class="col-4">
+                        <div class="mb-1">
+                          <label class="form-label">NIF/NIE</label>
+                          <input type="text" class="form-control" value="<%- datos.fraude.NIFCON %>" readonly/>
+                        </div>
+                      </div>
                       <div class="col-8">
+                        <div class="mb-1">
+                          <label class="form-label">Nombre</label>
+                          <input type="text" class="form-control" value="<%- datos.fraude.NOMCON %>" readonly/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <label class="form-label">Referencia</label>
+                          <input type="text" class="form-control" value="<%- datos.fraude.REFFRA %>" readonly/>
+                        </div>
+                      </div>
+                      <div class="col-8">
+                        <div class="mb-1">
+                          <label class="form-label">Tipo</label>
+                          <input type="text" class="form-control" value="<%- datos.fraude.DESTIP %>" readonly/>
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <label class="form-label">Ejercicio</label>
+                          <input type="number" class="form-control" value="<%- datos.fraude.EJEFRA %>" readonly/>
+                        </div>
+                      </div>
+                    </div>
+                    <% if(!datos.hayLiquidacion) { %>                    
+                    <div class="row">
+                      <div class="col-12">
                         <div class="mb-1">
                           <div class="form-label">Causa cierre</div>
                           <select class="form-select" id="cbotip" name="sitfra">
+                            <% datos.subtipos.map(element => { %> 
+                              <option value="<%- element.IDSUBT %>"><%- element.DESSUB %></option>
+                            <% }) %> 
                           </select>
                         </div>
                       </div>
                     </div>
+                    <% } else { %> 
+                      <div class="row">
+                        <input type="hidden" id="sitfra" name="sitfra" value="0">
+                      </div>
+                    <% } %> 
                   </div>
-                  <% } %> 
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/fraudes" class="btn btn-link">Cancelar</a>
@@ -205,30 +246,6 @@
         toggleBadge.classList.toggle('d-none')
       }
     })
-  </script>
-  <script>
-    const SubTipos = () => {
-      const xhr = new XMLHttpRequest();
-
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const tipos = JSON.parse(xhr.response)
-          const cbo = document.getElementById('cbotip')
-
-          tipos.map((itm) => {
-            const option = document.createElement('option')
-            option.value = itm.IDTIPO
-            option.text = itm.DESTIP
-
-            cbo.appendChild(option)
-          });
-        }
-      };
-      xhr.open('POST', 'http://localhost:8000/api/subtipos', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send()
-    }
-    SubTipos();
   </script>
 </body>
 </html>
