@@ -12,7 +12,10 @@ import formularioRouter from './routes/formulario.router'
 import fraudeRouter from './routes/fraude.router'
 import citaRouter from './routes/citas.router'
 import smsRouter from './routes/sms.router'
-import tipoRouter from './routes/tipo.router'
+import tipoFormularioRouter from './routes/tipoformulario.router'
+import tipoEventoRouter from './routes/tipoevento.router'
+import tipoFraudeRouter from './routes/tipofraude.router'
+import tipoHitoRouter from './routes/tipohito.router'
 import subtipoRouter from './routes/subtipo.router'
 
 const app = express()
@@ -36,7 +39,10 @@ app.use('/admin', formularioRouter)
 app.use('/admin', fraudeRouter)
 app.use('/admin', citaRouter)
 app.use('/admin', smsRouter)
-app.use('/admin', tipoRouter)
+app.use('/admin', tipoFormularioRouter)
+app.use('/admin', tipoEventoRouter)
+app.use('/admin', tipoFraudeRouter)
+app.use('/admin', tipoHitoRouter)
 app.use('/admin', subtipoRouter)
 app.use('/log', loginRouter)
 

@@ -24,18 +24,7 @@
       .sortable .th-sort-asc::after,
       .sortable .th-sort-desc::after {
         margin-left: 5px;
-      }
-      .btn-link {
-          border: none;
-          outline: none;
-          background: none;
-          cursor: pointer;
-          color: #0000EE;
-          padding: 0;
-          text-decoration: underline;
-          font-family: inherit;
-          font-size: inherit;
-      }      
+      }    
     </style>
   </head>
   <body class="antialiased">
@@ -90,7 +79,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="/" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi-house"></i>
+                    <i class="bi bi-house"></i>
                   </span>
                     Inicio
                   </span>
@@ -131,24 +120,44 @@
                   <span>Administración</span>
                 </a>
                 <div class="dropdown-menu">
-                  <a href="/admin/oficinas" class="dropdown-item">
-                    <i class="bi bi-building dropdown-item-icon"></i>Oficinas
-                  </a>
-                  <a href="/admin/tipos" class="dropdown-item">
-                    <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
-                  </a>
-                  <a href="/admin/usuarios" class="dropdown-item">
-                    <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                  </a>
-                  <a href="/admin/smss" class="dropdown-item">
-                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="/admin/estadistica" class="dropdown-item">
-                    <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                  </a>
+                  <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                      <a href="/admin/oficinas" class="dropdown-item">
+                        <i class="bi bi-people dropdown-item-icon"></i>Oficinas
+                      </a>
+                      <div class="dropend">
+                        <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                          <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
+                        </a>                          
+                        <div class="dropdown-menu">
+                          <a href="/admin/tipos/formularios" class="dropdown-item">
+                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Formulario
+                          </a>
+                          <a href="/admin/tipos/fraudes" class="dropdown-item">
+                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Fraude
+                          </a>
+                          <a href="/admin/tipos/hitos" class="dropdown-item">
+                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Hito
+                          </a>
+                          <a href="/admin/tipos/eventos" class="dropdown-item">
+                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Evento
+                          </a>
+                        </div>
+                      </div>
+                      <a href="/admin/usuarios" class="dropdown-item">
+                        <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                      </a>
+                      <a href="/admin/smss" class="dropdown-item">
+                        <i class="bi bi-chat dropdown-item-icon"></i>SMS
+                      </a>
+                      <div class="dropdown-divider"></div>
+                      <a href="/admin/estadistica" class="dropdown-item">
+                        <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </li>           
+              </li>
             </ul>
           </div>
         </div>
@@ -164,20 +173,12 @@
                     <h3 class="card-title">Tipos</h3>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
-                        <div class="me-3">
-                          <select class="form-select" id="cbotip" name="orgtip" value="">
-                            <% datos.arrOrigenTipo.map(element => { %> 
-                              <option value="<%- element.id %>" <%- element.id === parseInt(datos.tipo.orgtip) ? "selected" : "" %>><%= element.des %></option>
-                              <% }) %> 
-                            </select>
-                        </div>
-
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
                           <input type="text" class="form-control d-inline-block me-3" id="buscarTipoBox" onkeyup="filtroTipos();" placeholder="Buscar..."
                             aria-label="Buscar en tipos">
                         </div>
-                        <a href="/admin/tipos/add/<%- datos.tipo.orgtip %>" class="btn btn-primary">
+                        <a href="/admin/tipos/hitos/add" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -203,11 +204,6 @@
                               <div class="d-flex py-1 align-items-center">
                                 <div class="flex-fill">
                                   <div class="font-weight-medium"><%- element.DESTIP %></div>
-                                  <div class="text-muted">
-                                    <% if (element.ORGTIP === datos.origenTipo.formulario) { %>
-                                      <small class="text-reset">Texto ayuda: <%- element.AYUTIP %></small>
-                                    <% } %>
-                                  </div>
                                 </div>
                               </div>
                             </td>
@@ -219,19 +215,13 @@
                                   </a>
                                   <ul>
                                     <li class="nav-item">
-                                      <a href="/admin/tipos/edit/<%- element.IDTIPO %>" class="nav-link">
+                                      <a href="/admin/tipos/hitos/edit/<%- element.IDTIPO %>" class="nav-link">
                                         <i class="bi bi-pencil dropdown-item-icon"></i>Editar tipo
                                       </a>
                                     </li>
                                     <li class="nav-item">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('idtipo').value ='<%- element.IDTIPO %>', document.getElementById('deltip').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar tipo
-                                      </a>
-                                    </li>
-                                    <li class="nav-item list-divider"></li>                                    
-                                    <li class="nav-item">
-                                      <a href="/admin/subtipos/tipo/<%- element.IDTIPO %>" class="nav-link">
-                                        <i class="bi bi-diagram-3 dropdown-item-icon"></i>Subtipos
                                       </a>
                                     </li>
                                   </ul>
@@ -284,9 +274,8 @@
                   <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                 </div>
                 <div class="col">
-                  <form action="/admin/tipos/delete" method="POST">
+                  <form action="/admin/tipos/hitos/delete" method="POST">
                     <input type="hidden" id="idtipo" name="idtipo" value="">
-                    <input type="hidden" id="orgtip" name="orgtip" value="<%- datos.tipo.orgtip %>">
                     <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar tipo</button>
                   </form>
                 </div>
@@ -297,7 +286,7 @@
       </div>
     </div>
 
-    <script src="/js/ayuda.js"></script>
+    <script src="/js/ayuda.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>    
     <script>
       const messages = document.getElementById('messages')
@@ -326,17 +315,6 @@
         });      
       }      
     </script>
-    <script>
-      const filtroSubtipos = () => {
-        const filter = document.querySelector('#buscarSubtipoBox').value.toUpperCase()
-
-        document.querySelectorAll('#tblSubtipos tr:not(.header)').forEach((tr) => {
-          const anyMatch = [...tr.children]
-            .some(td => td.textContent.toUpperCase().includes(filter));
-          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
-        });      
-      }      
-    </script>  
     <script>
       function sortTableByColumn(table, column, asc = true) {
         const dirModifier = asc ? 1 : -1;
@@ -368,12 +346,6 @@
           sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
         });
       });
-    </script>
-    <script>
-      const elem = document.getElementById('cbotip');
-      elem.onchange = (event) => {
-        window.location.href = `http://localhost:4000/admin/tipos/${event.target.value}`
-      }
     </script>
   </body>
 </html>

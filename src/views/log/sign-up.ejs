@@ -86,55 +86,55 @@
         </div>
       </div>
     </div>
-    <script src="/js/ayuda.js"></script>
+    <script src="/js/ayuda.min.js"></script>
     <script>
-      const userid = document.getElementById("userid");
-      const nomusu = document.getElementById("nomusu");
-      const emausu = document.getElementById("emausu");
+      const userid = document.getElementById('userid')
+      const nomusu = document.getElementById('nomusu')
+      const emausu = document.getElementById('emausu')
 
       const validate = () => {
-        const useridValue = userid.value.trim();
-        const nomusuValue = nomusu.value.trim();
-        const emausuValue = emausu.value.trim();
+        const useridValue = userid.value.trim()
+        const nomusuValue = nomusu.value.trim()
+        const emausuValue = emausu.value.trim()
 
-        if (useridValue === "") {
-          setError(userid, "UserID requerido");
-          return false;
+        if (useridValue === '') {
+          setError(userid, 'UserID requerido')
+          return false
         } else {
-          setSuccess(userid);
+          setSuccess(userid)
         }
-        if (nomusuValue === "") {
-          setError(nomusu, "Nombre requerido");
-          return false;
+        if (nomusuValue === '') {
+          setError(nomusu, 'Nombre requerido')
+          return false
         } else {
-          setSuccess(nomusu);
+          setSuccess(nomusu)
         }
-        if (emausuValue === "") {
-          setError(emausu, "Email requerido");
-          return false;
+        if (emausuValue === '') {
+          setError(emausu, 'Email requerido')
+          return false
         } else {
-          setSuccess(emausu);
+          setSuccess(emausu)
         }
 
-        return true;
-      };
+        return true
+      }
 
       const setSuccess = (element) => {
-        const inputControl = element.parentElement;
-        const errorDisplay = inputControl.querySelector(".invalid-feedback");
+        const inputControl = element.parentElement
+        const errorDisplay = inputControl.querySelector('.invalid-feedback')
 
-        errorDisplay.innerText = "";
-        inputControl.classList.add("is-valid");
-        element.classList.remove("is-invalid");
-      };
+        errorDisplay.innerText = ''
+        inputControl.classList.add('is-valid')
+        element.classList.remove('is-invalid')
+      }
       const setError = (element, message) => {
-        const inputControl = element.parentElement;
-        const errorDisplay = inputControl.querySelector(".invalid-feedback");
+        const inputControl = element.parentElement
+        const errorDisplay = inputControl.querySelector('.invalid-feedback')
 
-        errorDisplay.innerText = message;
-        element.classList.add("is-invalid");
-        inputControl.classList.remove("is-valid");
-      };
+        errorDisplay.innerText = message
+        element.classList.add('is-invalid')
+        inputControl.classList.remove('is-valid')
+      }
     </script>
   </body>
 </html>

@@ -1,28 +1,16 @@
 import axios from 'axios'
-import {
-  origenTipo,
-  arrOrigenTipo,
-  tiposMovimiento,
-} from '../public/js/enumeraciones'
+import { tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const tipo = {
-    orgtip: req.params.org ? req.params.org : origenTipo.formulario,
-  }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/tipos', {
-      tipo,
-    })
+    const result = await axios.post('http://localhost:8000/api/tipos/eventos')
     const datos = {
       tipos: result.data,
-      tipo,
-      origenTipo,
-      arrOrigenTipo,
     }
 
-    res.render('admin/tipos', { user, datos })
+    res.render('admin/tipos/eventos', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -36,19 +24,14 @@ export const addPage = async (req, res) => {
   const tipo = {
     idtipo: 0,
     destip: '',
-    ayutip: '',
-    orgtip: req.params.org,
   }
-  const origen = arrOrigenTipo.find((o) => o.id === parseInt(tipo.orgtip))
 
   try {
     const datos = {
       tipo,
-      origen,
-      origenTipo,
     }
 
-    res.render('admin/tipos/add', { user, datos })
+    res.render('admin/tipos/eventos/add', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -64,23 +47,19 @@ export const editPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/tipo', {
+    const result = await axios.post('http://localhost:8000/api/tipos/evento', {
       tipo,
     })
 
     tipo = {
       idtipo: result.data.IDTIPO,
       destip: result.data.DESTIP,
-      ayutip: result.data.AYUTIP,
-      orgtip: result.data.ORGTIP,
     }
     const datos = {
       tipo,
-      arrOrigenTipo,
-      origenTipo,
     }
 
-    res.render('admin/tipos/edit', { user, datos })
+    res.render('admin/tipos/eventos/edit', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -90,25 +69,23 @@ export const editPage = async (req, res) => {
   }
 }
 
-export const insertTipo = async (req, res) => {
+export const insert = async (req, res) => {
   const user = req.user
   const tipo = {
     destip: req.body.destip,
-    ayutip: req.body.ayutip,
-    orgtip: req.body.orgtip,
   }
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.crearTipo,
+    tipmov: tiposMovimiento.crearTipoEvento,
   }
 
   try {
-    await axios.post('http://localhost:8000/api/tipos/insert', {
+    await axios.post('http://localhost:8000/api/tipos/eventos/insert', {
       tipo,
       movimiento,
     })
 
-    res.redirect(`/admin/tipos/${tipo.orgtip}`)
+    res.redirect(`/admin/tipos/eventos`)
   } catch (error) {
     let msg = 'No se ha podido crear el tipo.'
 
@@ -121,26 +98,24 @@ export const insertTipo = async (req, res) => {
     })
   }
 }
-export const updateTipo = async (req, res) => {
+export const update = async (req, res) => {
   const user = req.user
   const tipo = {
     idtipo: req.body.idtipo,
     destip: req.body.destip,
-    ayutip: req.body.ayutip,
-    orgtip: req.body.orgtip,
   }
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.modificarTipo,
+    tipmov: tiposMovimiento.modificarTipoEvento,
   }
 
   try {
-    axios.post('http://localhost:8000/api/tipos/update', {
+    axios.post('http://localhost:8000/api/tipos/eventos/update', {
       tipo,
       movimiento,
     })
 
-    res.redirect(`/admin/tipos/${tipo.orgtip}`)
+    res.redirect(`/admin/tipos/eventos`)
   } catch (error) {
     let msg =
       'No se ha podido actualizar el tipo. Verifique los datos introducidos'
@@ -154,24 +129,23 @@ export const updateTipo = async (req, res) => {
     })
   }
 }
-export const deleteTipo = async (req, res) => {
+export const remove = async (req, res) => {
   const user = req.user
-  const origen = req.body.orgtip
   const tipo = {
     idtipo: req.body.idtipo,
   }
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.borrarTipo,
+    tipmov: tiposMovimiento.borrarTipoEvento,
   }
 
   try {
-    await axios.post('http://localhost:8000/api/tipos/delete', {
+    await axios.post('http://localhost:8000/api/tipos/eventos/delete', {
       tipo,
       movimiento,
     })
 
-    res.redirect(`/admin/tipos/${origen}`)
+    res.redirect(`/admin/tipos/eventos`)
   } catch (error) {
     const msg = 'No se ha podido elminar el tipo.'
 

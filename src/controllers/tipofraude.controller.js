@@ -5,12 +5,12 @@ export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const result = await axios.post('http://localhost:8000/api/tipos/hitos')
+    const result = await axios.post('http://localhost:8000/api/tipos/fraudes')
     const datos = {
       tipos: result.data,
     }
 
-    res.render('admin/tipos/hitos', { user, datos })
+    res.render('admin/tipos/fraudes', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -24,7 +24,6 @@ export const addPage = async (req, res) => {
   const tipo = {
     idtipo: 0,
     destip: '',
-    anuhit: 0,
   }
 
   try {
@@ -32,7 +31,7 @@ export const addPage = async (req, res) => {
       tipo,
     }
 
-    res.render('admin/tipos/hitos/add', { user, datos })
+    res.render('admin/tipos/fraudes/add', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -48,20 +47,19 @@ export const editPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/tipos/hito', {
+    const result = await axios.post('http://localhost:8000/api/tipos/fraude', {
       tipo,
     })
 
     tipo = {
       idtipo: result.data.IDTIPO,
       destip: result.data.DESTIP,
-      anuhit: result.data.ANUHIT,
     }
     const datos = {
       tipo,
     }
 
-    res.render('admin/tipos/hitos/edit', { user, datos })
+    res.render('admin/tipos/fraudes/edit', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -75,20 +73,19 @@ export const insert = async (req, res) => {
   const user = req.user
   const tipo = {
     destip: req.body.destip,
-    anuhit: req.body.anuhit,
   }
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.crearTipoHito,
+    tipmov: tiposMovimiento.crearTipoFraude,
   }
 
   try {
-    await axios.post('http://localhost:8000/api/tipos/hitos/insert', {
+    await axios.post('http://localhost:8000/api/tipos/fraudes/insert', {
       tipo,
       movimiento,
     })
 
-    res.redirect(`/admin/tipos/hitos`)
+    res.redirect(`/admin/tipos/fraudes`)
   } catch (error) {
     let msg = 'No se ha podido crear el tipo.'
 
@@ -106,20 +103,19 @@ export const update = async (req, res) => {
   const tipo = {
     idtipo: req.body.idtipo,
     destip: req.body.destip,
-    anuhit: req.body.anuhit,
   }
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.modificarTipoHito,
+    tipmov: tiposMovimiento.modificarTipoFraude,
   }
 
   try {
-    axios.post('http://localhost:8000/api/tipos/hitos/update', {
+    axios.post('http://localhost:8000/api/tipos/fraudes/update', {
       tipo,
       movimiento,
     })
 
-    res.redirect(`/admin/tipos/hitos`)
+    res.redirect(`/admin/tipos/fraudes`)
   } catch (error) {
     let msg =
       'No se ha podido actualizar el tipo. Verifique los datos introducidos'
@@ -140,16 +136,16 @@ export const remove = async (req, res) => {
   }
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.borrarTipoHito,
+    tipmov: tiposMovimiento.borrarTipoFraude,
   }
 
   try {
-    await axios.post('http://localhost:8000/api/tipos/hitos/delete', {
+    await axios.post('http://localhost:8000/api/tipos/fraudes/delete', {
       tipo,
       movimiento,
     })
 
-    res.redirect(`/admin/tipos/hitos`)
+    res.redirect(`/admin/tipos/fraudes`)
   } catch (error) {
     const msg = 'No se ha podido elminar el tipo.'
 
