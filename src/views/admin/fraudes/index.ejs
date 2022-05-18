@@ -163,7 +163,7 @@
                     <div class="d-flex">
                       <div class="input-icon me-3">
                         <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarFraudeBox" onkeyup="filtroFraudes();" placeholder="Buscar..." aria-label="Buscar en fraudes">
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarFraudeBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en fraudes">
                       </div>
                       <a href="/admin/fraudes/add" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -177,7 +177,7 @@
                   </div>                    
                 </div>
                 <div class="card-body">
-                  <table class="table table-vcenter table-striped table-fixHead sortable" id="tblFraudes">
+                  <table class="table table-vcenter table-striped  sortable" id="tblFraudes">
                     <thead>
                     <tr class="header">
                       <th class="w-4"></th>
@@ -188,186 +188,13 @@
                       <th>Nombre</th>
                       <th>Tipo</th>
                       <th>Observaciones</th>
-                      <th class="w-4"></th>
+                      <th class="w-5"></th>
                     </tr>
                     </thead>
-                    <tbody>
-                      <% datos.documentos.map(element => { %>
-                        <tr>
-                          <td class="w-4">
-                            <div class="align-items-center py-1">                                
-                              <% if (element.STAFRA === 0) { %>
-                                  <span class="avatar avatar-rounded bg-red-lt">
-                                    <h6><%- element.LIQFRA %></h6>
-                                  </span>
-                              <% } else if (element.STAFRA === 1) { %>
-                                  <span class="avatar avatar-rounded bg-blue-lt">
-                                    <h6><%- element.LIQFRA %></h6>
-                                  </span>
-                              <% } else if (element.STAFRA === 2) { %>
-                                  <span class="avatar avatar-rounded bg-green-lt">
-                                    <h6><%- element.LIQFRA %></h6>
-                                  </span>
-                              <% } else { %>
-                                  <span class="avatar avatar-rounded bg-orange-lt">
-                                    <h6><%- element.LIQFRA %></h6>
-                                  </span>
-                              <% } %>
-                            </div>
-                          </td>
-                          <td class="w-8 px-3">
-                            <div class="d-flex py-1 align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- element.DESOFI %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-6">
-                            <div class="d-flex py-1 align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- element.STRFEC %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-5">
-                            <div class="d-flex py-1 align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- element.EJEFRA %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-7">
-                            <div class="d-flex py-1 align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- element.NIFCON %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="d-flex py-1 align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- element.NOMCON %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="d-flex py-1 align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- element.DESTIP %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="d-flex py-1 align-items-center">
-                              <div class="flex-fill">
-                                <% if (element.OBSFRA !== null) { %>
-                                  <div class="font-weight-medium"><%- element.OBSFRA.length > 30 ? element.OBSFRA.slice(0,30) + '...': element.OBSFRA %></div>
-                                <% }%>
-                              </div>
-                            </div>
-                          </td>
-                            <% if(element.STAFRA === datos.estadosFraude.pendiente) { %>
-                              <td class="text-end w-4">
-                                <ul class="dots-menu">
-                                  <li class="nav-item drop-right">
-                                    <a href="#" class="nav-link">
-                                      <i class="bi bi-three-dots-vertical"></i>
-                                    </a>
-                                    <ul>
-                                      <li class="nav-item">
-                                        <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                          <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
-                                        </a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('idfrau').value ='<%- element.IDFRAU %>', document.getElementById('delfor').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
-                                          <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
-                                        </a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='<%- element.IDFRAU %>', document.getElementById('texasi').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
-                                          <i class="bi bi-heart dropdown-item-icon"></i>Asignar fraude
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </li>                              
-                                </ul>
-                              </td>
-                            <% } else if(element.STAFRA === datos.estadosFraude.resuelto || element.STAFRA === datos.estadosFraude.remitido) {%>
-                                <td class="text-end w-4">
-                                  <ul class="dots-menu">
-                                    <li class="nav-item drop-right">
-                                      <a href="#" class="nav-link">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                      </a>
-                                      <ul>
-                                        <li class="nav-item">
-                                          <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDFRAU %>', document.getElementById('texdes').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
-                                            <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
-                                          </a>
-                                        </li>
-                                        <li class="nav-item list-divider"></li>
-                                        <li class="nav-item ">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('movfra').value ='<%- element.MOVCON %>', document.getElementById('nomsms').value ='<%- element.NOMCON %>', document.getElementById('idsmss').value ='<%- element.IDFRAU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
-                                            <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </li>                              
-                                  </ul>
-                                </td>
-                            <% } else {%>
-                              <% if(element.LIQFRA === user.userID || user.rol === datos.tiposRol.admin) { %>                              
-                                <td class="text-end w-4">
-                                  <ul class="dots-menu">
-                                    <li class="nav-item drop-right">
-                                      <a href="#" class="nav-link">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                      </a>
-                                      <ul>
-                                        <li class="nav-item">
-                                          <a href="/admin/fraudes/edit/<%- element.IDFRAU %>" class="nav-link">
-                                            <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a href="/admin/fraudes/resolver/<%- element.IDFRAU %>" class="nav-link">
-                                            <i class="bi bi-check2 dropdown-item-icon"></i>Resolver fraude
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='<%- element.IDFRAU %>', document.getElementById('texdes').innerHTML ='<p><%- element.REFFRA %></p><p><%- element.NIFCON %></p><p><%- element.NOMCON %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
-                                            <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
-                                          </a>
-                                        </li>
-                                        <li class="nav-item ">
-                                          <a href="/admin/fraudes/hitoseventos/<%- element.IDFRAU %>" class="nav-link">
-                                            <i class="bi bi-flag dropdown-item-icon"></i>Hitos / Eventos
-                                          </a>
-                                        </li>
-                                        <li class="nav-item list-divider"></li>
-                                        <li class="nav-item ">
-                                          <a href="#" class="nav-link" onclick="{document.getElementById('movfra').value ='<%- element.MOVCON %>', document.getElementById('nomsms').value ='<%- element.NOMCON %>', document.getElementById('idsmss').value ='<%- element.IDFRAU %>', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
-                                            <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </li>                              
-                                  </ul>
-                                </td>
-                              <% } else { %>
-                                <td class="text-end w-4"></td>
-                              <% } %>
-                            <% } %>
-                        </tr>
-                      <% }) %>
+                    <tbody id="table-body">
                     </tbody>
                   </table>
+                  <div id="pagination-wrapper" class="pagination"></div>
                 </div>
               </div>                
             </div>
@@ -637,15 +464,43 @@
     })
   </script>
   <script>
-    function filtroFraudes() {
-      const filter = document.querySelector('#buscarFraudeBox').value.toUpperCase()
-
-      document.querySelectorAll('#tblFraudes tr:not(.header)').forEach((tr) => {
-        const anyMatch = [...tr.children]
-          .some(td => td.textContent.toUpperCase().includes(filter));
-        anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
-      });
+    const setCookie = (name,value,days) => {
+      var expires = "";
+      if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days*24*60*60*1000));
+          expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
     }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e)=>{
+        if(e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+  </script>
+  <script>
+    const elemBuscar = document.getElementById('buscarFraudeBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5) // medio dia
+    }
+
+    function arrayFilter() {
+      const filtro = elemBuscar.value.toUpperCase()
+      const trimmedData = orgList.filter(itm => Object.keys(itm).some(k => JSON.stringify(itm[k]).includes(filtro)))
+
+      state.querySet= trimmedData
+      state.page = 1
+
+      buildTable()
+    }    
   </script>
   <script>
     function sortTableByColumn(table, column, asc = true) {
@@ -738,28 +593,283 @@
     }
   </script>
   <script>
-    let retor = 0;
-    let elem = document.getElementById('cierre');
+    const orgList = <%- datos.documentos %>
+    var state = {
+      'querySet': orgList,
+      'page': 1,
+      'rows': 9,
+      'window': 5,
+    }
 
-    const HitosFraude = (idFraude) => {
-      const xhr = new XMLHttpRequest();
-      const fraude = {
-        idfrau: idFraude,
+    elemBuscar.value = getCookie('filtro')
+    if (elemBuscar.value !== '') {
+      arrayFilter()
+    } else {
+      buildTable()
+    }
+    
+    function pagination(querySet, page, rows) {
+      var trimStart = (page - 1) * rows
+      var trimEnd = trimStart + rows
+      var trimmedData = querySet.slice(trimStart, trimEnd)
+      var pages = Math.ceil(querySet.length / rows);
+
+      return {
+        'querySet': trimmedData,
+        'pages': pages,
       }
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const hitos = JSON.parse(xhr.response)
-          const filter = <%- datos.estadosHito.liquidacionActiva %>          
-          if(hitos.some(itm => itm.STAHIT === filter)){
-            elem.style.display = 'block'
-          } else {
-            elem.style.display = 'none'
-          }
+    }
+    function pageButtons(pages) {
+      var wrapper = document.getElementById('pagination-wrapper')
+      var maxLeft = (state.page - Math.floor(state.window / 2))
+      var maxRight = (state.page + Math.floor(state.window / 2))
+      
+      wrapper.innerHTML = ``
+      if (maxLeft < 1) {
+        maxLeft = 1
+        maxRight = state.window
+      }
+
+      if (maxRight > pages) {
+        maxLeft = pages - (state.window - 1)
+        
+        if (maxLeft < 1){
+          maxLeft = 1
         }
-      };
-      xhr.open('POST', 'http://localhost:8000/api/fraudes/hitos', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify({fraude}))
+        maxRight = pages
+      }
+
+      for (var page = maxLeft; page <= maxRight; page++) {
+          wrapper.innerHTML += `<button value=${page} class="page-item btn btn-primary">${page}</button>`
+      } 
+      if (state.page != 1) {
+        wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
+      }          
+      if (state.page != pages) {
+        wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
+      }
+      // wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>`
+      // wrapper.innerHTML += `<button value=${maxLeft} class="page-item btn btn-primary">< Ant</button>`
+      // wrapper.innerHTML += `<button value=${maxRight} class="page-item btn btn-primary">Sig ></button>`
+      // wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
+
+      const elem = document.getElementsByClassName('page-item')
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].addEventListener('click', (e) => {
+          state.page = Number(e.target.value)
+
+          buildTable()
+        })
+      }
+    }
+    function buildTable() {
+        const table = document.getElementById('table-body')
+        const data = pagination(state.querySet, state.page, state.rows)
+        const myList = data.querySet
+        table.innerHTML = ''
+
+        myList.map(element => {
+          // col1
+          const row = document.createElement('tr')
+          let cell = document.createElement('td')
+          cell.classList.add("w-4")
+          if (element.STAFRA === <%- datos.estadosFraude.pendiente %>) {
+            cell.innerHTML = `<div class="align-items-center py-1">
+              <span class="avatar avatar-rounded bg-red-lt">
+                <h6>${element.LIQFRA}</h6>
+              </span>
+            </div>`
+          } else if (element.STAFRA === <%- datos.estadosFraude.asignado %>) {
+            cell.innerHTML = `<div class="align-items-center py-1">
+              <span class="avatar avatar-rounded bg-blue-lt">
+                <h6>${element.LIQFRA}</h6>
+              </span>
+            </div>`
+          } else if (element.STAFRA === <%- datos.estadosFraude.resuelto %>) {
+            cell.innerHTML = `<div class="align-items-center py-1">
+              <span class="avatar avatar-rounded bg-green-lt">
+                <h6>${element.LIQFRA}</h6>
+              </span>
+            </div>`
+          } else {
+            cell.innerHTML = `<div class="align-items-center py-1">
+              <span class="avatar avatar-rounded bg-orange-lt">
+                <h6>${element.LIQFRA}</h6>
+              </span>
+            </div>`
+          }
+          row.appendChild(cell)
+
+          // col2
+          cell = document.createElement('td')
+          cell.classList.add("w-8")
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.DESOFI}</div>
+            </div>
+          </div>`
+          row.appendChild(cell)
+
+          // col3
+          cell = document.createElement('td')
+          cell.classList.add("w-6")
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.STRFEC}</div>
+            </div>
+          </div>`
+          row.appendChild(cell)
+
+          // col4
+          cell = document.createElement('td')
+          cell.classList.add("w-5")
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.EJEFRA}</div>
+            </div>
+          </div>`
+          row.appendChild(cell)
+
+          // col5
+          cell = document.createElement('td')
+          cell.classList.add("w-7")
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.NIFCON}</div>
+            </div>
+          </div>`
+          row.appendChild(cell)
+
+          // col6
+          cell = document.createElement('td')
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.NOMCON}</div>
+            </div>
+          </div>`
+          row.appendChild(cell)
+
+          // col7
+          cell = document.createElement('td')
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.DESTIP}</div>
+            </div>
+          </div>`
+          row.appendChild(cell)
+
+          // col8
+          cell = document.createElement('td')
+          if (element.OBSFRA !== null) {
+            cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+              <div class="flex-fill">
+                <div class="font-weight-medium">${element.OBSFRA.length > 30 ? element.OBSFRA.slice(0,30) + '...': element.OBSFRA}</div>
+              </div>
+            </div>`
+          }                                
+          row.appendChild(cell)
+
+          // col9
+          cell = document.createElement('td')
+          cell.classList.add("w-5")
+          if (element.STAFRA === <%- datos.estadosFraude.pendiente %>) {
+            cell.innerHTML = `<ul class="dots-menu">
+              <li class="nav-item drop-right">
+                <a href="#" class="nav-link">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </a>
+                <ul>
+                  <li class="nav-item">
+                    <a href="/admin/fraudes/edit/${element.IDFRAU}" class="nav-link">
+                      <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="{document.getElementById('idfrau').value ='${element.IDFRAU}', document.getElementById('delfor').innerHTML ='<p>${element.REFFRA}</p><p>${element.NIFCON}</p><p>${element.NOMCON}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                      <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='${element.IDFRAU}', document.getElementById('texasi').innerHTML ='<p>${element.REFFRA}</p><p>${element.NIFCON}</p><p>${element.NOMCON}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
+                      <i class="bi bi-heart dropdown-item-icon"></i>Asignar fraude
+                    </a>
+                  </li>
+                </ul>
+              </li>                              
+            </ul>`
+          } else if (element.STAFRA === <%- datos.estadosFraude.resuelto %> || element.STAFRA === <%- datos.estadosFraude.remitido %>) {
+            cell.innerHTML = `<ul class="dots-menu">
+              <li class="nav-item drop-right">
+                <a href="#" class="nav-link">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </a>
+                <ul>
+                  <li class="nav-item">
+                    <a href="/admin/fraudes/edit/${element.IDFRAU}" class="nav-link">
+                      <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='${element.IDFRAU}', document.getElementById('texdes').innerHTML ='<p>${element.REFFRA}</p><p>${element.NIFCON}</p><p>${element.NOMCON}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
+                      <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
+                    </a>
+                  </li>
+                  <li class="nav-item list-divider"></li>
+                  <li class="nav-item ">
+                    <a href="#" class="nav-link" onclick="{document.getElementById('movfra').value ='${element.MOVCON}', document.getElementById('nomsms').value ='${element.NOMCON}', document.getElementById('idsmss').value ='${element.IDFRAU}', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                      <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
+                    </a>
+                  </li>
+                </ul>
+              </li>                              
+            </ul>`
+          } else {
+            if(element.LIQFRA === '<%- user.userID %>') {
+              cell.innerHTML = `<ul class="dots-menu">
+              <li class="nav-item drop-right">
+                <a href="#" class="nav-link">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </a>
+                <ul>
+                  <li class="nav-item">
+                    <a href="/admin/fraudes/edit/${element.IDFRAU}" class="nav-link">
+                      <i class="bi bi-pencil dropdown-item-icon"></i>Editar fraude
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/admin/fraudes/resolver/${element.IDFRAU}" class="nav-link">
+                      <i class="bi bi-check2 dropdown-item-icon"></i>Resolver fraude
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='${element.IDFRAU}', document.getElementById('texdes').innerHTML ='<p>${element.REFFRA}</p><p>${element.NIFCON}</p><p>${element.NOMCON}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
+                      <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
+                    </a>
+                  </li>
+                  <li class="nav-item ">
+                    <a href="/admin/fraudes/hitoseventos/${element.IDFRAU}" class="nav-link">
+                      <i class="bi bi-flag dropdown-item-icon"></i>Hitos / Eventos
+                    </a>
+                  </li>
+                  <li class="nav-item list-divider"></li>
+                  <li class="nav-item ">
+                    <a href="#" class="nav-link" onclick="{document.getElementById('movfra').value ='${element.MOVCON}', document.getElementById('nomsms').value ='${element.NOMCON}', document.getElementById('idsmss').value ='${element.IDFRAU}', setTimeout(focoSMS,500)}" data-bs-toggle="modal" data-bs-target="#modal-sms">
+                      <i class="bi bi-chat dropdown-item-icon"></i>Enviar SMS
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>`
+            } else {
+              cell.innerHTML = ``
+            }
+          }
+          row.appendChild(cell)
+
+          table.appendChild(row)
+        })
+
+        pageButtons(data.pages)
     }
   </script>
 </body>

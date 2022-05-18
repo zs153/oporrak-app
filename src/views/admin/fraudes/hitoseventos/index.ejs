@@ -35,10 +35,18 @@
       }
       .table-fixHead tbody {
         overflow-y: scroll;
-        height: 25vh;
+        height: 22vh;
         display: block;
         flex: 1 1 auto;
-      }      
+      }
+      /* .dots-menu ul {
+        position:static;
+      }
+      .dots-menu .nav-item.drop-right ul {
+        left: auto;
+        right: 140px !important;
+        top: auto;
+      } */
     </style>
   </head>
   <body class="antialiased">
@@ -203,7 +211,7 @@
                         <th>Tipo</th>
                         <th>Observaciones</th>
                         <th class="w-9">Valor</th>
-                        <th class="w-4"></th>
+                        <th class="w-5"></th>
                       </tr>
                       </thead>
                       <tbody>
@@ -250,7 +258,7 @@
                                 </div>
                               </div>
                             </td>
-                            <td class="text-end w-4">
+                            <td class="text-end w-5">
                               <ul class="dots-menu">
                                 <li class="nav-item drop-right">
                                   <a href="#" class="nav-link">
@@ -379,7 +387,10 @@
                     </table>
                   </div>
                 </div>
-              </div>              
+              </div>
+              <div class="col-12 mt-0">
+                <a href="/admin/fraudes" class="btn btn-link ms-auto">Volver</a>                
+              </div>
             </div>
           </div>
         </div>

@@ -155,9 +155,12 @@
                     <div class="row">
                       <div class="col-8">
                         <div class="mb-1">
-                          <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tiphit">
-                          </select>
+                          <div class="form-label required">Tipo</div>
+                          <div class="input-control">
+                            <select class="form-select form-control" id="cbotip" name="tiphit" value="<%- datos.hito.TIPHIT %>">
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-4">
@@ -224,13 +227,23 @@
   </script>
   <script>
     const imphit = document.getElementById('imphit')
-    const combo = document.getElementById('cbotip')
+    const tiphit = document.getElementById('cbotip')
 
     const validate = () => {
       const imphitValue = imphit.value
+      const tiphitValue = tiphit.value
 
+      if (tiphitValue === '') {
+        setError(tiphit, 'Tipo requerido')
+        setTimeout(function () {
+          setSuccess(tiphit)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(tiphit)
+      }
       if (imphitValue === '') {
-        setError(imphit, 'Nombre requerido')
+        setError(imphit, 'Importe requerido')
         setTimeout(function () {
           setSuccess(imphit)
         }, 3000)
@@ -239,7 +252,7 @@
         setSuccess(imphit)
       }
 
-      document.getElementById('anuhit').value = combo.options[combo.selectedIndex].getAttribute('data-foo')
+      document.getElementById('anuhit').value = tiphit.options[tiphit.selectedIndex].getAttribute('data-foo')
       return true
     }
 

@@ -146,7 +146,7 @@
                   <% }) %>
                 <% } %>
                 <form id="form" action="/admin/fraudes/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" name="idfrau" id="idfrau" value="<%- datos.documento.idfrau%>">
+                  <input type="hidden" name="idfrau" id="idfrau" value="<%- datos.fraude.IDFRAU%>">
                   <div class="card-header">
                     <h3 class="card-title">Fraude</h3>
                   </div>
@@ -156,7 +156,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">NIF/NIE</label>
-                            <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nifcon %>" autofocus/>
+                            <input type="text" name="nifcon" id="nifcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.fraude.NIFCON %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -165,7 +165,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Nombre</label>
-                            <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.documento.nomcon %>" />
+                            <input type="text" name="nomcon" id="nomcon" class="form-control" onkeyup="this.value = this.value.toUpperCase();" value="<%- datos.fraude.NOMCON %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -173,7 +173,7 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <label class="form-label">Correo electrónico</label>
-                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.documento.emacon %>" />
+                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.fraude.EMACON %>" />
                         </div>
                       </div>
                     </div>
@@ -181,7 +181,7 @@
                       <div class="col-9">
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tipfra" value="<%- datos.documento.tipfra %>">
+                          <select class="form-select" id="cbotip" name="tipfra" value="<%- datos.fraude.TIPFRA %>">
                           </select>
                         </div>
                       </div>
@@ -189,7 +189,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Ejercicio</label>
-                            <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.documento.ejefra %>" />
+                            <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.fraude.EJEFRA %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -197,7 +197,7 @@
                       <div class="col-1">
                         <div class="mb-1">
                           <label class="form-label">Adm</label>
-                          <input type="text" name="funfra" id="funfra" class="form-control" value="<%- datos.documento.funfra %>" readonly />
+                          <input type="text" name="funfra" id="funfra" class="form-control" value="<%- datos.fraude.FUNFRA %>" readonly />
                         </div>
                       </div>
                     </div>
@@ -206,7 +206,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Fecha</label>
-                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.documento.fecfra %>" />
+                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.fraude.FECFRA %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -214,21 +214,21 @@
                       <div class="col-5">
                         <div class="mb-1">
                           <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofifra" value="<%- datos.documento.ofifra %>">
+                          <select class="form-select" id="cboofi" name="ofifra" value="<%- datos.fraude.OFIFRA %>">
                           </select>
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="mb-3">
                           <label class="form-label">Teléfono</label>
-                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.documento.telcon %>" />
+                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.fraude.TELCON %>" />
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label">Movil</label>
-                            <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
+                            <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.fraude.MOVCON %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -239,7 +239,7 @@
                         <small></small>
                         <div class="mb-1">
                           <label class="form-label">Observaciones</label>
-                            <textarea type="text" name="obsfra" id="obsfra" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.obsfra %></textarea>
+                            <textarea type="text" name="obsfra" id="obsfra" class="form-control" rows="3" style="resize: vertical"><%- datos.fraude.OBSFRA %></textarea>
                         </div>
                       </div>
                     </div>
@@ -252,7 +252,7 @@
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/fraudes" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear documento</button>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar fraude</button>
                     </div>
                   </div>
                 </form>
@@ -388,14 +388,14 @@
             const option = document.createElement('option')
             option.value = itm.IDTIPO
             option.text = itm.DESTIP
-            if (itm.IDTIPO === <%- datos.documento.tipfra %>) {
+            if (itm.IDTIPO === <%- datos.fraude.TIPFRA %>) {
               option.selected = true
             }
             cbo.appendChild(option)
           })
         }
       };
-      xhr.open('POST', 'http://localhost:8000/api/tipos', true);
+      xhr.open('POST', 'http://localhost:8000/api/tiposfraude', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send()
     }
@@ -415,7 +415,7 @@
             const option = document.createElement('option')
             option.value = itm.IDOFIC
             option.text = itm.DESOFI
-            if (itm.IDOFIC === <%- datos.documento.ofifra %>) {
+            if (itm.IDOFIC === <%- datos.fraude.OFIFRA %>) {
               option.selected = true
             }
             cbo.appendChild(option)
