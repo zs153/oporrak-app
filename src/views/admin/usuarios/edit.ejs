@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Editar usuario</title>
+  <title>Usuario</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -75,7 +75,7 @@
                   <% }) %>
                 <% } %> 
                 <form action="/admin/usuarios/update" method="POST" onsubmit="return validate();">
-                  <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.idusua %>">
+                  <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.IDUSUA %>">
                   <div class="card-header">
                     Usuario
                   </div>
@@ -85,7 +85,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">UserID</label>
-                            <input type="text" name="userid" id="userid" class="form-control" style="text-transform: lowercase;" value="<%- datos.usuario.userid %>" autofocus/>
+                            <input type="text" name="userid" id="userid" class="form-control" style="text-transform: lowercase;" value="<%- datos.usuario.USERID %>" autofocus/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -94,7 +94,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Nombre</label>
-                            <input type="text" name="nomusu" id="nomusu" class="form-control" style="text-transform: uppercase;" value="<%- datos.usuario.nomusu %>" />
+                            <input type="text" name="nomusu" id="nomusu" class="form-control" style="text-transform: uppercase;" value="<%- datos.usuario.NOMUSU %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -102,9 +102,9 @@
                       <div class="col-2">
                         <div class="mb-1">
                           <div class="form-label">Estado</div>
-                          <select class="form-select" id="cboest" name="stausu" value="<%- datos.usuario.stausu %>">
+                          <select class="form-select" id="cboest" name="stausu" value="<%- datos.usuario.STAUSU %>">
                             <% datos.arrEstadosUsuario.map(element => { %> 
-                              <option value="<%= element.id %>" <%= element.id == datos.usuario.stausu ? " selected":"" %>> <%= element.des %></option>
+                              <option value="<%= element.id %>" <%= element.id == datos.usuario.STAUSU ? " selected":"" %>> <%= element.des %></option>
                             <% }) %> 
                           </select>
                         </div>
@@ -115,7 +115,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Correo electrónico</label>
-                            <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.emausu %>" />
+                            <input type="text" name="emausu" id="emausu" class="form-control" value="<%- datos.usuario.EMAUSU %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -124,7 +124,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Teléfono</label>
-                            <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.telusu %>" />
+                            <input type="text" name="telusu" id="telusu" class="form-control" value="<%- datos.usuario.TELUSU %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -134,14 +134,14 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofiusu" value="<%- datos.usuario.ofiusu %>">
+                          <select class="form-select" id="cboofi" name="ofiusu" value="<%- datos.usuario.OFIUSU %>">
                           </select>
                         </div>
                       </div>
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="form-label">Rol</div>
-                          <select class="form-select" id="cborol" name="rolusu" value="<%- datos.usuario.rolusu %>">
+                          <select class="form-select" id="cborol" name="rolusu" value="<%- datos.usuario.ROLUSU %>">
                             <% datos.arrTiposRol.map(element => { %> 
                               <option value="<%= element.id %>" <%- element.id == datos.usuario.rolusu ? " selected":"" %>> <%= element.des %></option>
                             <% }) %> 
@@ -151,9 +151,9 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="form-label">Perfil</div>
-                          <select class="form-select" id="cboper" name="perusu" value="<%- datos.usuario.perusu %>">
+                          <select class="form-select" id="cboper" name="perusu" value="<%- datos.usuario.PERUSU %>">
                             <% datos.arrTiposPerfil.map(element => { %> 
-                              <option value="<%= element.id %>" <%- element.id == datos.usuario.perusu ? " selected":"" %>><%= element.des %></option>
+                              <option value="<%= element.id %>" <%- element.id == datos.usuario.PERUSU ? " selected":"" %>><%= element.des %></option>
                             <% }) %>                             
                           </select>
                         </div>
@@ -267,14 +267,13 @@
       xhr.onload = function() {
         if (xhr.status === 200) {
           const oficinas = JSON.parse(xhr.response)
-
           const cbo = document.getElementById('cboofi')
 
           oficinas.map((itm) => {
             const option = document.createElement('option')
             option.value = itm.IDOFIC
             option.text = itm.DESOFI
-            if (itm.IDOFIC === <%- datos.usuario.ofiusu %>) {
+            if (itm.IDOFIC === <%- datos.usuario.OFIUSU %>) {
               option.selected = true
             }
             cbo.appendChild(option)

@@ -18,7 +18,7 @@ const usuarioRouter = express.Router()
 // pages
 usuarioRouter.get('/usuarios', authRoutes, mainPage)
 usuarioRouter.get('/usuarios/add', authRoutes, addPage)
-usuarioRouter.get('/usuarios/edit/:userid', authRoutes, editPage)
+usuarioRouter.get('/usuarios/edit/:id', authRoutes, editPage)
 usuarioRouter.get('/usuarios/perfil/:id', authRoutes, perfilPage)
 
 // procedures

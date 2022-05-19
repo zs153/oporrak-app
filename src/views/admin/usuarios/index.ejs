@@ -86,8 +86,7 @@
                       <div class="d-flex">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" onkeyup="filtroUsuarios();" placeholder="Buscar..."
-                            aria-label="Buscar en usuarios">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en usuarios">
                         </div>
                         <a href="/admin/usuarios/add" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -104,59 +103,19 @@
                     </div>                    
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-striped table-fixHead sortable" id="tblUsuarios">
+                    <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
                       <thead>
                       <tr class="header">
                         <th class="w-5"></th>
                         <th>Nombre</th>
-                        <th class="w-4"></th>
+                        <th>Oficina</th>
+                        <th class="w-5"></th>
                       </tr>
                       </thead>
-                      <tbody>
-                        <% datos.usuarios.map(element => { %>
-                          <tr>
-                            <td class="w-5">
-                              <div class="align-items-center py-2">                                
-                                <span class="avatar avatar-rounded bg-green-lt">
-                                  <h6><%- element.USERID %></h6>
-                                </span>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="d-flex align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.NOMUSU %></div>
-                                  <div class="text-muted">
-                                    <small class="text-reset">Oficina: <%- element.DESOFI %> Teléfono: <%- element.TELUSU %></small>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="text-end w-4">
-                              <ul class="dots-menu">
-                                <li class="nav-item drop-right">
-                                  <a href="#" class="nav-link">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                  </a>
-                                  <ul>
-                                    <li class="nav-item">
-                                      <a href="/admin/usuarios/edit/<%- element.USERID %>" class="nav-link">
-                                        <i class="bi bi-pencil dropdown-item-icon"></i>Editar usuario</a>
-                                      </a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idusua').value ='<%- element.IDUSUA %>', document.getElementById('delusu').innerText ='<%- element.NOMUSU %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
-                                        <i class="bi bi-person-dash dropdown-item-icon"></i>Borrar usuario
-                                      </a>
-                                    </li>
-                                  </ul>
-                                </li>
-                              </ul>
-                            </td>
-                          </tr>
-                        <% }) %>
+                      <tbody id="table-body">
                       </tbody>
                     </table>
+                    <div id="pagination-wrapper" class="pagination"></div>
                   </div>
                 </div>                
               </div>
@@ -177,7 +136,7 @@
       </div>
     </div>
     
-    <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-borrar" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -210,7 +169,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal modal-blur fade" id="modal-notif" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -262,18 +220,18 @@
       });
     </script>
     <script>
-      const filtroUsuarios = () => {
-        const filter = document.querySelector("#buscarUserBox").value.toUpperCase();
+      const elemBuscar = document.getElementById('buscarUserBox');
 
-        document.querySelectorAll("#tblUsuarios tr:not(.header)").forEach((tr) => {
-          const anyMatch = [...tr.children].some((td) =>
-            td.innerText.toUpperCase().includes(filter)
-        );
+      function arrayFilter() {
+        const filtro = elemBuscar.value.toUpperCase()
+        const trimmedData = orgList.filter(itm => Object.keys(itm).some(k => JSON.stringify(itm[k]).includes(filtro)))
 
-          anyMatch ? tr.style.display = "" : tr.style.display = "none";
-        });
-      };
-    </script>    
+        state.querySet= trimmedData
+        state.page = 1
+
+        buildTable()
+      }
+    </script>
     <script>
       function sortTableByColumn(table, column, asc = true) {
         const dirModifier = asc ? 1 : -1;
@@ -305,6 +263,136 @@
           sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
         });
       });
-    </script>    
+    </script>
+    <script>
+      const orgList = <%- datos.usuarios %>
+      let state = {
+        'querySet': orgList,
+        'page': 1,
+        'rows': 9,
+        'window': 5,
+      }
+
+      buildTable()
+      
+      function pagination(querySet, page, rows) {
+        const trimStart = (page - 1) * rows
+        const trimEnd = trimStart + rows
+        const trimmedData = querySet.slice(trimStart, trimEnd)
+        const pages = Math.ceil(querySet.length / rows);
+
+        return {
+          'querySet': trimmedData,
+          'pages': pages,
+        }
+      }
+      function pageButtons(pages) {
+        let wrapper = document.getElementById('pagination-wrapper')
+        let maxLeft = (state.page - Math.floor(state.window / 2))
+        let maxRight = (state.page + Math.floor(state.window / 2))
+        
+        wrapper.innerHTML = ``
+        if (maxLeft < 1) {
+          maxLeft = 1
+          maxRight = state.window
+        }
+
+        if (maxRight > pages) {
+          maxLeft = pages - (state.window - 1)
+          
+          if (maxLeft < 1){
+            maxLeft = 1
+          }
+          maxRight = pages
+        }
+
+        for (var page = maxLeft; page <= maxRight; page++) {
+            wrapper.innerHTML += `<button value=${page} class="page-item btn btn-primary">${page}</button>`
+        } 
+        if (state.page != 1) {
+          wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
+        }          
+        if (state.page != pages) {
+          wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
+        }
+
+        const elem = document.getElementsByClassName('page-item')
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].addEventListener('click', (e) => {
+            state.page = Number(e.target.value)
+
+            buildTable()
+          })
+        }
+      }
+      function buildTable() {
+        const table = document.getElementById('table-body')
+        const data = pagination(state.querySet, state.page, state.rows)
+        const lista = data.querySet
+        table.innerHTML = ``
+
+        lista.map(element => {
+          // col1
+          const row = document.createElement('tr')
+          let cell = document.createElement('td')
+          cell.classList.add("w-5")
+          cell.innerHTML = `<div class="align-items-center py-1">
+            <span class="avatar avatar-rounded bg-green-lt">
+              <h6>${element.USERID}</h6>
+            </span>
+          </div>`
+          row.appendChild(cell)
+
+          // col2
+          cell = document.createElement('td')
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+              <div class="flex-fill">
+                <div class="font-weight-medium">${element.NOMUSU}</div>
+              </div>
+            </div>
+            <div class="text-muted">
+              <small class="text-reset">Teléfono: ${element.TELUSU}</small>
+          </div>`
+          row.appendChild(cell)
+
+          // col3
+          cell = document.createElement('td')
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.DESOFI}</div>
+            </div>
+          </div>`
+          row.appendChild(cell)
+
+          // col4
+          cell = document.createElement('td')
+          cell.classList.add("w-5")
+          cell.innerHTML = `<ul class="dots-menu">
+            <li class="nav-item drop-right">
+              <a href="#" class="nav-link">
+                <i class="bi bi-three-dots-vertical"></i>
+              </a>
+              <ul>
+                <li class="nav-item">
+                  <a href="/admin/usuarios/edit/${element.IDUSUA}" class="nav-link">
+                    <i class="bi bi-pencil dropdown-item-icon"></i>Editar usuario
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link" onclick="{document.getElementById('idusua').value ='${element.IDUSUA}', document.getElementById('delusu').innerHTML ='<p>${element.USERID}</p><p>${element.NOMUSU}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                    <i class="bi bi-trash dropdown-item-icon"></i>Borrar fraude
+                  </a>
+                </li>
+              </ul>
+            </li>                              
+          </ul>`
+          row.appendChild(cell)
+
+          table.appendChild(row)
+        })
+
+        pageButtons(data.pages)
+      }
+    </script>
   </body>
 </html>

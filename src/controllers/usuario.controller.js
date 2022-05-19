@@ -17,7 +17,10 @@ export const mainPage = async (req, res) => {
 
   try {
     const result = await axios.post('http://localhost:8000/api/usuarios')
-    const datos = { usuarios: result.data }
+
+    const datos = {
+      usuarios: JSON.stringify(result.data),
+    }
 
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
@@ -31,15 +34,14 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user
   const usuario = {
-    idusua: 0,
-    nomusu: '',
-    ofiusu: 1,
-    rolusu: tiposRol.usuario,
-    userid: '',
-    emausu: '',
-    perusu: tiposPerfil.general,
-    telusu: '',
-    stausu: estadosUsuario.activo,
+    NOMUSU: '',
+    OFIUSU: 1,
+    ROLUSU: tiposRol.usuario,
+    USERID: '',
+    EMAUSU: '',
+    PERUSU: tiposPerfil.general,
+    TELUSU: '',
+    STAUSU: estadosUsuario.activo,
   }
 
   try {
@@ -61,24 +63,16 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
+  const usuario = {
+    idusua: req.params.id,
+  }
 
   try {
     const result = await axios.post('http://localhost:8000/api/usuario', {
-      userid: req.params.userid,
-    })
-    const usuario = {
-      idusua: result.data.IDUSUA,
-      nomusu: result.data.NOMUSU,
-      ofiusu: result.data.OFIUSU,
-      rolusu: result.data.ROLUSU,
-      userid: result.data.USERID,
-      emausu: result.data.EMAUSU,
-      perusu: result.data.PERUSU,
-      telusu: result.data.TELUSU,
-      stausu: result.data.STAUSU,
-    }
-    const datos = {
       usuario,
+    })
+    const datos = {
+      usuario: result.data,
       arrTiposRol,
       arrTiposPerfil,
       arrEstadosUsuario,
@@ -122,8 +116,9 @@ export const perfilPage = async (req, res) => {
 }
 export const insert = async (req, res) => {
   const user = req.user
-  const randomString = Math.random().toString().slice(2, 6)
-  const salt = await bcrypt.genSalt(10)
+  const randomString = Math.random().toString(36).substring(2, 10);
+  const salt = await bcrypt.genSalt(10);
+  const passHash = await bcrypt.hash(randomString, salt);
   const usuario = {
     nomusu: req.body.nomusu.toUpperCase(),
     ofiusu: req.body.ofiusu,
@@ -132,16 +127,13 @@ export const insert = async (req, res) => {
     emausu: req.body.emausu,
     perusu: req.body.perusu,
     telusu: req.body.telusu,
+    pwdusu: passHash,
     stausu: req.body.stausu,
   }
   const movimiento = {
     usumov: user.id,
     tipmov: tiposMovimiento.crearUsuario,
   }
-  const password = usuario.userid + randomString
-  const passHash = await bcrypt.hash(password, salt)
-
-  usuario.pwdusu = passHash
 
   try {
     const result = await axios.post(

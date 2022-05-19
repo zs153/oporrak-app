@@ -21,66 +21,56 @@ export const okPage = async (req, res) => {
   res.render("log/ok");
 };
 export const verifyLogin = async (req, res) => {
-  const { userid, password } = req.body;
+  let usuario = {
+    userid: req.body.userid,
+  }
+  const password = req.body.pwdusu
 
   try {
     const result = await axios.post("http://localhost:8000/api/usuario", {
-      userid,
+      usuario,
     });
 
-    if (result) {
-      const {
-        IDUSUA,
-        NOMUSU,
-        OFIUSU,
-        ROLUSU,
-        USERID,
-        EMAUSU,
-        PERUSU,
-        TELUSU,
-        PWDUSU,
-        STAUSU,
-      } = result.data;
+    usuario = result.data
 
-      bcrypt.compare(password, PWDUSU, (err, result) => {
-        if (result) {
-          const accessToken = jwt.sign(
-            {
-              id: IDUSUA,
-              nombre: NOMUSU,
-              userID: USERID,
-              email: EMAUSU,
-              rol: ROLUSU,
-              oficina: OFIUSU,
-              telefono: TELUSU,
-            },
-            `${process.env.ACCESS_TOKEN_SECRET}`,
-            { expiresIn: "8h" }
-          );
-          const options = {
-            path: "/",
-            sameSite: true,
-            maxAge: 1000 * 60 * 60 * 8, // 8 horas
-            httpOnly: true,
-          };
+    bcrypt.compare(password, usuario.PWDUSU, (err, result) => {
+      if (result) {
+        const accessToken = jwt.sign(
+          {
+            id: usuario.IDUSUA,
+            nombre: usuario.NOMUSU,
+            userID: usuario.USERID,
+            email: usuario.EMAUSU,
+            rol: usuario.ROLUSU,
+            oficina: usuario.OFIUSU,
+            telefono: usuario.TELUSU,
+          },
+          `${process.env.ACCESS_TOKEN_SECRET}`,
+          { expiresIn: "8h" }
+        );
+        const options = {
+          path: "/",
+          sameSite: true,
+          maxAge: 1000 * 60 * 60 * 8, // 8 horas
+          httpOnly: true,
+        };
 
-          const user = {
-            id: IDUSUA,
-            userID: userid,
-          };
+        const user = {
+          id: usuario.IDUSUA,
+          userID: usuario.USERID,
+        };
 
-          req.user = user;
+        req.user = user;
 
-          res.cookie("auth", accessToken, options);
-          res.redirect("/admin");
-        } else {
-          res.render("log/sign-in", {
-            datos: req.body,
-            alerts: [{ msg: "El userID o la contraseña no son correctas" }],
-          });
-        }
-      });
-    }
+        res.cookie("auth", accessToken, options);
+        res.redirect("/admin");
+      } else {
+        res.render("log/sign-in", {
+          datos: req.body,
+          alerts: [{ msg: "El userID o la contraseña no son correctas" }],
+        });
+      }
+    });
   } catch (error) {
     res.render("log/sign-in", {
       datos: req.body,
@@ -109,6 +99,8 @@ export const forgotPassword = async (req, res) => {
   const usuario = {
     emausu: emausu,
     pwdusu: passHash,
+  };
+  const movimiento = {
     tipmov: tiposMovimiento.olvidoPassword,
     saltus: randomString,
   };
@@ -118,6 +110,7 @@ export const forgotPassword = async (req, res) => {
       "http://localhost:8000/api/usuarios/forgot",
       {
         usuario,
+        movimiento,
       }
     );
 
