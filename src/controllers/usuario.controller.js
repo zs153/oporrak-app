@@ -125,10 +125,10 @@ export const insert = async (req, res) => {
   const randomString = Math.random().toString().slice(2, 6)
   const salt = await bcrypt.genSalt(10)
   const usuario = {
-    nomusu: req.body.nomusu,
+    nomusu: req.body.nomusu.toUpperCase(),
     ofiusu: req.body.ofiusu,
     rolusu: req.body.rolusu,
-    userid: req.body.userid,
+    userid: req.body.userid.toLowerCase(),
     emausu: req.body.emausu,
     perusu: req.body.perusu,
     telusu: req.body.telusu,
@@ -170,10 +170,10 @@ export const update = async (req, res) => {
 
   const usuario = {
     idusua: req.body.idusua,
-    nomusu: req.body.nomusu,
+    nomusu: req.body.nomusu.toUpperCase(),
     ofiusu: req.body.ofiusu,
     rolusu: req.body.rolusu,
-    userid: req.body.userid,
+    userid: req.body.userid.toLowerCase(),
     emausu: req.body.emausu,
     perusu: req.body.perusu,
     telusu: req.body.telusu,

@@ -9,7 +9,7 @@ export const tiposMovimiento = {
   modificarOficina: 7,
   borrarOficina: 8,
   crearTipoFormulario: 9,
-  modificarFormulario: 10,
+  modificarTipoFormulario: 10,
   borrarTipoFormulario: 11,
   crearReferencia: 12,
   modificarReferencia: 13,

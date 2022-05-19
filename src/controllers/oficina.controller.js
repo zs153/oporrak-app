@@ -71,7 +71,7 @@ export const editPage = async (req, res) => {
 export const insert = async (req, res) => {
   const user = req.user
   const oficina = {
-    desofi: req.body.desofi,
+    desofi: req.body.desofi.toUpperCase(),
     codofi: req.body.codofi,
   }
   const movimiento = {
@@ -102,7 +102,7 @@ export const update = async (req, res) => {
   const user = req.user
   const oficina = {
     idofic: req.body.idofic,
-    desofi: req.body.desofi,
+    desofi: req.body.desofi.toUpperCase(),
     codofi: req.body.codofi,
   }
   const movimiento = {

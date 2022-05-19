@@ -1,16 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Tipos</title>
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tipos Evento</title>
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
     <!-- bootstrap -->
-    <link rel="stylesheet" href="/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/bootstrap-icons.css" />
     <!-- custom -->
-    <link rel="stylesheet" href="/css/estilos.min.css">
-    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/estilos.min.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
     <style>
       .sortable th {
         cursor: pointer;
@@ -24,7 +27,7 @@
       .sortable .th-sort-asc::after,
       .sortable .th-sort-desc::after {
         margin-left: 5px;
-      }    
+      }
     </style>
   </head>
   <body class="antialiased">
@@ -36,20 +39,20 @@
           </button>
           <h1 class="navbar-brand pe-0 pe-md-3">
             <a href="/">
-              <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
+              <img src="/img/logoFormularios.png" width="110" height="32" alt="Formularios" class="navbar-brand-image"/>
             </a>
           </h1>
           <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item dropdown d-none d-md-flex me-3">
               <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
+                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue"></i>
                 <span class="badge bg-white"></span>
                 <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
                 <div class="card">
                   <div class="card-body">
-                    <ul id="messages" style="list-style: none;"></ul>
+                    <ul id="messages" style="list-style: none"></ul>
                   </div>
                 </div>
               </div>
@@ -65,103 +68,16 @@
                   <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
+                <a href="/log/logout" class="dropdown-item">
+                  <i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión
+                </a>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-            <div class="navbar-expand-md">
-        <div class="navbar navbar-light">
-          <div class="container-xl">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="/" >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-house"></i>
-                  </span>
-                    Inicio
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/admin/formularios" >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-music-note"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Formularios
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/admin/citas" >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-alarm"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Citas
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/admin/fraudes" >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-cash"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Fraudes
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                  <span>Administración</span>
-                </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <a href="/admin/oficinas" class="dropdown-item">
-                        <i class="bi bi-people dropdown-item-icon"></i>Oficinas
-                      </a>
-                      <div class="dropend">
-                        <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                          <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
-                        </a>                          
-                        <div class="dropdown-menu">
-                          <a href="/admin/tipos/formularios" class="dropdown-item">
-                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Formulario
-                          </a>
-                          <a href="/admin/tipos/fraudes" class="dropdown-item">
-                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Fraude
-                          </a>
-                          <a href="/admin/tipos/hitos" class="dropdown-item">
-                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Hito
-                          </a>
-                          <a href="/admin/tipos/eventos" class="dropdown-item">
-                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Evento
-                          </a>
-                        </div>
-                      </div>
-                      <a href="/admin/usuarios" class="dropdown-item">
-                        <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                      </a>
-                      <a href="/admin/smss" class="dropdown-item">
-                        <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                      </a>
-                      <div class="dropdown-divider"></div>
-                      <a href="/admin/estadistica" class="dropdown-item">
-                        <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <%- include('../../../partials/navbar') %>
 
       <div class="page-wrapper">
         <div class="page-body">
@@ -175,65 +91,74 @@
                       <div class="d-flex">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarTipoBox" onkeyup="filtroTipos();" placeholder="Buscar..."
-                            aria-label="Buscar en tipos">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarTipoBox" onkeyup="filtroTipos();" placeholder="Buscar..." aria-label="Buscar en tipos"/>
                         </div>
-                        <a href="/admin/tipos/eventos/add" class="btn btn-primary">
+                        <a href="/admin/tipos/fraudes/add" class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
+                          </svg>
                           Nuevo
                         </a>
                       </div>
-                    </div>                     
+                    </div>
                   </div>
                   <div class="card-body">
                     <table class="table table-vcenter table-striped table-fixHead sortable" id="tblTipos">
                       <thead>
-                      <tr class="header">
-                        <th>Descripción</th>
-                        <th class="w-4"></th>
-                      </tr>
+                        <tr class="header">
+                          <th class="w-5"></th>
+                          <th>Descripción</th>
+                          <th class="w-4"></th>
+                        </tr>
                       </thead>
                       <tbody>
                         <% datos.tipos.map(element => { %>
-                          <tr>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium"><%- element.DESTIP %></div>
+                        <tr>
+                          <td class="w-5">
+                            <div class="d-flex py-1 align-items-center">
+                              <span class="avatar me-2 avatar-rounded bg-green-lt">
+                                <h6><%- element.IDTIPO %></h6>
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex py-1 align-items-center">
+                              <div class="flex-fill">
+                                <div class="font-weight-medium">
+                                  <%- element.DESTIP %>
                                 </div>
                               </div>
-                            </td>
-                            <td class="text-end w-4">
-                              <ul class="dots-menu">
-                                <li class="nav-item drop-right">
-                                  <a href="#" class="nav-link">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                  </a>
-                                  <ul>
-                                    <li class="nav-item">
-                                      <a href="/admin/tipos/eventos/edit" class="nav-link">
-                                        <i class="bi bi-pencil dropdown-item-icon"></i>Editar tipo
-                                      </a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idtipo').value ='<%- element.IDTIPO %>', document.getElementById('deltip').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
-                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar tipo
-                                      </a>
-                                    </li>
-                                  </ul>
-                                </li>
-                              </ul>
-                            </td>
-                          </tr>
+                            </div>
+                          </td>
+                          <td class="text-end w-4">
+                            <ul class="dots-menu">
+                              <li class="nav-item drop-right">
+                                <a href="#" class="nav-link">
+                                  <i class="bi bi-three-dots-vertical"></i>
+                                </a>
+                                <ul>
+                                  <li class="nav-item">
+                                    <a href="/admin/tipos/eventos/edit/<%- element.IDTIPO %>" class="nav-link">
+                                      <i class="bi bi-pencil dropdown-item-icon"></i>Editar tipo
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="{document.getElementById('idtipo').value ='<%- element.IDTIPO %>', document.getElementById('deltip').innerText ='<%- element.DESTIP %>'}" data-bs-toggle="modal" data-bs-target="#modal-danger">
+                                      <i class="bi bi-trash dropdown-item-icon"></i>Borrar tipo
+                                    </a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </td>
+                        </tr>
                         <% }) %>
                       </tbody>
                     </table>
                   </div>
-                </div>                
+                </div>
               </div>
             </div>
           </div>
@@ -251,7 +176,7 @@
         </footer>
       </div>
     </div>
-    
+
     <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -275,8 +200,8 @@
                 </div>
                 <div class="col">
                   <form action="/admin/tipos/eventos/delete" method="POST">
-                    <input type="hidden" id="idtipo" name="idtipo" value="">
-                    <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar tipo</button>
+                    <input type="hidden" id="idtipo" name="idtipo" value="" />
+                    <button type="submit" class="btn btn-danger w-100" id="btnDelete">Borrar tipo</button>
                   </form>
                 </div>
               </div>
@@ -287,33 +212,38 @@
     </div>
 
     <script src="/js/ayuda.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>    
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-      const messages = document.getElementById('messages')
-      const socket = io()
+      const messages = document.getElementById("messages");
+      const socket = io();
 
-      socket.on('receive-message', msg => {
-        const li = document.createElement('li')
-        li.textContent = msg
-        messages.appendChild(li)
+      socket.on("receive-message", (msg) => {
+        const li = document.createElement("li");
+        li.textContent = msg;
+        messages.appendChild(li);
 
-        const toggleBadge = document.querySelector('#toggleBadge');
-        const numeroMensajes = messages.getElementsByTagName("li").length
+        const toggleBadge = document.querySelector("#toggleBadge");
+        const numeroMensajes = messages.getElementsByTagName("li").length;
         if (numeroMensajes === 1) {
-          toggleBadge.classList.toggle('d-none')
+          toggleBadge.classList.toggle("d-none");
         }
-      })
+      });
     </script>
     <script>
       const filtroTipos = () => {
-        const filter = document.querySelector('#buscarTipoBox').value.toUpperCase()
+        const filter = document
+          .querySelector("#buscarTipoBox")
+          .value.toUpperCase();
 
-        document.querySelectorAll('#tblTipos tr:not(.header)').forEach((tr) => {
-          const anyMatch = [...tr.children]
-            .some(td => td.textContent.toUpperCase().includes(filter));
-          anyMatch ? tr.style.removeProperty('display') : tr.style.display = 'none'
-        });      
-      }      
+        document.querySelectorAll("#tblTipos tr:not(.header)").forEach((tr) => {
+          const anyMatch = [...tr.children].some((td) =>
+            td.textContent.toUpperCase().includes(filter)
+          );
+          anyMatch
+            ? tr.style.removeProperty("display")
+            : (tr.style.display = "none");
+        });
+      };
     </script>
     <script>
       function sortTableByColumn(table, column, asc = true) {
@@ -325,24 +255,35 @@
           const aColText = a.cells[column].textContent;
           const bColText = b.cells[column].textContent;
 
-          return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+          return aColText > bColText ? 1 * dirModifier : -1 * dirModifier;
         });
 
-        for(let row of sortedRows) {
-          tBody.appendChild( row );
+        for (let row of sortedRows) {
+          tBody.appendChild(row);
         }
 
-        table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
-        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-asc", asc);
-        table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-desc", !asc);
+        table
+          .querySelectorAll("th")
+          .forEach((th) => th.classList.remove("th-sort-asc", "th-sort-desc"));
+        table
+          .querySelector(`th:nth-child(${column + 1})`)
+          .classList.toggle("th-sort-asc", asc);
+        table
+          .querySelector(`th:nth-child(${column + 1})`)
+          .classList.toggle("th-sort-desc", !asc);
       }
 
-      document.querySelectorAll(".sortable th").forEach(headerCell => {
+      document.querySelectorAll(".sortable th").forEach((headerCell) => {
         headerCell.addEventListener("click", () => {
-          const tableElement = headerCell.parentElement.parentElement.parentElement;
-          const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
-          const currentIsAscending = headerCell.classList.contains("th-sort-asc");
-          
+          const tableElement =
+            headerCell.parentElement.parentElement.parentElement;
+          const headerIndex = Array.prototype.indexOf.call(
+            headerCell.parentElement.children,
+            headerCell
+          );
+          const currentIsAscending =
+            headerCell.classList.contains("th-sort-asc");
+
           sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
         });
       });

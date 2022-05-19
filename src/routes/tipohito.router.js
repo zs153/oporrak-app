@@ -9,16 +9,16 @@ import {
   remove,
 } from '../controllers/tipohito.controller'
 
-const tipoRouter = express.Router()
+const tipoHitoRouter = express.Router()
 
 // paginas
-tipoRouter.get('/tipos/:org?', authRoutes, mainPage)
-tipoRouter.get('/tipos/add/:org', authRoutes, addPage)
-tipoRouter.get('/tipos/edit/:id', authRoutes, editPage)
+tipoHitoRouter.get('/tipos/hitos', authRoutes, mainPage)
+tipoHitoRouter.get('/tipos/hitos/add', authRoutes, addPage)
+tipoHitoRouter.get('/tipos/hitos/edit/:id', authRoutes, editPage)
 
 // procedures
-tipoRouter.post('/tipos/insert', authRoutes, insert)
-tipoRouter.post('/tipos/update', authRoutes, update)
-tipoRouter.post('/tipos/delete', authRoutes, remove)
+tipoHitoRouter.post('/tipos/hitos/insert', authRoutes, insert)
+tipoHitoRouter.post('/tipos/hitos/update', authRoutes, update)
+tipoHitoRouter.post('/tipos/hitos/delete', authRoutes, remove)
 
-export default tipoRouter
+export default tipoHitoRouter

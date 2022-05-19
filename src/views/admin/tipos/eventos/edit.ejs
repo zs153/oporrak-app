@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Editar tipo</title>
+  <title>Tipo Evento</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -59,76 +59,7 @@
       </div>
     </header>
 
-    <div class="navbar-expand-md">
-      <div class="navbar navbar-light">
-        <div class="container-xl">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="/" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi-house"></i>
-                </span>
-                  Inicio
-                </span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/formularios" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-music-note"></i>
-                </span>
-                <span class="nav-link-title">
-                  Formularios
-                </span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/citas" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-alarm"></i>
-                </span>
-                <span class="nav-link-title">
-                  Citas
-                </span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/fraudes" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-cash"></i>
-                </span>
-                <span class="nav-link-title">
-                  Fraudes
-                </span>
-              </a>
-            </li>
-              <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                  <span>Administración</span>
-                </a>
-                <div class="dropdown-menu">
-                  <a href="/admin/oficinas" class="dropdown-item">
-                    <i class="bi bi-building dropdown-item-icon"></i>Oficinas
-                  </a>
-                  <a href="/admin/tipos" class="dropdown-item">
-                    <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
-                  </a>
-                  <a href="/admin/usuarios" class="dropdown-item">
-                    <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                  </a>
-                  <a href="/admin/smss" class="dropdown-item">
-                    <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="/admin/estadistica" class="dropdown-item">
-                    <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                  </a>
-                </div>
-              </li>            
-          </ul>
-        </div>
-      </div>
-    </div>
+    <%- include('../../../partials/navbar.ejs') %>
 
     <div class="page-wrapper">
       <div class="page-body">
@@ -148,35 +79,23 @@
                 <% } %>                   
                 <form action="/admin/tipos/update" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="idtipo" id="idtipo" value = <%- datos.tipo.idtipo %>>
-                  <input type="hidden" name="orgtip" id="orgtip" value = <%- datos.tipo.orgtip %>>
                   <div class="card-header">
-                    <h3 class="card-title">Tipo</h3>
+                    <h3 class="card-title">Tipo Evento</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                            <label class="form-label required">Descripción</label>
-                            <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" onkeyup="this.value = this.value.toUpperCase();" autofocus/>
-                            <div class="invalid-feedback"></div>
+                          <label class="form-label required">Descripción</label>
+                          <input type="text" name="destip" id="destip" class="form-control" value="<%- datos.tipo.destip %>" style="text-transform: uppercase;" autofocus/>
+                          <div class="invalid-feedback"></div>
                         </div>
                       </div>
                     </div>
-                    <% if (datos.tipo.orgtip === datos.origenTipo.formulario) { %>
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="mb-1">
-                            <label class="form-label required">Texto ayuda</label>
-                            <textarea type="text" name="ayutip" id="ayutip" class="form-control" rows="3" style="resize: vertical"><%- datos.tipo.ayutip %></textarea>
-                            <div class="invalid-feedback"></div>
-                          </div>
-                        </div>
-                      </div>
-                    <% } %>
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/tipos/<%- datos.tipo.orgtip %>" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/tipos/eventos" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Modificar tipo</button>
                     </div>
                   </div>
