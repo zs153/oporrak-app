@@ -19,7 +19,7 @@ export const mainPage = async (req, res) => {
     })
 
     const datos = {
-      documentos: result.data,
+      formularios: JSON.stringify(result.data),
       tiposRol,
       estadosDocumento,
       verTodo,
@@ -39,25 +39,15 @@ export const addPage = async (req, res) => {
   const fecha = new Date()
 
   try {
-    const documento = {
-      iddocu: 0,
-      fecdoc: fecha.toISOString().slice(0, 10),
-      nifcon: '',
-      nomcon: '',
-      emacon: '',
-      telcon: '',
-      movcon: '',
-      refdoc: '',
-      tipdoc: 0,
-      ejedoc: fecha.getFullYear() - 1,
-      ofidoc: user.oficina,
-      obsdoc: '',
-      fundoc: user.userID,
-      liqdoc: '',
-      stadoc: estadosDocumento.pendiente,
+    const formulario = {
+      FECDOC: fecha.toISOString().slice(0, 10),
+      EJEDOC: fecha.getFullYear() - 1,
+      OFIDOC: user.oficina,
+      FUNDOC: user.userID,
+      STADOC: estadosDocumento.pendiente,
     }
     const datos = {
-      documento,
+      formulario,
     }
 
     res.render('admin/formularios/add', { user, datos })
@@ -80,24 +70,8 @@ export const editPage = async (req, res) => {
       formulario,
     })
 
-    const documento = {
-      iddocu: result.data.IDDOCU,
-      fecdoc: result.data.FECDOC,
-      nifcon: result.data.NIFCON,
-      nomcon: result.data.NOMCON,
-      emacon: result.data.EMACON,
-      telcon: result.data.TELCON,
-      movcon: result.data.MOVCON,
-      refdoc: result.data.REFDOC,
-      tipdoc: result.data.TIPDOC,
-      ejedoc: result.data.EJEDOC,
-      ofidoc: result.data.OFIDOC,
-      obsdoc: result.data.OBSDOC,
-      fundoc: result.data.FUNDOC,
-      liqdoc: result.data.LIQDOC,
-    }
     const datos = {
-      documento,
+      formulario: result.data,
     }
 
     res.render('admin/formularios/edit', { user, datos })
@@ -112,7 +86,7 @@ export const editPage = async (req, res) => {
 export const insert = async (req, res) => {
   const user = req.user
   const referencia = 'W' + randomString(10, '1234567890YMGS')
-  const documento = {
+  const formulario = {
     fecdoc: req.body.fecdoc,
     nifcon: req.body.nifcon,
     nomcon: req.body.nomcon,
@@ -137,7 +111,7 @@ export const insert = async (req, res) => {
     const result = await axios.post(
       'http://localhost:8000/api/formularios/insert',
       {
-        documento,
+        formulario,
         movimiento,
       }
     )
@@ -158,7 +132,7 @@ export const insert = async (req, res) => {
 export const update = async (req, res) => {
   const user = req.user
 
-  const documento = {
+  const formulario = {
     iddocu: req.body.iddocu,
     fecdoc: req.body.fecdoc,
     nifcon: req.body.nifcon,
@@ -180,7 +154,7 @@ export const update = async (req, res) => {
     const result = await axios.post(
       'http://localhost:8000/api/formularios/update',
       {
-        documento,
+        formulario,
         movimiento,
       }
     )
@@ -200,7 +174,7 @@ export const update = async (req, res) => {
 }
 export const remove = async (req, res) => {
   const user = req.user
-  const documento = {
+  const formulario = {
     iddocu: req.body.iddocu,
   }
   const movimiento = {
@@ -212,7 +186,7 @@ export const remove = async (req, res) => {
     const result = await axios.post(
       'http://localhost:8000/api/formularios/delete',
       {
-        documento,
+        formulario,
         movimiento,
       }
     )
@@ -229,26 +203,27 @@ export const remove = async (req, res) => {
 }
 export const asign = async (req, res) => {
   const user = req.user
-  const documento = {
+  let formulario = {
     iddocu: req.body.iddocu,
-    liqdoc: user.userID,
-    stadoc: estadosDocumento.asignado,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.asignarFormulario,
   }
 
   try {
     const resul = await axios.post('http://localhost:8000/api/formulario', {
-      iddocu: req.body.iddocu,
+      formulario,
     })
 
     if (resul.data.STADOC === estadosDocumento.pendiente) {
+      formulario.liqdoc = user.userID
+      formulario.stadoc= estadosDocumento.asignado
+
+      const movimiento = {
+        usumov: user.id,
+        tipmov: tiposMovimiento.asignarFormulario,
+      }
       const result = await axios.post(
         'http://localhost:8000/api/formularios/cambio',
         {
-          documento,
+          formulario,
           movimiento,
         }
       )
@@ -266,26 +241,28 @@ export const asign = async (req, res) => {
 }
 export const resol = async (req, res) => {
   const user = req.user
-  const documento = {
+  let formulario = {
     iddocu: req.body.iddocu,
-    liqdoc: user.userID,
-    stadoc: estadosDocumento.resuelto,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.resolverFormulario,
   }
 
   try {
     const resul = await axios.post('http://localhost:8000/api/formulario', {
-      iddocu: req.body.iddocu,
+      formulario,
     })
 
     if (resul.data.STADOC === estadosDocumento.asignado) {
+      formulario.liqdoc = user.userID
+      formulario.stadoc= estadosDocumento.resuelto
+      
+      let movimiento = {
+        usumov: user.id,
+        tipmov: tiposMovimiento.resolverFormulario,
+      }
+
       const result = await axios.post(
         'http://localhost:8000/api/formularios/cambio',
         {
-          documento,
+          formulario,
           movimiento,
         }
       )
@@ -297,20 +274,14 @@ export const resol = async (req, res) => {
           movsms: req.body.movsms,
           stasms: estadosSms.pendiente,
         }
-        const documento = {
-          iddocu: req.body.iddocu,
-        }
-        const movimiento = {
-          usumov: user.id,
-          tipmov: tiposMovimiento.crearSms,
-        }
+        movimiento.tipmov = tiposMovimiento.crearSms        
 
         try {
           const result = await axios.post(
             'http://localhost:8000/api/formularios/sms/insert',
             {
               sms,
-              documento,
+              formulario,
               movimiento,
             }
           )
@@ -318,7 +289,7 @@ export const resol = async (req, res) => {
           const msg =
             'No se ha podido enviar el sms. El envio tendrá que realizarse manualmente.'
 
-          res.render('admin/error400', {
+          return res.render('admin/error400', {
             alerts: [{ msg, error }],
           })
         }
@@ -334,54 +305,15 @@ export const resol = async (req, res) => {
     })
   }
 }
-export const remit = async (req, res) => {
-  const user = req.user
-  const documento = {
-    iddocu: req.body.iddocu,
-    liqdoc: user.userID,
-    stadoc: estadosDocumento.remitido,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.remitirFormulario,
-  }
-
-  try {
-    const resul = await axios.post('http://localhost:8000/api/formulario', {
-      iddocu: req.body.iddocu,
-    })
-
-    if (resul.data.STADOC === estadosDocumento.asignado) {
-      await axios.post('http://localhost:8000/api/formularios/cambio', {
-        documento,
-        movimiento,
-      })
-    }
-
-    res.redirect('/admin/formularios')
-  } catch (error) {
-    const msg = 'No se ha podido remitir el fraude.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
-  }
-}
 export const unasign = async (req, res) => {
   const user = req.user
-  const documento = {
+  let formulario = {
     iddocu: req.body.iddocu,
-    liqdoc: 'PEND',
-    stadoc: estadosDocumento.pendiente,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.desasignarFormulario,
   }
 
   try {
     const resul = await axios.post('http://localhost:8000/api/formulario', {
-      iddocu: req.body.iddocu,
+      formulario,
     })
 
     if (
@@ -389,8 +321,15 @@ export const unasign = async (req, res) => {
       resul.data.STADOC === estadosDocumento.resuelto ||
       resul.data.STADOC === estadosDocumento.remitido
     ) {
+      formulario.liqdoc = 'PEND'
+      formulario.stadoc= estadosDocumento.pendiente
+
+      const movimiento = {
+        usumov: user.id,
+        tipmov: tiposMovimiento.desasignarFormulario,
+      }      
       await axios.post('http://localhost:8000/api/formularios/cambio', {
-        documento,
+        formulario,
         movimiento,
       })
     }
@@ -420,7 +359,7 @@ export const verTodo = async (req, res) => {
     })
 
     const datos = {
-      documentos: result.data,
+      formularios: JSON.stringify(result.data),
       tiposRol,
       estadosDocumento,
       verTodo,
@@ -437,7 +376,7 @@ export const verTodo = async (req, res) => {
 }
 export const sms = async (req, res) => {
   const user = req.user
-  const documento = {
+  const formulario = {
     iddocu: req.body.iddocu,
   }
   const sms = {
@@ -449,10 +388,10 @@ export const sms = async (req, res) => {
     usumov: user.id,
     tipmov: tiposMovimiento.crearSms,
   }
-
+    
   try {
     await axios.post('http://localhost:8000/api/formularios/sms/insert', {
-      documento,
+      formulario,
       sms,
       movimiento,
     })

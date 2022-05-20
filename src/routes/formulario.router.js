@@ -9,7 +9,6 @@ import {
   remove,
   asign,
   resol,
-  remit,
   unasign,
   verTodo,
   sms,
@@ -29,7 +28,6 @@ formularioRouter.post("/formularios/update", authRoutes, update);
 formularioRouter.post("/formularios/delete", authRoutes, remove);
 formularioRouter.post("/formularios/asignar", authRoutes, asign);
 formularioRouter.post("/formularios/resolver", authRoutes, resol);
-formularioRouter.post("/formularios/remitir", authRoutes, remit);
 formularioRouter.post("/formularios/desasignar", authRoutes, unasign);
 formularioRouter.get("/formularios/vertodo", authRoutes, verTodo);
 formularioRouter.post("/formularios/sms", authRoutes, sms);

@@ -2,7 +2,7 @@
         <div class="navbar navbar-light">
           <div class="container-xl">
             <ul class="navbar-nav">
-              <li class="nav-item">
+              <li class="nav-item <%- opcion === 'INICIO' ? 'active':'' %>">
                 <a class="nav-link" href="/" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <i class="bi bi-house"></i>
@@ -11,7 +11,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item <%- opcion === 'FORMULARIOS' ? 'active':'' %>">
                 <a class="nav-link" href="/admin/formularios" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <i class="bi bi-music-note"></i>
@@ -21,7 +21,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item <%- opcion === 'CITAS' ? 'active':'' %>">
                 <a class="nav-link" href="/admin/citas" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <i class="bi bi-alarm"></i>
@@ -31,7 +31,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item <%- opcion === 'FRAUDES' ? 'active':'' %> ">
                 <a class="nav-link" href="/admin/fraudes" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <i class="bi bi-cash"></i>
@@ -41,7 +41,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item dropdown active">
+              <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
                   <span>Administración</span>
                 </a>

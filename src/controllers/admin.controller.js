@@ -13,24 +13,16 @@ export const mainPage = async (req, res) => {
 }
 export const perfilPage = async (req, res) => {
   const user = req.user
+  const usuario = {
+    userid: user.userID,
+  }
   try {
     const result = await axios.post('http://localhost:8000/api/usuario', {
-      userid: user.userID,
+      usuario,
     })
 
-    const usuario = {
-      idusua: result.data.IDUSUA,
-      nomusu: result.data.NOMUSU,
-      ofiusu: result.data.OFIUSU,
-      rolusu: result.data.ROLUSU,
-      userid: result.data.USERID,
-      emausu: result.data.EMAUSU,
-      perusu: result.data.PERUSU,
-      telusu: result.data.TELUSU,
-      stausu: result.data.STAUSU,
-    }
     const datos = {
-      usuario,
+      usuario: result.data,
       arrTiposRol,
       arrTiposPerfil,
     }
