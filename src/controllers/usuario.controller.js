@@ -34,13 +34,9 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user
   const usuario = {
-    NOMUSU: '',
     OFIUSU: 1,
     ROLUSU: tiposRol.usuario,
-    USERID: '',
-    EMAUSU: '',
     PERUSU: tiposPerfil.general,
-    TELUSU: '',
     STAUSU: estadosUsuario.activo,
   }
 

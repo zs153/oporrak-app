@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Añadir fraude</title>
+  <title>Fraude</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -15,134 +15,19 @@
 
 <body class="antialiased">
   <div class="wrapper">
-    <header class="navbar navbar-expand-md navbar-light d-print-none">
-      <div class="container-xl">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <h1 class="navbar-brand pe-0 pe-md-3">
-          <a href="/">
-            <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
-          </a>
-        </h1>
-        <div class="navbar-nav flex-row order-md-last">
-          <div class="nav-item dropdown d-none d-md-flex me-3">
-            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-              <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
-              <span class="badge bg-white"></span>
-              <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-              <div class="card">
-                <div class="card-body">
-                  <ul id="messages" style="list-style: none;"></ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="nav-item dropdown">
-            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-              <div class="d-none d-xl-block">
-                <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
-              </div>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
-                <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
-              </a>
-              <div class="dropdown-divider"></div>
-              <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div class="navbar-expand-md">
-      <div class="navbar navbar-light">
-        <div class="container-xl">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="/" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi-house"></i>
-                </span>
-                  Inicio
-                </span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/formularios" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-music-note"></i>
-                </span>
-                <span class="nav-link-title">
-                  Formularios
-                </span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/citas" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-alarm"></i>
-                </span>
-                <span class="nav-link-title">
-                  Citas
-                </span>
-              </a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/admin/fraudes" >
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="bi bi-cash"></i>
-                </span>
-                <span class="nav-link-title">
-                  Fraudes
-                </span>
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                <span>Administración</span>
-              </a>
-              <div class="dropdown-menu">
-                <a href="/admin/oficinas" class="dropdown-item">
-                  <i class="bi bi-building dropdown-item-icon"></i>Oficinas
-                </a>
-                <a href="/admin/tipos" class="dropdown-item">
-                  <i class="bi bi-signpost dropdown-item-icon"></i>Tipos
-                </a>
-                <a href="/admin/usuarios" class="dropdown-item">
-                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                </a>
-                <a href="/admin/smss" class="dropdown-item">
-                  <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="/admin/estadistica" class="dropdown-item">
-                  <i class="bi bi-graph-up dropdown-item-icon"></i>Estadística
-                </a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
+      <%- include('../../partials/header') %>
+      <%- include('../../partials/navbar', {opcion: 'FRAUDES'}) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
               <div class="card">
-                  <% if(typeof alerts !='undefined' ) { %>
-                    <% alerts.map(function (alert){ %>
-                  <div
-                    class="alert alert-warning alert-dismissible fade show"
-                    role="alert"
-                  >
-                    <%- alert.msg %>
-                  </div>
+                <% if(typeof alerts !='undefined' ) { %>
+                  <% alerts.map(function (alert) { %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <%- alert.msg %>
+                    </div>
                   <% }) %>
                 <% } %>
                 <form id="form" action="/admin/fraudes/insert" method="POST" onsubmit="return validate();">
@@ -155,10 +40,10 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">NIF/NIE</label>
-                            <input type="text" name="nifcon" id="nifcon" class="form-control" style="text-transform: uppercase;" value="<%- datos.documento.nifcon %>" autofocus/>
+                            <input type="text" name="nifcon" id="nifcon" class="form-control" style="text-transform: uppercase;" value="" autofocus/>
                             <div class="invalid-feedback"></div>
                             <div class="discrim">
-                              <ul id="iddisc">                                
+                              <ul id="iddisc">
                               </ul>
                             </div>
                           </div>
@@ -168,7 +53,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Nombre</label>
-                            <input type="text" name="nomcon" id="nomcon" class="form-control" style="text-transform: uppercase;" value="<%- datos.documento.nomcon %>" />
+                            <input type="text" name="nomcon" id="nomcon" class="form-control" style="text-transform: uppercase;" value="" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -176,7 +61,7 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <label class="form-label">Correo electrónico</label>
-                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.documento.emacon %>" />
+                          <input type="text" name="emacon" id="emacon" class="form-control" value="" />
                         </div>
                       </div>
                     </div>
@@ -185,7 +70,7 @@
                         <div class="mb-1">
                           <div class="form-label">Tipo</div>
                           <div class="input-control">
-                            <select class="form-select form-control" id="cbotip" name="tipfra" value="<%- datos.documento.tipfra %>">
+                            <select class="form-select form-control" id="cbotip" name="tipfra" value="<%- datos.fraude.TIPFRA %>">
                               <option value="0">SELECCIONE UN TIPO</option>
                             </select>
                             <div class="invalid-feedback"></div>
@@ -196,7 +81,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Ejercicio</label>
-                            <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.documento.ejefra %>" />
+                            <input type="number" name="ejefra" id="ejefra" class="form-control" value="<%- datos.fraude.EJEFRA %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -204,7 +89,7 @@
                       <div class="col-1">
                         <div class="mb-1">
                           <label class="form-label">Adm</label>
-                          <input type="text" name="funfra" id="funfra" class="form-control" value="<%- datos.documento.funfra %>" readonly />
+                          <input type="text" name="funfra" id="funfra" class="form-control" value="<%- datos.fraude.FUNFRA %>" readonly />
                         </div>
                       </div>
                     </div>
@@ -213,7 +98,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Fecha</label>
-                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.documento.fecfra %>" />
+                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.fraude.FECFRA %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -221,21 +106,21 @@
                       <div class="col-5">
                         <div class="mb-1">
                           <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofifra" value="<%- datos.documento.ofifra %>">
+                          <select class="form-select" id="cboofi" name="ofifra" value="<%- datos.fraude.OFIFRA %>">
                           </select>
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="mb-1">
                           <label class="form-label">Teléfono</label>
-                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.documento.telcon %>" />
+                          <input type="text" name="telcon" id="telcon" class="form-control" value="" />
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label">Movil</label>
-                            <input type="text" name="movcon" id="movcon" class="form-control" value="<%- datos.documento.movcon %>" />
+                            <input type="text" name="movcon" id="movcon" class="form-control" value="" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -245,14 +130,9 @@
                       <div class="col-12">
                         <div class="mb-1">
                           <label class="form-label">Observaciones</label>
-                            <textarea type="text" name="obsfra" id="obsfra" class="form-control" rows="3" style="resize: vertical"><%- datos.documento.obsfra %></textarea>
+                            <textarea type="text" name="obsfra" id="obsfra" class="form-control" rows="3" style="resize: vertical"></textarea>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <h4>
-                        <small id="tipayu" class="form-hint"></small>
-                      </h4>
                     </div>
                   </div>
                   <div class="card-footer text-end">
@@ -268,17 +148,7 @@
         </div>
       </div>
     </div>
-    
-    <footer class="footer footer-transparent d-print-none">
-      <div class="container">
-        <div class="row text-center align-items-center flex-row-reverse">
-          <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-            Copyright &copy; 2021
-            <a href="/" class="link-secondary">SIAC</a>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <%- include('../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
@@ -479,14 +349,12 @@
     })
   </script>
   <script>
-    let tipos;
     const Tipos = () => {
       const xhr = new XMLHttpRequest();
 
       xhr.onload = function() {
         if (xhr.status === 200) {
-          tipos = JSON.parse(xhr.response)
-
+          const tipos = JSON.parse(xhr.response)
           const cbo = document.getElementById('cbotip')
 
           tipos.map((itm) => {
@@ -498,7 +366,7 @@
           })
         }
       };
-      xhr.open('POST', 'http://localhost:8000/api/tiposfraude', true);
+      xhr.open('POST', 'http://localhost:8000/api/tipos/fraudes', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send()
     }
@@ -511,14 +379,13 @@
       xhr.onload = function() {
         if (xhr.status === 200) {
           const oficinas = JSON.parse(xhr.response)
-
           const cbo = document.getElementById('cboofi')
 
           oficinas.map((itm) => {
             const option = document.createElement('option')
             option.value = itm.IDOFIC
             option.text = itm.DESOFI
-            if (itm.IDOFIC === <%- datos.documento.ofifra %>) {
+            if (itm.IDOFIC === <%- datos.fraude.OFIFRA %>) {
               option.selected = true
             }
             cbo.appendChild(option)

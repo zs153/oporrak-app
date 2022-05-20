@@ -32,7 +32,6 @@
   <div class="wrapper">
     <%- include('../../partials/header') %>
     <%- include('../../partials/navbar', {opcion: 'FRAUDES'}) %>
-
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -47,6 +46,13 @@
                         <span class="input-icon-addon"><i class="bi bi-search"></i></span>
                         <input type="text" class="form-control d-inline-block me-3" id="buscarFraudeBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en fraudes">
                       </div>
+                      <a href="#" class="btn btn-warning" onclick="checkItem(this)">
+                        <% if (datos.verTodo ) { %>
+                          <i class='bi bi-eye-slash dropdown-item-icon'></i>Solo pendientes
+                        <% } else { %>
+                          <i class='bi bi-eye dropdown-item-icon'></i>Mostrar todo
+                        <% } %>
+                      </a>                      
                       <a href="/admin/fraudes/add" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -465,7 +471,7 @@
     }
   </script>
   <script>
-    const orgList = <%- datos.documentos %>
+    const orgList = <%- datos.fraudes %>
     let state = {
       'querySet': orgList,
       'page': 1,
@@ -520,10 +526,6 @@
       if (state.page != pages) {
         wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
       }
-      // wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>`
-      // wrapper.innerHTML += `<button value=${maxLeft} class="page-item btn btn-primary">< Ant</button>`
-      // wrapper.innerHTML += `<button value=${maxRight} class="page-item btn btn-primary">Sig ></button>`
-      // wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
 
       const elem = document.getElementsByClassName('page-item')
       for (let i = 0; i < elem.length; i++) {
@@ -696,7 +698,7 @@
               </li>                              
             </ul>`
           } else {
-            if(element.LIQFRA === '<%- user.userID %>') {
+            if(element.LIQFRA === '<%- user.userID %>' || <%- user.rol %> === <%- datos.tiposRol.admin %>) {
               cell.innerHTML = `<ul class="dots-menu">
               <li class="nav-item drop-right">
                 <a href="#" class="nav-link">
@@ -716,6 +718,11 @@
                   <li class="nav-item">
                     <a href="#" class="nav-link" onclick="{document.getElementById('desasig').value ='${element.IDFRAU}', document.getElementById('texdes').innerHTML ='<p>${element.REFFRA}</p><p>${element.NIFCON}</p><p>${element.NOMCON}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-desasignar">
                       <i class="bi bi-x-square dropdown-item-icon"></i>Desasignar fraude
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/admin/fraudes/ejercicio/${element.IDFRAU}" class="nav-link">
+                      <i class="bi bi-calendar dropdown-item-icon"></i>Nuevo ejercicio
                     </a>
                   </li>
                   <li class="nav-item ">

@@ -9,10 +9,8 @@ import {
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const ofic = decodeURIComponent(req.cookies.oficina)
   const cita = {
     stacit: estadosCita.disponible,
-    oficit: ofic === 'undefined' ? user.oficina : ofic,
     dias: [2, 2, 2, 2, 4, 4, 3][new Date().getDay()],
   }
   const verTodo = false
@@ -27,7 +25,8 @@ export const mainPage = async (req, res) => {
       estadosCita,
       verTodo,
     }
-    res.render('admin/citas', { user, datos, oficina: cita.oficit })
+    
+    res.render('admin/citas', { user, datos})
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 

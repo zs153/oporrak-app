@@ -14,6 +14,7 @@ export const mainPage = async (req, res) => {
   const fraude = {
     stafra: estadosFraude.pendiente + estadosFraude.asignado,
   };
+  const verTodo = false
 
   try {
     const result = await axios.post("http://localhost:8000/api/fraudes", {
@@ -21,10 +22,10 @@ export const mainPage = async (req, res) => {
     });
 
     const datos = {
-      documentos: JSON.stringify(result.data),
-      tiposRol,
+      fraudes: JSON.stringify(result.data),
       estadosFraude,
-      estadosHito,
+      tiposRol,
+      verTodo,
     };
 
     res.render("admin/fraudes", { user, datos });
@@ -39,27 +40,17 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user;
   const fecha = new Date();
+
   try {
-    const documento = {
-      idfrau: 0,
-      fecfra: fecha.toISOString().slice(0, 10),
-      nifcon: "",
-      nomcon: "",
-      emacon: "",
-      telcon: "",
-      movcon: "",
-      reffra: "",
-      tipfra: 0,
-      ejefra: fecha.getFullYear() - 1,
-      ofifra: user.oficina,
-      obsfra: "",
-      funfra: user.userID,
-      liqfra: "",
-      stafra: estadosFraude.pendiente,
-      sitfra: 0,
+    const fraude = {
+      FECFRA: fecha.toISOString().slice(0, 10),
+      EJEFRA: fecha.getFullYear() - 1,
+      OFIFRA: user.oficina,
+      FUNFRA: user.userID,
+      STAFRA: estadosFraude.pendiente,
     };
     const datos = {
-      documento,
+      fraude,
     };
 
     res.render("admin/fraudes/add", { user, datos });
@@ -83,6 +74,7 @@ export const editPage = async (req, res) => {
     });
     const datos = {
       fraude: result.data,
+      tiposRol,
     };
 
     res.render("admin/fraudes/edit", { user, datos });
@@ -334,39 +326,25 @@ export const editEventosPage = async (req, res) => {
 export const ejercicioPage = async (req, res) => {
   const user = req.user;
   const fecha = new Date();
+  let fraude = {
+    idfrau: req.params.id,
+  };
 
   try {
-    // tipos
-    const resultTipos = await axios.post(
-      "http://localhost:8000/api/tipos/origen",
-      {
-        origen: origenTipo.fraude,
-      }
-    );
     // fraude
     const result = await axios.post("http://localhost:8000/api/fraude", {
-      idfrau: req.params.idfrau,
+      fraude,
     });
-    const documento = {
-      idfrau: 0,
-      fecfra: fecha.toISOString().substring(0, 10),
-      nifcon: result.data.nifcon,
-      nomcon: result.data.nomcon,
-      emacon: result.data.emacon,
-      telcon: result.data.telcon,
-      movcon: result.data.movcon,
-      reffra: "",
-      tipfra: 0,
-      ejefra: fecha.getFullYear(),
-      ofifra: result.data.ofifra,
-      obsfra: "",
-      funfra: user.userID,
-      liqdoc: user.userID,
-      stafra: estadosDocumento.pendiente,
-    };
+    fraude = result.data
+    fraude.FECHA = fecha.toISOString().substring(0, 10)
+    fraude.EJEFRA = fecha.getFullYear()
+    fraude.FUNFRA = user.userID
+    fraude.LIQDOC = user.userID
+    fraude.STAFRA = estadosFraude.asignado
+    fraude.SITFRA = 0
+
     const datos = {
-      documento,
-      arrTipos: resultTipos.data,
+      fraude,
     };
 
     res.render("admin/fraudes/ejercicio", { user, datos });
@@ -686,9 +664,9 @@ export const verTodo = async (req, res) => {
     });
 
     const datos = {
-      documentos: result.data,
-      tiposRol,
+      fraudes: JSON.stringify(result.data),
       estadosFraude,
+      tiposRol,
       verTodo,
     };
 
@@ -948,15 +926,10 @@ export const deleteEvento = async (req, res) => {
 // proc otros
 export const ejercicio = async (req, res) => {
   const user = req.user;
-  const referencia =
-    "F" +
-    randomString(
-      10,
-      "abcdefghijklmnpqrstuvwxyz1234567890ABCDEFGHIJKLMNPQRSTUVWXYZ"
-    );
-
-  const documento = {
-    fecfra: new Date().toISOString().slice(0, 10),
+  const fecha = new Date()
+  const referencia = "F" + randomString(10, "0123456789BCDE");
+  const fraude = {
+    fecfra: fecha.toISOString().substring(0, 10),
     nifcon: req.body.nifcon,
     nomcon: req.body.nomcon,
     emacon: req.body.emacon,
@@ -969,16 +942,17 @@ export const ejercicio = async (req, res) => {
     obsfra: req.body.obsfra,
     funfra: user.userID,
     liqfra: user.userID,
-    stafra: estadosDocumento.asignado,
+    stafra: estadosFraude.asignado,
+    sitfra: 0,
   };
   const movimiento = {
-    usuarioMov: user.id,
-    tipoMov: tiposMovimiento.crearFraude,
+    usumov: user.id,
+    tipmov: tiposMovimiento.nuevoEjercicioFraude,
   };
-
+console.log(fraude)
   try {
     await axios.post("http://localhost:8000/api/fraudes/insert", {
-      documento,
+      fraude,
       movimiento,
     });
 

@@ -52,6 +52,7 @@ export const tiposMovimiento = {
   crearTipoFraude: 50,
   modificarTipoFraude: 51,
   borrarTipoFraude: 52,
+  nuevoEjercicioFraude: 58,
   archivadoSancion: 59,
   cambioPassword: 60,
   olvidoPassword: 61,
@@ -104,12 +105,6 @@ export const estadosHito = {
   sancionActiva: 3,
 }
 
-export const origenTipo = {
-  formulario: 1,
-  fraude: 2,
-  hito: 3,
-  otros: 4,
-}
 export const tiposLiquidacion = {
   ingresar: 1,
   devolver: 2,
@@ -145,12 +140,6 @@ export const arrEstadosFraude = [
   { ID: 1, DES: 'ASIGNADO', LIT: 'ASI' },
   { ID: 2, DES: 'RESUELTO', LIT: 'RES' },
   { ID: 3, DES: 'REMITIDO', LIT: 'REM' },
-]
-export const arrOrigenTipo = [
-  { id: 1, des: 'FORMULARIO' },
-  { id: 2, des: 'FRAUDE' },
-  { id: 3, des: 'HITO' },
-  { id: 4, des: 'OTROS' },
 ]
 export const arrTiposLiquidacion = [
   { id: 1, des: 'INFRESAR' },
