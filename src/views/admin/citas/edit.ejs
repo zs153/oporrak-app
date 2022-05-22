@@ -31,7 +31,7 @@
                   <% }) %>
                 <% } %>
                 <form action="/admin/citas/update" method="POST">
-                  <input type="hidden" id="idcita" name="idcita" value="<%- datos.cita.idcita %>">
+                  <input type="hidden" id="idcita" name="idcita" value="<%- datos.cita.IDCITA %>">
                   <div class="card-header">
                     <h3 class="card-title">Cita</h3>
                   </div>
@@ -41,26 +41,26 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label">Origen</label>
-                            <input type="text" name="orgcit" id="orgcit" class="form-control" value="<%- datos.cita.orgcit %>" readonly/>
+                            <input type="text" name="orgcit" id="orgcit" class="form-control" value="<%- datos.cita.ORGCIT %>" readonly/>
                           </div>
                         </div>
                       </div>
                       <div class="col-3">
                         <div class="mb-1">
                           <label class="form-label">Fecha</label>
-                          <input type="text" name="feccit" id="feccit" class="form-control" value="<%- datos.cita.feccit %>" readonly/>
+                          <input type="text" name="feccit" id="feccit" class="form-control" value="<%- datos.cita.FECCIT %>" readonly/>
                         </div>
                       </div>
                       <div class="col-1">
                         <div class="mb-1">
                           <label class="form-label">Hora</label>
-                          <input type="text" name="horcit" id="horcit" class="form-control" value="<%- datos.cita.horcit %>" readonly/>
+                          <input type="text" name="horcit" id="horcit" class="form-control" value="<%- datos.cita.HORCIT %>" readonly/>
                         </div>
                       </div>
                       <div class="col-5">
                         <div class="mb-1">
                           <label class="form-label">Oficina</label>
-                          <input type="text" name="oficit" id="oficit" class="form-control" value="<%- datos.cita.desofi %>" readonly/>
+                          <input type="text" name="oficit" id="oficit" class="form-control" value="<%- datos.cita.DESOFI %>" readonly/>
                         </div>
                       </div>
                     </div>
@@ -68,19 +68,19 @@
                       <div class="col-2">
                         <div class="mb-1">
                           <label class="form-label">NIF/NIE</label>
-                          <input type="text" name="nifcon" id="nifcon" class="form-control" style="text-transform: uppercase;" value="<%- datos.cita.nifcon %>" readonly/>
+                          <input type="text" name="nifcon" id="nifcon" class="form-control" style="text-transform: uppercase;" value="<%- datos.cita.NIFCON %>" readonly/>
                         </div>
                       </div>
                       <div class="col-6">
                         <div class="mb-1">
                           <label class="form-label">Nombre</label>
-                          <input type="text" name="nomcon" id="nomcon" class="form-control" style="text-transform: uppercase;" value="<%- datos.cita.nomcon %>" readonly/>
+                          <input type="text" name="nomcon" id="nomcon" class="form-control" style="text-transform: uppercase;" value="<%- datos.cita.NOMCON %>" readonly/>
                         </div>
                       </div>
                       <div class="col-4">
                         <div class="mb-1">
                           <label class="form-label">Teléfono</label>
-                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.cita.telcon %>" readonly/>
+                          <input type="text" name="telcon" id="telcon" class="form-control" value="<%- datos.cita.TELCON %>" readonly/>
                         </div>
                       </div>
                     </div>
@@ -88,13 +88,13 @@
                       <div class="col-6">
                         <div class="mb-1">
                           <div class="form-label">Descripción</div>
-                          <input type="text" name="descit" id="descit" class="form-control" value="<%- datos.cita.descit %>" readonly/>
+                          <input type="text" name="descit" id="descit" class="form-control" value="<%- datos.cita.DESCIT %>" readonly/>
                         </div>
                       </div>
                       <div class="col-6">
                         <div class="mb-1">
                           <label class="form-label">Notas</label>
-                          <input type="text" name="notcit" id="notcit" class="form-control" value="<%- datos.cita.notcit %>" readonly/>
+                          <input type="text" name="notcit" id="notcit" class="form-control" value="<%- datos.cita.NOTCIT %>" readonly/>
                         </div>
                       </div>
                     </div>
@@ -102,7 +102,7 @@
                       <div class="col-12">
                         <div class="mb-1">
                           <label class="form-label">Observaciones</label>
-                            <textarea type="text" name="obscit" id="obscit" class="form-control" rows="10" style="resize: vertical"><%- datos.cita.obscit %></textarea>
+                            <textarea type="text" name="obscit" id="obscit" class="form-control" rows="10" style="resize: vertical"><%- datos.cita.OBSCIT %></textarea>
                         </div>
                       </div>
                     </div>

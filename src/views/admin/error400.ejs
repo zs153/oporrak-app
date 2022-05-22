@@ -15,24 +15,15 @@
         <div class="empty">
           <div class="empty-header">404</div>
           <p class="empty-title">Se ha generado una página de error</p>
-          <!-- <p class="empty-subtitle text-muted">Revisa los datos intoducidos</p> -->
-          <% if(typeof alerts !='undefined') { %> <% alerts.map(function
-          (alert){ %>
-          <div
-            class="alert alert-warning alert-dismissible fade show"
-            role="alert"
-          >
-            <%- alert.msg %>
-          </div>
-          <% }) %> <% } %>
+          <% if(typeof alerts !='undefined' ) { %>
+            <% alerts.map(function (alert) { %>
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <%- alert.msg %>
+              </div>
+            <% }) %>
+          <% } %>
           <div class="empty-action">
-            <input
-              class="btn btn-primary"
-              action="action"
-              onclick="window.history.go(-1); return false;"
-              type="submit"
-              value="Volver"
-            />
+            <input class="btn btn-primary" action="action" onclick="window.history.go(-1); return false;" type="submit" value="Volver" />
           </div>
         </div>
       </div>

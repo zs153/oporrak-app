@@ -7,7 +7,7 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.post("http://localhost:8000/api/tipos/fraudes");
     const datos = {
-      tipos: result.data,
+      tipos: JSON.stringify(result.data),
     };
 
     res.render("admin/tipos/fraudes", { user, datos });
@@ -21,17 +21,8 @@ export const mainPage = async (req, res) => {
 };
 export const addPage = async (req, res) => {
   const user = req.user;
-  const tipo = {
-    idtipo: 0,
-    destip: "",
-  };
-
   try {
-    const datos = {
-      tipo,
-    };
-
-    res.render("admin/tipos/fraudes/add", { user, datos });
+    res.render("admin/tipos/fraudes/add", { user });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
 
@@ -42,7 +33,7 @@ export const addPage = async (req, res) => {
 };
 export const editPage = async (req, res) => {
   const user = req.user;
-  let tipo = {
+  const tipo = {
     idtipo: req.params.id,
   };
 
@@ -50,13 +41,8 @@ export const editPage = async (req, res) => {
     const result = await axios.post("http://localhost:8000/api/tipos/fraude", {
       tipo,
     });
-
-    tipo = {
-      idtipo: result.data.IDTIPO,
-      destip: result.data.DESTIP,
-    };
     const datos = {
-      tipo,
+      tipo: result.data,
     };
 
     res.render("admin/tipos/fraudes/edit", { user, datos });

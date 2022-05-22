@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Usuario registrado</title>
+    <title>Registro</title>
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
     <!-- CSS files -->
     <link rel="stylesheet" href="/css/estilos.min.css" />
@@ -21,15 +21,13 @@
             La contraseña puede cambiarse en el menu de usuario una vez iniciada
             la sesión
           </p>
-          <% if(typeof alerts !='undefined') { %> <% alerts.map(function
-          (alert){ %>
-          <div
-            class="alert alert-warning alert-dismissible fade show"
-            role="alert"
-          >
-            <%- alert.msg %>
-          </div>
-          <% }) %> <% } %>
+          <% if(typeof alerts !='undefined') { %>
+            <% alerts.map(function (alert){ %>
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <%- alert.msg %>
+              </div>
+            <% }) %>
+          <% } %>
           <div class="empty-action">
             <a href="/" class="btn btn-primary">Iniciar sesión</a>
           </div>

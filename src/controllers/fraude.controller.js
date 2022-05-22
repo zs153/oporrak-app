@@ -210,17 +210,10 @@ export const addHitosPage = async (req, res) => {
   const fraude = {
     idfrau: req.params.id,
   };
-  const hito = {
-    idhito: 0,
-    tiphit: 0,
-    imphit: 0,
-    obshit: "",
-    stahit: 0,
-  };
+
   try {
     const datos = {
       fraude,
-      hito,
       origenTipo,
     };
 
@@ -271,15 +264,10 @@ export const addEventosPage = async (req, res) => {
   const fraude = {
     idfrau: req.params.id,
   };
-  const evento = {
-    ideven: 0,
-    tipeve: 0,
-    obseve: "",
-  };
+
   try {
     const datos = {
       fraude,
-      evento,
     };
 
     res.render("admin/fraudes/eventos/add", { user, datos });
@@ -364,8 +352,8 @@ export const insert = async (req, res) => {
   const referencia = "F" + randomString(10, "1234567890YMGS");
   const fraude = {
     fecfra: req.body.fecfra,
-    nifcon: req.body.nifcon,
-    nomcon: req.body.nomcon,
+    nifcon: req.body.nifcon.toUpperCase(),
+    nomcon: req.body.nomcon.toUpperCase(),
     emacon: req.body.emacon,
     telcon: req.body.telcon,
     movcon: req.body.movcon,
@@ -411,8 +399,8 @@ export const update = async (req, res) => {
   const fraude = {
     idfrau: req.body.idfrau,
     fecfra: req.body.fecfra,
-    nifcon: req.body.nifcon,
-    nomcon: req.body.nomcon,
+    nifcon: req.body.nifcon.toUpperCase(),
+    nomcon: req.body.nomcon.toUpperCase(),
     emacon: req.body.emacon,
     telcon: req.body.telcon,
     movcon: req.body.movcon,

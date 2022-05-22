@@ -31,7 +31,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item <%- opcion === 'FRAUDES' ? 'active':'' %> ">
+              <li class="nav-item <%- opcion === 'FRAUDES' ? 'active':'' %>">
                 <a class="nav-link" href="/admin/fraudes" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <i class="bi bi-cash"></i>
@@ -41,7 +41,7 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown <%- opcion === 'ADMINISTRACION' ? 'active':'' %>">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
                   <span>Administración</span>
                 </a>
@@ -70,6 +70,9 @@
                           </a>
                         </div>
                       </div>
+                      <a href="/admin/subtipos" class="dropdown-item">
+                        <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subtipos
+                      </a>
                       <a href="/admin/usuarios" class="dropdown-item">
                         <i class="bi bi-people dropdown-item-icon"></i>Usuarios
                       </a>

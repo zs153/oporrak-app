@@ -29,51 +29,8 @@
   </head>
   <body class="antialiased">
     <div class="wrapper">
-      <header class="navbar navbar-expand-md navbar-light d-print-none">
-        <div class="container-xl">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <h1 class="navbar-brand pe-0 pe-md-3">
-            <a href="/">
-              <img src="/img/logoFormularios.png" width="110" height="32" alt="AYUDA" class="navbar-brand-image">
-            </a>
-          </h1>
-          <div class="navbar-nav flex-row order-md-last">
-            <div class="nav-item dropdown d-none d-md-flex me-3">
-              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <i class="bi bi-bell" style="font-size: 1.1rem; color: cornflowerblue;"></i>
-                <span class="badge bg-white"></span>
-                <span id="toggleBadge" class="badge badge-pill bg-red d-none">!</span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-                <div class="card">
-                  <div class="card-body">
-                    <ul id="messages" style="list-style: none;"></ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <div class="d-none d-xl-block">
-                  <span class="avatar avatar-sm avatar-rounded"><h5><%- user.userID %></h5></span>
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="/admin/perfil/<%- user.userID %>" class="dropdown-item">
-                  <i class="bi bi-pencil dropdown-item-icon"></i>Perfil de usuario
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="/log/logout" class="dropdown-item"><i class="bi bi-box-arrow-in-right dropdown-item-icon"></i>Finalizar sesión</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <%- include('../../partials/navbar') %>
-
+      <%- include('../../partials/header') %>
+      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION'}) %>
       <div class="page-wrapper">
         <div class="page-body">
           <div class="container-xl">
@@ -81,7 +38,7 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    Usuarios
+                    <h3 class="card-title">Usuarios</h3>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
                         <div class="input-icon me-3">
@@ -115,25 +72,15 @@
                       <tbody id="table-body">
                       </tbody>
                     </table>
-                    <div id="pagination-wrapper" class="pagination"></div>
+                    <div id="pagination-wrapper" class="pagination py-1"></div>
                   </div>
                 </div>                
               </div>
             </div>
           </div>
         </div>
-
-        <footer class="footer footer-transparent d-print-none">
-          <div class="container">
-            <div class="row text-center align-items-center flex-row-reverse">
-              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-                Copyright &copy; 2022
-                <a href="/" class="link-secondary">SIAC</a>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
+      <%- include('../../partials/footer') %>
     </div>
     
     <div class="modal modal-blur fade" id="modal-borrar" tabindex="-1" role="dialog" aria-hidden="true">
@@ -221,6 +168,9 @@
     </script>
     <script>
       const elemBuscar = document.getElementById('buscarUserBox');
+      elemBuscar.onchange = (event) => {
+        setCookie('filtro', event.target.value, .5) // medio dia
+      }
 
       function arrayFilter() {
         const filtro = elemBuscar.value.toUpperCase()
@@ -263,6 +213,29 @@
           sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
         });
       });
+    </script>
+    <script>
+      const getCookie = (key) => {
+        let value = ''
+        document.cookie.split(';').forEach((e)=>{
+          if(e.includes(key)) {
+            value = e.split('=')[1]
+          }
+        })
+        return value
+      }
+      const setCookie = (name,value,days) => {
+        let expires = "";
+        if (days) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      }
+      const deleteCookie = () => {
+        document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+      }
     </script>
     <script>
       const orgList = <%- datos.usuarios %>

@@ -7,7 +7,7 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.post("http://localhost:8000/api/tipos/eventos");
     const datos = {
-      tipos: result.data,
+      tipos: JSON.stringify(result.data),
     };
 
     res.render("admin/tipos/eventos", { user, datos });
@@ -21,17 +21,9 @@ export const mainPage = async (req, res) => {
 };
 export const addPage = async (req, res) => {
   const user = req.user;
-  const tipo = {
-    idtipo: 0,
-    destip: "",
-  };
 
   try {
-    const datos = {
-      tipo,
-    };
-
-    res.render("admin/tipos/eventos/add", { user, datos });
+    res.render("admin/tipos/eventos/add", { user });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
 
@@ -42,7 +34,7 @@ export const addPage = async (req, res) => {
 };
 export const editPage = async (req, res) => {
   const user = req.user;
-  let tipo = {
+  const tipo = {
     idtipo: req.params.id,
   };
 
@@ -50,13 +42,8 @@ export const editPage = async (req, res) => {
     const result = await axios.post("http://localhost:8000/api/tipos/evento", {
       tipo,
     });
-
-    tipo = {
-      idtipo: result.data.IDTIPO,
-      destip: result.data.DESTIP,
-    };
     const datos = {
-      tipo,
+      tipo: result.data,
     };
 
     res.render("admin/tipos/eventos/edit", { user, datos });

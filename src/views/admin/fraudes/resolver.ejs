@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Resolver fraude</title>
+  <title>Rraude</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -15,8 +15,8 @@
 
 <body class="antialiased">
   <div class="wrapper">
-    <%- include('../partials/header') %>
-    <%- include('../partials/navbar', {opcion: 'INICIO'}) %>
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/navbar', {opcion: 'FRAUDES'}) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -33,7 +33,7 @@
                 <form action="/admin/fraudes/resolver" method="POST">
                   <input type="hidden" id="idfrau" name="idfrau" value="<%- datos.fraude.IDFRAU %>">
                   <div class="card-header">
-                    <h3 class="card-title">Fraude</h3>
+                    <h4 class="card-title">Resolver Fraude</h4>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -102,7 +102,7 @@
         </div>
       </div>
     </div>
-    <%- include('../partials/footer') %>
+    <%- include('../../partials/footer') %>
   </div>
   <script src="/js/ayuda.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>

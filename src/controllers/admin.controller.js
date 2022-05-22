@@ -61,7 +61,7 @@ export const changePassword = async (req, res) => {
       }
     )
 
-    res.redirect('/admin')
+    res.redirect('/log/logout')
   } catch (error) {
     res.redirect('/admin')
   }
@@ -70,7 +70,7 @@ export const updatePerfil = async (req, res) => {
   const user = req.user
   const usuario = {
     idusua: user.id,
-    nomusu: req.body.nomusu,
+    nomusu: req.body.nomusu.toUpperCase(),
     ofiusu: req.body.ofiusu,
     emausu: req.body.emausu,
     telusu: req.body.telusu,
@@ -110,7 +110,7 @@ export const updatePerfil = async (req, res) => {
     }
 
     res.cookie('auth', accessToken, options)
-    res.redirect('/admin')
+    res.redirect('/log/logout')
   } catch (error) {
     res.redirect('/admin')
   }

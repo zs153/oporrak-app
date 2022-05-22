@@ -67,14 +67,14 @@
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Observaciones</th>
-                        <th class="w-4">C</th>
-                        <th class="w-4"></th>
+                        <th class="w-3">C</th>
+                        <th class="w-5"></th>
                       </tr>
                       </thead>
                       <tbody id="table-body">
                       </tbody>
                     </table>
-                    <div id="pagination-wrapper" class="pagination"></div>
+                    <div id="pagination-wrapper" class="pagination py-1"></div>
                   </div>
                 </div>                
               </div>
@@ -226,6 +226,29 @@
       });
     </script>
     <script>
+      const Tipos = () => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const tipos = JSON.parse(xhr.response)
+            const cbo = document.getElementById('cbotip')
+
+            tipos.map((itm) => {
+              const option = document.createElement('option')
+              option.value = itm.IDTIPO
+              option.text = itm.DESTIP
+              cbo.appendChild(option)
+            })
+          }
+        };
+        xhr.open('POST', 'http://localhost:8000/api/tipos/formularios', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send()
+      }
+      Tipos();
+    </script>
+    <script>
       const orgList = <%- datos.citas %>
       let state = {
         'querySet': orgList,
@@ -319,10 +342,10 @@
 
             // col2
             cell = document.createElement('td')
-            cell.classList.add("w-5")
+            cell.classList.add("w-4")
             cell.innerHTML = `<div class="d-flex py-1 align-items-center">
               <div class="flex-fill">
-                <div class="font-weight-medium">${ORGCIT.slice(0,4)}</div>
+                <div class="font-weight-medium">${element.ORGCIT.slice(0,4)}</div>
               </div>
             </div>`
             row.appendChild(cell)
@@ -377,10 +400,10 @@
 
             // col8
             cell = document.createElement('td')
-            if (element.OBSDOC !== null) {
+            if (element.OBSCIT !== null) {
               cell.innerHTML = `<div class="d-flex py-1 align-items-center">
                 <div class="flex-fill">
-                  <div class="font-weight-medium">${element.OBSDOC.length > 33 ? element.OBSDOC.slice(0,33) + '...': element.OBSDOC}</div>
+                  <div class="font-weight-medium">${element.OBSCIT.length > 33 ? element.OBSCIT.slice(0,33) + '...': element.OBSCIT}</div>
                 </div>
               </div>`
             }
@@ -388,7 +411,7 @@
 
             // col5
             cell = document.createElement('td')
-            cell.classList.add("w-4")
+            cell.classList.add("w-3")
             cell.innerHTML = `<div class="d-flex py-1 align-items-center">
               <div class="flex-fill">
                 <div class="font-weight-medium">${element.COMPLE}</div>
@@ -398,7 +421,7 @@
 
             // col10
             cell = document.createElement('td')
-            cell.classList.add("w-4")
+            cell.classList.add("w-5")
             if (element.STACIT === <%- datos.estadosCita.disponible %>) {
               cell.innerHTML = `<ul class="dots-menu">
                 <li class="nav-item drop-right">
@@ -412,7 +435,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='${element.IDCITA}', document.getElementById('texasi').innerHTML ='<p>${element.REFDOC}</p><p>${element.NIFCON}</p><p>${element.NOMCON}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
+                      <a href="#" class="nav-link" onclick="{document.getElementById('asign').value ='${element.IDCITA}', document.getElementById('texasi').innerHTML ='<p>${element.FECCIT}</p><p>${element.NIFCON}</p><p>${element.NOMCON}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-asignar">
                         <i class="bi bi-heart dropdown-item-icon"></i>Generar formulario
                       </a>
                     </li>

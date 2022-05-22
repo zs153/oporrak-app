@@ -3,7 +3,6 @@ import {
   arrEstadosSms,
   estadosSms,
   tiposMovimiento,
-  tiposRol,
 } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -18,8 +17,8 @@ export const mainPage = async (req, res) => {
       sms,
     })
     const datos = {
-      smss: result.data,
-      tiposRol,
+      smss: JSON.stringify(result.data),
+      estadosSms,
       verTodo,
     }
 
@@ -34,16 +33,9 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const sms = {
-    idsmss: 0,
-    texsms: '',
-    movsms: '',
-    stasms: estadosSms.pendiente,
-  }
 
   try {
     const datos = {
-      sms,
       arrEstadosSms,
     }
 
@@ -58,27 +50,20 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
+  const sms = {
+    idsmss: req.params.id
+  }
 
   try {
     const result = await axios.post('http://localhost:8000/api/sms', {
-      idsmss: req.params.id,
+      sms,
     })
-
-    if (result) {
-      const sms = {
-        idsmss: result.data.IDSMSS,
-        texsms: result.data.TEXSMS,
-        movsms: result.data.MOVSMS,
-        stasms: result.data.STASMS,
-        refdoc: result.data.REFDOC,
-      }
-      const datos = {
-        sms,
-        arrEstadosSms,
-      }
-
-      res.render('admin/smss/edit', { user, datos })
+    const datos = {
+      sms: result.data,
+      arrEstadosSms,
     }
+
+    res.render('admin/smss/edit', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -90,38 +75,22 @@ export const editPage = async (req, res) => {
 export const insertSms = async (req, res) => {
   const user = req.user
   const sms = {
+    movsms: req.body.movsms,
     texsms: req.body.texsms,
+    stasms: estadosSms.pendiente,
   }
   const movimiento = {
     usumov: user.id,
     tipmov: tiposMovimiento.crearSms,
   }
-  const formulario = {
-    refdoc: req.body.refdoc,
-  }
 
   try {
-    // referencia
-    const result = await axios.post(
-      'http://localhost:8000/api/formularios/referencia',
-      {
-        formulario,
-      }
-    )
+    await axios.post('http://localhost:8000/api/smss/insert', {
+      sms,
+      movimiento,
+    })
 
-    if (result) {
-      formulario.iddocu = result.data.IDDOCU
-      sms.movsms = result.data.MOVCON
-      sms.stasms = estadosSms.pendiente
-
-      await axios.post('http://localhost:8000/api/smss/insert', {
-        sms,
-        formulario,
-        movimiento,
-      })
-
-      res.redirect('/admin/smss')
-    }
+    res.redirect('/admin/smss')
   } catch (error) {
     let msg = 'No se ha podido crear el sms. Verifique la referencia'
 
@@ -204,8 +173,8 @@ export const verTodo = async (req, res) => {
     })
 
     const datos = {
-      smss: result.data,
-      tiposRol,
+      smss: JSON.stringify(result.data),
+      estadosSms,
       verTodo,
     }
 

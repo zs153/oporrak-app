@@ -7,7 +7,7 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.post('http://localhost:8000/api/oficinas')
     const datos = {
-      oficinas: result.data,
+      oficinas: JSON.stringify(result.data),
     }
 
     res.render('admin/oficinas', { user, datos })
@@ -21,18 +21,9 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const oficina = {
-    idofic: 0,
-    desofi: '',
-    codofi: '',
-  }
 
   try {
-    const datos = {
-      oficina,
-    }
-
-    res.render('admin/oficinas/add', { user, datos })
+    res.render('admin/oficinas/add', { user })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -48,15 +39,8 @@ export const editPage = async (req, res) => {
     const result = await axios.post('http://localhost:8000/api/oficina', {
       idofic: req.params.id,
     })
-
-    const oficina = {
-      idofic: result.data.IDOFIC,
-      desofi: result.data.DESOFI,
-      codofi: result.data.CODOFI,
-    }
-
     const datos = {
-      oficina,
+      oficina: result.data,
     }
 
     res.render('admin/oficinas/edit', { user, datos })
@@ -72,7 +56,7 @@ export const insert = async (req, res) => {
   const user = req.user
   const oficina = {
     desofi: req.body.desofi.toUpperCase(),
-    codofi: req.body.codofi,
+    codofi: req.body.codofi.toUpperCase(),
   }
   const movimiento = {
     usumov: user.id,
@@ -103,7 +87,7 @@ export const update = async (req, res) => {
   const oficina = {
     idofic: req.body.idofic,
     desofi: req.body.desofi.toUpperCase(),
-    codofi: req.body.codofi,
+    codofi: req.body.codofi.toUpperCase(),
   }
   const movimiento = {
     usumov: user.id,

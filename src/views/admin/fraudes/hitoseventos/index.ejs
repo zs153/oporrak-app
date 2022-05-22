@@ -396,8 +396,7 @@
         const filter = document.querySelector('#buscarHitoBox').value.toUpperCase()
 
         document.querySelectorAll('#tblHitos tr:not(.header)').forEach((tr) => {
-          const anyMatch = [...tr.children]
-            .some(td => td.textContent.toUpperCase().includes(filter));
+          const anyMatch = [...tr.children].some(td => td.textContent.toUpperCase().includes(filter));
           anyMatch ? tr.style.display = '' : tr.style.display = 'none'
         });
       }
@@ -405,8 +404,7 @@
         const filter = document.querySelector('#buscarEventoBox').value.toUpperCase()
 
         document.querySelectorAll('#tblEventos tr:not(.header)').forEach((tr) => {
-          const anyMatch = [...tr.children]
-            .some(td => td.textContent.toUpperCase().includes(filter));
+          const anyMatch = [...tr.children].some(td => td.textContent.toUpperCase().includes(filter));
           anyMatch ? tr.style.display = '' : tr.style.display = 'none'
         });
       }

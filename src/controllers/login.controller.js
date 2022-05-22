@@ -31,19 +31,17 @@ export const verifyLogin = async (req, res) => {
       usuario,
     });
 
-    usuario = result.data
-
-    bcrypt.compare(password, usuario.PWDUSU, (err, result) => {
-      if (result) {
+    bcrypt.compare(password, result.data.PWDUSU, (err, ret) => {
+      if (ret) {
         const accessToken = jwt.sign(
           {
-            id: usuario.IDUSUA,
-            nombre: usuario.NOMUSU,
-            userID: usuario.USERID,
-            email: usuario.EMAUSU,
-            rol: usuario.ROLUSU,
-            oficina: usuario.OFIUSU,
-            telefono: usuario.TELUSU,
+            id: result.data.IDUSUA,
+            nombre: result.data.NOMUSU,
+            userID: result.data.USERID,
+            email: result.data.EMAUSU,
+            rol: result.data.ROLUSU,
+            oficina: result.data.OFIUSU,
+            telefono: result.data.TELUSU,
           },
           `${process.env.ACCESS_TOKEN_SECRET}`,
           { expiresIn: "8h" }
@@ -56,8 +54,8 @@ export const verifyLogin = async (req, res) => {
         };
 
         const user = {
-          id: usuario.IDUSUA,
-          userID: usuario.USERID,
+          id: result.data.IDUSUA,
+          userID: result.data.USERID,
         };
 
         req.user = user;
@@ -125,30 +123,34 @@ export const forgotPassword = async (req, res) => {
   }
 };
 export const crearRegistro = async (req, res) => {
-  const { userid, nomusu, emausu } = req.body;
-  const randomString = Math.random().toString().slice(2, 6);
-  const password = userid + randomString;
+  const randomString = Math.random().toString(36).substring(2, 10);
   const salt = await bcrypt.genSalt(10);
-  const passHash = await bcrypt.hash(password, salt);
+  const passHash = await bcrypt.hash(randomString, salt);
   const usuario = {
-    nomusu: nomusu,
+    nomusu: req.body.nomusu.toUpperCase(),
     ofiusu: 1,
-    rolusu: userid === "go500" ? tiposRol.admin : tiposRol.usuario,
-    userid: userid,
-    emausu: emausu,
+    rolusu: req.body.userid.toLowerCase() === "go500" ? tiposRol.admin : tiposRol.usuario,
+    userid: req.body.userid.toLowerCase(),
+    emausu: req.body.emausu,
     perusu: tiposPerfil.general,
     telusu: "0000",
-    stausu: estadosUsuario.activo,
     pwdusu: passHash,
-    tipmov: tiposMovimiento.registroUsuario,
-    saltus: password,
+    stausu: estadosUsuario.activo,
   };
+  const movimiento = {
+    tipmov: tiposMovimiento.registroUsuario,
+  }
+  const passwd = {
+    saltus: randomString,
+  }
 
   try {
     const result = await axios.post(
       "http://localhost:8000/api/usuarios/registro",
       {
         usuario,
+        movimiento,
+        passwd,
       }
     );
 

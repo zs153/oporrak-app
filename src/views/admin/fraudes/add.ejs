@@ -138,7 +138,7 @@
                   <div class="card-footer text-end">
                     <div class="d-flex">
                       <a href="/admin/fraudes" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear documento</button>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear fraude</button>
                     </div>
                   </div>
                 </form>
@@ -148,7 +148,7 @@
         </div>
       </div>
     </div>
-    <%- include('../partials/footer') %>
+    <%- include('../../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
@@ -328,6 +328,7 @@
               eleNif.focus()
             } else {
               if (gentes.NOMGEN) {
+                eleNif.value = gentes.NIFGEN
                 eleNombre.value = gentes.NOMGEN
               } else {
                 eleNombre.value = ''

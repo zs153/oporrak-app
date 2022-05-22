@@ -21,11 +21,11 @@ export const mainPage = async (req, res) => {
     })
 
     const datos = {
-      citas: result.data,
+      citas: JSON.stringify(result.data),
       estadosCita,
       verTodo,
     }
-    
+
     res.render('admin/citas', { user, datos})
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -45,24 +45,8 @@ export const editPage = async (req, res) => {
     const result = await axios.post('http://localhost:8000/api/cita', {
       cita,
     })
-
-    cita = {
-      idcita: result.data.IDCITA,
-      orgcit: result.data.ORGCIT,
-      oficit: result.data.OFICIT,
-      feccit: result.data.STRFEC,
-      horcit: result.data.HORCIT,
-      nifcon: result.data.NIFCON,
-      nomcon: result.data.NOMCON,
-      telcon: result.data.TELCON,
-      descit: result.data.DESCIT,
-      notcit: result.data.NOTCIT,
-      obscit: result.data.OBSCIT,
-      stacit: result.data.STACIT,
-      desofi: result.data.DESOFI,
-    }
     const datos = {
-      cita,
+      cita: result.data,
     }
 
     res.render('admin/citas/edit', { user, datos })
@@ -168,8 +152,7 @@ export const verTodo = async (req, res) => {
   const user = req.user
   const ofic = decodeURIComponent(req.cookies.oficina)
   const cita = {
-    stacit: estadosCita.asignado,
-    oficit: ofic === 'undefined' ? user.oficina : ofic,
+    stacit: estadosCita.disponible + estadosCita.asignado,
     dias: [2, 2, 2, 2, 4, 4, 3][new Date().getDay()],
   }
   const verTodo = true
@@ -180,8 +163,7 @@ export const verTodo = async (req, res) => {
     })
 
     const datos = {
-      citas: result.data,
-      tiposRol,
+      citas: JSON.stringify(result.data),
       estadosCita,
       verTodo,
     }

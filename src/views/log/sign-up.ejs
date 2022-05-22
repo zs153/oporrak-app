@@ -15,68 +15,35 @@
     <div class="flex-fill d-flex flex-column justify-content-center py-4">
       <div class="container-tight py-6">
         <div class="text-center mb-4">
-          <a href="."
-            ><img src="/img/logoFormularios.png" height="36" alt=""
-          /></a>
+          <a href="."><img src="/img/logoFormularios.png" height="36" alt=""/></a>
         </div>
-        <% if(typeof alerts !='undefined' ) { %> <% alerts.map(function (alert){
-        %>
-        <div
-          class="alert alert-warning alert-dismissible fade show"
-          role="alert"
-        >
-          <%- alert.msg %>
-        </div>
-        <% }) %> <% } %>
-        <form
-          action="/log/registro"
-          method="POST"
-          class="card card-md"
-          autocomplete="off"
-          onsubmit="return validate();"
-        >
+        <% if(typeof alerts !='undefined') { %>
+          <% alerts.map(function (alert){ %>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <%- alert.msg %>
+            </div>
+          <% }) %>
+        <% } %>
+        <form action="/log/registro" method="POST" class="card card-md" autocomplete="off" onsubmit="return validate();">
           <div class="card-body">
             <h2 class="card-title text-center mb-4">Registro de usuario</h2>
             <div class="mb-2">
               <label class="form-label required">UserID</label>
-              <input
-                type="text"
-                class="form-control"
-                name="userid"
-                id="userid"
-                onkeyup="this.value = this.value.toLowerCase();"
-                value="<%- datos.userid %>"
-                autofocus
-              />
+              <input type="text" class="form-control" name="userid" id="userid" onkeyup="this.value = this.value.toLowerCase();" value="<%- datos.userid %>" autofocus />
               <div class="invalid-feedback"></div>
             </div>
             <div class="mb-2">
               <label class="form-label required">Nombre</label>
-              <input
-                type="text"
-                class="form-control"
-                name="nomusu"
-                id="nomusu"
-                style="text-transform: uppercase;"
-                value="<%- datos.nomusu %>"
-              />
+              <input type="text" class="form-control" name="nomusu" id="nomusu" style="text-transform: uppercase;" value="<%- datos.nomusu %>" />
               <div class="invalid-feedback"></div>
             </div>
             <div class="mb-2">
               <label class="form-label required">Correo electrónico</label>
-              <input
-                type="text"
-                class="form-control"
-                name="emausu"
-                id="emausu"
-                value="<%- datos.emausu %>"
-              />
+              <input type="text" class="form-control" name="emausu" id="emausu" value="<%- datos.emausu %>" />
               <div class="invalid-feedback"></div>
             </div>
             <div class="form-footer">
-              <button type="submit" class="btn btn-primary w-100">
-                Crear nueva cuenta
-              </button>
+              <button type="submit" class="btn btn-primary w-100">Crear nueva cuenta</button>
             </div>
           </div>
         </form>
@@ -99,18 +66,27 @@
 
         if (useridValue === '') {
           setError(userid, 'UserID requerido')
+          setTimeout(function () {
+            setSuccess(userid)
+          }, 3000)
           return false
         } else {
           setSuccess(userid)
         }
         if (nomusuValue === '') {
           setError(nomusu, 'Nombre requerido')
+          setTimeout(function () {
+            setSuccess(nomusu)
+          }, 3000)
           return false
         } else {
           setSuccess(nomusu)
         }
         if (emausuValue === '') {
           setError(emausu, 'Email requerido')
+          setTimeout(function () {
+            setSuccess(emausu)
+          }, 3000)
           return false
         } else {
           setSuccess(emausu)

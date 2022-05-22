@@ -15,23 +15,19 @@
 
 <body class="antialiased">
   <div class="wrapper">
-      <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'FORMULARIOS'}) %>
-
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/navbar', {opcion: 'FORMULARIOS'}) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-deck row-cards">
             <div class="col-12">
               <div class="card">
-                  <% if(typeof alerts !='undefined' ) { %>
-                    <% alerts.map(function (alert){ %>
-                  <div
-                    class="alert alert-warning alert-dismissible fade show"
-                    role="alert"
-                  >
-                    <%- alert.msg %>
-                  </div>
+                <% if(typeof alerts !='undefined') { %>
+                  <% alerts.map(function (alert){ %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <%- alert.msg %>
+                    </div>
                   <% }) %>
                 <% } %>
                 <form action="/admin/formularios/update" method="POST" onsubmit="return validate();">

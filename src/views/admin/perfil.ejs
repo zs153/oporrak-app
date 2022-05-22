@@ -46,13 +46,20 @@
     .hr {
       border-top: 1px solid rgb(217, 217, 217);
     }
+    .subtitulo {
+      margin: 0;
+      align-items: center;
+      justify-content: center;
+      color: #656d77;
+      pointer-events: none;
+      font-size: 1em;
+    }
   </style>
 </head>
 
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../partials/header') %>
-
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -64,11 +71,14 @@
             <div class="contents hr">
               <div id="tabContent1">
                 <div class="card">
+                  <div class="card-header d-inline-block">
+                    <h3 class="card-title">Perfil de usuario</h3>
+                      <p class="subtitulo text-muted">
+                        Aviso: La actualización del perfil de usuario implica la finalización de la sesión.
+                      </p>    
+                  </div>
                   <form action="/admin/perfil" method="POST" onsubmit="return validate();">
                     <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.IDUSUA %>">
-                    <div class="card-header">
-                      Perfil
-                    </div>
                     <div class="card-body">
                       <div class="row">
                         <div class="col-2">
@@ -117,7 +127,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="card-footer text-end">
+                    <div class="card-footer text-end">                      
                       <div class="d-flex">
                         <input class="btn btn-link" action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancelar"/>
                         <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar perfil</button>
@@ -131,11 +141,14 @@
                   <div class="col-3"></div>
                   <div class="col-6">
                     <div class="card">
+                      <div class="card-header d-inline-block">
+                        <h3 class="card-title">Perfil de usuario</h3>
+                          <p class="subtitulo text-muted">
+                            Aviso: La actualización de la contraseña de usuario implica la finalización de la sesión.
+                          </p>    
+                      </div>
                       <form action="/admin/cambio" method="POST" onsubmit="return validate();">
                         <input type="hidden" name="idusua" id="idusua" value="<%- datos.usuario.IDUSUA %>">
-                        <div class="card-header">
-                          Contraseña
-                        </div>
                         <div class="card-body">
                           <div class="mb-1">
                             <label class="form-label required">Nueva contraseña</label>
@@ -150,7 +163,7 @@
                         </div>
                         <div class="card-footer text-end">
                           <div class="d-flex">
-                            <a href="/admin" class="btn btn-link">Cancelar</a>
+                            <input class="btn btn-primary" action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancelar" />
                             <button type="submit" class="btn btn-primary ms-auto" id="btnPassword">Actualizar contraseña</button>
                           </div>
                         </div>

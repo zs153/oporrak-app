@@ -88,8 +88,8 @@ export const insert = async (req, res) => {
   const referencia = 'W' + randomString(10, '1234567890YMGS')
   const formulario = {
     fecdoc: req.body.fecdoc,
-    nifcon: req.body.nifcon,
-    nomcon: req.body.nomcon,
+    nifcon: req.body.nifcon.toUpperCase(),
+    nomcon: req.body.nomcon.toUpperCase(),
     emacon: req.body.emacon,
     telcon: req.body.telcon,
     movcon: req.body.movcon,
@@ -135,8 +135,8 @@ export const update = async (req, res) => {
   const formulario = {
     iddocu: req.body.iddocu,
     fecdoc: req.body.fecdoc,
-    nifcon: req.body.nifcon,
-    nomcon: req.body.nomcon,
+    nifcon: req.body.nifcon.toUpperCase(),
+    nomcon: req.body.nomcon.toUpperCase(),
     emacon: req.body.emacon,
     telcon: req.body.telcon,
     movcon: req.body.movcon,

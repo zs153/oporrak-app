@@ -6,9 +6,6 @@ import {
   arrTiposRol,
   arrTiposPerfil,
   arrEstadosUsuario,
-  tiposRol,
-  estadosUsuario,
-  tiposPerfil,
   tiposMovimiento,
 } from '../public/js/enumeraciones'
 
@@ -33,16 +30,9 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const usuario = {
-    OFIUSU: 1,
-    ROLUSU: tiposRol.usuario,
-    PERUSU: tiposPerfil.general,
-    STAUSU: estadosUsuario.activo,
-  }
 
   try {
     const datos = {
-      usuario,
       arrTiposRol,
       arrTiposPerfil,
       arrEstadosUsuario,
@@ -85,19 +75,24 @@ export const editPage = async (req, res) => {
 }
 export const perfilPage = async (req, res) => {
   const user = req.user
+  let usuario = {
+    userid: req.params.userid,
+  }
 
   try {
     const result = await axios.post('http://localhost:8000/api/usuario', {
-      userid: req.params.userid,
+      usuario,
     })
-    const usuario = {
-      idusua: result.data.IDUSUA,
-      nomusu: result.data.NOMUSU,
-      ofiusu: result.data.OFIUSU,
-      userid: result.data.USERID,
-      emausu: result.data.EMAUSU,
-      telusu: result.data.TELUSU,
+
+    usuario = {
+      IDUSUA: result.data.IDUSUA,
+      NOMUSU: result.data.NOMUSU,
+      OFIUSU: result.data.OFIUSU,
+      USERID: result.data.USERID,
+      EMAUSU: result.data.EMAUSU,
+      TELUSU: result.data.TELUSU,
     }
+    
     const datos = {
       usuario,
     }

@@ -1,35 +1,24 @@
-import express from "express";
-import authRoutes from "../middleware/auth";
+import express from 'express'
+import authRoutes from '../middleware/auth'
 import {
   mainPage,
   addPage,
   editPage,
-  subtiposPage,
-  addSubtipoPage,
-  editSubtipoPage,
-  insertSubtipo,
-  updateSubtipo,
-  deleteSubtipo,
-} from "../controllers/subtipo.controller";
+  insert,
+  update,
+  remove,
+} from '../controllers/subtipo.controller'
 
-const subtipoRouter = express.Router();
+const subtipoRouter = express.Router()
 
 // paginas
-subtipoRouter.get("/subtipos", authRoutes, mainPage);
-subtipoRouter.get("/subtipos/edit/:id", authRoutes, editPage);
-
-// subtipos
-subtipoRouter.get("/subtipos/tipo/:id", authRoutes, subtiposPage);
-subtipoRouter.get("/subtipos/add/tipo/:id", authRoutes, addSubtipoPage);
-subtipoRouter.get(
-  "/subtipos/edit/tipo/:id/:idsub",
-  authRoutes,
-  editSubtipoPage
-);
+subtipoRouter.get('/subtipos', authRoutes, mainPage)
+subtipoRouter.get('/subtipos/add', authRoutes, addPage)
+subtipoRouter.get('/subtipos/edit/:id', authRoutes, editPage)
 
 // procedures
-subtipoRouter.post("/subtipos/insert", authRoutes, insertSubtipo);
-subtipoRouter.post("/subtipos/update", authRoutes, updateSubtipo);
-subtipoRouter.post("/subtipos/delete", authRoutes, deleteSubtipo);
+subtipoRouter.post('/subtipos/insert', authRoutes, insert)
+subtipoRouter.post('/subtipos/update', authRoutes, update)
+subtipoRouter.post('/subtipos/delete', authRoutes, remove)
 
-export default subtipoRouter;
+export default subtipoRouter

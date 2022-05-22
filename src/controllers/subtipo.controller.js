@@ -3,30 +3,14 @@ import { tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  let tipo = {
-    idtipo: req.body.idtipo,
-  }
 
   try {
-    if (result.data) {
-      const ret = await axios.post('http://localhost:8000/api/subtipos/tipo', {
-        tipo,
-      })
-
-      tipo = result.data
-      const datos = {
-        subtipos: ret.data,
-        tipo,
-      }
-
-      res.render('admin/subtipos', { user, datos })
-    } else {
-      const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-      res.render('admin/error400', {
-        alerts: [{ msg }],
-      })
+    const result = await axios.post('http://localhost:8000/api/subtipos')
+    const datos = {
+      subtipos: JSON.stringify(result.data),
     }
+
+    res.render('admin/subtipos', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -37,21 +21,9 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  let tipo = {
-    idtipo: req.body.idtipo,
-  }
-  const documento = {
-    idsubt: 0,
-    dessub: '',
-  }
 
   try {
-    const datos = {
-      tipo,
-      documento,
-    }
-
-    res.render('admin/subtipos/add', { user, datos })
+    res.render('admin/subtipos/add', { user })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -84,104 +56,10 @@ export const editPage = async (req, res) => {
   }
 }
 
-export const subtiposPage = async (req, res) => {
+export const insert = async (req, res) => {
   const user = req.user
-  let tipo = {
-    idtipo: req.params.id,
-  }
-
-  try {
-    const result = await axios.post('http://localhost:8000/api/tipo', {
-      tipo,
-    })
-
-    if (result.data) {
-      const ret = await axios.post('http://localhost:8000/api/subtipos/tipo', {
-        tipo,
-      })
-
-      tipo = result.data
-      const datos = {
-        subtipos: ret.data,
-        tipo,
-      }
-
-      res.render('admin/subtipos', { user, datos })
-    } else {
-      const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-      res.render('admin/error400', {
-        alerts: [{ msg }],
-      })
-    }
-  } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
-  }
-}
-export const addSubtipoPage = async (req, res) => {
-  const user = req.user
-  let tipo = {
-    idtipo: req.params.id,
-  }
   const subtipo = {
-    idsubt: 0,
-    dessub: '',
-  }
-
-  try {
-    const datos = {
-      tipo,
-      subtipo,
-    }
-
-    res.render('admin/subtipos/add', { user, datos })
-  } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
-  }
-}
-export const editSubtipoPage = async (req, res) => {
-  const user = req.user
-  const tipo = {
-    idtipo: req.params.id,
-  }
-  const subtipo = {
-    idsubt: req.params.idsub,
-  }
-
-  try {
-    const result = await axios.post('http://localhost:8000/api/subtipo', {
-      subtipo,
-    })
-    const datos = {
-      tipo,
-      subtipo: result.data,
-    }
-
-    res.render('admin/subtipos/edit', { user, datos })
-  } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
-  }
-}
-
-export const insertSubtipo = async (req, res) => {
-  const user = req.user
-  const tipo = {
-    idtipo: req.body.idtipo,
-  }
-  const subtipo = {
-    dessub: req.body.dessub,
+    dessub: req.body.dessub.toUpperCase(),
   }
   const movimiento = {
     usumov: user.id,
@@ -190,12 +68,11 @@ export const insertSubtipo = async (req, res) => {
 
   try {
     await axios.post('http://localhost:8000/api/subtipos/insert', {
-      tipo,
       subtipo,
       movimiento,
     })
 
-    res.redirect(`/admin/subtipos/tipo/${tipo.idtipo}`)
+    res.redirect(`/admin/subtipos`)
   } catch (error) {
     let msg = 'No se ha podido crear el subtipo.'
 
@@ -208,14 +85,11 @@ export const insertSubtipo = async (req, res) => {
     })
   }
 }
-export const updateSubtipo = async (req, res) => {
+export const update = async (req, res) => {
   const user = req.user
-  const tipo = {
-    idtipo: req.body.idtipo,
-  }
   const subtipo = {
     idsubt: req.body.idsubt,
-    dessub: req.body.dessub,
+    dessub: req.body.dessub.toUpperCase(),
   }
   const movimiento = {
     usumov: user.id,
@@ -228,7 +102,7 @@ export const updateSubtipo = async (req, res) => {
       movimiento,
     })
 
-    res.redirect(`/admin/subtipos/tipo/${tipo.idtipo}`)
+    res.redirect(`/admin/subtipos`)
   } catch (error) {
     let msg =
       'No se han podido modificar los datos del subtipo. Verifique los datos introducidos'
@@ -242,11 +116,8 @@ export const updateSubtipo = async (req, res) => {
     })
   }
 }
-export const deleteSubtipo = async (req, res) => {
+export const remove = async (req, res) => {
   const user = req.user
-  const tipo = {
-    idtipo: req.body.idtipo,
-  }
   const subtipo = {
     idsubt: req.body.idsubt,
   }
@@ -261,7 +132,7 @@ export const deleteSubtipo = async (req, res) => {
       movimiento,
     })
 
-    res.redirect(`/admin/subtipos/tipo/${tipo.idtipo}`)
+    res.redirect(`/admin/subtipos`)
   } catch (error) {
     const msg = 'No se ha podido elminar el subtipo.'
 

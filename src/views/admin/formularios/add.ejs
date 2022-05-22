@@ -16,7 +16,7 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'INICIO'}) %>
+    <%- include('../../partials/navbar', {opcion: 'FORMULARIOS'}) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -172,15 +172,22 @@
   </script>
   <script>
     const combo = document.getElementById('cbotip')
-    const e = document.getElementById('tipayu')
+    const elem = document.getElementById('tipayu')
 
-    combo.addEventListener('change', () => {
-      tipos.map(element => {
-        if(element.IDTIPO == combo.value) {
-          document.getElementById('tipayu').innerHTML = element.AYUTIP
-          setSuccess(combo)
-        }
-      });
+    combo.addEventListener('change', async (e) => {
+      const idtipo = e.target.value;            
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function() {
+          if (xhr.status === 200) {
+            const result = JSON.parse(xhr.response)
+
+            elem.innerHTML = result.AYUTIP
+          }
+      }
+      xhr.open('POST', 'http://localhost:8000/api/tipos/formulario', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify({tipo: {idtipo}}))
     })
   </script>
   <script>
@@ -377,6 +384,7 @@
               eleNif.focus()
             } else {
               if (gentes.NOMGEN) {
+                eleNif.value = gentes.NIFGEN
                 eleNombre.value = gentes.NOMGEN
               } else {
                 eleNombre.value = ''
@@ -396,6 +404,23 @@
         }
       }
     })
+  </script>
+  <script>
+    const Tipo = async (idTipo) => {
+      const xhr = new XMLHttpRequest();
+      let tipo = null;
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          tipo = JSON.parse(xhr.response)
+        }
+        
+        return tipo
+      };
+      xhr.open('POST', 'http://localhost:8000/api/tipos/formulario', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify({tipo: {idtipo: idTipo}}))
+    }
   </script>
   <script>
     const Tipos = () => {
