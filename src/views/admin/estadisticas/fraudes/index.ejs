@@ -19,54 +19,35 @@
       <div class="page-wrapper">
         <div class="page-body">
           <div class="container-xl">
-            <div class="row row-cards">
-              <div class="col-3"></div>
-              <div class="col-6">
-                <div class="card mt-3">
-                  <form action="/admin/estadistica" method="POST">
-                    <div class="card-header">
-                      <h3 class="card-title">Estadísticas</h3>
-                    </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-3">
-                          <div class="mb-3">
-                            <select class="form-select form-control" id="cboann" value="">
-                              <option value="0">Año</option>
-                            </select>
+            <div class="row row-deck row-cards">
+              <div class="col-sm-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Revenue</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last 7 days</a>
+                            <a class="dropdown-item" href="#">Last 30 days</a>
+                            <a class="dropdown-item" href="#">Last 3 months</a>
                           </div>
-                        </div>
-                        <div class="col-3">
-                          <div class="mb-3">
-                            <select class="form-select form-control" id="cbomes" value="">
-                              <option value="0">Mes</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-3">
-                          <div class="mb-3">
-                            <select class="form-select form-control" id="cboofi" value="">
-                              <option value="0">Oficina</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-3">
-                          <select class="form-select form-control" id="cbotip" value="">
-                            <option value="0">Tipo</option>
-                          </select>
                         </div>
                       </div>
                     </div>
-                    <div class="card-footer text-end">
-                      <div class="d-flex">
-                        <!-- <a href="/admin/formularios" class="btn btn-link">Cancelar</a>
-                        <button type="submit" class="btn btn-primary ms-auto" id="btnGenerar">Generar estadística</button> -->
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2">$4,300</div>
+                      <div class="me-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          8% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                        </span>
                       </div>
                     </div>
-                  </form>                        
-                </div>                
+                  </div>
+                  <div id="chart-revenue-bg" class="chart-sm"></div>
+                </div>
               </div>
-              <div class="col-3"></div>
             </div>
           </div>
         </div>
@@ -74,22 +55,5 @@
       <%- include('../../partials/footer') %>
     </div>
   </body>
-  <script src="/js/ayuda.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const messages = document.getElementById('messages')
-    const socket = io()
-
-    socket.on('receive-message', msg => {
-      const li = document.createElement('li')
-      li.textContent = msg
-      messages.appendChild(li)
-
-      const toggleBadge = document.querySelector('#toggleBadge');
-      const numeroMensajes = messages.getElementsByTagName("li").length
-      if (numeroMensajes === 1) {
-        toggleBadge.classList.toggle('d-none')
-      }
-    })
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </html>
