@@ -9,6 +9,7 @@
     "startdev": "nodemon --exec babel-node ./src/bin/www"
   },
   "dependencies": {
+    "apexcharts": "^3.35.2",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
