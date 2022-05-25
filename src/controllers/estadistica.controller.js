@@ -7,7 +7,7 @@ export const fraudePage = async (req, res) => {
     hasta: '2022-12-31',
   }
   const tipo = {
-    tipfra: 51,
+    tipfra: 10,
   }
 
   try {
@@ -32,8 +32,10 @@ export const fraudePage = async (req, res) => {
     const serieS = []
 
     actuacion.data.map(itm => {
-      serieL.push({x: new Date(itm.FECHIT),y: itm.LIQUID})
-      serieS.push({x: new Date(itm.FECHIT),y: itm.SANCIO})
+      // const t = itm.FECHIT.split(/[-:T]/)
+      // const d = new Date(Date.UTC(t[0],t[1]-1,t[2]))
+      serieL.push({x: itm.FECHIT,y: itm.LIQUID})
+      serieS.push({x: itm.FECHIT,y: itm.SANCIO})
     })
 
     const totalSituacion = situacion.data.ACTSIT + situacion.data.CORSIT

@@ -184,8 +184,7 @@
               <div class="col-sm-6 col-lg-6">
                 <div class="card">
                   <div class="card-body">
-                    <!-- <h3 class="card-title">Actuaciones</h3> -->
-                    <div id="chart-actuac" class="chart-lg"></div>
+                    <div id="chart-actuac"></div>
                   </div>
                 </div>
               </div>
@@ -211,35 +210,35 @@
                             <% datos.oficinas.map(element => { %>
                               <tr>
                                 <td>
-                                  <div class="d-flex py-1 align-items-center">
+                                  <div class="d-flex align-items-center">
                                     <div class="flex-fill">
                                       <div class="font-weight-medium"><%- element.DESOFI %></div>
                                     </div>
                                   </div>
                                 </td>
                                 <td class="w-6">
-                                  <div class="d-flex py-1 align-items-center">
+                                  <div class="d-flex align-items-center">
                                     <div class="flex-fill">
                                       <div class="font-weight-medium"><%- element.PEN %></div>
                                     </div>
                                   </div>
                                 </td>
                                 <td class="w-6">
-                                  <div class="d-flex py-1 align-items-center">
+                                  <div class="d-flex align-items-center">
                                     <div class="flex-fill">
                                       <div class="font-weight-medium"><%- element.ADJ %></div>
                                     </div>
                                   </div>
                                 </td>
                                 <td class="w-6">
-                                  <div class="d-flex py-1 align-items-center">
+                                  <div class="d-flex align-items-center">
                                     <div class="flex-fill">
                                       <div class="font-weight-medium"><%- element.RES %></div>
                                     </div>
                                   </div>
                                 </td>
                                 <td class="w-6">
-                                  <div class="d-flex py-1 align-items-center">
+                                  <div class="d-flex align-items-center">
                                     <div class="flex-fill">
                                       <div class="font-weight-medium"><%- element.TOT %></div>
                                     </div>
@@ -247,28 +246,61 @@
                                 </td>
                               </tr>
                             <% }) %>
+                              <tr>
+                                <td>
+                                  <div class="d-flex align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium text-blue">TOTAL </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium text-blue">pend</div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium text-blue">adju</div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium text-blue">resu</div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium text-blue">total</div>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="d-flex align-items-center">
-                          <div class="subheader">Correctas</div>
-                        </div>
-                        <div class="h1 mb-3"><%- datos.situacion.CORSIT %></div>
-                        <div class="d-flex mb-2">
-                          <div>Ratio</div>
-                          <div class="ms-auto">
-                            <span class="text-green d-inline-flex align-items-center lh-1">
-                              <%- datos.ratios.correctas %>%
-                            </span>
+                    <div class="row row-cards">
+                      <div class="col-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div id="chart-correc"></div>
                           </div>
                         </div>
-                        <div class="progress-container">
-                          <div id="corsit" class="progress">
+                      </div>
+                      <div class="col-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div id="chart-liquid"></div>
                           </div>
                         </div>
                       </div>
@@ -295,7 +327,7 @@
       changeProgress(document.querySelector("#corsit"), <%- datos.ratios.correctas %>)
   </script>
   <script>
-      var options = {
+    const options1 = {
       chart: {
         type: 'bar',
         stacked: true,
@@ -315,22 +347,132 @@
       ],
       xaxis: {
         type: 'categories',
-        // labels: {
-        //   datetimeFormatter: {
-        //     year: 'yyyy',
-        //     month: 'MMM \'yy',
-        //     day: 'dd MMM',
-        //     hour: 'HH:mm'
-        //   }
-        // },
         labels: {
-          format: 'dd/MM',
-        }
+          datetimeFormatter: {
+            year: 'yyyy',
+            month: 'MMM \'yy',
+            day: 'dd MMM',
+            hour: 'HH:mm'
+          }
+        },
       }
     }
+    const options2 = {
+      series: [76],
+      chart: {
+        type: 'radialBar',
+        offsetY: -10,
+        sparkline: {
+          enabled: true
+        }
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: -90,
+          endAngle: 90,
+          track: {
+            background: "#e7e7e7",
+            strokeWidth: '97%',
+            margin: 5, // margin is in pixels
+            dropShadow: {
+              enabled: true,
+              top: 2,
+              left: 0,
+              color: '#999',
+              opacity: 1,
+              blur: 2
+            }
+          },
+          dataLabels: {
+            name: {
+              show: true
+            },
+            value: {
+              offsetY: -40,
+              fontSize: '22px'
+            }
+          }
+        }
+      },
+      grid: {
+        padding: {
+          top: -10
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          shadeIntensity: 0.4,
+          inverseColors: false,
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [0, 50, 53, 91]
+        },
+      },
+      labels: ['Correctas'],
+    };
+    const options3 = {
+      series: [24],
+      chart: {
+        type: 'radialBar',
+        offsetY: -10,
+        sparkline: {
+          enabled: true
+        }
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: -90,
+          endAngle: 90,
+          track: {
+            background: "#e7e7e7",
+            strokeWidth: '97%',
+            margin: 5, // margin is in pixels
+            dropShadow: {
+              enabled: true,
+              top: 2,
+              left: 0,
+              color: '#999',
+              opacity: 1,
+              blur: 2
+            }
+          },
+          dataLabels: {
+            name: {
+              show: true
+            },
+            value: {
+              offsetY: -40,
+              fontSize: '22px'
+            }
+          }
+        }
+      },
+      grid: {
+        padding: {
+          top: -10
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          shadeIntensity: 0.4,
+          inverseColors: false,
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [0, 50, 53, 91]
+        },
+      },
+      labels: ['Liquidadas'],
+    };
 
-    var chart = new ApexCharts(document.querySelector("#chart-actuac"), options);
-
-    chart.render();
+    const chart1 = new ApexCharts(document.querySelector("#chart-actuac"), options1);
+    const chart2 = new ApexCharts(document.querySelector("#chart-correc"), options2);
+    const chart3 = new ApexCharts(document.querySelector("#chart-liquid"), options3);
+    chart1.render();
+    chart2.render();
+    chart3.render();
   </script>
 </html>
