@@ -11,49 +11,326 @@
     <!-- custom -->
     <link rel="stylesheet" href="/css/estilos.min.css">
     <link rel="stylesheet" href="/css/navbar.css">
+    <!-- apexcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+      .subheader {
+        font-size: .625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        line-height: 1.6;
+        color: #626976;
+      }
+      .h1 {
+        font-size: 1.5rem;
+      }
+      .progress-container {
+        height: 0.5rem;
+        width: 100%;
+        border-radius: 0.4rem;
+        background: #f2f3f4;
+      }
+
+      .progress-container .progress {
+        height: 100%;
+        width: 0;
+        border-radius: 0.4rem;
+        background: #225ddd;
+        transition: width 0.4s ease;
+      }
+    </style>
   </head>
   <body class="antialiased">
     <div class="wrapper">
-      <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION'}) %>
+      <%- include('../../../partials/header') %>
+      <%- include('../../../partials/navbar', {opcion: 'ADMINISTRACION'}) %>
       <div class="page-wrapper">
         <div class="page-body">
           <div class="container-xl">
             <div class="row row-deck row-cards">
-              <div class="col-sm-6 col-lg-3">
+              <div class="col-sm-6 col-lg-2">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex align-items-center">
-                      <div class="subheader">Revenue</div>
-                      <div class="ms-auto lh-1">
-                        <div class="dropdown">
-                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item active" href="#">Last 7 days</a>
-                            <a class="dropdown-item" href="#">Last 30 days</a>
-                            <a class="dropdown-item" href="#">Last 3 months</a>
+                      <div class="subheader">Prop.Liquidación</div>
+                    </div>
+                    <div class="h1 mb-3"><%- datos.hitos.PROLIQ %></div>
+                    <div class="d-flex mb-2">
+                      <div>Ratio</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          <%- datos.ratios.propuestaLiquidacion %>%
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress-container">
+                      <div id="proliq" class="progress">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Propuestas Sanción</div>
+                    </div>
+                    <div class="h1 mb-3"><%- datos.hitos.PROSAN %></div>
+                    <div class="d-flex mb-2">
+                      <div>Ratio</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          <%- datos.ratios.propuestaSancion %>%
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress-container">
+                      <div id="prosan" class="progress">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Liquidaciones</div>
+                    </div>
+                    <div class="h1 mb-3"><%- datos.hitos.LIQUID %></div>
+                    <div class="d-flex mb-2">
+                      <div>Ratio</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          <%- datos.ratios.liquidacion %>%
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress-container">
+                      <div id="liquid" class="progress">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Sanciones</div>
+                    </div>
+                    <div class="h1 mb-3"><%- datos.hitos.SANCIO %></div>
+                    <div class="d-flex mb-2">
+                      <div>Ratio</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          <%- datos.ratios.sancion %>%
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress-container">
+                      <div id="sancio" class="progress">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Sanciones anuladas</div>
+                    </div>
+                    <div class="h1 mb-3"><%- datos.hitos.ANUSAN %></div>
+                    <div class="d-flex mb-2">
+                      <div>Ratio</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          <%- datos.ratios.anulacion %>%
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress-container">
+                      <div id="anusan" class="progress">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Correctas</div>
+                    </div>
+                    <div class="h1 mb-3"><%- datos.situacion.CORSIT %></div>
+                    <div class="d-flex mb-2">
+                      <div>Ratio</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          <%- datos.ratios.correctas %>%
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress-container">
+                      <div id="corsit" class="progress">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-6">
+                <div class="card">
+                  <div class="card-body">
+                    <!-- <h3 class="card-title">Actuaciones</h3> -->
+                    <div id="chart-actuac" class="chart-lg"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-6">
+                <div class="row row-cards">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Oficinas</h3>
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-vcenter table-striped sortable" id="tblFraudes">
+                          <thead>
+                          <tr class="header">
+                            <th>Oficina</th>
+                            <th class="w-5">Pend</th>
+                            <th class="w-5">Adju</th>
+                            <th class="w-5">Resu</th>
+                            <th class="w-6">Total</th>
+                          </tr>
+                          </thead>
+                          <tbody id="table-body">
+                            <% datos.oficinas.map(element => { %>
+                              <tr>
+                                <td>
+                                  <div class="d-flex py-1 align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium"><%- element.DESOFI %></div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex py-1 align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium"><%- element.PEN %></div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex py-1 align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium"><%- element.ADJ %></div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex py-1 align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium"><%- element.RES %></div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-6">
+                                  <div class="d-flex py-1 align-items-center">
+                                    <div class="flex-fill">
+                                      <div class="font-weight-medium"><%- element.TOT %></div>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            <% }) %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <div class="subheader">Correctas</div>
+                        </div>
+                        <div class="h1 mb-3"><%- datos.situacion.CORSIT %></div>
+                        <div class="d-flex mb-2">
+                          <div>Ratio</div>
+                          <div class="ms-auto">
+                            <span class="text-green d-inline-flex align-items-center lh-1">
+                              <%- datos.ratios.correctas %>%
+                            </span>
+                          </div>
+                        </div>
+                        <div class="progress-container">
+                          <div id="corsit" class="progress">
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="d-flex align-items-baseline">
-                      <div class="h1 mb-0 me-2">$4,300</div>
-                      <div class="me-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          8% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                        </span>
-                      </div>
-                    </div>
                   </div>
-                  <div id="chart-revenue-bg" class="chart-sm"></div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
-      <%- include('../../partials/footer') %>
+      <%- include('../../../partials/footer') %>
     </div>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+      const changeProgress = (element, progress) => {
+        element.style.width = `${progress}%`;
+      };
+
+      changeProgress(document.querySelector("#proliq"), <%- datos.ratios.propuestaLiquidacion %>)
+      changeProgress(document.querySelector("#prosan"), <%- datos.ratios.propuestaSancion %>)
+      changeProgress(document.querySelector("#liquid"), <%- datos.ratios.liquidacion %>)
+      changeProgress(document.querySelector("#sancio"), <%- datos.ratios.sancion %>)
+      changeProgress(document.querySelector("#anusan"), <%- datos.ratios.anulacion %>)
+      changeProgress(document.querySelector("#corsit"), <%- datos.ratios.correctas %>)
+  </script>
+  <script>
+      var options = {
+      chart: {
+        type: 'bar',
+        stacked: true,
+      },
+      dataLabels: {
+        enabled: false
+      },
+      series: [
+        {
+          name: 'Liquidaciones',
+          data: <%- datos.serieL %>
+        },
+        {
+          name: 'Sanciones',
+          data: <%- datos.serieS %>
+        }
+      ],
+      xaxis: {
+        type: 'categories',
+        // labels: {
+        //   datetimeFormatter: {
+        //     year: 'yyyy',
+        //     month: 'MMM \'yy',
+        //     day: 'dd MMM',
+        //     hour: 'HH:mm'
+        //   }
+        // },
+        labels: {
+          format: 'dd/MM',
+        }
+      }
+    }
+
+    var chart = new ApexCharts(document.querySelector("#chart-actuac"), options);
+
+    chart.render();
+  </script>
 </html>

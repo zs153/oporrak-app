@@ -100,9 +100,8 @@ export const resolverPage = async (req, res) => {
       fraude,
     });
 
-    // propuesta liq
-    const hayPropuestaLiquid = hitos.data.some((itm) => itm.STAHIT === -1);
-    if (hayPropuestaLiquid) {
+    const hayPropuestaLiquidacion = hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaLiquidacion);
+    if (hayPropuestaLiquidacion) {
       if (!hitos.data.some((itm) => itm.STAHIT === 1)) {
         const msg =
           "Existe propuesta de liquidación sin su correspondiente liquidación.\nNo se puede resolver el fraude.";
@@ -112,22 +111,20 @@ export const resolverPage = async (req, res) => {
         });
       }
     }
-    // liq
-    const hayLiquidacion = hitos.data.some((itm) => itm.STAHIT === 1);
+    const hayLiquidacion = hitos.data.some((itm) => itm.STAHIT === estadosHito.liquidacion);
     if (hayLiquidacion) {
-      if (!hitos.data.some((itm) => itm.STAHIT === -1)) {
+      if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaLiquidacion)) {
         const msg =
-          "Existe liquidación sin su correspondiente propuesta de liquidación.\nNo se puede resolver el fraude.";
+          "Existe liquidación/es sin su correspondiente propuesta de liquidación.\nNo se puede resolver el fraude.";
 
         return res.render("admin/error400", {
           alerts: [{ msg }],
         });
       }
     }
-    // propuesta sancion
-    const hayPropuestaSancion = hitos.data.some((itm) => itm.STAHIT === -3);
+    const hayPropuestaSancion = hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaSancion);
     if (hayPropuestaSancion) {
-      if (!hitos.data.some((itm) => itm.STAHIT === 3 || itm.STAHIT === 2)) {
+      if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.sancion || itm.STAHIT === estadosHito.sancionAnulada)) {
         const msg =
           "Existe propuesta de sanción sin su correspondiente sanción o sanción anulada.\nNo se puede resolver el fraude.";
 
@@ -136,14 +133,11 @@ export const resolverPage = async (req, res) => {
         });
       }
     }
-    // sancion
-    const haySancion = hitos.data.some(
-      (itm) => itm.STAHIT === 3 || itm.STAHIT === 2
-    );
+    const haySancion = hitos.data.some((itm) => itm.STAHIT === estadosHito.sancion);
     if (haySancion) {
-      if (!hitos.data.some((itm) => itm.STAHIT === -3)) {
+      if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaSancion)) {
         const msg =
-          "Existe sanción o sanción anulada sin su correspondiente propuesta de sanción.\nNo se puede resolver el fraude.";
+          "Existe sanción sin su correspondiente propuesta de sanción.\nNo se puede resolver el fraude.";
 
         return res.render("admin/error400", {
           alerts: [{ msg }],
@@ -155,9 +149,7 @@ export const resolverPage = async (req, res) => {
     const datos = {
       fraude: result.data,
       subtipos: subtipos.data,
-      hayLiquidacion: hitos.data.some(
-        (itm) => itm.STAHIT === estadosHito.liquidacionActiva
-      ),
+      hayLiquidacion,
     };
 
     res.render("admin/fraudes/resolver", { user, datos });
@@ -506,34 +498,25 @@ export const asign = async (req, res) => {
 };
 export const resol = async (req, res) => {
   const user = req.user;
-  const fraude = {
+  let fraude = {
     idfrau: req.body.idfrau,
-    liqfra: user.userID,
-    stafra: estadosFraude.resuelto,
-    sitfra: req.body.sitfra,
   };
   const movimiento = {
     usumov: user.id,
     tipmov: tiposMovimiento.resolverFraude,
   };
-
+  
   try {
     const result = await axios.post("http://localhost:8000/api/fraude", {
-      fraude: { idfrau: fraude.idfrau },
+      fraude,
     });
 
     if (result.data.STAFRA === estadosFraude.asignado) {
-      const hitos = await axios.post(
-        "http://localhost:8000/api/fraudes/hitos",
-        {
-          fraude,
-        }
-      );
+      const hitos = await axios.post("http://localhost:8000/api/fraudes/hitos", {
+        fraude,
+      });
 
-      // propuesta liq
-      const hayPropuestaLiquidacion = hitos.data.some(
-        (itm) => itm.STAHIT === -1
-      );
+      const hayPropuestaLiquidacion = hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaLiquidacion);
       if (hayPropuestaLiquidacion) {
         if (!hitos.data.some((itm) => itm.STAHIT === 1)) {
           const msg =
@@ -544,22 +527,20 @@ export const resol = async (req, res) => {
           });
         }
       }
-      // liq
-      const hayLiquidacion = hitos.data.some((itm) => itm.STAHIT === 1);
+      const hayLiquidacion = hitos.data.some((itm) => itm.STAHIT === estadosHito.liquidacion);
       if (hayLiquidacion) {
-        if (!hitos.data.some((itm) => itm.STAHIT === -1)) {
+        if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaLiquidacion)) {
           const msg =
-            "Existe liquidación sin su correspondiente propuesta de liquidación.\nNo se puede resolver el fraude.";
+            "Existe liquidación/es sin su correspondiente propuesta de liquidación.\nNo se puede resolver el fraude.";
 
           return res.render("admin/error400", {
             alerts: [{ msg }],
           });
         }
       }
-      // propuesta sancion
-      const hayPropuestaSancion = hitos.data.some((itm) => itm.STAHIT === -3);
+      const hayPropuestaSancion = hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaSancion);
       if (hayPropuestaSancion) {
-        if (!hitos.data.some((itm) => itm.STAHIT === 3 || itm.STAHIT === 2)) {
+        if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.sancion || itm.STAHIT === estadosHito.sancionAnulada)) {
           const msg =
             "Existe propuesta de sanción sin su correspondiente sanción o sanción anulada.\nNo se puede resolver el fraude.";
 
@@ -568,20 +549,21 @@ export const resol = async (req, res) => {
           });
         }
       }
-      // sancion
-      const haySancion = hitos.data.some(
-        (itm) => itm.STAHIT === 3 || itm.STAHIT === 2
-      );
+      const haySancion = hitos.data.some((itm) => itm.STAHIT === estadosHito.sancion);
       if (haySancion) {
-        if (!hitos.data.some((itm) => itm.STAHIT === -3)) {
+        if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaSancion)) {
           const msg =
-            "Existe sanción o sanción anulada sin su correspondiente propuesta de sanción.\nNo se puede resolver el fraude.";
+            "Existe sanción sin su correspondiente propuesta de sanción.\nNo se puede resolver el fraude.";
 
           return res.render("admin/error400", {
             alerts: [{ msg }],
           });
         }
       }
+
+      fraude.liqfra = user.userID
+      fraude.stafra = estadosFraude.resuelto
+      fraude.sitfra = req.body.sitfra
 
       const result = await axios.post(
         "http://localhost:8000/api/fraudes/situacion",

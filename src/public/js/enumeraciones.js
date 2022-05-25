@@ -99,10 +99,11 @@ export const estadosSms = {
   enviado: 1,
 }
 export const estadosHito = {
-  liquidacionAnulada: 0,
-  liquidacionActiva: 1,
-  sancionAnulada: 2,
-  sancionActiva: 3,
+  sancionAnulada: -1,
+  propuestaLiquidacion: 1,
+  propuestaSancion: 2,
+  liquidacion: 3,
+  sancion: 4,
 }
 
 export const tiposLiquidacion = {
@@ -146,8 +147,10 @@ export const arrTiposLiquidacion = [
   { id: 2, des: 'DEVOLVER' },
 ]
 export const arrEstadosHito = [
-  { id: 0, des: 'LIQUIDACION ANULADA' },
-  { id: 0, des: 'LIQUIDACION ACTIVA' },
-  { id: 1, des: 'SANCION ANULADA' },
-  { id: 2, des: 'SANCION ACTIVA' },
+  { id: -1, des: 'LIQUIDACION ANULADA' },
+  { id: -3, des: 'SANCION ANULADA' },
+  { id: 0, des: 'PROPUESTA LIQUIDACION' },
+  { id: 1, des: 'LIQUIDACION' },
+  { id: 2, des: 'PROPUESTA SANCION' },
+  { id: 3, des: 'SANCION' },
 ]

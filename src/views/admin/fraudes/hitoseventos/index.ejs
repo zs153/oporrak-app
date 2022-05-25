@@ -148,7 +148,7 @@
                                         <i class="bi bi-trash dropdown-item-icon"></i>Borrar hito
                                       </a>
                                     </li>
-                                    <% if(element.STAHIT === datos.estadosHito.sancionActiva) { %>
+                                    <% if(element.STAHIT === datos.estadosHito.sancion) { %>
                                     <li class="nav-item list-divider"></li>
                                     <li class="nav-item">
                                       <a href="#" class="nav-link" onclick="{document.getElementById('archito').value ='<%- element.IDHITO %>', document.getElementById('texarc').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-archivo">
