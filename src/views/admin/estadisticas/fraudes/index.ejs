@@ -26,6 +26,7 @@
         font-size: 1.5rem;
       }
       .progress-container {
+        display: flex;
         height: 0.7rem;
         width: 100%;
         border-radius: 0.4rem;
@@ -33,32 +34,50 @@
         text-align: center;
         color: #fff;
       }
-
-      .progress-container .progress {
+      /* .progress-container .progress {
         height: 100%;
         width: 0;
         border-radius: 0.4rem;
         background: #225ddd;
         transition: width 0.4s ease;
+      } */
+      .chart {
+        position: relative;
+        display: inline-block;
+        width: 110px;
+        height: 110px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      .chart canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .percent {
+        display: inline-block;
+        line-height: 110px;
+        z-index: 2;
+      }
+      .percent:after {
+        content: '%';
+        margin-left: 0.1em;
+        font-size: .8em;
       }
       .err {
           width: 50%;
           height: 100%;
-          /* background-color: green; */
           float: left;
       }
-
       .dec {
           width: 25%;
           height: 100%;
-          /* background-color: orange; */
           float: left;
       }
-
       .otr {
           width: 10%;
           height: 100%;
-          /* background-color: red; */
           float: left;
       }
       .legend {
@@ -90,13 +109,13 @@
                     <div class="d-flex">
                       <div class="subheader">Causas</div>
                       <div class="ms-auto">
-                        <div class="col-auto">
+                        <div class="col-auto mb-1">
                           <span class="legend bg-primary"></span>
-                          <span>Cruce err</span>
+                          <span>Cruce</span>
                           <span class="legend bg-warning"></span>
-                          <span>Ya declar</span>
+                          <span>Decla</span>
                           <span class="legend bg-success"></span>
-                          <span>Atrib otr</span>
+                          <span>Atrib</span>
                         </div>
                       </div>
                     </div>
@@ -119,10 +138,14 @@
                   <div class="card-body">
                     <div class="d-flex align-items-center">
                       <div class="subheader">Liquidaciones</div>
+                      <div class="subheader ms-auto">Importe</div>
                     </div>
-                    <div class="h1 mb-3"><%- datos.hitos.LIQUID %></div>
                     <div class="d-flex align-items-center">
-                      <div class="subheader">Propuestas</div>
+                      <div class="h1"><%- datos.hitos.LIQUID %></div>
+                      <div class="h1 ms-auto">3.257</div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="subheader mt-3">Propuestas</div>
                     </div>
                     <div class="h2"><%- datos.hitos.PROLIQ %></div>
                   </div>
@@ -173,7 +196,11 @@
                                 <td>
                                   <div class="d-flex align-items-center">
                                     <div class="flex-fill">
-                                      <div class="font-weight-medium"><%- element.DESOFI %></div>
+                                      <% if (element.DESOFI === null) { %>
+                                        <div class="font-weight-medium">TOTAL</div>
+                                      <% } else { %> 
+                                        <div class="font-weight-medium"><%- element.DESOFI %></div>
+                                      <% } %> 
                                     </div>
                                   </div>
                                 </td>
@@ -207,85 +234,32 @@
                                 </td>
                               </tr>
                             <% }) %>
-                              <tr>
-                                <td>
-                                  <div class="d-flex align-items-center">
-                                    <div class="flex-fill">
-                                      <div class="font-weight-medium text-blue">TOTAL </div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td class="w-6">
-                                  <div class="d-flex align-items-center">
-                                    <div class="flex-fill">
-                                      <div class="font-weight-medium text-blue">pend</div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td class="w-6">
-                                  <div class="d-flex align-items-center">
-                                    <div class="flex-fill">
-                                      <div class="font-weight-medium text-blue">adju</div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td class="w-6">
-                                  <div class="d-flex align-items-center">
-                                    <div class="flex-fill">
-                                      <div class="font-weight-medium text-blue">resu</div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td class="w-6">
-                                  <div class="d-flex align-items-center">
-                                    <div class="flex-fill">
-                                      <div class="font-weight-medium text-blue">total</div>
-                                    </div>
-                                  </div>
-                                </td>
-                              </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="card">
-                      <div class="col-4">
-                        <div id="chart-correc" class="chart" data-percent="75">
-                          <span class="percent">75</span>
+                    <div class="card" style="display: -webkit-box;">
+                      <div class="col-4 mx-auto w-auto">
+                        <div id="chart-correc" class="chart" data-percent="<%- datos.ratios.correctas %>">
+                          <span class="percent"></span>
+                          <span>Correcto</span>
                         </div>
                       </div>
-                      <div class="col-4">
-                        <div id="chart-liquid"></div>
+                      <div class="col-4 mx-auto w-auto">
+                        <div id="chart-liquid" class="chart" data-percent="<%- datos.ratios.liquidacion %>">
+                          <span class="percent"></span>
+                          <span>Liquida</span>
+                        </div>
                       </div>
-                      <div class="col-4">
-                        <div id="chart-sancio"></div>
+                      <div class="col-4 mx-auto w-auto">
+                        <div id="chart-sancio" class="chart" data-percent="<%- datos.ratios.sancion %>">
+                          <span class="percent"></span>
+                          <span>Sanción</span>
+                        </div>
                       </div>
                     </div>
-                    <!-- <div class="row row-cards"> -->
-                      <!-- <div class="col-4"> -->
-                        <!-- <div class="card"> -->
-                          <!-- <div class="card-body"> -->
-                            <!-- <div id="chart-correc"></div> -->
-                          <!-- </div> -->
-                        <!-- </div> -->
-                      <!-- </div>
-                      <div class="col-4"> -->
-                        <!-- <div class="card">
-                          <div class="card-body"> -->
-                            <!-- <div id="chart-liquid"></div> -->
-                          <!-- </div> -->
-                        <!-- </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="card">
-                          <div class="card-body"> -->
-                            <!-- <div id="chart-sancio"></div> -->
-                          <!-- </div> -->
-                        <!-- </div> -->
-                      <!-- </div> -->
-                    <!-- </div> -->
                   </div>
                 </div>
               </div>
@@ -355,271 +329,54 @@
         },
       }
     }
-    const options2 = {
-      series: [76],
-      chart: {
-        type: 'radialBar',
-        offsetY: -5,
-        sparkline: {
-          enabled: true
-        }
-      },
-      plotOptions: {
-        radialBar: {
-          startAngle: -90,
-          endAngle: 90,
-          track: {
-            background: "#e7e7e7",
-            strokeWidth: '97%',
-            margin: 5, // margin is in pixels
-            dropShadow: {
-              enabled: true,
-              top: 2,
-              left: 0,
-              color: '#999',
-              opacity: 1,
-              blur: 2
-            }
-          },
-          dataLabels: {
-            name: {
-              show: true
-            },
-            value: {
-              offsetY: -40,
-              fontSize: '22px'
-            }
-          }
-        }
-      },
-      grid: {
-        padding: {
-          top: -10
-        }
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          shadeIntensity: 0.4,
-          inverseColors: false,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 50, 53, 91]
-        },
-      },
-      labels: ['Correctas'],
-    };
-    const options3 = {
-      series: [24],
-      chart: {
-        type: 'radialBar',
-        offsetY: -10,
-        sparkline: {
-          enabled: true
-        }
-      },
-      plotOptions: {
-        radialBar: {
-          startAngle: -90,
-          endAngle: 90,
-          track: {
-            background: "#e7e7e7",
-            strokeWidth: '97%',
-            margin: 5, // margin is in pixels
-            dropShadow: {
-              enabled: true,
-              top: 2,
-              left: 0,
-              color: '#999',
-              opacity: 1,
-              blur: 2
-            }
-          },
-          dataLabels: {
-            name: {
-              show: true
-            },
-            value: {
-              offsetY: -40,
-              fontSize: '22px'
-            }
-          }
-        }
-      },
-      grid: {
-        padding: {
-          top: -10
-        }
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          shadeIntensity: 0.4,
-          inverseColors: false,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 50, 53, 91]
-        },
-      },
-      labels: ['Liquidadas'],
-    };
-    const options4 = {
-      series: [12],
-      chart: {
-        type: 'radialBar',
-        offsetY: -10,
-        sparkline: {
-          enabled: true
-        }
-      },
-      plotOptions: {
-        radialBar: {
-          startAngle: -90,
-          endAngle: 90,
-          track: {
-            background: "#e7e7e7",
-            strokeWidth: '97%',
-            margin: 5, // margin is in pixels
-            dropShadow: {
-              enabled: true,
-              top: 2,
-              left: 0,
-              color: '#999',
-              opacity: 1,
-              blur: 2
-            }
-          },
-          dataLabels: {
-            name: {
-              show: true
-            },
-            value: {
-              offsetY: -40,
-              fontSize: '22px'
-            }
-          }
-        }
-      },
-      grid: {
-        padding: {
-          top: -10
-        }
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          shadeIntensity: 0.4,
-          inverseColors: false,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 50, 53, 91]
-        },
-      },
-      labels: ['Sancionadas'],
-    };
-    const options5 = {
-      series: [{
-        name: 'Erroneo',
-        data: [44]
-      }, {
-        name: 'Declarado',
-        data: [53]
-      }, {
-        name: 'Otros',
-        data: [12]
-      }],
-      chart: {
-        type: 'bar',
-        height: 60,
-        width: 350,
-        stacked: true,
-        toolbar: {
-          show: false,
-        },
-        offsetX: -40,
-        offsetY: 40,
-      },
-      grid: {
-        show: false,
-      },
-      dataLabels: {
-        enabled: false,
-        },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        },
-      },
-      stroke: {
-        width: 1,
-        colors: ['#fff'],
-      },
-      xaxis: {
-        labels: {  
-          show: false,
-        },
-        categories: ['Causas'],
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-      },
-      yaxis: {
-        show: false,
-      },
-      // tooltip: {
-      //   y: {
-      //     formatter: function (val) {
-      //       return val + "K"
-      //     }
-      //   }
-      // },
-      fill: {
-        opacity: 1        
-      },
-      legend: {
-        show: false,
-        position: 'right',
-        horizontalAlign: 'center',
-        fontSize: 10,
-        height: 140,
-        offsetX: -60,
-        offsetY: -60,
-        floating: true,
-      }
-    };
-
     const chart1 = new ApexCharts(document.querySelector("#chart-actuac"), options1);
-    // const chart2 = new ApexCharts(document.querySelector("#chart-correc"), options2);
-    // const chart3 = new ApexCharts(document.querySelector("#chart-liquid"), options3);
-    // const chart4 = new ApexCharts(document.querySelector("#chart-sancio"), options4);
-    // const chart5 = new ApexCharts(document.querySelector("#chart-situac"), options5);
     chart1.render();
-    // chart2.render();
-    // chart3.render();
-    // chart4.render();
-    // chart5.render();    
+   
   </script>
 
   <script>
-    var element = document.querySelector('#chart-correc');
+    const element = document.querySelector('#chart-correc');
+    const element1 = document.querySelector('#chart-liquid');
+    const element2 = document.querySelector('#chart-sancio');
+
     new EasyPieChart(element, {
-      // easing: 'ease',
-			// delay: 3000,
-			// barColor: '#69c',
-			// trackColor: '#ace',
-			// scaleColor: false,
-			// lineWidth: 3,
-			// trackWidth: 1,
-			// lineCap: 'round',
-			// onStep: function(from, to, percent) {
-			// 	this.el.children[0].innerHTML = Math.round(percent);
-			// }
+        easing: 'easeOutElastic',
+        delay: 3000,
+        barColor: '#4263eb',
+        trackColor: '#ace',
+        scaleColor: false,
+        lineWidth: 3,
+        trackWidth: 1,
+        lineCap: 'butt',
+        onStep: function(from, to, percent) {
+          this.el.children[0].innerHTML = Math.round(percent);
+        }
+    });    
+    new EasyPieChart(element1, {
+        easing: 'easeOutElastic',
+        delay: 3000,
+        barColor: '#74b816',
+        trackColor: '#ace',
+        scaleColor: false,
+        lineWidth: 3,
+        trackWidth: 1,
+        lineCap: 'butt',
+        onStep: function(from, to, percent) {
+          this.el.children[0].innerHTML = Math.round(percent);
+        }
+    });
+    new EasyPieChart(element2, {
+        easing: 'easeOutElastic',
+        delay: 3000,
+        barColor: '#f76707',
+        trackColor: '#ace',
+        scaleColor: false,
+        lineWidth: 3,
+        trackWidth: 1,
+        lineCap: 'butt',
+        onStep: function(from, to, percent) {
+          this.el.children[0].innerHTML = Math.round(percent);
+        }
     });
   </script>
 </html>

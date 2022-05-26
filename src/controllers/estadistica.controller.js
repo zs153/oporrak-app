@@ -7,7 +7,7 @@ export const fraudePage = async (req, res) => {
     hasta: '2022-12-31',
   }
   const tipo = {
-    tipfra: 51,
+    tipfra: 10,
   }
 
   try {
@@ -55,7 +55,7 @@ export const fraudePage = async (req, res) => {
       serieL: JSON.stringify(serieL),
       serieS: JSON.stringify(serieS),
     }
-
+console.log(datos)
     res.render('admin/estadisticas/fraudes', { user, datos})
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
