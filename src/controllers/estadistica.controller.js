@@ -7,7 +7,7 @@ export const fraudePage = async (req, res) => {
     hasta: '2022-12-31',
   }
   const tipo = {
-    tipfra: 10,
+    tipfra: 51,
   }
 
   try {

@@ -26,10 +26,12 @@
         font-size: 1.5rem;
       }
       .progress-container {
-        height: 0.5rem;
+        height: 0.7rem;
         width: 100%;
         border-radius: 0.4rem;
         background: #f2f3f4;
+        text-align: center;
+        color: #fff;
       }
 
       .progress-container .progress {
@@ -38,6 +40,35 @@
         border-radius: 0.4rem;
         background: #225ddd;
         transition: width 0.4s ease;
+      }
+      .err {
+          width: 50%;
+          height: 100%;
+          /* background-color: green; */
+          float: left;
+      }
+
+      .dec {
+          width: 25%;
+          height: 100%;
+          /* background-color: orange; */
+          float: left;
+      }
+
+      .otr {
+          width: 10%;
+          height: 100%;
+          /* background-color: red; */
+          float: left;
+      }
+      .legend {
+        display: inline-block;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 4px;
+      }
+      .progress-separated {
+        border-right: 2px solid #fff;
       }
     </style>
   </head>
@@ -49,135 +80,65 @@
         <div class="page-body">
           <div class="container-xl">
             <div class="row row-deck row-cards">
-              <div class="col-sm-6 col-lg-2">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Prop.Liquidación</div>
-                    </div>
-                    <div class="h1 mb-3"><%- datos.hitos.PROLIQ %></div>
-                    <div class="d-flex mb-2">
-                      <div>Ratio</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          <%- datos.ratios.propuestaLiquidacion %>%
-                        </span>
-                      </div>
-                    </div>
-                    <div class="progress-container">
-                      <div id="proliq" class="progress">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-lg-2">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Propuestas Sanción</div>
-                    </div>
-                    <div class="h1 mb-3"><%- datos.hitos.PROSAN %></div>
-                    <div class="d-flex mb-2">
-                      <div>Ratio</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          <%- datos.ratios.propuestaSancion %>%
-                        </span>
-                      </div>
-                    </div>
-                    <div class="progress-container">
-                      <div id="prosan" class="progress">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-lg-2">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Liquidaciones</div>
-                    </div>
-                    <div class="h1 mb-3"><%- datos.hitos.LIQUID %></div>
-                    <div class="d-flex mb-2">
-                      <div>Ratio</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          <%- datos.ratios.liquidacion %>%
-                        </span>
-                      </div>
-                    </div>
-                    <div class="progress-container">
-                      <div id="liquid" class="progress">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-lg-2">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Sanciones</div>
-                    </div>
-                    <div class="h1 mb-3"><%- datos.hitos.SANCIO %></div>
-                    <div class="d-flex mb-2">
-                      <div>Ratio</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          <%- datos.ratios.sancion %>%
-                        </span>
-                      </div>
-                    </div>
-                    <div class="progress-container">
-                      <div id="sancio" class="progress">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-lg-2">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Sanciones anuladas</div>
-                    </div>
-                    <div class="h1 mb-3"><%- datos.hitos.ANUSAN %></div>
-                    <div class="d-flex mb-2">
-                      <div>Ratio</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          <%- datos.ratios.anulacion %>%
-                        </span>
-                      </div>
-                    </div>
-                    <div class="progress-container">
-                      <div id="anusan" class="progress">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-lg-2">
+              <div class="col-lg-4">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex align-items-center">
                       <div class="subheader">Correctas</div>
                     </div>
                     <div class="h1 mb-3"><%- datos.situacion.CORSIT %></div>
-                    <div class="d-flex mb-2">
-                      <div>Ratio</div>
+                    <div class="d-flex">
+                      <div class="subheader">Causas</div>
                       <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          <%- datos.ratios.correctas %>%
-                        </span>
+                        <div class="col-auto">
+                          <span class="legend bg-primary"></span>
+                          <span>Cruce err</span>
+                          <span class="legend bg-warning"></span>
+                          <span>Ya declar</span>
+                          <span class="legend bg-success"></span>
+                          <span>Atrib otr</span>
+                        </div>
                       </div>
                     </div>
-                    <div class="progress-container">
-                      <div id="corsit" class="progress">
+                      <div class="progress-container">
+                        <div class="err bg-primary progress-separated">
+                          <h6 class="m-0"><%- datos.situacion.ACUERR %></h6>
+                        </div>
+                        <div class="dec bg-warning progress-separated">
+                          <h6 class="m-0"><%- datos.situacion.ACUDEC %></h6>
+                        </div>
+                        <div class="otr bg-success">
+                          <h6 class="m-0"><%- datos.situacion.ACUOTR %></h6>
+                        </div>
                       </div>
+                  </div>                  
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Liquidaciones</div>
                     </div>
+                    <div class="h1 mb-3"><%- datos.hitos.LIQUID %></div>
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Propuestas</div>
+                    </div>
+                    <div class="h2"><%- datos.hitos.PROLIQ %></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Sanciones</div>
+                    </div>
+                    <div class="h1 mb-3"><%- datos.hitos.SANCIO %></div>
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Propuestas</div>
+                    </div>
+                    <div class="h2"><%- datos.hitos.PROSAN %></div>
                   </div>
                 </div>
               </div>
@@ -289,22 +250,42 @@
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="row row-cards">
-                      <div class="col-6">
-                        <div class="card">
-                          <div class="card-body">
-                            <div id="chart-correc"></div>
-                          </div>
+                    <div class="card">
+                      <div class="col-4">
+                        <div id="chart-correc" class="chart" data-percent="75">
+                          <span class="percent">75</span>
                         </div>
                       </div>
-                      <div class="col-6">
-                        <div class="card">
-                          <div class="card-body">
-                            <div id="chart-liquid"></div>
-                          </div>
-                        </div>
+                      <div class="col-4">
+                        <div id="chart-liquid"></div>
+                      </div>
+                      <div class="col-4">
+                        <div id="chart-sancio"></div>
                       </div>
                     </div>
+                    <!-- <div class="row row-cards"> -->
+                      <!-- <div class="col-4"> -->
+                        <!-- <div class="card"> -->
+                          <!-- <div class="card-body"> -->
+                            <!-- <div id="chart-correc"></div> -->
+                          <!-- </div> -->
+                        <!-- </div> -->
+                      <!-- </div>
+                      <div class="col-4"> -->
+                        <!-- <div class="card">
+                          <div class="card-body"> -->
+                            <!-- <div id="chart-liquid"></div> -->
+                          <!-- </div> -->
+                        <!-- </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="card">
+                          <div class="card-body"> -->
+                            <!-- <div id="chart-sancio"></div> -->
+                          <!-- </div> -->
+                        <!-- </div> -->
+                      <!-- </div> -->
+                    <!-- </div> -->
                   </div>
                 </div>
               </div>
@@ -314,17 +295,34 @@
       <%- include('../../../partials/footer') %>
     </div>
   </body>
+
+  <script src="/js/ayuda.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/easypiechart.min.js"></script>
+  <script>
+    const messages = document.getElementById('messages')
+    const socket = io()
+
+    socket.on('receive-message', msg => {
+      const li = document.createElement('li')
+      li.textContent = msg
+      messages.appendChild(li)
+
+      const toggleBadge = document.querySelector('#toggleBadge');
+      const numeroMensajes = messages.getElementsByTagName("li").length
+      if (numeroMensajes === 1) {
+        toggleBadge.classList.toggle('d-none')
+      }
+    })
+  </script>
   <script>
       const changeProgress = (element, progress) => {
         element.style.width = `${progress}%`;
       };
 
-      changeProgress(document.querySelector("#proliq"), <%- datos.ratios.propuestaLiquidacion %>)
-      changeProgress(document.querySelector("#prosan"), <%- datos.ratios.propuestaSancion %>)
-      changeProgress(document.querySelector("#liquid"), <%- datos.ratios.liquidacion %>)
-      changeProgress(document.querySelector("#sancio"), <%- datos.ratios.sancion %>)
-      changeProgress(document.querySelector("#anusan"), <%- datos.ratios.anulacion %>)
-      changeProgress(document.querySelector("#corsit"), <%- datos.ratios.correctas %>)
+      changeProgress(document.querySelector(".err"), <%- datos.situacion.ACUERR / datos.situacion.CORSIT * 100 %>)
+      changeProgress(document.querySelector(".dec"), <%- datos.situacion.ACUDEC / datos.situacion.CORSIT * 100 %>)
+      changeProgress(document.querySelector(".otr"), <%- datos.situacion.ACUOTR / datos.situacion.CORSIT * 100 %>)
   </script>
   <script>
     const options1 = {
@@ -361,7 +359,7 @@
       series: [76],
       chart: {
         type: 'radialBar',
-        offsetY: -10,
+        offsetY: -5,
         sparkline: {
           enabled: true
         }
@@ -467,12 +465,161 @@
       },
       labels: ['Liquidadas'],
     };
+    const options4 = {
+      series: [12],
+      chart: {
+        type: 'radialBar',
+        offsetY: -10,
+        sparkline: {
+          enabled: true
+        }
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: -90,
+          endAngle: 90,
+          track: {
+            background: "#e7e7e7",
+            strokeWidth: '97%',
+            margin: 5, // margin is in pixels
+            dropShadow: {
+              enabled: true,
+              top: 2,
+              left: 0,
+              color: '#999',
+              opacity: 1,
+              blur: 2
+            }
+          },
+          dataLabels: {
+            name: {
+              show: true
+            },
+            value: {
+              offsetY: -40,
+              fontSize: '22px'
+            }
+          }
+        }
+      },
+      grid: {
+        padding: {
+          top: -10
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          shadeIntensity: 0.4,
+          inverseColors: false,
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [0, 50, 53, 91]
+        },
+      },
+      labels: ['Sancionadas'],
+    };
+    const options5 = {
+      series: [{
+        name: 'Erroneo',
+        data: [44]
+      }, {
+        name: 'Declarado',
+        data: [53]
+      }, {
+        name: 'Otros',
+        data: [12]
+      }],
+      chart: {
+        type: 'bar',
+        height: 60,
+        width: 350,
+        stacked: true,
+        toolbar: {
+          show: false,
+        },
+        offsetX: -40,
+        offsetY: 40,
+      },
+      grid: {
+        show: false,
+      },
+      dataLabels: {
+        enabled: false,
+        },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+        },
+      },
+      stroke: {
+        width: 1,
+        colors: ['#fff'],
+      },
+      xaxis: {
+        labels: {  
+          show: false,
+        },
+        categories: ['Causas'],
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        show: false,
+      },
+      // tooltip: {
+      //   y: {
+      //     formatter: function (val) {
+      //       return val + "K"
+      //     }
+      //   }
+      // },
+      fill: {
+        opacity: 1        
+      },
+      legend: {
+        show: false,
+        position: 'right',
+        horizontalAlign: 'center',
+        fontSize: 10,
+        height: 140,
+        offsetX: -60,
+        offsetY: -60,
+        floating: true,
+      }
+    };
 
     const chart1 = new ApexCharts(document.querySelector("#chart-actuac"), options1);
-    const chart2 = new ApexCharts(document.querySelector("#chart-correc"), options2);
-    const chart3 = new ApexCharts(document.querySelector("#chart-liquid"), options3);
+    // const chart2 = new ApexCharts(document.querySelector("#chart-correc"), options2);
+    // const chart3 = new ApexCharts(document.querySelector("#chart-liquid"), options3);
+    // const chart4 = new ApexCharts(document.querySelector("#chart-sancio"), options4);
+    // const chart5 = new ApexCharts(document.querySelector("#chart-situac"), options5);
     chart1.render();
-    chart2.render();
-    chart3.render();
+    // chart2.render();
+    // chart3.render();
+    // chart4.render();
+    // chart5.render();    
+  </script>
+
+  <script>
+    var element = document.querySelector('#chart-correc');
+    new EasyPieChart(element, {
+      // easing: 'ease',
+			// delay: 3000,
+			// barColor: '#69c',
+			// trackColor: '#ace',
+			// scaleColor: false,
+			// lineWidth: 3,
+			// trackWidth: 1,
+			// lineCap: 'round',
+			// onStep: function(from, to, percent) {
+			// 	this.el.children[0].innerHTML = Math.round(percent);
+			// }
+    });
   </script>
 </html>
