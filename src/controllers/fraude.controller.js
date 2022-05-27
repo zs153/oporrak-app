@@ -102,7 +102,7 @@ export const resolverPage = async (req, res) => {
 
     const hayPropuestaLiquidacion = hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaLiquidacion);
     if (hayPropuestaLiquidacion) {
-      if (!hitos.data.some((itm) => itm.STAHIT === 1)) {
+      if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.liquidacion)) {
         const msg =
           "Existe propuesta de liquidación sin su correspondiente liquidación.\nNo se puede resolver el fraude.";
 
@@ -518,7 +518,7 @@ export const resol = async (req, res) => {
 
       const hayPropuestaLiquidacion = hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaLiquidacion);
       if (hayPropuestaLiquidacion) {
-        if (!hitos.data.some((itm) => itm.STAHIT === 1)) {
+        if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.liquidacion)) {
           const msg =
             "Existe propuesta de liquidación sin su correspondiente liquidación.\nNo se puede resolver el fraude.";
 
@@ -589,6 +589,7 @@ export const unasign = async (req, res) => {
     idfrau: req.body.idfrau,
     liqfra: "PEND",
     stafra: estadosFraude.pendiente,
+    sitfra: 0,
   };
   const movimiento = {
     usumov: user.id,

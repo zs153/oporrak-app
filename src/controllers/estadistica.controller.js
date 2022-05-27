@@ -7,7 +7,7 @@ export const fraudePage = async (req, res) => {
     hasta: '2022-12-31',
   }
   const tipo = {
-    tipfra: 10,
+    tipfra: 51,
   }
 
   try {
@@ -30,12 +30,14 @@ export const fraudePage = async (req, res) => {
 
     const serieL = []
     const serieS = []
+    const serieC = []
 
     actuacion.data.map(itm => {
       // const t = itm.FECHIT.split(/[-:T]/)
       // const d = new Date(Date.UTC(t[0],t[1]-1,t[2]))
-      serieL.push({x: itm.FECHIT,y: itm.LIQUID})
-      serieS.push({x: itm.FECHIT,y: itm.SANCIO})
+      serieC.push({x: itm.FEC,y: itm.COR})
+      serieL.push({x: itm.FEC,y: itm.LIQ})
+      serieS.push({x: itm.FEC,y: itm.SAN})
     })
 
     const totalSituacion = situacion.data.ACTSIT + situacion.data.CORSIT
@@ -52,10 +54,11 @@ export const fraudePage = async (req, res) => {
       oficinas: oficinas.data,
       situacion: situacion.data,
       ratios,
+      serieC: JSON.stringify(serieC),
       serieL: JSON.stringify(serieL),
       serieS: JSON.stringify(serieS),
     }
-console.log(datos)
+
     res.render('admin/estadisticas/fraudes', { user, datos})
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'

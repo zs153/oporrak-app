@@ -110,23 +110,23 @@
                       <div class="subheader">Causas</div>
                       <div class="ms-auto">
                         <div class="col-auto mb-1">
-                          <span class="legend bg-primary"></span>
+                          <span class="legend bg-azure"></span>
                           <span>Cruce</span>
-                          <span class="legend bg-warning"></span>
+                          <span class="legend bg-purple"></span>
                           <span>Decla</span>
-                          <span class="legend bg-success"></span>
+                          <span class="legend bg-teal"></span>
                           <span>Atrib</span>
                         </div>
                       </div>
                     </div>
                       <div class="progress-container">
-                        <div class="err bg-primary progress-separated">
+                        <div class="err bg-azure progress-separated">
                           <h6 class="m-0"><%- datos.situacion.ACUERR %></h6>
                         </div>
-                        <div class="dec bg-warning progress-separated">
+                        <div class="dec bg-purple progress-separated">
                           <h6 class="m-0"><%- datos.situacion.ACUDEC %></h6>
                         </div>
-                        <div class="otr bg-success">
+                        <div class="otr bg-teal">
                           <h6 class="m-0"><%- datos.situacion.ACUOTR %></h6>
                         </div>
                       </div>
@@ -141,13 +141,13 @@
                       <div class="subheader ms-auto">Importe</div>
                     </div>
                     <div class="d-flex align-items-center">
-                      <div class="h1"><%- datos.hitos.LIQUID %></div>
-                      <div class="h1 ms-auto">3.257</div>
+                      <div class="h1"><%- Intl.NumberFormat('de-DE').format(datos.hitos.LIQUID) %></div>
+                      <div class="h1 ms-auto"><%- Intl.NumberFormat('de-DE').format(datos.hitos.IMPLIQ) %></div>
                     </div>
                     <div class="d-flex align-items-center">
                       <div class="subheader mt-3">Propuestas</div>
                     </div>
-                    <div class="h2"><%- datos.hitos.PROLIQ %></div>
+                    <div class="h2"><%- Intl.NumberFormat('de-DE').format(datos.hitos.PROLIQ) %></div>
                   </div>
                 </div>
               </div>
@@ -156,17 +156,36 @@
                   <div class="card-body">
                     <div class="d-flex align-items-center">
                       <div class="subheader">Sanciones</div>
+                      <div class="subheader ms-auto">Importe</div>
                     </div>
-                    <div class="h1 mb-3"><%- datos.hitos.SANCIO %></div>
                     <div class="d-flex align-items-center">
-                      <div class="subheader">Propuestas</div>
+                      <div class="h1"><%- Intl.NumberFormat('de-DE').format(datos.hitos.SANCIO) %></div>
+                      <div class="h1 ms-auto"><%- Intl.NumberFormat('de-DE').format(datos.hitos.IMPSAN) %></div>
                     </div>
-                    <div class="h2"><%- datos.hitos.PROSAN %></div>
+                    <div class="d-flex align-items-center">
+                      <div class="subheader mt-3">
+                        Propuestas
+                        <span class="text-red">(anuladas)</span>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="h2">
+                        <%- datos.hitos.PROSAN %>
+                        <span class="text-red">(<%- Intl.NumberFormat('de-DE').format(datos.hitos.ANUSAN) %>)</span>
+                      </div>
+                      <div class="ms-auto">
+                        <span class="text-red">(<%- Intl.NumberFormat('de-DE').format(datos.hitos.IMPANU) %>)</span>
+                        <%- Intl.NumberFormat('de-DE').format(datos.hitos.IMPPSA) %>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="col-sm-6 col-lg-6">
                 <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Acumulados</h3>
+                  </div>                  
                   <div class="card-body">
                     <div id="chart-actuac"></div>
                   </div>
@@ -300,14 +319,23 @@
   </script>
   <script>
     const options1 = {
+      colors : ['#4263eb', '#74b816', '#f76707'],
       chart: {
         type: 'bar',
         stacked: true,
+        toolbar: {
+          show: false,
+        }
       },
       dataLabels: {
         enabled: false
       },
       series: [
+        {
+          name: 'Correcto',
+          data: <%- datos.serieC %>
+
+        },
         {
           name: 'Liquidaciones',
           data: <%- datos.serieL %>
@@ -330,8 +358,7 @@
       }
     }
     const chart1 = new ApexCharts(document.querySelector("#chart-actuac"), options1);
-    chart1.render();
-   
+    chart1.render();   
   </script>
 
   <script>
@@ -343,7 +370,7 @@
         easing: 'easeOutElastic',
         delay: 3000,
         barColor: '#4263eb',
-        trackColor: '#ace',
+        trackColor: '#f2f3f4',
         scaleColor: false,
         lineWidth: 3,
         trackWidth: 1,
@@ -356,7 +383,7 @@
         easing: 'easeOutElastic',
         delay: 3000,
         barColor: '#74b816',
-        trackColor: '#ace',
+        trackColor: '#f2f3f4',
         scaleColor: false,
         lineWidth: 3,
         trackWidth: 1,
@@ -369,7 +396,7 @@
         easing: 'easeOutElastic',
         delay: 3000,
         barColor: '#f76707',
-        trackColor: '#ace',
+        trackColor: '#f2f3f4',
         scaleColor: false,
         lineWidth: 3,
         trackWidth: 1,
