@@ -321,7 +321,6 @@ export const ejercicioPage = async (req, res) => {
     fraude.FUNFRA = user.userID
     fraude.LIQDOC = user.userID
     fraude.STAFRA = estadosFraude.asignado
-    fraude.SITFRA = 0
 
     const datos = {
       fraude,
@@ -357,7 +356,6 @@ export const insert = async (req, res) => {
     funfra: req.body.funfra,
     liqfra: "PEND",
     stafra: estadosFraude.pendiente,
-    sitfra: 0,
   };
   const movimiento = {
     usumov: user.id,
@@ -501,6 +499,9 @@ export const resol = async (req, res) => {
   let fraude = {
     idfrau: req.body.idfrau,
   };
+  const cierre = {
+    sitcie: req.body.sitcie
+  }
   const movimiento = {
     usumov: user.id,
     tipmov: tiposMovimiento.resolverFraude,
@@ -563,12 +564,12 @@ export const resol = async (req, res) => {
 
       fraude.liqfra = user.userID
       fraude.stafra = estadosFraude.resuelto
-      fraude.sitfra = req.body.sitfra
 
       const result = await axios.post(
-        "http://localhost:8000/api/fraudes/situacion",
+        "http://localhost:8000/api/fraudes/cierre",
         {
           fraude,
+          cierre,
           movimiento,
         }
       );
@@ -589,7 +590,6 @@ export const unasign = async (req, res) => {
     idfrau: req.body.idfrau,
     liqfra: "PEND",
     stafra: estadosFraude.pendiente,
-    sitfra: 0,
   };
   const movimiento = {
     usumov: user.id,
@@ -603,10 +603,9 @@ export const unasign = async (req, res) => {
 
     if (
       resul.data.STAFRA === estadosFraude.asignado ||
-      resul.data.STAFRA === estadosFraude.resuelto ||
-      resul.data.STAFRA === estadosFraude.remitido
+      resul.data.STAFRA === estadosFraude.resuelto
     ) {
-      await axios.post("http://localhost:8000/api/fraudes/cambio", {
+      await axios.post("http://localhost:8000/api/fraudes/unasign", {
         fraude,
         movimiento,
       });
@@ -914,7 +913,6 @@ export const ejercicio = async (req, res) => {
     funfra: user.userID,
     liqfra: user.userID,
     stafra: estadosFraude.asignado,
-    sitfra: 0,
   };
   const movimiento = {
     usumov: user.id,
