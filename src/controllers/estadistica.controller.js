@@ -15,11 +15,11 @@ export const fraudePage = async (req, res) => {
       periodo,
       tipo,
     })
-    const oficinas = await axios.post('http://localhost:8000/api/fraudes/stat/oficinas', {
+    const situacion = await axios.post('http://localhost:8000/api/fraudes/stat/situacion', {
       periodo,
       tipo,
     })
-    const situacion = await axios.post('http://localhost:8000/api/fraudes/stat/situacion', {
+    const oficinas = await axios.post('http://localhost:8000/api/fraudes/stat/oficinas', {
       periodo,
       tipo,
     })
@@ -40,14 +40,14 @@ export const fraudePage = async (req, res) => {
       serieS.push({x: itm.FEC,y: itm.SAN})
     })
 
-    const totalSituacion = situacion.data.ACTSIT + situacion.data.CORSIT
+    const totalSituacion = situacion.data.TOTAL
     const ratios = {
       propuestaLiquidacion: Math.round((hitos.data.PROLIQ * 100 / totalSituacion) * 100) / 100.0,
       propuestaSancion: Math.round((hitos.data.PROSAN * 100 / totalSituacion) * 100) / 100.0,
       liquidacion: Math.round((hitos.data.LIQUID * 100 / totalSituacion) * 100) / 100.0,
       sancion: Math.round((hitos.data.SANCIO * 100 / totalSituacion) * 100) / 100.0,
       anulacion: Math.round((hitos.data.ANUSAN * 100 / totalSituacion) * 100) / 100.0,
-      correctas: Math.round((situacion.data.CORSIT * 100 / totalSituacion) * 100) / 100.0,
+      correctas: Math.round((situacion.data.CORREC * 100 / totalSituacion) * 100) / 100.0,
     }
     const datos = {
       hitos: hitos.data,

@@ -199,7 +199,7 @@
     const obsdoc = document.getElementById('obsdoc')
 
     const validate = () => {
-      const nifconValue = nifcon.value.trim().slice(0,9)
+      const nifconValue = nifcon.value.trim().toUpperCase().slice(0,9)
       const nomconValue = nomcon.value.trim()
       const movconValue = movcon.value.trim()
       const tipdocValue = combo.value

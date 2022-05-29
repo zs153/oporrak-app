@@ -178,7 +178,7 @@
     const tipfra = document.getElementById('cbotip')
 
     const validate = () => {
-      const nifconValue = nifcon.value.trim().toUpperCase()
+      const nifconValue = nifcon.value.trim().toUpperCase().slice(0,9)
       const nomconValue = nomcon.value.trim()
       const ejefraValue = ejefra.value.trim()
       const fecfraValue = fecfra.value.trim()

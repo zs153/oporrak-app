@@ -181,7 +181,7 @@
     const telusu = document.getElementById('telusu')
 
     const validate = () => {
-      const nifconValue = nifcon.value.trim().slice(0,9)
+      const nifconValue = nifcon.value.trim().toUpperCase().slice(0,9)
       const nomconValue = nomcon.value.trim()
       const movconValue = movcon.value.trim()
       const tipdocValue = combo.value
@@ -236,6 +236,7 @@
         }
         setSuccess(nifcon)
       }
+
       if (nomconValue === '') {
         setError(nomcon, 'Nombre requerido')
         setTimeout(function () {
@@ -336,6 +337,56 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
+  </script>
+  <script>
+    const eleNif = document.getElementById('nifcon')
+    const eleNombre = document.getElementById('nomcon')
+    const eleDiscri = document.getElementById('iddisc')
+
+    eleNif.addEventListener('blur', async () => {
+      if (eleNif.value !== '') {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const gentes = JSON.parse(xhr.response)
+            const discriminantes = document.getElementById('iddisc')
+
+            if (gentes.length > 1) {
+              discriminantes.innerHTML = ''
+              gentes.map((item) => {
+                const li = document.createElement('li')
+                li.textContent = item.NIFGEN + ` ${item.DISGEN} ` + item.NOMGEN
+                discriminantes.appendChild(li)
+              })
+              const li = document.createElement('li')
+              li.textContent = 'Introduzca discriminante'
+              discriminantes.appendChild(li)
+              
+              eleDiscri.style.display = 'block'
+              eleNif.focus()
+            } else {
+              if (gentes.NOMGEN) {
+                eleNif.value = gentes.NIFGEN
+                eleNombre.value = gentes.NOMGEN
+              } else {
+                eleNombre.value = ''
+              }
+              eleDiscri.style.display = 'none'
+            }
+          } else {
+            eleNombre.value = ''
+          }
+        };
+        try {
+          xhr.open('POST', 'http://localhost:8000/api/gente', true);
+          xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');     
+          xhr.send(JSON.stringify({nifgen: eleNif.value}))
+        } catch (error) {
+          eleNombre.value = ''
+        }
+      }
+    })
   </script>
   <script>
     const Tipos = () => {
