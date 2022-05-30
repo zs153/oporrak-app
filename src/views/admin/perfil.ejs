@@ -222,18 +222,27 @@
       if(document.getElementById('tab1').checked) {
         if (nomusuValue === '') {
           setError(nomusu, 'Nombre requerido')
+          setTimeout(function () {
+            setSuccess(nomusu)
+          }, 3000)
         return false
       } else {
         setSuccess(nomusu)
       }
       if (emausuValue === '') {
         setError(emausu, 'Email requerido')
+        setTimeout(function () {
+          setSuccess(emausu)
+        }, 3000)
         return false
       } else {
         setSuccess(emausu)
       }
       if (telusuValue === '') {
         setError(telusu, 'Teléfono requerido')
+        setTimeout(function () {
+          setSuccess(telusu)
+        }, 3000)
         return false
       } else {
         setSuccess(telusu)
@@ -241,6 +250,9 @@
       } else {
         if (pwdusuValue === '') {
           setError(pwdusu, 'Contraseña requerida')
+          setTimeout(function () {
+            setSuccess(pwdusu)
+          }, 3000)
           return false
         } else {
           setSuccess(pwdusu)
