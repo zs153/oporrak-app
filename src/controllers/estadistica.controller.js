@@ -3,12 +3,13 @@ import axios from 'axios'
 // pages
 export const fraudePage = async (req, res) => {
   const user = req.user
-  const fecha = new Date()
+  let fecha = new Date()
   const desde = new Date(fecha.getFullYear(), fecha.getMonth(), 1, 23,0,0).toISOString().slice(0,10)
   const hasta = new Date(fecha.getFullYear(), fecha.getMonth()+1, 0, 23,0,0).toISOString().slice(0,10)
 
+  fecha = fecha.toISOString().slice(0,10)
   try {
-    res.render('admin/estadisticas/fraudes/periodo', { user, desde, hasta })
+    res.render('admin/estadisticas/fraudes/periodo', { user, fecha, desde, hasta })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -58,26 +59,28 @@ export const estadisticaFraude = async (req, res) => {
     hasta: req.body.hasta,
   }
   const tipo = {
+    destip: req.body.destip,
+  }
+  const fraude = {
     tipfra: req.body.tipfra,
-    destip: req.body.destip
+    fecfra: req.body.fecfra,
   }
 
   try {
     const hitos = await axios.post('http://localhost:8000/api/fraudes/stat/hitos', {
       periodo,
-      tipo,
+      fraude,
     })
     const situacion = await axios.post('http://localhost:8000/api/fraudes/stat/situacion', {
       periodo,
-      tipo,
+      fraude,
     })
     const oficinas = await axios.post('http://localhost:8000/api/fraudes/stat/oficinas', {
-      periodo,
-      tipo,
+      fraude
     })
     const actuacion = await axios.post('http://localhost:8000/api/fraudes/stat/actuacion', {
       periodo,
-      tipo,
+      fraude,
     })
 
     const serieL = []
@@ -85,8 +88,6 @@ export const estadisticaFraude = async (req, res) => {
     const serieC = []
 
     actuacion.data.map(itm => {
-      // const t = itm.FECHIT.split(/[-:T]/)
-      // const d = new Date(Date.UTC(t[0],t[1]-1,t[2]))
       serieC.push({x: itm.FEC,y: itm.COR})
       serieL.push({x: itm.FEC,y: itm.LIQ})
       serieS.push({x: itm.FEC,y: itm.SAN})
@@ -102,6 +103,7 @@ export const estadisticaFraude = async (req, res) => {
       correctas: Math.round((situacion.data.CORREC * 100 / totalSituacion) * 100) / 100.0,
     }
     const datos = {
+      fraude,
       periodo,
       tipo,
       hitos: hitos.data,

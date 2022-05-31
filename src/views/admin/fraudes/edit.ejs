@@ -91,7 +91,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Fecha</label>
-                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.fraude.FECFRA %>" />
+                            <input type="date" name="fecfra" id="fecfra" class="form-control" value="<%- datos.fraude.FECFRA %>" <%- datos.fraude.FUNFRA === 'SYSTEM' ? 'readonly' : '' %>/>
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
