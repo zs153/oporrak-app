@@ -4,7 +4,6 @@ import {
   estadosSms,
   tiposMovimiento,
   tiposRol,
-  origenTipo,
   estadosHito,
 } from "../public/js/enumeraciones";
 
@@ -206,7 +205,7 @@ export const addHitosPage = async (req, res) => {
   try {
     const datos = {
       fraude,
-      origenTipo,
+      estadosHito,
     };
 
     res.render("admin/fraudes/hitos/add", { user, datos });
@@ -236,7 +235,7 @@ export const editHitosPage = async (req, res) => {
     const datos = {
       fraude,
       hito: result.data,
-      origenTipo,
+      estadosHito,
     };
 
     res.render("admin/fraudes/hitos/edit", { user, datos });
@@ -697,13 +696,58 @@ export const insertHito = async (req, res) => {
     usumov: user.id,
     tipmov: tiposMovimiento.crearHito,
   };
+  const generaLiq = req.body.genliq;
+  const generaSan = req.body.gensan;
 
   try {
-    await axios.post("http://localhost:8000/api/fraudes/hitos/insert", {
-      fraude,
-      hito,
-      movimiento,
-    });
+    if (generaLiq === '1') {
+      const tipo = {
+        idtipo: estadosHito.liquidacion,
+      }
+      const tipoHito = await axios.post('http://localhost:8000/api/tipos/hito', {
+        tipo,
+      });
+      const liquidacion = {      
+        tipliq: tipoHito.data.IDTIPO,
+        impliq: hito.imphit,
+        obsliq: '',
+        staliq: tipoHito.data.ANUHIT,
+      }
+
+      await axios.post("http://localhost:8000/api/fraudes/hitos/insertliq", {
+        fraude,
+        hito,
+        liquidacion,
+        movimiento,
+      });
+    } if (generaSan === '1') {
+      const tipo = {
+        idtipo: estadosHito.sancion,
+      }
+      const tipoHito = await axios.post('http://localhost:8000/api/tipos/hito', {
+        tipo,
+      });
+      const sancion = {      
+        tipsan: tipoHito.data.IDTIPO,
+        impsan: hito.imphit,
+        obssan: '',
+        stasan: tipoHito.data.ANUHIT,
+      }
+console.log(fraude,hito,sancion,movimiento)
+      await axios.post("http://localhost:8000/api/fraudes/hitos/insertsan", {
+        fraude,
+        hito,
+        sancion,
+        movimiento,
+      });
+    } else { 
+      console.log(fraude,hito,movimiento)
+      await axios.post("http://localhost:8000/api/fraudes/hitos/insert", {
+        fraude,
+        hito,
+        movimiento,
+      });
+    }
 
     res.redirect(`/admin/fraudes/hitoseventos/${fraude.idfrau}`);
   } catch (error) {

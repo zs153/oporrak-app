@@ -40,7 +40,7 @@
                     <div class="row">
                       <div class="col-8">
                         <div class="mb-1">
-                          <div class="form-label required">Tipo</div>
+                          <div class="form-label">Tipo</div>
                           <div class="input-control">
                             <select class="form-select form-control" id="cbotip" name="tiphit" value="">
                             </select>
@@ -64,6 +64,24 @@
                           <label class="form-label">Observaciones</label>
                           <textarea type="text" name="obshit" id="obshit" class="form-control" rows="3" style="resize: vertical"></textarea>
                         </div>
+                      </div>
+                    </div>
+                    <div id="liq" class="row">
+                      <div class="col-12">
+                        <div class="form-label">Generar liquidación</div>
+                        <label class="form-check form-switch">
+                          <input type="checkbox" id="genliq" name="genliq" class="form-check-input" value="0">
+                          <span class="form-check-label">Crear hito de liquidación</span>
+                        </label>  
+                      </div>
+                    </div>
+                    <div id="san" class="row">
+                      <div class="col-12">
+                        <div class="form-label">Generar sanción</div>
+                        <label class="form-check form-switch">
+                          <input type="checkbox" id="gensan" name="gensan" class="form-check-input" value="0">
+                          <span class="form-check-label">Crear hito de sanción</span>
+                        </label>  
                       </div>
                     </div>
                   </div>
@@ -103,21 +121,10 @@
   </script>
   <script>
     const imphit = document.getElementById('imphit')
-    const tiphit = document.getElementById('cbotip')
 
     const validate = () => {
       const imphitValue = imphit.value
-      const tiphitValue = tiphit.value
 
-      if (tiphitValue === '') {
-        setError(tiphit, 'Tipo requerido')
-        setTimeout(function () {
-          setSuccess(tiphit)
-        }, 3000)
-        return false
-      } else {
-        setSuccess(tiphit)
-      }
       if (imphitValue === '') {
         setError(imphit, 'Importe requerido')
         setTimeout(function () {
@@ -128,7 +135,6 @@
         setSuccess(imphit)
       }
 
-      document.getElementById('anuhit').value = tiphit.options[tiphit.selectedIndex].getAttribute('data-foo')
       return true
     }
 
@@ -186,6 +192,18 @@
             }
             cbo.appendChild(option)
           });
+
+          elemLiq.style.display = 'none'
+          elemSan.style.display = 'none'
+
+          if (parseInt(cbo.options[cbo.selectedIndex].getAttribute('data-foo')) === <%- datos.estadosHito.propuestaLiquidacion %>) {
+            elemLiq.style.display = ''
+            document.getElementById('anuhit').value = <%- datos.estadosHito.propuestaLiquidacion %>
+          } 
+          if (parseInt(cbo.options[cbo.selectedIndex].getAttribute('data-foo')) === <%- datos.estadosHito.propuestaSancion %>) {
+            elemSan.style.display = ''
+            document.getElementById('anuhit').value = <%- datos.estadosHito.propuestaSancion %>
+          }
         }
       };
       xhr.open('POST', 'http://localhost:8000/api/tipos/hitos', true);
@@ -195,9 +213,40 @@
   </script>
   <script>
     const input = document.querySelector('#imphit');
-    input.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
+    const elemLiq = document.querySelector('#liq');
+    const elemSan = document.querySelector('#san');
+    const combo = document.getElementById('cbotip')
+    const gLiq = document.querySelector('#genliq')
+    const gSan = document.querySelector('#gensan')
+
+    input.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
     });
-  </script> 
+    gLiq.addEventListener('change', (e) => {
+      e.target.value = e.target.checked ? 1:0
+    });
+    gSan.addEventListener('change', (e) => {
+      e.target.value = e.target.checked ? 1:0
+    });
+    combo.addEventListener('change', (e) => {
+      const data = e.target.options[e.target.selectedIndex].getAttribute('data-foo')
+      document.getElementById('anuhit').value = data
+
+      if (parseInt(data) === <%- datos.estadosHito.propuestaLiquidacion %>) {
+        elemLiq.style.display = ''
+      } else {
+        elemLiq.style.display = 'none'
+        gLiq.value = 0
+        gLiq.checked = false
+      }
+      if (parseInt(data) === <%- datos.estadosHito.propuestaSancion %>) {
+        elemSan.style.display = ''
+      } else {
+        elemSan.style.display = 'none'
+        gSan.value = 0
+        gSan.checked = false
+      }
+    })
+  </script>
 </body>
 </html>

@@ -143,18 +143,29 @@
                                         <i class="bi bi-pencil dropdown-item-icon"></i>Editar hito
                                       </a>
                                     </li>
-                                    <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('texdel').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrarHito">
-                                        <i class="bi bi-trash dropdown-item-icon"></i>Borrar hito
-                                      </a>
-                                    </li>
+                                    <% if (element.TIPHIT === datos.estadosHito.propuestaLiquidacion || element.TIPHIT === datos.estadosHito.propuestaSancion) { %>
+                                      <% if (!datos.hitos.find(q => q.TIPHIT === datos.estadosHito.liquidacion || q.TIPHIT === datos.estadosHito.sancion)) { %>
+                                        <li class="nav-item">
+                                          <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('texdel').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrarHito">
+                                            <i class="bi bi-trash dropdown-item-icon"></i>Borrar hito
+                                          </a>
+                                        </li>
+                                      <% } %>
+                                    <% } else { %>
+                                      <li class="nav-item">
+                                        <a href="#" class="nav-link" onclick="{document.getElementById('idhito').value ='<%- element.IDHITO %>', document.getElementById('texdel').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrarHito">
+                                          <i class="bi bi-trash dropdown-item-icon"></i>Borrar hito
+                                        </a>
+                                      </li>                                        
+                                    <% } %>
+
                                     <% if(element.STAHIT === datos.estadosHito.sancion) { %>
-                                    <li class="nav-item list-divider"></li>
-                                    <li class="nav-item">
-                                      <a href="#" class="nav-link" onclick="{document.getElementById('archito').value ='<%- element.IDHITO %>', document.getElementById('texarc').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-archivo">
-                                        <i class="bi bi-archive dropdown-item-icon"></i>Archivado de sanción
-                                      </a>
-                                    </li>
+                                      <li class="nav-item list-divider"></li>
+                                      <li class="nav-item">
+                                        <a href="#" class="nav-link" onclick="{document.getElementById('archito').value ='<%- element.IDHITO %>', document.getElementById('texarc').innerHTML ='<p><%- element.STRFEC %></p><p><%- element.DESTIP %></p>'}" data-bs-toggle="modal" data-bs-target="#modal-archivo">
+                                          <i class="bi bi-archive dropdown-item-icon"></i>Archivado de sanción
+                                        </a>
+                                      </li>
                                     <% } %>
                                   </ul>
                                 </li>
