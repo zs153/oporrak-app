@@ -11,26 +11,6 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item <%- opcion === 'FORMULARIOS' ? 'active':'' %>">
-                <a class="nav-link" href="/admin/formularios" >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-music-note"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Formularios
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item <%- opcion === 'CITAS' ? 'active':'' %>">
-                <a class="nav-link" href="/admin/citas" >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-alarm"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Citas
-                  </span>
-                </a>
-              </li>
               <li class="nav-item <%- opcion === 'FRAUDES' ? 'active':'' %>">
                 <a class="nav-link" href="/admin/fraudes" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -56,9 +36,6 @@
                           <i class="bi bi-chat-right-dots dropdown-item-icon"></i>Tipos
                         </a>                          
                         <div class="dropdown-menu">
-                          <a href="/admin/tipos/formularios" class="dropdown-item">
-                            <i class="bi bi-clipboard dropdown-item-icon"></i>Tipos de Formulario
-                          </a>
                           <a href="/admin/tipos/fraudes" class="dropdown-item">
                             <i class="bi bi-bug dropdown-item-icon"></i>Tipos de Fraude
                           </a>
@@ -85,12 +62,6 @@
                           <i class="bi bi-graph-up dropdown-item-icon"></i>Estadísticas
                         </a>                          
                         <div class="dropdown-menu">                          
-                          <!-- <a href="/admin/estadisticas/formularios" class="dropdown-item">
-                            <i class="bi bi-music-note dropdown-item-icon"></i>Formularios
-                          </a>
-                          <a href="/admin/estadisticas/citas" class="dropdown-item">
-                            <i class="bi bi-alarm dropdown-item-icon"></i>Citas
-                          </a> -->
                           <a href="/admin/estadisticas/fraudes" class="dropdown-item">
                             <i class="bi bi-bug dropdown-item-icon"></i>Fraude
                           </a>
