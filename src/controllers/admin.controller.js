@@ -17,7 +17,7 @@ export const perfilPage = async (req, res) => {
     userid: user.userID,
   }
   try {
-    const result = await axios.post('http://localhost:8000/api/usuario', {
+    const result = await axios.post('http://localhost:8100/api/usuario', {
       usuario,
     })
 
@@ -54,7 +54,7 @@ export const changePassword = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8000/api/usuarios/cambio',
+      'http://localhost:8100/api/usuarios/cambio',
       {
         usuario,
         movimiento,
@@ -82,7 +82,7 @@ export const updatePerfil = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8000/api/usuarios/perfil',
+      'http://localhost:8100/api/usuarios/perfil',
       {
         usuario,
         movimiento,

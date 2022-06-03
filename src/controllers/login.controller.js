@@ -27,7 +27,7 @@ export const verifyLogin = async (req, res) => {
   const password = req.body.pwdusu
 
   try {
-    const result = await axios.post("http://localhost:8000/api/usuario", {
+    const result = await axios.post("http://localhost:8100/api/usuario", {
       usuario,
     });
 
@@ -105,7 +105,7 @@ export const forgotPassword = async (req, res) => {
 
   try {
     const result = await axios.post(
-      "http://localhost:8000/api/usuarios/forgot",
+      "http://localhost:8100/api/usuarios/forgot",
       {
         usuario,
         movimiento,
@@ -146,7 +146,7 @@ export const crearRegistro = async (req, res) => {
 
   try {
     const result = await axios.post(
-      "http://localhost:8000/api/usuarios/registro",
+      "http://localhost:8100/api/usuarios/registro",
       {
         usuario,
         movimiento,

@@ -5,7 +5,7 @@ export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const result = await axios.post('http://localhost:8000/api/oficinas')
+    const result = await axios.post('http://localhost:8100/api/oficinas')
     const datos = {
       oficinas: JSON.stringify(result.data),
     }
@@ -36,7 +36,7 @@ export const editPage = async (req, res) => {
   const user = req.user
 
   try {
-    const result = await axios.post('http://localhost:8000/api/oficina', {
+    const result = await axios.post('http://localhost:8100/api/oficina', {
       idofic: req.params.id,
     })
     const datos = {
@@ -64,7 +64,7 @@ export const insert = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8000/api/oficinas/insert', {
+    await axios.post('http://localhost:8100/api/oficinas/insert', {
       oficina,
       movimiento,
     })
@@ -95,7 +95,7 @@ export const update = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8000/api/oficinas/update', {
+    await axios.post('http://localhost:8100/api/oficinas/update', {
       oficina,
       movimiento,
     })
@@ -125,7 +125,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8000/api/oficinas/delete', {
+    await axios.post('http://localhost:8100/api/oficinas/delete', {
       oficina,
       movimiento,
     })

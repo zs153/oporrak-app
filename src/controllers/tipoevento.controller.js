@@ -5,7 +5,7 @@ export const mainPage = async (req, res) => {
   const user = req.user;
 
   try {
-    const result = await axios.post("http://localhost:8000/api/tipos/eventos");
+    const result = await axios.post("http://localhost:8100/api/tipos/eventos");
     const datos = {
       tipos: JSON.stringify(result.data),
     };
@@ -39,7 +39,7 @@ export const editPage = async (req, res) => {
   };
 
   try {
-    const result = await axios.post("http://localhost:8000/api/tipos/evento", {
+    const result = await axios.post("http://localhost:8100/api/tipos/evento", {
       tipo,
     });
     const datos = {
@@ -67,7 +67,7 @@ export const insert = async (req, res) => {
   };
 
   try {
-    await axios.post("http://localhost:8000/api/tipos/eventos/insert", {
+    await axios.post("http://localhost:8100/api/tipos/eventos/insert", {
       tipo,
       movimiento,
     });
@@ -97,7 +97,7 @@ export const update = async (req, res) => {
   };
 
   try {
-    axios.post("http://localhost:8000/api/tipos/eventos/update", {
+    axios.post("http://localhost:8100/api/tipos/eventos/update", {
       tipo,
       movimiento,
     });
@@ -127,7 +127,7 @@ export const remove = async (req, res) => {
   };
 
   try {
-    await axios.post("http://localhost:8000/api/tipos/eventos/delete", {
+    await axios.post("http://localhost:8100/api/tipos/eventos/delete", {
       tipo,
       movimiento,
     });

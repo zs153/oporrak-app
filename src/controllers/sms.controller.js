@@ -13,7 +13,7 @@ export const mainPage = async (req, res) => {
   const verTodo = false
 
   try {
-    const result = await axios.post('http://localhost:8000/api/smss', {
+    const result = await axios.post('http://localhost:8100/api/smss', {
       sms,
     })
     const datos = {
@@ -55,7 +55,7 @@ export const editPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/sms', {
+    const result = await axios.post('http://localhost:8100/api/sms', {
       sms,
     })
     const datos = {
@@ -85,7 +85,7 @@ export const insertSms = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8000/api/smss/insert', {
+    await axios.post('http://localhost:8100/api/smss/insert', {
       sms,
       movimiento,
     })
@@ -116,7 +116,7 @@ export const updateSms = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/smss/update', {
+    const result = await axios.post('http://localhost:8100/api/smss/update', {
       sms,
       movimiento,
     })
@@ -146,7 +146,7 @@ export const deleteSms = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8000/api/smss/delete', {
+    const result = await axios.post('http://localhost:8100/api/smss/delete', {
       sms,
       movimiento,
     })
@@ -168,7 +168,7 @@ export const verTodo = async (req, res) => {
   const verTodo = true
 
   try {
-    const result = await axios.post('http://localhost:8000/api/smss', {
+    const result = await axios.post('http://localhost:8100/api/smss', {
       sms,
     })
 
