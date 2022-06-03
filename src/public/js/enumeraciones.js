@@ -101,8 +101,8 @@ export const estadosSms = {
 export const estadosHito = {
   sancionAnulada: -1,
   propuestaLiquidacion: 1,
-  propuestaSancion: 2,
-  liquidacion: 3,
+  liquidacion: 2,
+  propuestaSancion: 3,
   sancion: 4,
 }
 

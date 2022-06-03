@@ -114,7 +114,7 @@ export const resolverPage = async (req, res) => {
     if (hayLiquidacion) {
       if (!hitos.data.some((itm) => itm.STAHIT === estadosHito.propuestaLiquidacion)) {
         const msg =
-          "Existe liquidación/es sin su correspondiente propuesta de liquidación.\nNo se puede resolver el fraude.";
+          "Existe liquidación sin su correspondiente propuesta de liquidación.\nNo se puede resolver el fraude.";
 
         return res.render("admin/error400", {
           alerts: [{ msg }],
@@ -700,7 +700,7 @@ export const insertHito = async (req, res) => {
   const generaSan = req.body.gensan;
 
   try {
-    if (generaLiq === '1') {
+    if (parseInt(generaLiq) === 1) {
       const tipo = {
         idtipo: estadosHito.liquidacion,
       }
@@ -720,7 +720,7 @@ export const insertHito = async (req, res) => {
         liquidacion,
         movimiento,
       });
-    } if (generaSan === '1') {
+    } else if (parseInt(generaSan) === 1) {
       const tipo = {
         idtipo: estadosHito.sancion,
       }

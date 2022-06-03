@@ -135,6 +135,7 @@
         setSuccess(imphit)
       }
 
+      document.getElementById('anuhit').value = combo.options[combo.selectedIndex].getAttribute('data-foo')
       return true
     }
 
@@ -198,11 +199,9 @@
 
           if (parseInt(cbo.options[cbo.selectedIndex].getAttribute('data-foo')) === <%- datos.estadosHito.propuestaLiquidacion %>) {
             elemLiq.style.display = ''
-            document.getElementById('anuhit').value = <%- datos.estadosHito.propuestaLiquidacion %>
-          } 
+          }
           if (parseInt(cbo.options[cbo.selectedIndex].getAttribute('data-foo')) === <%- datos.estadosHito.propuestaSancion %>) {
             elemSan.style.display = ''
-            document.getElementById('anuhit').value = <%- datos.estadosHito.propuestaSancion %>
           }
         }
       };
@@ -215,9 +214,9 @@
     const input = document.querySelector('#imphit');
     const elemLiq = document.querySelector('#liq');
     const elemSan = document.querySelector('#san');
-    const combo = document.getElementById('cbotip')
-    const gLiq = document.querySelector('#genliq')
-    const gSan = document.querySelector('#gensan')
+    const combo = document.getElementById('cbotip');
+    const gLiq = document.querySelector('#genliq');
+    const gSan = document.querySelector('#gensan');
 
     input.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/[^0-9 \,.]/, '').replace(/[.]/g, ',')
