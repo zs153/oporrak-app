@@ -293,7 +293,7 @@ export const enviarNotificacion = async (req, res) => {
   const user = req.user
 
   try {
-    const socket = io('http://localhost:4000')
+    const socket = io('http://localhost:4100')
     socket.emit('send-message', req.body.texnot)
 
     res.redirect('/admin/usuarios')
