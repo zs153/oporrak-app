@@ -505,7 +505,7 @@ export const resol = async (req, res) => {
     usumov: user.id,
     tipmov: tiposMovimiento.resolverFraude,
   };
-  
+
   try {
     const result = await axios.post("http://localhost:8100/api/fraude", {
       fraude,
@@ -707,7 +707,7 @@ export const insertHito = async (req, res) => {
       const tipoHito = await axios.post('http://localhost:8100/api/tipos/hito', {
         tipo,
       });
-      const liquidacion = {      
+      const liquidacion = {
         tipliq: tipoHito.data.IDTIPO,
         impliq: hito.imphit,
         obsliq: '',
@@ -727,21 +727,21 @@ export const insertHito = async (req, res) => {
       const tipoHito = await axios.post('http://localhost:8100/api/tipos/hito', {
         tipo,
       });
-      const sancion = {      
+      const sancion = {
         tipsan: tipoHito.data.IDTIPO,
         impsan: hito.imphit,
         obssan: '',
         stasan: tipoHito.data.ANUHIT,
       }
-console.log(fraude,hito,sancion,movimiento)
+      console.log(fraude, hito, sancion, movimiento)
       await axios.post("http://localhost:8100/api/fraudes/hitos/insertsan", {
         fraude,
         hito,
         sancion,
         movimiento,
       });
-    } else { 
-      console.log(fraude,hito,movimiento)
+    } else {
+      console.log(fraude, hito, movimiento)
       await axios.post("http://localhost:8100/api/fraudes/hitos/insert", {
         fraude,
         hito,
@@ -962,7 +962,7 @@ export const ejercicio = async (req, res) => {
     usumov: user.id,
     tipmov: tiposMovimiento.nuevoEjercicioFraude,
   };
-console.log(fraude)
+  console.log(fraude)
   try {
     await axios.post("http://localhost:8100/api/fraudes/insert", {
       fraude,
