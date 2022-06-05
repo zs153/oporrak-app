@@ -323,7 +323,7 @@
   <script>
     function checkItem(elem) {
       <% if (datos.verTodo) { %>
-        window.location.href = 'http://localhost:4200/admin/fraudes'          
+        window.location.href = 'http://localhost:4200/admin/fraudes'
       <% } else { %>
         window.location.href = 'http://localhost:4200/admin/fraudes/vertodo'
       <% } %>
@@ -520,12 +520,8 @@
       for (let page = maxLeft; page <= maxRight; page++) {
           wrapper.innerHTML += `<button value=${page} class="page-item btn btn-primary">${page}</button>`
       } 
-      // if (state.page != 1) {
-        wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
-      // }
-      //if (state.page != pages) {
-        wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
-      //}
+      wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
+      wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
 
       const elem = document.getElementsByClassName('page-item')
       for (let i = 0; i < elem.length; i++) {

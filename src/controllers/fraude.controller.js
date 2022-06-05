@@ -19,7 +19,6 @@ export const mainPage = async (req, res) => {
     const result = await axios.post("http://localhost:8100/api/fraudes", {
       fraude,
     });
-
     const datos = {
       fraudes: JSON.stringify(result.data),
       estadosFraude,
@@ -164,24 +163,24 @@ export const resolverPage = async (req, res) => {
 // page hitosevento
 export const hitoseventosPage = async (req, res) => {
   const user = req.user;
-  let fraude = {
+  const fraude = {
     idfrau: req.params.id,
   };
 
   try {
-    const rslt = await axios.post("http://localhost:8100/api/fraude", {
+    const result = await axios.post("http://localhost:8100/api/fraude", {
       fraude,
     });
-    const htos = await axios.post("http://localhost:8100/api/fraudes/hitos", {
+    const hitos = await axios.post("http://localhost:8100/api/fraudes/hitos", {
       fraude,
     });
-    const evts = await axios.post("http://localhost:8100/api/fraudes/events", {
+    const eventos = await axios.post("http://localhost:8100/api/fraudes/events", {
       fraude,
     });
     const datos = {
-      fraude: rslt.data,
-      hitos: htos.data,
-      eventos: evts.data,
+      fraude: result.data,
+      hitos: hitos.data,
+      eventos: eventos.data,
       estadosHito,
     };
 
@@ -733,7 +732,6 @@ export const insertHito = async (req, res) => {
         obssan: '',
         stasan: tipoHito.data.ANUHIT,
       }
-      console.log(fraude, hito, sancion, movimiento)
       await axios.post("http://localhost:8100/api/fraudes/hitos/insertsan", {
         fraude,
         hito,
@@ -741,7 +739,6 @@ export const insertHito = async (req, res) => {
         movimiento,
       });
     } else {
-      console.log(fraude, hito, movimiento)
       await axios.post("http://localhost:8100/api/fraudes/hitos/insert", {
         fraude,
         hito,

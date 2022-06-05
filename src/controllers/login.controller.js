@@ -22,7 +22,7 @@ export const okPage = async (req, res) => {
 };
 export const verifyLogin = async (req, res) => {
   let usuario = {
-    userid: req.body.userid,
+    userid: req.body.userid.toLowerCase(),
   }
   const password = req.body.pwdusu
 

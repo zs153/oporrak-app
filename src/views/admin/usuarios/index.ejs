@@ -243,10 +243,15 @@
         'querySet': orgList,
         'page': 1,
         'rows': 9,
-        'window': 5,
+        'window': 3 ,
       }
 
-      buildTable()
+      elemBuscar.value = getCookie('filtro')
+      if (elemBuscar.value !== '') {
+        arrayFilter()
+      } else {
+        buildTable()
+      }
       
       function pagination(querySet, page, rows) {
         const trimStart = (page - 1) * rows
@@ -282,12 +287,8 @@
         for (var page = maxLeft; page <= maxRight; page++) {
             wrapper.innerHTML += `<button value=${page} class="page-item btn btn-primary">${page}</button>`
         } 
-        if (state.page != 1) {
-          wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
-        }          
-        if (state.page != pages) {
-          wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
-        }
+        wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
+        wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
 
         const elem = document.getElementsByClassName('page-item')
         for (let i = 0; i < elem.length; i++) {
@@ -309,11 +310,19 @@
           const row = document.createElement('tr')
           let cell = document.createElement('td')
           cell.classList.add("w-5")
-          cell.innerHTML = `<div class="align-items-center py-1">
-            <span class="avatar avatar-rounded bg-green-lt">
-              <h6>${element.USERID}</h6>
-            </span>
-          </div>`
+          if (element.STAUSU === <%- datos.estadosUsuario.activo %>) {
+            cell.innerHTML = `<div class="align-items-center py-1">
+              <span class="avatar avatar-rounded bg-green-lt">
+                <h6>${element.USERID.slice(0,5)}</h6>
+              </span>
+            </div>`
+          } else {
+            cell.innerHTML = `<div class="align-items-center py-1">
+              <span class="avatar avatar-rounded bg-red-lt">
+                <h6>${element.USERID.slice(0,5)}</h6>
+              </span>
+            </div>`
+          }
           row.appendChild(cell)
 
           // col2

@@ -6,6 +6,7 @@ import {
   arrTiposRol,
   arrTiposPerfil,
   arrEstadosUsuario,
+  estadosUsuario,
   tiposMovimiento,
 } from '../public/js/enumeraciones'
 
@@ -14,9 +15,9 @@ export const mainPage = async (req, res) => {
 
   try {
     const result = await axios.post('http://localhost:8100/api/usuarios')
-
     const datos = {
       usuarios: JSON.stringify(result.data),
+      estadosUsuario,
     }
 
     res.render('admin/usuarios', { user, datos })
@@ -92,7 +93,7 @@ export const perfilPage = async (req, res) => {
       EMAUSU: result.data.EMAUSU,
       TELUSU: result.data.TELUSU,
     }
-    
+
     const datos = {
       usuario,
     }
