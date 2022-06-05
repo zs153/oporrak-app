@@ -105,10 +105,13 @@ export const estadosHito = {
   propuestaSancion: 3,
   sancion: 4,
 }
-
 export const tiposLiquidacion = {
   ingresar: 1,
   devolver: 2,
+}
+export const estadosCarga = {
+  pendiente: 0,
+  procesado: 1,
 }
 
 /* arrays */
