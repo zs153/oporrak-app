@@ -14,6 +14,7 @@ import tipoEventoRouter from "./routes/tipoevento.router";
 import tipoFraudeRouter from "./routes/tipofraude.router";
 import tipoHitoRouter from "./routes/tipohito.router";
 import subtipoRouter from "./routes/subtipo.router";
+import cargaRouter from "./routes/carga.router";
 import estadisticaRouter from "./routes/estadisticas.router";
 
 const app = express();
@@ -39,6 +40,7 @@ app.use("/admin", tipoEventoRouter);
 app.use("/admin", tipoFraudeRouter);
 app.use("/admin", tipoHitoRouter);
 app.use("/admin", subtipoRouter);
+app.use("/admin", cargaRouter);
 app.use("/admin", estadisticaRouter);
 app.use("/log", loginRouter);
 

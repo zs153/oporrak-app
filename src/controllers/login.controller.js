@@ -90,12 +90,11 @@ export const verifyLogout = async (req, res) => {
   res.render("log/logout");
 };
 export const forgotPassword = async (req, res) => {
-  const { emausu } = req.body;
   const randomString = Math.random().toString(36).substring(2, 10);
   const salt = await bcrypt.genSalt(10);
   const passHash = await bcrypt.hash(randomString, salt);
   const usuario = {
-    emausu: emausu,
+    emausu: req.body.emausu,
     pwdusu: passHash,
   };
   const movimiento = {
