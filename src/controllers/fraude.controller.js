@@ -11,6 +11,7 @@ import {
 export const mainPage = async (req, res) => {
   const user = req.user;
   const fraude = {
+    liqfra: user.userID,
     stafra: estadosFraude.pendiente + estadosFraude.asignado,
   };
   const verTodo = false
