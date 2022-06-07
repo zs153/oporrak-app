@@ -622,8 +622,8 @@ export const unasign = async (req, res) => {
 export const verTodo = async (req, res) => {
   const user = req.user;
   const fraude = {
-    stafra:
-      estadosFraude.pendiente + estadosFraude.resuelto + estadosFraude.remitido,
+    liqfra: user.userID,
+    stafra: estadosFraude.pendiente + estadosFraude.resuelto,
   };
   const verTodo = true;
 
@@ -631,7 +631,6 @@ export const verTodo = async (req, res) => {
     const result = await axios.post("http://localhost:8100/api/fraudes", {
       fraude,
     });
-
     const datos = {
       fraudes: JSON.stringify(result.data),
       estadosFraude,
