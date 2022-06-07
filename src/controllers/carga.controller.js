@@ -60,9 +60,9 @@ export const editPage = async (req, res) => {
 export const insert = async (req, res) => {
   const user = req.user;
   const carga = {
-    descar: req.body.destip.toUpperCase(),
+    descar: req.body.descar.toUpperCase(),
     ficcar: req.body.ficcar,
-    stacar: estadosCarga.pendiente,
+    stacar: estadosCarga.procesado,
   };
   const movimiento = {
     usumov: user.id,
