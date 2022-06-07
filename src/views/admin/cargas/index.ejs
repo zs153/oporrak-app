@@ -61,9 +61,10 @@
                       <thead>
                       <tr class="header">
                         <th class="w-5"></th>
-                        <th>Nombre</th>
                         <th>Fecha</th>
-                        <th class="w-5"></th>
+                        <th>Nombre</th>
+                        <th>Fichero</th>
+                        <!-- <th class="w-5"></th> -->
                       </tr>
                       </thead>
                       <tbody id="table-body">
@@ -295,7 +296,7 @@
           cell = document.createElement('td')
           cell.innerHTML = `<div class="d-flex py-1 align-items-center">
             <div class="flex-fill">
-              <div class="font-weight-medium">${element.FECCAR}</div>
+              <div class="font-weight-medium">${element.STRFEC}</div>
             </div>
           </div>`
           row.appendChild(cell)
@@ -311,27 +312,36 @@
 
           // col4
           cell = document.createElement('td')
-          cell.classList.add("w-5")
-          cell.innerHTML = `<ul class="dots-menu">
-            <li class="nav-item drop-right">
-              <a href="#" class="nav-link">
-                <i class="bi bi-three-dots-vertical"></i>
-              </a>
-              <ul>
-                <li class="nav-item">
-                  <a href="/admin/usuarios/edit/${element.IDCARG}" class="nav-link">
-                    <i class="bi bi-pencil dropdown-item-icon"></i>Editar carga
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link" onclick="{document.getElementById('idcarg').value ='${element.IDCARG}', document.getElementById('delcar').innerHTML ='<p>${element.FECAR}</p><p>${element.DESCAR}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
-                    <i class="bi bi-trash dropdown-item-icon"></i>Borrar carga
-                  </a>
-                </li>
-              </ul>
-            </li>                              
-          </ul>`
+          cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.FICCAR}</div>
+            </div>
+          </div>`
           row.appendChild(cell)
+
+          // col5
+          // cell = document.createElement('td')
+          // cell.classList.add("w-5")
+          // cell.innerHTML = `<ul class="dots-menu">
+          //   <li class="nav-item drop-right">
+          //     <a href="#" class="nav-link">
+          //       <i class="bi bi-three-dots-vertical"></i>
+          //     </a>
+          //     <ul>
+          //       <li class="nav-item">
+          //         <a href="/admin/usuarios/edit/${element.IDCARG}" class="nav-link">
+          //           <i class="bi bi-pencil dropdown-item-icon"></i>Editar carga
+          //         </a>
+          //       </li>
+          //       <li class="nav-item">
+          //         <a href="#" class="nav-link" onclick="{document.getElementById('idcarg').value ='${element.IDCARG}', document.getElementById('delcar').innerHTML ='<p>${element.FECAR}</p><p>${element.DESCAR}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+          //           <i class="bi bi-trash dropdown-item-icon"></i>Borrar carga
+          //         </a>
+          //       </li>
+          //     </ul>
+          //   </li>                              
+          // </ul>`
+          // row.appendChild(cell)
 
           table.appendChild(row)
         })
