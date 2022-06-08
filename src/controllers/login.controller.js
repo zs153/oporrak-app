@@ -36,12 +36,9 @@ export const verifyLogin = async (req, res) => {
         const accessToken = jwt.sign(
           {
             id: result.data.IDUSUA,
-            // nombre: result.data.NOMUSU,
             userID: result.data.USERID,
-            // email: result.data.EMAUSU,
             rol: result.data.ROLUSU,
             oficina: result.data.OFIUSU,
-            // telefono: result.data.TELUSU,
           },
           `${process.env.ACCESS_TOKEN_SECRET}`,
           { expiresIn: "8h" }

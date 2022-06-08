@@ -99,9 +99,15 @@
                         <div class="mb-1">
                           <div class="form-label">Rol</div>
                           <select class="form-select" id="cborol" name="rolusu" value="<%- datos.usuario.ROLUSU %>">
-                            <% datos.arrTiposRol.map(element => { %> 
-                              <option value="<%= element.id %>" <%- element.id == datos.usuario.ROLUSU ? " selected":"" %>> <%= element.des %></option>
-                            <% }) %> 
+                            <% datos.arrTiposRol.map(element => { %>
+                              <% if (user.rol === datos.tiposRol.admin) { %>
+                                <option value="<%- element.id %>"><%= element.des %></option>
+                              <% } else { %>
+                                <% if (element.id === datos.tiposRol.usuario) { %> 
+                                  <option value="<%- element.id %>"><%- element.des %></option>
+                                <% } %> 
+                              <% } %>
+                            <% }) %>
                           </select>
                         </div>
                       </div>
@@ -228,11 +234,14 @@
         if (xhr.status === 200) {
           const oficinas = JSON.parse(xhr.response)
           const cbo = document.getElementById('cboofi')
+          const rolUser = <%- JSON.stringify(user.rol) %>
+          const oficinaUser = <%- JSON.stringify(user.oficina) %>
 
           oficinas.map((itm) => {
             const option = document.createElement('option')
             option.value = itm.IDOFIC
             option.text = itm.DESOFI
+
             if (itm.IDOFIC === <%- datos.usuario.OFIUSU %>) {
               option.selected = true
             }

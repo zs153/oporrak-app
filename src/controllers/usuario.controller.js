@@ -72,6 +72,7 @@ export const editPage = async (req, res) => {
       arrTiposRol,
       arrTiposPerfil,
       arrEstadosUsuario,
+      tiposRol,
     }
 
     res.render('admin/usuarios/edit', { user, datos })

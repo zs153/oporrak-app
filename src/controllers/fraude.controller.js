@@ -42,7 +42,7 @@ export const addPage = async (req, res) => {
 
   try {
     const fraude = {
-      FECFRA: fecha.toISOString().slice(0, 10),
+      STRFEC: fecha.toISOString().slice(0, 10),
       EJEFRA: fecha.getFullYear() - 1,
       OFIFRA: user.oficina,
       FUNFRA: user.userID,
@@ -959,7 +959,7 @@ export const ejercicio = async (req, res) => {
     usumov: user.id,
     tipmov: tiposMovimiento.nuevoEjercicioFraude,
   };
-  console.log(fraude)
+
   try {
     await axios.post("http://localhost:8100/api/fraudes/insert", {
       fraude,

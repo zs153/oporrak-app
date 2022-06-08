@@ -97,10 +97,15 @@
                         <div class="mb-1">
                           <div class="form-label">Rol</div>
                           <select class="form-select" id="cborol" name="rolusu" value="">
-                            <!-- TODO -->
-                            <% datos.arrTiposRol.map(element => { %> 
-                              <option value="<%= element.id %>" <% datos.usuario.ROLUSU === datos.tiposRol.admin ? 'disabled':'' %>><%= element.des %></option>
-                            <% }) %> 
+                            <% datos.arrTiposRol.map(element => { %>
+                              <% if (user.rol === datos.tiposRol.admin) { %>
+                                <option value="<%- element.id %>"><%= element.des %></option>
+                              <% } else { %>
+                                <% if (element.id === datos.tiposRol.usuario) { %> 
+                                  <option value="<%- element.id %>"><%- element.des %></option>
+                                <% } %> 
+                              <% } %>
+                            <% }) %>
                           </select>
                         </div>
                       </div>
@@ -227,11 +232,17 @@
         if (xhr.status === 200) {
           const oficinas = JSON.parse(xhr.response)
           const cbo = document.getElementById('cboofi')
+          const rolUser = <%- JSON.stringify(user.rol) %>
+          const oficinaUser = <%- JSON.stringify(user.oficina) %>
 
           oficinas.map((itm) => {
             const option = document.createElement('option')
             option.value = itm.IDOFIC
             option.text = itm.DESOFI
+
+            if (rolUser !== <%- datos.tiposRol.admin %> && itm.IDOFIC !== oficinaUser) {
+              option.setAttribute('disabled', 'disabled')
+            }
             cbo.appendChild(option)
           })
         }
@@ -241,6 +252,6 @@
       xhr.send()
     }
     Oficinas();
-  </script>   
+  </script>
 </body>
 </html>
