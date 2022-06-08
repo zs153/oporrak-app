@@ -97,8 +97,9 @@
                         <div class="mb-1">
                           <div class="form-label">Rol</div>
                           <select class="form-select" id="cborol" name="rolusu" value="">
+                            <!-- TODO -->
                             <% datos.arrTiposRol.map(element => { %> 
-                              <option value="<%= element.id %>"><%= element.des %></option>
+                              <option value="<%= element.id %>" <% datos.usuario.ROLUSU === datos.tiposRol.admin ? 'disabled':'' %>><%= element.des %></option>
                             <% }) %> 
                           </select>
                         </div>

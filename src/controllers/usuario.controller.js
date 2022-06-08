@@ -18,7 +18,7 @@ export const mainPage = async (req, res) => {
   if (user.rol === tiposRol.responsable) {
     usuario.ofiusu = user.oficina
   }
-  
+
   try {
     const result = await axios.post('http://localhost:8100/api/usuarios', {
       usuario
@@ -45,6 +45,7 @@ export const addPage = async (req, res) => {
       arrTiposRol,
       arrTiposPerfil,
       arrEstadosUsuario,
+      tiposRol,
     }
 
     res.render('admin/usuarios/add', { user, datos })
