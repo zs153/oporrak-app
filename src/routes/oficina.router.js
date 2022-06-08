@@ -1,5 +1,5 @@
 import express from 'express'
-import authRoutes from "../middleware/auth";
+import {verifyTokenAndAdmin} from "../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -12,13 +12,13 @@ import {
 const oficinaRouter = express.Router()
 
 // paginas
-oficinaRouter.get('/oficinas', authRoutes, mainPage)
-oficinaRouter.get('/oficinas/add', authRoutes, addPage)
-oficinaRouter.get('/oficinas/edit/:id', authRoutes, editPage)
+oficinaRouter.get('/oficinas', verifyTokenAndAdmin, mainPage)
+oficinaRouter.get('/oficinas/add', verifyTokenAndAdmin, addPage)
+oficinaRouter.get('/oficinas/edit/:id', verifyTokenAndAdmin, editPage)
 
 // procedures
-oficinaRouter.post('/oficinas/insert', authRoutes, insert)
-oficinaRouter.post('/oficinas/update', authRoutes, update)
-oficinaRouter.post('/oficinas/delete', authRoutes, remove)
+oficinaRouter.post('/oficinas/insert', verifyTokenAndAdmin, insert)
+oficinaRouter.post('/oficinas/update', verifyTokenAndAdmin, update)
+oficinaRouter.post('/oficinas/delete', verifyTokenAndAdmin, remove)
 
 export default oficinaRouter

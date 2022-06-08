@@ -1,5 +1,5 @@
 import express from 'express'
-import authRoutes from '../middleware/auth'
+import {verifyTokenAndAdmin} from "../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -13,14 +13,14 @@ import {
 const smsRouter = express.Router()
 
 // paginas
-smsRouter.get('/smss', authRoutes, mainPage)
-smsRouter.get('/smss/add', authRoutes, addPage)
-smsRouter.get('/smss/edit/:id', authRoutes, editPage)
+smsRouter.get('/smss', verifyTokenAndAdmin, mainPage)
+smsRouter.get('/smss/add', verifyTokenAndAdmin, addPage)
+smsRouter.get('/smss/edit/:id', verifyTokenAndAdmin, editPage)
 
 // procedures
-smsRouter.post('/smss/insert', authRoutes, insertSms)
-smsRouter.post('/smss/update', authRoutes, updateSms)
-smsRouter.post('/smss/delete', authRoutes, deleteSms)
-smsRouter.get('/smss/vertodo', authRoutes, verTodo)
+smsRouter.post('/smss/insert', verifyTokenAndAdmin, insertSms)
+smsRouter.post('/smss/update', verifyTokenAndAdmin, updateSms)
+smsRouter.post('/smss/delete', verifyTokenAndAdmin, deleteSms)
+smsRouter.get('/smss/vertodo', verifyTokenAndAdmin, verTodo)
 
 export default smsRouter

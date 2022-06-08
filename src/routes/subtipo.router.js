@@ -1,5 +1,5 @@
 import express from 'express'
-import authRoutes from '../middleware/auth'
+import {verifyTokenAndAdmin} from "../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -12,13 +12,13 @@ import {
 const subtipoRouter = express.Router()
 
 // paginas
-subtipoRouter.get('/subtipos', authRoutes, mainPage)
-subtipoRouter.get('/subtipos/add', authRoutes, addPage)
-subtipoRouter.get('/subtipos/edit/:id', authRoutes, editPage)
+subtipoRouter.get('/subtipos', verifyTokenAndAdmin, mainPage)
+subtipoRouter.get('/subtipos/add', verifyTokenAndAdmin, addPage)
+subtipoRouter.get('/subtipos/edit/:id', verifyTokenAndAdmin, editPage)
 
 // procedures
-subtipoRouter.post('/subtipos/insert', authRoutes, insert)
-subtipoRouter.post('/subtipos/update', authRoutes, update)
-subtipoRouter.post('/subtipos/delete', authRoutes, remove)
+subtipoRouter.post('/subtipos/insert', verifyTokenAndAdmin, insert)
+subtipoRouter.post('/subtipos/update', verifyTokenAndAdmin, update)
+subtipoRouter.post('/subtipos/delete', verifyTokenAndAdmin, remove)
 
 export default subtipoRouter

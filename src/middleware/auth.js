@@ -28,5 +28,14 @@ const authRoutes = (req, res, next) => {
     res.render('log/sign-in', { datos: req.body, alerts: undefined })
   }
 }
+export const verifyTokenAndAdmin = (req, res, next) => {
+  authRoutes(req, res, () => {
+    if (req.user.rol === tiposRol.admin) {
+      next()
+    } else {
+      res.status(410).json('No tienes autorización')
+    }
+  })
+}
 
 export default authRoutes

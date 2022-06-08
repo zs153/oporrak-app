@@ -1,5 +1,5 @@
 import express from 'express'
-import authRoutes from "../middleware/auth";
+import {verifyTokenAndAdmin} from "../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -12,13 +12,13 @@ import {
 const cargaRouter = express.Router()
 
 // paginas
-cargaRouter.get('/cargas', authRoutes, mainPage)
-cargaRouter.get('/cargas/add', authRoutes, addPage)
-cargaRouter.get('/cargas/edit/:id', authRoutes, editPage)
+cargaRouter.get('/cargas', verifyTokenAndAdmin, mainPage)
+cargaRouter.get('/cargas/add', verifyTokenAndAdmin, addPage)
+cargaRouter.get('/cargas/edit/:id', verifyTokenAndAdmin, editPage)
 
 // procedures
-cargaRouter.post('/cargas/insert', authRoutes, insert)
-cargaRouter.post('/cargas/update', authRoutes, update)
-cargaRouter.post('/cargas/delete', authRoutes, remove)
+cargaRouter.post('/cargas/insert', verifyTokenAndAdmin, insert)
+cargaRouter.post('/cargas/update', verifyTokenAndAdmin, update)
+cargaRouter.post('/cargas/delete', verifyTokenAndAdmin, remove)
 
 export default cargaRouter

@@ -1,5 +1,5 @@
 import express from 'express'
-import authRoutes from '../middleware/auth'
+import {verifyTokenAndAdmin} from "../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -12,13 +12,13 @@ import {
 const tipoFraudeRouter = express.Router()
 
 // paginas
-tipoFraudeRouter.get('/tipos/fraudes', authRoutes, mainPage)
-tipoFraudeRouter.get('/tipos/fraudes/add', authRoutes, addPage)
-tipoFraudeRouter.get('/tipos/fraudes/edit/:id', authRoutes, editPage)
+tipoFraudeRouter.get('/tipos/fraudes', verifyTokenAndAdmin, mainPage)
+tipoFraudeRouter.get('/tipos/fraudes/add', verifyTokenAndAdmin, addPage)
+tipoFraudeRouter.get('/tipos/fraudes/edit/:id', verifyTokenAndAdmin, editPage)
 
 // procedures
-tipoFraudeRouter.post('/tipos/fraudes/insert', authRoutes, insert)
-tipoFraudeRouter.post('/tipos/fraudes/update', authRoutes, update)
-tipoFraudeRouter.post('/tipos/fraudes/delete', authRoutes, remove)
+tipoFraudeRouter.post('/tipos/fraudes/insert', verifyTokenAndAdmin, insert)
+tipoFraudeRouter.post('/tipos/fraudes/update', verifyTokenAndAdmin, update)
+tipoFraudeRouter.post('/tipos/fraudes/delete', verifyTokenAndAdmin, remove)
 
 export default tipoFraudeRouter

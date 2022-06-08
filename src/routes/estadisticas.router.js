@@ -1,12 +1,12 @@
 import express from "express";
-import authRoutes from "../middleware/auth";
+import {verifyTokenAndAdmin} from "../middleware/auth";
 import { estadisticaFraude, fraudePage } from "../controllers/estadistica.controller";
 
 const estadisticaRouter = express.Router();
 
 // paginas
-estadisticaRouter.get("/estadisticas/fraudes", authRoutes, fraudePage);
+estadisticaRouter.get("/estadisticas/fraudes", verifyTokenAndAdmin, fraudePage);
 // proc
-estadisticaRouter.post("/estadisticas/fraudes", authRoutes, estadisticaFraude);
+estadisticaRouter.post("/estadisticas/fraudes", verifyTokenAndAdmin, estadisticaFraude);
 
 export default estadisticaRouter;
