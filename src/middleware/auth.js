@@ -37,5 +37,14 @@ export const verifyTokenAndAdmin = (req, res, next) => {
     }
   })
 }
+export const verifyTokenAndResp = (req, res, next) => {
+  authRoutes(req, res, () => {
+    if (req.user.rol === tiposRol.responsable || req.user.rol === tiposRol.admin) {
+      next()
+    } else {
+      res.status(410).json('No tienes autorización')
+    }
+  })
+}
 
 export default authRoutes

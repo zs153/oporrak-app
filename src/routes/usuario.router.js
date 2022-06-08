@@ -1,5 +1,5 @@
 import express from 'express'
-import {verifyTokenAndAdmin} from "../middleware/auth";
+import {verifyTokenAndResp} from "../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -16,17 +16,17 @@ import {
 const usuarioRouter = express.Router()
 
 // pages
-usuarioRouter.get('/usuarios', verifyTokenAndAdmin, mainPage)
-usuarioRouter.get('/usuarios/add', verifyTokenAndAdmin, addPage)
-usuarioRouter.get('/usuarios/edit/:id', verifyTokenAndAdmin, editPage)
-usuarioRouter.get('/usuarios/perfil/:id', verifyTokenAndAdmin, perfilPage)
+usuarioRouter.get('/usuarios', verifyTokenAndResp, mainPage)
+usuarioRouter.get('/usuarios/add', verifyTokenAndResp, addPage)
+usuarioRouter.get('/usuarios/edit/:id', verifyTokenAndResp, editPage)
+usuarioRouter.get('/usuarios/perfil/:id', verifyTokenAndResp, perfilPage)
 
 // procedures
-usuarioRouter.post('/usuarios/insert', verifyTokenAndAdmin, insert)
-usuarioRouter.post('/usuarios/update', verifyTokenAndAdmin, update)
-usuarioRouter.post('/usuarios/delete', verifyTokenAndAdmin, remove)
-usuarioRouter.post('/usuarios/notificacion', verifyTokenAndAdmin, enviarNotificacion)
-usuarioRouter.post('/usuarios/change', verifyTokenAndAdmin, changePassword)
-usuarioRouter.post('/usuarios/perfil', verifyTokenAndAdmin, updatePerfil)
+usuarioRouter.post('/usuarios/insert', verifyTokenAndResp, insert)
+usuarioRouter.post('/usuarios/update', verifyTokenAndResp, update)
+usuarioRouter.post('/usuarios/delete', verifyTokenAndResp, remove)
+usuarioRouter.post('/usuarios/notificacion', verifyTokenAndResp, enviarNotificacion)
+usuarioRouter.post('/usuarios/change', verifyTokenAndResp, changePassword)
+usuarioRouter.post('/usuarios/perfil', verifyTokenAndResp, updatePerfil)
 
 export default usuarioRouter

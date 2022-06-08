@@ -8,13 +8,21 @@ import {
   arrEstadosUsuario,
   estadosUsuario,
   tiposMovimiento,
+  tiposRol,
 } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const usuario = {}
 
+  if (user.rol === tiposRol.responsable) {
+    usuario.ofiusu = user.oficina
+  }
+  
   try {
-    const result = await axios.post('http://localhost:8100/api/usuarios')
+    const result = await axios.post('http://localhost:8100/api/usuarios', {
+      usuario
+    })
     const datos = {
       usuarios: JSON.stringify(result.data),
       estadosUsuario,
