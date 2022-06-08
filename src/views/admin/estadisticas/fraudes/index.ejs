@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="/css/estilos.min.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <!-- apexcharts -->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3/dist/apexcharts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.6/easypiechart.min.js"></script>
     <style>
       .subheader {
         font-size: .625rem;
@@ -358,7 +359,6 @@
 
   <script src="/js/ayuda.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/easypiechart.min.js"></script>
   <script>
     const messages = document.getElementById('messages')
     const socket = io()
@@ -480,7 +480,7 @@
     const element1 = document.querySelector('#chart-liquid');
     const element2 = document.querySelector('#chart-sancio');
 
-    new EasyPieChart(element, {
+    const chartCorrecto = new EasyPieChart(element, {
         easing: 'easeOutElastic',
         delay: 3000,
         barColor: '#4263eb',
@@ -493,7 +493,7 @@
           this.el.children[0].innerHTML = Math.round(percent);
         }
     });    
-    new EasyPieChart(element1, {
+    const chartLiquid = new EasyPieChart(element1, {
         easing: 'easeOutElastic',
         delay: 3000,
         barColor: '#74b816',
@@ -506,7 +506,7 @@
           this.el.children[0].innerHTML = Math.round(percent);
         }
     });
-    new EasyPieChart(element2, {
+    const chartSancion = new EasyPieChart(element2, {
         easing: 'easeOutElastic',
         delay: 3000,
         barColor: '#f76707',
@@ -519,6 +519,10 @@
           this.el.children[0].innerHTML = Math.round(percent);
         }
     });
+
+    // chartCorrecto.update(<%- datos.ratios.correctas %>)
+    // chartLiquid.update(<%- datos.ratios.liquidacion %>)
+    // chartSancion.update(<%- datos.ratios.sancion %>)
   </script>
   <script>
     const desde = document.getElementById('desde')
