@@ -311,7 +311,9 @@ export const enviarNotificacion = async (req, res) => {
 
   try {
     const socket = io('http://localhost:4200')
-    socket.emit('send-message', req.body.texnot)
+
+    //socket.emit('send-message', req.body.texnot)
+    socket.emit('client:newnote', req.body.texnot)
 
     res.redirect('/admin/usuarios')
   } catch (error) {

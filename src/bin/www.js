@@ -7,6 +7,9 @@ import http from "http";
 import app from "../app";
 import { Server } from "socket.io";
 
+const onlineClients = new Set();
+let notes = [];
+
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -73,11 +76,23 @@ const io = new Server(server);
 
 io.on("connection", (socket) => {
   console.log("user connected", socket.id);
+  onlineClients.add(socket.id);
+
+  socket.emit('server:loadnotes', notes)
+
+  socket.on("client:newnote", (message) => {
+    notes.push(message)
+    io.emit("server:newnote", message)
+  })
   socket.on("send-message", (message) => {
-    socket.broadcast.emit("receive-message", message);
-    //socket.emit('receive-message', message)
+    //socket.broadcast.emit("receive-message", message);
+    //socket.emit('receive-message', message)    
+    onlineClients.forEach((value) => {
+      socket.emit('send-message', {message: 'Hola mundo', id: value})
+    })
   });
   socket.on("disconnect", () => {
+    onlineClients.delete(socket.id);
     console.log("Desconectado");
   });
 });
