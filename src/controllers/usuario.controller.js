@@ -9,6 +9,7 @@ import {
   estadosUsuario,
   tiposMovimiento,
   tiposRol,
+  tiposPerfil,
 } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -39,9 +40,14 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-
+  const usuario = {
+    STAUSU: estadosUsuario.activo,
+    ROLUSU: tiposRol.usuario,
+    PERUSU: tiposPerfil.general, 
+  }
   try {
     const datos = {
+      usuario,
       arrTiposRol,
       arrTiposPerfil,
       arrEstadosUsuario,

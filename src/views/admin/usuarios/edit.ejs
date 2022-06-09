@@ -98,10 +98,15 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="form-label">Rol</div>
-                          <select class="form-select" id="cborol" name="rolusu" value="<%- datos.usuario.ROLUSU %>" <%- user.rol !== datos.tiposRol.admin ? " disabled": "" %>>
-                            <% datos.arrTiposRol.map(element => { %>
-                              <option value="<%- element.id %>" <%- element.id === datos.usuario.ROLUSU ? " selected":"" %>><%= element.des %></option>
-                            <% }) %>
+                          <select class="form-select" id="cborol" name="rolusu" value="<%- datos.usuario.ROLUSU %>">
+                            <% if(user.rol === datos.tiposRol.admin) { %>
+                              <% datos.arrTiposRol.map(element => { %>
+                                <option value="<%- element.id %>" <%- element.id === datos.usuario.ROLUSU ? " selected":"" %>><%= element.des %></option>
+                              <% }) %>                              
+                            <% } else { %>
+                              <option value="<%- datos.arrTiposRol[datos.usuario.ROLUSU].id %>"><%- datos.arrTiposRol[datos.usuario.ROLUSU].des %></option>
+                            <% } %>
+
                           </select>
                         </div>
                       </div>

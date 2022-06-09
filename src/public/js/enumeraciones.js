@@ -119,6 +119,7 @@ export const estadosCarga = {
 
 /* arrays */
 export const arrTiposRol = [
+  { id: 0, des: 'INDEFINIDO' },
   { id: 1, des: 'USUARIO' },
   { id: 2, des: 'RESPONSABLE' },
   { id: 3, des: 'ADMINISTRADOR' },
@@ -151,12 +152,4 @@ export const arrEstadosFraude = [
 export const arrTiposLiquidacion = [
   { id: 1, des: 'INFRESAR' },
   { id: 2, des: 'DEVOLVER' },
-]
-export const arrEstadosHito = [
-  { id: -1, des: 'LIQUIDACION ANULADA' },
-  { id: -3, des: 'SANCION ANULADA' },
-  { id: 0, des: 'PROPUESTA LIQUIDACION' },
-  { id: 1, des: 'LIQUIDACION' },
-  { id: 2, des: 'PROPUESTA SANCION' },
-  { id: 3, des: 'SANCION' },
 ]

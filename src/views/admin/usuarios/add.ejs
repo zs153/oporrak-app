@@ -59,7 +59,7 @@
                           <div class="form-label">Estado</div>
                           <select class="form-select" id="cboest" name="stausu" value="">
                             <% datos.arrEstadosUsuario.map(element => { %> 
-                              <option value="<%= element.id %>"><%= element.des %></option>
+                              <option value="<%= element.id %>" <%- element.id === datos.usuario.STAUSU ? " selected":"" %>><%= element.des %></option>
                             <% }) %> 
                           </select>
                         </div>
@@ -97,15 +97,13 @@
                         <div class="mb-1">
                           <div class="form-label">Rol</div>
                           <select class="form-select" id="cborol" name="rolusu" value="">
-                            <% datos.arrTiposRol.map(element => { %>
-                              <% if (user.rol === datos.tiposRol.admin) { %>
-                                <option value="<%- element.id %>"><%= element.des %></option>
-                              <% } else { %>
-                                <% if (element.id === datos.tiposRol.usuario) { %> 
-                                  <option value="<%- element.id %>"><%- element.des %></option>
-                                <% } %> 
-                              <% } %>
-                            <% }) %>
+                            <% if (user.rol === datos.tiposRol.admin) { %>
+                              <% datos.arrTiposRol.map(element => { %>
+                                <option value="<%- element.id %>" <%- element.id === datos.usuario.ROLUSU ? " selected":"" %>><%= element.des %></option>
+                              <% }) %>
+                            <% } else { %>
+                              <option value="<%- datos.arrTiposRol[datos.tiposRol.usuario].id %>"><%- datos.arrTiposRol[datos.tiposRol.usuario].des %></option>
+                            <% } %>
                           </select>
                         </div>
                       </div>
