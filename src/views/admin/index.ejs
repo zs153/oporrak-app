@@ -11,6 +11,49 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    .dropdown-menu.msg_list {
+      width: 30rem !important;
+    }
+
+    ul.msg_list li {
+      /* background: #f7f7f7; */
+      /* padding: 5px; */
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      margin: 6px 6px 0;
+      width: 96% !important; 
+      background-color: rgba(27,125,241,.02);
+    }
+
+    ul.msg_list li:last-child {
+      margin-bottom: 6px;
+      /* padding: 10px;  */
+    }
+
+    /* ul.msg_list li a {
+      padding: 3px 5px !important; } */
+
+    ul.msg_list li a .image img {
+      border-radius: 2px 2px 2px 2px;
+      -webkit-border-radius: 2px 2px 2px 2px;
+      float: left;
+      margin-right: 10px;
+      width: 11%; }
+
+    ul.msg_list li a .time {
+      font-size: 9px;
+      font-style: italic;
+      font-weight: bold;
+      position: absolute;
+      right: 35px; }
+
+    ul.msg_list li a .message {
+      display: block !important;
+      font-size: 11px; 
+    }
+  </style>
 </head>
 <body class="antialiased">
   <div class="wrapper">
@@ -37,10 +80,23 @@
     const socket = io()
 
     socket.on('server:loadnotes', notes => {
-      notes.forEach(element => {
-        const li = document.createElement('li')
-        li.textContent = element
-        messages.appendChild(li)
+      notes.forEach(element => {        
+        let ele = document.createElement('li')
+        let elea = document.createElement('a')
+
+        elea.classList.add('dropdown-item')
+        elea.innerHTML = `<div class="d-flex flex-column justify-content-center">
+          <h4 class="text-sm font-weight-normal mb-1">
+            <span class="font-weight-bold">${element}</span>
+          </h4>
+          <small class="time mb-0">
+            <i class="bi bi-clock"></i>
+            1 minuto
+          </small>
+        `
+        ele.classList.add('nav-item')
+        ele.appendChild(elea)
+        messages.appendChild(ele)
       });
 
       const toggleBadge = document.querySelector('.badge');
@@ -53,12 +109,6 @@
       const li = document.createElement('li')
       li.textContent = msg
       messages.appendChild(li)
-
-      const toggleBadge = document.querySelector('.badge');
-      const numeroMensajes = messages.getElementsByTagName("li").length
-      if (numeroMensajes === 1) {
-        toggleBadge.classList.toggle('d-none')
-      }
     })
   </script>
 </body>

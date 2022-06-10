@@ -79,18 +79,10 @@ io.on("connection", (socket) => {
   onlineClients.add(socket.id);
 
   socket.emit('server:loadnotes', notes)
-
   socket.on("client:newnote", (message) => {
     notes.push(message)
     io.emit("server:newnote", message)
   })
-  socket.on("send-message", (message) => {
-    //socket.broadcast.emit("receive-message", message);
-    //socket.emit('receive-message', message)    
-    onlineClients.forEach((value) => {
-      socket.emit('send-message', {message: 'Hola mundo', id: value})
-    })
-  });
   socket.on("disconnect", () => {
     onlineClients.delete(socket.id);
     console.log("Desconectado");
