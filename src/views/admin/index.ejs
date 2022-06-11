@@ -79,7 +79,14 @@
     const messages = document.getElementById('messages')
     const socket = io()
 
-    socket.on('server:loadnotes', notes => {
+    socket.emit('client:addUser', {
+      userID:<%- JSON.stringify(user.userID) %>,
+    })
+    socket.on('server:users', (users) => {
+      console.log('Usuarios activos', users)
+    })
+    socket.on('server:loadNotes', (notes) => {
+      messages.innerHTML = ''
       notes.forEach(element => {        
         let ele = document.createElement('li')
         let elea = document.createElement('a')
@@ -87,28 +94,55 @@
         elea.classList.add('dropdown-item')
         elea.innerHTML = `<div class="d-flex flex-column justify-content-center">
           <h4 class="text-sm font-weight-normal mb-1">
-            <span class="font-weight-bold">${element}</span>
+            <span class="font-weight-bold">${element.message}</span>
           </h4>
+          <p>
           <small class="time mb-0">
             <i class="bi bi-clock"></i>
-            1 minuto
+            ${element.fecha}
           </small>
+          </p>
         `
         ele.classList.add('nav-item')
         ele.appendChild(elea)
         messages.appendChild(ele)
       });
 
-      const toggleBadge = document.querySelector('.badge');
-      const numeroMensajes = messages.getElementsByTagName("li").length
-      if (numeroMensajes === 0) {
-        toggleBadge.classList.toggle('d-none')
+      if (messages.getElementsByTagName("li").length > 0) {
+        document.querySelector('.badge').classList.remove('bg-white')
+        document.querySelector('.badge').classList.add('bg-red')        
+      } else {
+        document.querySelector('.badge').classList.remove('bg-red')
+        document.querySelector('.badge').classList.add('bg-white')
       }
     })
-    socket.on('server:newnote', msg => {
-      const li = document.createElement('li')
-      li.textContent = msg
-      messages.appendChild(li)
+    socket.on('server:newNote', (note) => {
+      let ele = document.createElement('li')
+      let elea = document.createElement('a')
+
+      elea.classList.add('dropdown-item')
+      elea.innerHTML = `<div class="d-flex flex-column justify-content-center">
+        <h4 class="text-sm font-weight-normal mb-1">
+          <span class="font-weight-bold">${note.message}</span>
+        </h4>
+        <p>
+        <small class="time mb-0">
+          <i class="bi bi-clock"></i>
+          ${note.fecha}
+        </small>
+        </p>
+      `
+      ele.classList.add('nav-item')
+      ele.appendChild(elea)
+      messages.appendChild(ele)
+
+      if (messages.getElementsByTagName("li").length > 0) {
+        document.querySelector('.badge').classList.remove('bg-white')
+        document.querySelector('.badge').classList.add('bg-red')        
+      } else {
+        document.querySelector('.badge').classList.remove('bg-red')
+        document.querySelector('.badge').classList.add('bg-white')
+      }        
     })
   </script>
 </body>

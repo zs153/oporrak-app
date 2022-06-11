@@ -43,7 +43,7 @@ export const addPage = async (req, res) => {
   const usuario = {
     STAUSU: estadosUsuario.activo,
     ROLUSU: tiposRol.usuario,
-    PERUSU: tiposPerfil.general, 
+    PERUSU: tiposPerfil.general,
   }
   try {
     const datos = {
@@ -312,7 +312,12 @@ export const enviarNotificacion = async (req, res) => {
   try {
     const socket = io('http://localhost:4200')
 
-    socket.emit('client:newnote', req.body.texnot)
+    const note = {
+      senderId: user.userID,
+      message: req.body.texnot,
+      fecha: new Date().toLocaleString('fr-FR'),
+    }
+    socket.emit('client:newNote', note)
 
     res.redirect('/admin/usuarios')
   } catch (error) {
