@@ -2,6 +2,7 @@ import logger from "morgan";
 import express from "express";
 import cookieParser from "cookie-parser";
 import path from "path";
+
 // import rutas
 import mainRouter from "./routes/main.router";
 import adminRouter from "./routes/admin.router";

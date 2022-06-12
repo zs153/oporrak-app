@@ -7,7 +7,7 @@ import http from "http";
 import app from "../app";
 import { Server } from "socket.io";
 
-let notes = [];
+let notes = [{ senderId: 'SYSTEM', message: 'Bienvenido a Gestión de Fraude SIAC', fecha: new Date().toLocaleString('fr-FR') }];
 let users = [];
 
 /**
@@ -75,22 +75,21 @@ const onListening = () => {
 const io = new Server(server);
 
 io.on("connection", (socket) => {
-  console.log("user connected", socket.id);
-
+  //console.log("user connected", socket.id);
   socket.on('client:addUser', (userID) => {
     addUser(userID, socket.id)
     //io.emit('server:users', users)
     io.to(socket.id).emit('server:loadNotes', notes)
-  })
+  });
   socket.on("client:newNote", (note) => {
     addNote(note)
     io.emit("server:newNote", note)
-  })
+  });
   socket.on("client:newNoteTo", (note) => {
     const user = getUser(note.receiverId)
     addNote(note)
     io.to(user.socketId).emit("server:newNote", note)
-  })
+  });
   socket.on("disconnect", () => {
     delUser(socket.id)
     //io.emit('server:users', users)
