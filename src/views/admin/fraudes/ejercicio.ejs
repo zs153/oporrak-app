@@ -32,12 +32,14 @@
                 <% } %>
                 <form id="form" action="/admin/fraudes/ejercicio" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="idfrau" id="idfrau" value="<%- datos.fraude.IDFRAU %>">
+                  <input type="hidden" name="reffra" id="reffra" value="<%- datos.fraude.REFFRA %>">
+                  <input type="hidden" name="tipfra" id="tipfra" value="<%- datos.fraude.TIPFRA %>">
                   <div class="card-header">
                     <h3 class="card-title">Nuevo ejercicio</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-2">
+                      <div class="col-4">
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">NIF/NIE</label>
@@ -46,7 +48,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-6">
+                      <div class="col-8">
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Nombre</label>
@@ -55,19 +57,12 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <label class="form-label">Correo electrónico</label>
-                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.fraude.EMACON %>" readonly/>
-                        </div>
-                      </div>
                     </div>
                     <div class="row">
                       <div class="col-6">
                         <div class="mb-1">
-                          <div class="form-label">Tipo</div>
-                          <select class="form-select" id="cbotip" name="tipfra" value="<%- datos.fraude.TIPFRA %>" autofocus>
-                          </select>
+                          <label class="form-label">Correo electrónico</label>
+                          <input type="text" name="emacon" id="emacon" class="form-control" value="<%- datos.fraude.EMACON %>" readonly/>
                         </div>
                       </div>
                       <div class="col-2">
@@ -117,23 +112,6 @@
     <%- include('../../partials/footer') %>
   </div>
   <script src="/js/ayuda.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const messages = document.getElementById('messages')
-    const socket = io()
-
-    socket.on('receive-message', msg => {
-      const li = document.createElement('li')
-      li.textContent = msg
-      messages.appendChild(li)
-
-      const toggleBadge = document.querySelector('#toggleBadge');
-      const numeroMensajes = messages.getElementsByTagName("li").length
-      if (numeroMensajes === 1) {
-        toggleBadge.classList.toggle('d-none')
-      }
-    })
-  </script>
   <script>
     const ejefra = document.getElementById('ejefra')
 

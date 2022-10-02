@@ -17,6 +17,9 @@ import tipoHitoRouter from "./routes/tipohito.router";
 import subtipoRouter from "./routes/subtipo.router";
 import cargaRouter from "./routes/carga.router";
 import estadisticaRouter from "./routes/estadisticas.router";
+import matriculaRouter from "./routes/matricula.router";
+import cursoRouter from "./routes/curso.router";
+import turnoRouter from "./routes/turno.router";
 
 const app = express();
 
@@ -24,6 +27,7 @@ const app = express();
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
 
+// middleware
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -43,6 +47,9 @@ app.use("/admin", tipoHitoRouter);
 app.use("/admin", subtipoRouter);
 app.use("/admin", cargaRouter);
 app.use("/admin", estadisticaRouter);
+app.use("/admin", matriculaRouter);
+app.use("/admin", cursoRouter);
+app.use("/admin", turnoRouter);
 app.use("/log", loginRouter);
 
 export default app;

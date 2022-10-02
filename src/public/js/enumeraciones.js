@@ -8,15 +8,15 @@ export const tiposMovimiento = {
   crearOficina: 6,
   modificarOficina: 7,
   borrarOficina: 8,
-  crearTipoFormulario: 9,
-  modificarTipoFormulario: 10,
-  borrarTipoFormulario: 11,
-  crearReferencia: 12,
-  modificarReferencia: 13,
-  borrarReferencia: 14,
-  asignarFormulario: 15,
-  resolverFormulario: 16,
-  remitirFormulario: 17,
+  crearCurso: 9,
+  modificarCurso: 10,
+  borrarCurso: 11,
+  crearTurno: 12,
+  modificarTurno: 13,
+  borrarTurno: 14,
+  crearMatricula: 15,
+  modificarMatricula: 16,
+  borrarMatricula: 17,
   desasignarFormulario: 18,
   crearSms: 19,
   modificarSms: 20,
@@ -55,7 +55,9 @@ export const tiposMovimiento = {
   crearCarga: 53,
   modificiarCarga: 54,
   borrarCarga: 55,
-  nuevoEjercicioFraude: 58,
+  deshacerFraude: 56,
+  crearUsuarioCurso: 57,
+  borrarUsuarioCurso: 58,
   archivadoSancion: 59,
   cambioPassword: 60,
   olvidoPassword: 61,
@@ -80,6 +82,14 @@ export const tiposVisualizacion = {
 export const estadosUsuario = {
   reserva: 0,
   activo: 1,
+}
+export const estadosCurso = {
+  cerrado: 0,
+  abierto: 1,
+}
+export const estadosMatricula = {
+  cerrada: 0,
+  abierta: 1,
 }
 export const estadosDocumento = {
   pendiente: 0,
@@ -116,6 +126,20 @@ export const estadosCarga = {
   pendiente: 0,
   procesado: 1,
 }
+const tiposEstado = {
+  traspaso: { ID: -1, DES: "TRASPASADO" },
+  vacacion: { ID: 1, DES: "VACACION" },
+  baja: { ID: 2, DES: "BAJA" },
+  traspaso: { ID: 3, DES: "TRASPASO" },
+  formacion: { ID: 4, DES: "FORMACION" },
+  conciliacion: { ID: 5, DES: "CONCILIACION" },
+  reunion: { ID: 6, DES: "REUNION" },
+  turno: { ID: 7, DES: "TURNO" },
+  horasBolsa: { ID: 8, DES: "HORAS BOLSA" },
+  horasFamiliar: { ID: 9, DES: "HORAS ATENCION FAMILIAR" },
+  acumuladoEstados: { ID: 10, DES: "ACUMULADO ESTADOS" },
+  teletrabajo: { ID: 11, DES: "TELETRABAJO" }
+};
 
 /* arrays */
 export const arrTiposRol = [
@@ -132,6 +156,14 @@ export const arrTiposPerfil = [
 export const arrEstadosUsuario = [
   { id: 0, des: 'RESERVA' },
   { id: 1, des: 'ACTIVO' },
+]
+export const arrEstadosCurso = [
+  { id: 0, des: 'CERRADO' },
+  { id: 1, des: 'ABIERTO' },
+]
+export const arrEstadosMatricula = [
+  { id: 0, des: 'CERRADA' },
+  { id: 1, des: 'ABIERTA' },
 ]
 export const arrEstadosSms = [
   { id: 0, des: 'PENDIENTE' },
@@ -152,4 +184,18 @@ export const arrEstadosFraude = [
 export const arrTiposLiquidacion = [
   { id: 1, des: 'INFRESAR' },
   { id: 2, des: 'DEVOLVER' },
+]
+const arrTiposEstado = [
+  { ID: -1, DES: "TRASPASADO" },
+  { ID: 1, DES: "VACACION" },
+  { ID: 2, DES: "BAJA" },
+  { ID: 3, DES: "TRASPASO" },
+  { ID: 4, DES: "FORMACION" },
+  { ID: 5, DES: "CONCILIACION" },
+  { ID: 6, DES: "REUNION" },
+  { ID: 7, DES: "TURNO" },
+  { ID: 8, DES: "HORAS BOLSA" },
+  { ID: 9, DES: "HORAS ATENCION FAMILIAR" },
+  { ID: 10, DES: "ACUMULADO ESTADOS" },
+  { ID: 11, DES: "TELETRABAJO" }
 ]

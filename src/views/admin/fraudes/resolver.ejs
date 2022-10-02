@@ -11,6 +11,12 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    select[readonly] {
+      background: #eee;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -105,22 +111,5 @@
     <%- include('../../partials/footer') %>
   </div>
   <script src="/js/ayuda.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const messages = document.getElementById('messages')
-    const socket = io()
-
-    socket.on('receive-message', msg => {
-      const li = document.createElement('li')
-      li.textContent = msg
-      messages.appendChild(li)
-
-      const toggleBadge = document.querySelector('#toggleBadge');
-      const numeroMensajes = messages.getElementsByTagName("li").length
-      if (numeroMensajes === 1) {
-        toggleBadge.classList.toggle('d-none')
-      }
-    })
-  </script>
 </body>
 </html>

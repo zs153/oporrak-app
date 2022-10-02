@@ -22,16 +22,16 @@ export const okPage = async (req, res) => {
 };
 export const verifyLogin = async (req, res) => {
   let usuario = {
-    userid: req.body.userid.toLowerCase(),
+    userid: req.body.userid?.toLowerCase(),
+    passwd: req.body.pwdusu
   }
-  const password = req.body.pwdusu
 
   try {
     const result = await axios.post("http://localhost:8100/api/usuario", {
       usuario,
     });
 
-    bcrypt.compare(password, result.data.PWDUSU, (err, ret) => {
+    bcrypt.compare(usuario.passwd, result.data.PWDUSU, (err, ret) => {
       if (ret) {
         const accessToken = jwt.sign(
           {
@@ -98,7 +98,7 @@ export const forgotPassword = async (req, res) => {
     tipmov: tiposMovimiento.olvidoPassword,
     saltus: randomString,
   };
-
+  console.log(passHash, randomString)
   try {
     const result = await axios.post(
       "http://localhost:8100/api/usuarios/forgot",
