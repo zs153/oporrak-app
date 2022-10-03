@@ -45,6 +45,13 @@
       display: block;
       flex: 1 1 auto;
     }
+    .dots-menu .nav-divider {
+      height: 0;
+      margin: 0;
+      padding: 0 !important;
+      overflow: hidden;
+      border-top: 1px solid rgba(101, 109, 119, 0.16);
+    } 
   </style>
 </head>
 
@@ -60,7 +67,7 @@
                   <div class="card">
                     <div class="card-header">
                       <div>
-                        <h3 class="card-title">Turnos</h3>
+                        <h3 class="card-title">Turnos Curso</h3>
                         <p class="subtitulo">
                           <%- datos.curso.DESCUR %>
                         </p>
@@ -366,13 +373,14 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/cursos/turnos/usuarios/<%- datos.curso.IDCURS %>/${element.IDTURN}" class="nav-link">
-                <i class="bi bi-trash dropdown-item-icon"></i>Usuarios
-              </a>
-            </li>
-            <li class="nav-item">
               <a href="#" class="nav-link" onclick="{document.getElementById('idturn').value ='${element.IDTURN}', document.getElementById('deltur').innerHTML ='<p>${element.DESTUR}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrarTurno">
                 <i class="bi bi-trash dropdown-item-icon"></i>Borrar turno
+              </a>
+            </li>
+            <div class="nav-divider"></div>
+            <li class="nav-item">
+              <a href="/admin/cursos/turnos/usuarios/<%- datos.curso.IDCURS %>/${element.IDTURN}" class="nav-link">
+                <i class="bi bi-trash dropdown-item-icon"></i>Usuarios
               </a>
             </li>
           </ul>
