@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Usuarios</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
+  <!-- custom -->
+  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    .sortable th {
+      matricular: pointer;
+    }
+
+    .sortable .th-sort-asc::after {
+      content: "\25b4";
+    }
+
+    .sortable .th-sort-desc::after {
+      content: "\25be";
+    }
+
+    .sortable .th-sort-asc::after,
+    .sortable .th-sort-desc::after {
+      margin-left: 5px;
+    }
+
+    .subtitulo {
+      margin: 0;
+      align-items: center;
+      justify-content: center;
+      color: #656d77;
+      pointer-events: none;
+      font-size: 0.8em;
+    }
+
+    .table-fixHead tbody {
+      overflow-y: scroll;
+      height: 24vh;
+      display: block;
+      flex: 1 1 auto;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+  <div class="wrapper">
+    <%- include('../../../partials/header') %>
+      <%- include('../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+        <div class="page-wrapper">
+          <div class="container-xl">
+            <div class="page-body">
+              <div class="row row-deck row-cards">
+                <form id="form" action="/admin/matriculas/usuarios/insert" method="POST" onsubmit="return addUsuarios();">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <div>
+                          <h3 class="card-title">Usuarios</h3>
+                          <p class="subtitulo">
+                            <%- datos.matricula.DESCUR %>
+                          </p>
+                        </div>
+                        <div class="col-auto ms-auto">
+                          <div class="d-flex">
+                            <div class="input-icon me-3">
+                              <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                              <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox"
+                                onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                          <thead>
+                            <tr class="header">
+                              <th class="w-4"></th>
+                              <th>Oficina</th>
+                              <th>Nombre</th>
+                            </tr>
+                          </thead>
+                          <tbody id="table-body">
+                          </tbody>
+                        </table>
+                        <div id="pagination-wrapper" class="pagination py-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 d-flex">
+                      <a href="/admin/matriculas/usuarios/<%- datos.matricula.IDMATR %>" class="btn btn-link">Salir</a>
+                      <input type="hidden" name="idmatr" id="idmatr" value="<%- datos.matricula.IDMATR %>">
+                      <input type="hidden" name="arrusu" id="arrusu" value="">
+                      <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include('../../../partials/footer') %>
+  </div>
+
+  <script src="/js/ayuda.min.js"></script>
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (encodeURIComponent(value) || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+
+    const elemBuscar = document.getElementById('buscarUsuarioBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5) // medio dia
+    }
+
+    function arrayFilter() {
+      const filtro = elemBuscar.value.toUpperCase()
+      const trimmedData = orgList.filter(itm => Object.keys(itm).some(k => JSON.stringify(itm[k]).includes(filtro)))
+
+      state.querySet = trimmedData
+      state.page = 1
+
+      buildTable()
+    }
+    function sortTableByColumn(table, column, asc = true) {
+      const dirModifier = asc ? 1 : -1;
+      const tBody = table.tBodies[0];
+      const rows = Array.from(tBody.querySelectorAll("tr"));
+
+      const sortedRows = rows.sort((a, b) => {
+        const aColText = a.cells[column].textContent;
+        const bColText = b.cells[column].textContent;
+
+        return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+      });
+
+      for (let row of sortedRows) {
+        tBody.appendChild(row);
+      }
+
+      table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
+      table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
+      table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
+    }
+
+    document.querySelectorAll(".sortable th").forEach(headerCell => {
+      headerCell.addEventListener("click", () => {
+        const tableElement = headerCell.parentElement.parentElement.parentElement;
+        const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+        const currentIsAscending = headerCell.classList.contains("th-sort-asc");
+
+        sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+      });
+    });
+  </script>
+  <script>
+    const IDMATR = <%- datos.matricula.IDMATR %>
+    const orgList = <%- datos.usuarios %>
+    let state = {
+      'querySet': orgList,
+      'page': 1,
+      'rows': 9,
+      'window': 3,
+    }
+
+    elemBuscar.value = getCookie('filtro')
+    if (elemBuscar.value !== '') {
+      arrayFilter()
+    } else {
+      buildTable()
+    }
+
+    function pagination(querySet, page, rows) {
+      const trimStart = (page - 1) * rows
+      const trimEnd = trimStart + rows
+      const trimmedData = querySet.slice(trimStart, trimEnd)
+      const pages = Math.ceil(querySet.length / rows);
+
+      return {
+        'querySet': trimmedData,
+        'pages': pages,
+      }
+    }
+    function pageButtons(pages) {
+      var wrapper = document.getElementById('pagination-wrapper')
+      var maxLeft = (state.page - Math.floor(state.window / 2))
+      var maxRight = (state.page + Math.floor(state.window / 2))
+
+      wrapper.innerHTML = ``
+      if (maxLeft < 1) {
+        maxLeft = 1
+        maxRight = state.window
+      }
+
+      if (maxRight > pages) {
+        maxLeft = pages - (state.window - 1)
+
+        if (maxLeft < 1) {
+          maxLeft = 1
+        }
+        maxRight = pages
+      }
+
+      for (var page = maxLeft; page <= maxRight; page++) {
+        wrapper.innerHTML += `<button value=${page} class="page-item btn btn-primary">${page}</button>`
+      }
+      wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
+      wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
+
+      const elem = document.getElementsByClassName('page-item')
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].addEventListener('click', (e) => {
+          state.page = Number(e.target.value)
+
+          buildTable()
+        })
+      }
+    }
+    function buildTable() {
+      const table = document.getElementById('table-body')
+      const data = pagination(state.querySet, state.page, state.rows)
+      const lista = data.querySet
+      table.innerHTML = ''
+
+      lista.map(element => {
+        // col1
+        const row = document.createElement('tr')
+        let cell = document.createElement('td')
+        cell.classList.add("w-4")
+        cell.innerHTML = `<input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select invoice">`
+        row.appendChild(cell)
+
+        // col2
+        cell = document.createElement('td')
+        cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+          <div class="flex-fill">
+            <div class="font-weight-medium">${element.DESOFI}</div>
+          </div>
+        </div>`
+        row.appendChild(cell)
+
+        // col3
+        cell = document.createElement('td')
+        cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+          <div class="flex-fill">
+            <div class="font-weight-medium">${element.NOMUSU}</div>
+          </div>
+        </div>`
+        row.appendChild(cell)
+
+        // col4
+        cell = document.createElement('td')
+        cell.style.display = 'none'
+        cell.value = element.IDUSUA
+        row.appendChild(cell)
+
+        table.appendChild(row)
+      })
+
+      pageButtons(data.pages)
+    }
+
+    const addUsuarios = () => {
+      let arrUsuarios = []
+
+      document.querySelectorAll('input[type=checkbox]').forEach(e => {
+        if (e.checked) {
+          arrUsuarios.push(e.parentNode.parentNode.cells[3].value)
+        }
+      })
+      document.getElementById('arrusu').value = arrUsuarios
+    }
+</script>
+</body>
+
+</html>

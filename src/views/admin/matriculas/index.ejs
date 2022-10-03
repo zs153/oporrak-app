@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Cursos</title>
+  <title>Matrículas</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -29,6 +29,14 @@
     .sortable .th-sort-desc::after {
       margin-left: 5px;
     }
+
+    .dots-menu .nav-divider {
+      height: 0;
+      margin: 0;
+      padding: 0 !important;
+      overflow: hidden;
+      border-top: 1px solid rgba(101, 109, 119, 0.16);
+    } 
   </style>
 </head>
 
@@ -43,15 +51,15 @@
                 <div class="col-12">
                   <div class="card">
                     <div class="card-header">
-                      <h3 class="card-title">Cursos</h3>
+                      <h3 class="card-title">Matrículas</h3>
                       <div class="col-auto ms-auto">
                         <div class="d-flex">
                           <div class="input-icon me-3">
                             <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarCursoBox"
-                              onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en cursos">
+                            <input type="text" class="form-control d-inline-block me-3" id="buscarMatriculaBox"
+                              onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en matriculas">
                           </div>
-                          <a href="/admin/cursos/add" class="btn btn-primary">
+                          <a href="/admin/matriculas/add" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                               viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                               stroke-linecap="round" stroke-linejoin="round">
@@ -59,18 +67,21 @@
                               <line x1="12" y1="5" x2="12" y2="19"></line>
                               <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
-                            Nuevo
+                            Nueva
                           </a>
                         </div>
                       </div>
                     </div>
                     <div class="card-body">
-                      <table class="table table-vcenter table-striped sortable" id="tblCursos">
+                      <table class="table table-vcenter table-striped sortable" id="tblMatriculas">
                         <thead>
                           <tr class="header">
                             <th class="w-4"></th>
                             <th>Descipción</th>
+                            <th>Fecha de Inicio</th>
+                            <th>Fecha de Fin</th>
                             <th>Estado</th>
+                            <th>Curso</th>
                             <th class="w-6"></th>
                           </tr>
                         </thead>
@@ -101,20 +112,20 @@
             <path d="M12 9v2m0 4v.01"></path>
             <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
           </svg>
-          <h3>¿Desea borrar este curso?</h3>
-          <div id="delcur"></div>
+          <h3>¿Desea borrar esta matrícula?</h3>
+          <div id="delmat"></div>
           <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
         </div>
         <div class="modal-footer">
           <div class="w-100">
             <div class="row">
               <div class="col">
-                <a href="/admin/cursos" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                <a href="/admin/matriculas" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
-                <form action="/admin/cursos/delete" method="POST">
-                  <input type="hidden" id="IDCURS" name="IDCURS" value="">
-                  <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar curso</button>
+                <form action="/admin/matriculas/delete" method="POST">
+                  <input type="hidden" id="idmatr" name="idmatr" value="">
+                  <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar matrícula</button>
                 </form>
               </div>
             </div>
@@ -126,7 +137,7 @@
 
   <script src="/js/ayuda.min.js"></script>
   <script>
-    const elemBuscar = document.getElementById('buscarCursoBox');
+    const elemBuscar = document.getElementById('buscarMatriculaBox');
     elemBuscar.onchange = (event) => {
       setCookie('filtro', event.target.value, .5) // medio dia
     }
@@ -197,8 +208,8 @@
     }
   </script>
   <script>
-    const estados = <%- datos.arrEstadosCurso %>
-    const orgList = <%- datos.cursos %>
+    const estados = <%- datos.estados %>
+    const orgList = <%- datos.matriculas %>
     let state = {
       'querySet': orgList,
       'page': 1,
@@ -272,7 +283,7 @@
         cell.classList.add("w-4")
         cell.innerHTML = `<div class="align-items-center py-1">
             <span class="avatar avatar-rounded bg-green-lt">
-              <h6>${element.IDCURS}</h6>
+              <h6>${element.IDMATR}</h6>
             </span>
           </div>`
         row.appendChild(cell)
@@ -281,7 +292,7 @@
         cell = document.createElement('td')
         cell.innerHTML = `<div class="d-flex py-1 align-items-center">
             <div class="flex-fill">
-              <div class="font-weight-medium">${element.DESCUR}</div>
+              <div class="font-weight-medium">${element.DESMAT}</div>
             </div>
           </div>`
         row.appendChild(cell)
@@ -290,12 +301,39 @@
         cell = document.createElement('td')
         cell.innerHTML = `<div class="d-flex py-1 align-items-center">
             <div class="flex-fill">
-              <div class="font-weight-medium">${estados[element.STACUR].des} </div>
+              <div class="font-weight-medium">${element.STRINI}</div>
             </div>
           </div>`
         row.appendChild(cell)
 
         // col4
+        cell = document.createElement('td')
+        cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.STRFIN}</div>
+            </div>
+          </div>`
+        row.appendChild(cell)
+
+        // col5
+        cell = document.createElement('td')
+        cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${estados[element.STAMAT].des} </div>
+            </div>
+          </div>`
+        row.appendChild(cell)
+
+        // col6
+        cell = document.createElement('td')
+        cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+            <div class="flex-fill">
+              <div class="font-weight-medium">${element.DESCUR} </div>
+            </div>
+          </div>`
+        row.appendChild(cell)
+
+        // col7
         cell = document.createElement('td')
         cell.classList.add("w-6")
         cell.innerHTML = `<ul class="dots-menu">
@@ -305,23 +343,19 @@
             </a>
             <ul>
               <li class="nav-item">
-                <a href="/admin/cursos/edit/${element.IDCURS}" class="nav-link">
-                  <i class="bi bi-pencil dropdown-item-icon"></i>Editar curso
+                <a href="/admin/matriculas/edit/${element.IDMATR}" class="nav-link">
+                  <i class="bi bi-pencil dropdown-item-icon"></i>Editar matrÍcula
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/cursos/turnos/${element.IDCURS}" class="nav-link">
-                  <i class="bi bi-diagram-2 dropdown-item-icon"></i>Turnos
-                </a>
+                <a href="#" class="nav-link" onclick="{document.getElementById('idmatr').value ='${element.IDMATR}', document.getElementById('delmat').innerHTML ='<p>${element.DESMAT}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                  <i class="bi bi-trash dropdown-item-icon"></i>Borrar matrÍcula
+                  </a>
               </li>
+              <div class="nav-divider"></div>
               <li class="nav-item">
-                <a href="/admin/cursos/usuarios/${element.IDCURS}" class="nav-link">
+                <a href="/admin/matriculas/usuarios/${element.IDMATR}" class="nav-link">
                   <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" onclick="{document.getElementById('IDCURS').value ='${element.IDCURS}', document.getElementById('delcur').innerHTML ='<p>${element.DESCUR}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
-                  <i class="bi bi-trash dropdown-item-icon"></i>Borrar curso
                 </a>
               </li>
             </ul>

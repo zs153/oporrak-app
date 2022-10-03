@@ -24,7 +24,7 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user
   const curso = {
-    STACUR: estadosCurso.cerrado,
+    stacur: estadosCurso.cerrado,
   }
   const datos = {
     curso,
@@ -44,7 +44,7 @@ export const addPage = async (req, res) => {
 export const editPage = async (req, res) => {
   const user = req.user
   const curso = {
-    IDCURS: req.params.id,
+    idcurs: req.params.id,
   }
 
   try {

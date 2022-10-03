@@ -55,33 +55,42 @@
                                     </div>
                                   </div>
                                 </div>
-                                <div class="col-3">
-                                  <div class="mb-1">
-                                    <div class="input-control">
-                                      <label class="form-label required">Fecha inicio</label>
-                                      <input type="date" name="inimat" id="inimat" class="form-control" value="<%- datos.matricula.INIMAT %>" />
-                                      <div class="invalid-feedback"></div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-3">
-                                  <div class="mb-1">
-                                    <div class="input-control">
-                                      <label class="form-label required">Fecha fin</label>
-                                      <input type="date" name="finmat" id="finmat" class="form-control" value="<%- datos.matricula.FINMAT %>" />
-                                      <div class="invalid-feedback"></div>
-                                    </div>
-                                  </div>
-                                </div>  
                                 <div class="row">
-                                  <div class="col-2">
+                                  <div class="col-4">
+                                    <div class="mb-1">
+                                      <div class="input-control">
+                                        <label class="form-label required">Fecha inicio</label>
+                                        <input type="date" name="inimat" id="inimat" class="form-control" value="<%- datos.matricula.inimat %>" />
+                                        <div class="invalid-feedback"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="mb-1">
+                                      <div class="input-control">
+                                        <label class="form-label required">Fecha fin</label>
+                                        <input type="date" name="finmat" id="finmat" class="form-control" value="<%- datos.matricula.finmat %>" />
+                                        <div class="invalid-feedback"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
                                     <div class="mb-1">
                                       <div class="form-label">Estado</div>
                                       <select class="form-select" id="cboest" name="stamat" value="">
-                                        <% datos.arrEstadosCurso.map(element=> { %>
-                                          <option value="<%= element.id %>" <%- element.id === datos.matricula.STAMAT ? " selected" :"" %>><%= element.des %>
+                                        <% datos.arrEstadosMatricula.map(element=> { %>
+                                          <option value="<%= element.id %>" <%- element.id===datos.matricula.stamat ? " selected" :"" %>><%= element.des %>
                                           </option>
                                           <% }) %>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-12">
+                                    <div class="mb-1">
+                                      <div class="form-label">Curso</div>
+                                      <select class="form-select" id="cbocur" name="idcurs" value="<%- datos.matricula.idcurs %>">
                                       </select>
                                     </div>
                                   </div>
@@ -139,6 +148,30 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
+  </script>
+  <script>
+    const Cursos = () => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          const cursos = JSON.parse(xhr.response)
+          const cbo = document.getElementById('cbocur')
+
+          cursos.map((itm) => {
+            const option = document.createElement('option')
+            option.value = itm.IDCURS
+            option.text = itm.DESCUR
+
+            cbo.appendChild(option)
+          })
+        }
+      };
+      xhr.open('POST', 'http://localhost:8100/api/cursos', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send()
+    }
+    Cursos();
   </script>
 </body>
 
