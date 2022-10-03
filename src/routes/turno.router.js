@@ -30,7 +30,7 @@ turnoRouter.post("/cursos/turnos/update", authRoutes, update);
 turnoRouter.post("/cursos/turnos/delete", authRoutes, remove);
 
 // proc usuarios
-turnoRouter.post("/cursos/usuarios/insert", authRoutes, insertUsuario);
-turnoRouter.post("/cursos/usuarios/delete", authRoutes, deleteUsuario);
+turnoRouter.post("/cursos/turnos/usuarios/insert", authRoutes, insertUsuario);
+turnoRouter.post("/cursos/turnos/usuarios/delete", authRoutes, deleteUsuario);
 
 export default turnoRouter;

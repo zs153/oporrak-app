@@ -135,14 +135,13 @@ export const usuariosAddPage = async (req, res) => {
       turno,
     });
     const usuarios = await axios.post("http://localhost:8100/api/turnos/usuarios/pendientes", {
-      turno,
+      curso,
     });
     const datos = {
       curso,
       turno: result.data,
       usuarios: JSON.stringify(usuarios.data),
     };
-    console.log(datos)
 
     res.render("admin/cursos/turnos/usuarios/add", { user, datos });
   } catch (error) {
@@ -260,6 +259,9 @@ export const insertUsuario = async (req, res) => {
   const curso = {
     idcurs: req.body.idcurs,
   }
+  const turno = {
+    idturn: req.body.idturn,
+  }
   const usuarios = {
     arrusu: req.body.arrusu.split(',').map(itm => +itm)
   }
@@ -269,15 +271,15 @@ export const insertUsuario = async (req, res) => {
   }
 
   try {
-    await axios.post("http://localhost:8100/api/cursos/usuarios/insert", {
-      curso,
+    await axios.post("http://localhost:8100/api/turnos/usuarios/insert", {
+      turno,
       usuarios,
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/usuarios/${curso.idcurs}`);
+    res.redirect(`/admin/cursos/turnos/usuarios/${turno.idturn}`);
   } catch (error) {
-    const msg = "No se ha podido insertar el usuario.";
+    const msg = "No se ha podido insertar al usuario.";
 
     res.render("admin/error400", {
       alerts: [{ msg }],
