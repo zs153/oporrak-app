@@ -17,8 +17,9 @@ import apiSubtipoRouter from '../routes/subtipo.router'
 import apiHitoRouter from '../routes/hito.router'
 import apiCargaRouter from '../routes/carga.router'
 import apiEventoRouter from '../routes/evento.router'
-import apiTurnoRouter from '../routes/turno.router'
+import apiMatriculaRouter from '../routes/matricula.router'
 import apiCursoRouter from '../routes/curso.router'
+import apiTurnoRouter from '../routes/turno.router'
 
 let httpServer
 
@@ -48,8 +49,9 @@ function initialize() {
     app.use('/api', apiHitoRouter)
     app.use('/api', apiCargaRouter)
     app.use('/api', apiEventoRouter)
-    app.use('/api', apiTurnoRouter)
+    app.use('/api', apiMatriculaRouter)
     app.use('/api', apiCursoRouter)
+    app.use('/api', apiTurnoRouter)
 
     // server
     httpServer

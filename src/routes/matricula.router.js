@@ -1,19 +1,29 @@
 import express from "express";
 import {
-  curso,
-  cursos,
+  matricula,
+  matriculas,
+  usuariosMatricula,
+  usuariosPendientes,
   crear,
   modificar,
   borrar,
-} from "../controllers/curso.controller";
+  crearUsuario,
+  borrarUsuario,
+} from "../controllers/matricula.controller";
 
 const apiMatriculaRouter = express.Router();
 
 // matricula
-apiMatriculaRouter.post("/curso", curso);
-apiMatriculaRouter.post("/cursos", cursos);
-apiMatriculaRouter.post("/cursos/insert", crear);
-apiMatriculaRouter.post("/cursos/update", modificar);
-apiMatriculaRouter.post("/cursos/delete", borrar);
+apiMatriculaRouter.post("/matricula", matricula);
+apiMatriculaRouter.post("/matriculas", matriculas);
+apiMatriculaRouter.post("/matriculas/insert", crear);
+apiMatriculaRouter.post("/matriculas/update", modificar);
+apiMatriculaRouter.post("/matriculas/delete", borrar);
+
+// usuarios
+apiMatriculaRouter.post('/matriculas/usuarios', usuariosMatricula)
+apiMatriculaRouter.post('/matriculas/usuarios/pendientes', usuariosPendientes)
+apiMatriculaRouter.post('/matriculas/usuarios/insert', crearUsuario)
+apiMatriculaRouter.post('/matriculas/usuarios/delete', borrarUsuario)
 
 export default apiMatriculaRouter;

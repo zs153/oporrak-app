@@ -95,6 +95,8 @@ FROM usuarios uu
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 INNER JOIN (
 SELECT um.idusua FROM usuariosmatricula um
+INNER JOIN matriculas mm ON mm.idmatr = um.idmatr
+WHERE mm.idcurs = :idcurs
 MINUS
 SELECT uc.idusua FROM usuarioscurso uc WHERE uc.idcurs = :idcurs
 ) p1 ON p1.idusua = uu.idusua
