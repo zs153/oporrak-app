@@ -45,8 +45,9 @@ FROM usuarios uu
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 INNER JOIN (
   SELECT uc.idusua FROM usuarioscurso uc
+  WHERE uc.idcurs = :idcurs
   MINUS
-  SELECT ut.idusua FROM usuariosturno ut WHERE ut.idturn = :idturn
+  SELECT ut.idusua FROM usuariosturno ut 
 ) p1 ON p1.idusua = uu.idusua
 `
 const insertUsuarioSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
@@ -185,7 +186,7 @@ export const insertUsuario = async (bind) => {
     result = null
   }
 
-  return bind
+  return result
 }
 export const removeUsuario = async (bind) => {
   let result

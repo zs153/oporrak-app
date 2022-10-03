@@ -46,7 +46,7 @@ const deleteFromRec = (req) => {
 }
 const insertUsuarioFromRec = (req) => {
   const turno = {
-    idturn: req.body.curso.idturn,
+    idturn: req.body.turno.idturn,
   }
   const usuarios = {
     arrusu: req.body.usuarios.arrusu,
@@ -158,7 +158,7 @@ export const usuariosTurno = async (req, res) => {
   }
 }
 export const usuariosPendientes = async (req, res) => {
-  const context = req.body.turno
+  const context = req.body.curso
 
   try {
     const result = await DAL.usuariosPendientes(context)
