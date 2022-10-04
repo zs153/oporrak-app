@@ -155,7 +155,7 @@ export const editTurnoPage = async (req, res) => {
   }
 }
 
-// pages usuarios
+// pages usuarios curso
 export const usuariosPage = async (req, res) => {
   const user = req.user;
   const curso = {
@@ -202,6 +202,65 @@ export const usuariosAddPage = async (req, res) => {
     };
 
     res.render("admin/cursos/usuarios/add", { user, datos });
+  } catch (error) {
+    const msg = "No se ha podido acceder a los turnos del curso seleccionado.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+
+// pages usuarios turno
+export const usuariosTurnoPage = async (req, res) => {
+  const user = req.user
+  const turnocurso = {
+    idcurs: req.params.idcurs,
+    idturn: req.params.idturn,
+  }
+
+  try {
+    const result = await axios.post('http://localhost:8100/api/cursos/turnocurso', {
+      turnocurso,
+    })
+    const usuarios = await axios.post('http://localhost:8100/api/cursos/turnos/usuarios', {
+      turnocurso,
+    })
+    const datos = {
+      turnocurso: result.data,
+      usuarios: JSON.stringify(usuarios.data),
+    }
+
+    res.render('admin/cursos/turnos/usuarios', { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+export const usuariosTurnoAddPage = async (req, res) => {
+  const user = req.user;
+  const turnocurso = {
+    idcurs: req.params.idcurs,
+    idturn: req.params.idturn,
+  }
+
+  try {
+    const result = await axios.post('http://localhost:8100/api/cursos/turnocurso', {
+      turnocurso,
+    })
+    const usuarios = await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/pendientes", {
+      turnocurso,
+    });
+    const datos = {
+      turnocurso,
+      curso: { descur: result.data.DESCUR },
+      usuarios: JSON.stringify(usuarios.data),
+    };
+
+    res.render("admin/cursos/turnos/usuarios/add", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los turnos del curso seleccionado.";
 
@@ -431,6 +490,72 @@ export const insertUsuario = async (req, res) => {
   }
 }
 export const deleteUsuario = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    idcurs: req.body.idcurs,
+  }
+  const usuario = {
+    idusua: req.body.idusua,
+  };
+  const movimiento = {
+    usumov: user.id,
+    tipmov: tiposMovimiento.borrarUsuarioCurso,
+  };
+
+  try {
+    await axios.post("http://localhost:8100/api/cursos/usuarios/delete", {
+      curso,
+      usuario,
+      movimiento,
+    });
+
+    res.redirect(`/admin/cursos/usuarios/${curso.idcurs}`);
+  } catch (error) {
+    const msg = "No se ha podido borrar el usuario.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+
+// proc usuarios turno
+export const insertUsuarioTurno = async (req, res) => {
+  const user = req.user;
+  const turnocurso = {
+    idcurs: req.body.idcurs,
+    idturn: req.body.idturn,
+  }
+  const usuarios = {
+    //arrusu: req.body.arrusu.split(',').map(itm => +itm)
+    arrusu: JSON.parse(req.body.arrusu)
+  }
+  const movimiento = {
+    usumov: user.id,
+    tipmov: tiposMovimiento.crearUsuarioCurso,
+  }
+console.log(usuarios)
+  try {
+    // const result = await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/insert", {
+    //   turno: { idturn: turnocurso.idturn },
+    // });
+    // console.log(result.data)
+    await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/insert", {
+      turno: { idturn: 481, initur: '2022-10-04', fintur: '2022-10-06', inihor: '+0 08:00:00', finhor: '+0 14:00:00'},
+      usuarios,
+      movimiento,
+    });
+
+    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.idcurs}/${turnocurso.idturn}`);
+  } catch (error) {    
+    const msg = "No se ha podido insertar el usuario.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+export const deleteUsuarioTurno = async (req, res) => {
   const user = req.user;
   const curso = {
     idcurs: req.body.idcurs,

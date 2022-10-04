@@ -19,7 +19,6 @@ import cargaRouter from "./routes/carga.router";
 import estadisticaRouter from "./routes/estadisticas.router";
 import matriculaRouter from "./routes/matricula.router";
 import cursoRouter from "./routes/curso.router";
-import turnoRouter from "./routes/turno.router";
 
 const app = express();
 
@@ -49,7 +48,6 @@ app.use("/admin", cargaRouter);
 app.use("/admin", estadisticaRouter);
 app.use("/admin", matriculaRouter);
 app.use("/admin", cursoRouter);
-app.use("/admin", turnoRouter);
 app.use("/log", loginRouter);
 
 export default app;
