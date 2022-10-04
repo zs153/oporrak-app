@@ -128,7 +128,43 @@ const deleteUsuarioFromRec = (req) => {
 
   return Object.assign(curso, usuario, movimiento)
 }
+const insertUsuarioTurnoFromRec = (req) => {
+  const turno = {
+    idturn: req.body.turno.idturn,
+    initur: req.body.turno.initur,
+    fintur: req.body.turno.fintur,
+    inihor: req.body.turno.inihor,
+    finhor: req.body.turno.finhor,
+  }
+  const usuarios = {
+    arrusu: {
+      type: "USRTYPE",
+      val: req.body.usuarios.arrusu,
+    }
+  }
+  const movimiento = {
+    usumov: req.body.movimiento.usumov,
+    tipmov: req.body.movimiento.tipmov,
+  }
+  return Object.assign(turno,usuarios,movimiento)
+}
+const deleteUsuarioTurnoFromRec = (req) => {
+  const turnocurso = {
+    idcurs: req.body.turnocurso.idcurs,
+    idturn: req.body.turnocurso.idturn,
+  }
+  const usuario = {
+    idusua: req.body.usuario.idusua,
+  }
+  const movimiento = {
+    usumov: req.body.movimiento.usumov,
+    tipmov: req.body.movimiento.tipmov,
+  }
 
+  return Object.assign(turnocurso, usuario, movimiento)
+}
+
+// cursos
 export const curso = async (req, res) => {
   const context = req.body.curso
 
@@ -153,7 +189,6 @@ export const cursos = async (req, res) => {
     res.status(400).end()
   }
 }
-
 export const crear = async (req, res) => {
   try {
     const result = await DAL.insert(insertFromRec(req))
@@ -208,11 +243,26 @@ export const cambioEstado = async (req, res) => {
 }
 
 // turnos
-export const turnosCurso = async (req, res) => {
+export const turno = async (req, res) => {
+  const context = req.body.turno
+
+  try {
+    const result = await DAL.turno(context)
+
+    if (result.length === 1) {
+      return res.status(200).json(result[0])
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const turnos = async (req, res) => {
   const context = req.body.curso
 
   try {
-    const result = await DAL.turnosCurso(context)
+    const result = await DAL.turnos(context)
 
     if (result !== null) {
       res.status(200).json(result)
@@ -264,11 +314,11 @@ export const borrarTurno = async (req, res) => {
 }
 
 // usuarios
-export const usuariosCurso = async (req, res) => {
+export const usuarios = async (req, res) => {
   const context = req.body.curso
 
   try {
-    const result = await DAL.usuariosCurso(context)
+    const result = await DAL.usuarios(context)
 
     if (result !== null) {
       res.status(200).json(result)
@@ -314,6 +364,84 @@ export const borrarUsuario = async (req, res) => {
       res.status(200).json(result)
     } else {
       res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+
+// usuarios turno
+export const usuariosTurno = async (req, res) => {
+  const context = req.body.turnocurso
+  delete context.idcurs
+
+  try {
+    const result = await DAL.usuariosTurno(context)
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(400).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const usuariosTurnoPendientes = async (req, res) => {
+  const context = req.body.turnocurso
+
+  try {
+    const result = await DAL.usuariosTurnoPendientes(context)
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(400).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const crearUsuarioTurno = async (req, res) => {  
+  console.log(insertUsuarioTurnoFromRec(req))
+  try {
+    const result = await DAL.insertUsuarioTurno(insertUsuarioTurnoFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).end()
+  }
+}
+export const borrarUsuarioTurno = async (req, res) => {
+  try {
+    const result = await DAL.removeUsuarioTurno(deleteUsuarioTurnoFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+
+// turnoCurso
+export const turnoCurso = async (req, res) => {
+  const context = req.body.turnocurso
+
+  try {
+    const result = await DAL.turnoCurso(context)
+
+    if (result !== null) {
+      res.status(200).json(result[0])
+    } else {
+      res.status(400).end()
     }
   } catch (err) {
     res.status(500).end()

@@ -36,7 +36,13 @@ const cambioSql = `BEGIN OPORRAK_PKG.CAMBIOESTADOCURSO(
   :tipmov 
 ); END;
 `
-const turnosCursoSql = `SELECT 
+// turnos
+const turnoSql = `SELECT 
+  tt.*
+FROM turnos
+WHERE tt.idturn = :idturn
+`
+const turnosSql = `SELECT 
   tt.idturn,
   tt.destur,
   TO_CHAR(tt.initur, 'DD/MM/YYYY') "STRINI",
@@ -81,7 +87,8 @@ const removeTurnoSql = `BEGIN OPORRAK_PKG.DELETETURNOCURSO(
   :tipmov
 ); END;
 `
-const usuariosCursoSql = `SELECT 
+// usuarios
+const usuariosSql = `SELECT 
   uu.idusua,
   uu.nomusu,
   uu.userid,
@@ -114,6 +121,60 @@ const removeUsuarioSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOCURSO(
   :usumov,
   :tipmov
 ); END;
+`
+// usuarios turno
+const usuariosTurnoSql = `SELECT 
+  uu.idusua,
+  uu.nomusu,
+  uu.userid,
+  oo.desofi
+FROM usuarios uu
+INNER JOIN usuariosturno ut ON ut.idusua = uu.idusua
+INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+WHERE ut.idturn = :idturn
+`
+const usuariosTurnoPendientesSql = `SELECT 
+  uu.idusua, 
+  uu.nomusu, 
+  oo.idofic,
+  oo.desofi
+FROM usuarios uu
+INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+INNER JOIN (
+SELECT uc.idusua FROM usuarioscurso uc
+WHERE uc.idcurs = :idcurs
+MINUS
+SELECT ut.idusua FROM usuariosturno ut WHERE ut.idturn = :idturn
+) p1 ON p1.idusua = uu.idusua
+`
+const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
+  :idturn,
+  TO_DATE(:initur, 'YYYY-MM-DD'),
+  TO_DATE(:fintur, 'YYYY-MM-DD'),
+  :inihor,
+  :finhor,
+  :arrusu,
+  :usumov,
+  :tipmov
+); END;
+`
+const removeUsuarioTurnoSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOTURNO(
+  :idturn,
+  :idusua,
+  :usumov,
+  :tipmov
+); END;
+`
+// turnocurso
+const turnoCursoSql = `SELECT 
+  cc.idcurs,
+  cc.descur,
+  tt.idturn,
+  tt.destur
+FROM turnoscurso tc
+INNER JOIN cursos cc ON cc.idcurs = tc.idcurs
+INNER JOIN turnos tt ON tt.idturn = tc.idturn
+WHERE tc.idcurs = :idcurs AND tc.idturn = :idturn
 `
 
 // cursos
@@ -194,8 +255,15 @@ export const change = async (bind) => {
 }
 
 // turnos
-export const turnosCurso = async (context) => {
-  let query = turnosCursoSql
+export const turno = async (context) => {
+  let query = turnoSql
+
+  const result = await simpleExecute(query, context)
+
+  return result.rows
+}
+export const turnos = async (context) => {
+  let query = turnosSql
   let binds = {}
 
   binds.idcurs = context.idcurs
@@ -248,9 +316,9 @@ export const removeTurno = async (bind) => {
 }
 
 // usuarios
-export const usuariosCurso = async (context) => {
+export const usuarios = async (context) => {
   let result
-  let query = usuariosCursoSql
+  let query = usuariosSql
   let binds = {}
 
   if (context.idcurs) {
@@ -303,4 +371,71 @@ export const removeUsuario = async (bind) => {
   }
 
   return result
+}
+
+// usuarios turno
+export const usuariosTurno = async (context) => {
+  let result
+  let query = usuariosTurnoSql
+
+  try {
+    result = await simpleExecute(query, context)
+  } catch (error) {
+    result = null
+  }
+
+  return result.rows
+}
+export const usuariosTurnoPendientes = async (context) => {
+  let result
+  let query = usuariosTurnoPendientesSql
+
+  try {
+    result = await simpleExecute(query, context)
+  } catch (error) {
+    result = null
+  }
+
+  return result.rows
+}
+export const insertUsuarioTurno = async (bind) => {
+  let result
+
+  console.log(insertUsuarioTurnoSql, bind)
+  try {
+    await simpleExecute(insertUsuarioTurnoSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return bind
+}
+export const removeUsuarioTurno = async (bind) => {
+  let result
+
+  try {
+    await simpleExecute(removeUsuarioTurnoSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+
+// turnos curso
+export const turnoCurso = async (context) => {
+  let result
+  let query = turnoCursoSql
+
+  try {
+    result = await simpleExecute(query, context)
+  } catch (error) {
+    result = null
+  }
+
+  return result.rows
 }
