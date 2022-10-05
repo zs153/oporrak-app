@@ -176,7 +176,6 @@
     });
   </script>
   <script>
-    const IDMATR = <%- datos.matricula.IDMATR %>
     const orgList = <%- datos.usuarios %>
     let state = {
       'querySet': orgList,
@@ -249,7 +248,7 @@
         const row = document.createElement('tr')
         let cell = document.createElement('td')
         cell.classList.add("w-4")
-        cell.innerHTML = `<input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select invoice">`
+        cell.innerHTML = `<input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select invoice" ${element.STAT} === 1 ? checked : ''>`
         row.appendChild(cell)
 
         // col2
@@ -280,6 +279,19 @@
       })
 
       pageButtons(data.pages)
+
+      const checkboxes = document.querySelectorAll("tr input");
+      checkboxes.forEach(e => {
+        e.addEventListener('click', function () {
+          // const cb = e.parentNode.querySelector('.checkbox input');
+          //cb.checked = !cb.checked;
+          state.querySet.findIndex(x => {
+            if (x.IDUSUA === e.parentNode.parentNode.cells[3].value) {
+              x.STAT = e.checked ? 1:0
+            }
+          })
+        });
+      })
     }
 
     const addUsuarios = () => {

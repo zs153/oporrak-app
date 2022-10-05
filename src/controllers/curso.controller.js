@@ -135,15 +135,15 @@ export const editTurnoPage = async (req, res) => {
   };
 
   try {
-    const result = await axios.post("http://localhost:8100/api/turno", {
+    const result = await axios.post("http://localhost:8100/api/cursos/turno", {
       turno,
     });
 
     const datos = {
-      curso,
+      curso,      
       turno: result.data,
     };
-
+console.log(datos)
     res.render("admin/cursos/turnos/edit", { user, datos });
   } catch (error) {
     const msg =
@@ -527,21 +527,16 @@ export const insertUsuarioTurno = async (req, res) => {
     idturn: req.body.idturn,
   }
   const usuarios = {
-    //arrusu: req.body.arrusu.split(',').map(itm => +itm)
     arrusu: JSON.parse(req.body.arrusu)
   }
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.crearUsuarioCurso,
+    tipmov: tiposMovimiento.insertarUsuarioTurno,
   }
-console.log(usuarios)
+
   try {
-    // const result = await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/insert", {
-    //   turno: { idturn: turnocurso.idturn },
-    // });
-    // console.log(result.data)
     await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/insert", {
-      turno: { idturn: 481, initur: '2022-10-04', fintur: '2022-10-06', inihor: '+0 08:00:00', finhor: '+0 14:00:00'},
+      turnocurso,
       usuarios,
       movimiento,
     });
@@ -557,25 +552,26 @@ console.log(usuarios)
 }
 export const deleteUsuarioTurno = async (req, res) => {
   const user = req.user;
-  const curso = {
+  const turnocurso = {
     idcurs: req.body.idcurs,
+    idturn: req.body.idturn,
   }
   const usuario = {
     idusua: req.body.idusua,
   };
   const movimiento = {
     usumov: user.id,
-    tipmov: tiposMovimiento.borrarUsuarioCurso,
+    tipmov: tiposMovimiento.borrarUsuarioTurno,
   };
 
   try {
-    await axios.post("http://localhost:8100/api/cursos/usuarios/delete", {
-      curso,
+    await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/delete", {
+      turnocurso,
       usuario,
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/usuarios/${curso.idcurs}`);
+    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.idcurs}/${turnocurso.idturn}`);
   } catch (error) {
     const msg = "No se ha podido borrar el usuario.";
 

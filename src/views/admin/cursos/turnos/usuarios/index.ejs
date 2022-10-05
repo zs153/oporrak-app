@@ -137,8 +137,9 @@
                   data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
-                <form action="/admin/cursos/usuarios/delete" method="POST">
-                  <input type="hidden" id="idusua" name="idusua" value="<%- datos.turnocurso.IDCURS %>">
+                <form action="/admin/cursos/turnos/usuarios/delete" method="POST">
+                  <input type="hidden" id="idusua" name="idusua" value="">
+                  <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.turnocurso.IDCURS %>">
                   <input type="hidden" id="idturn" name="idturn" value="<%- datos.turnocurso.IDTURN %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar usuario</button>
                 </form>

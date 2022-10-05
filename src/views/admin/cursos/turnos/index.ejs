@@ -242,7 +242,6 @@
     }
   </script>
   <script>
-    const IDCURS = <%- datos.curso.IDCURS %>
     const orgList = <%- datos.turnos %>
     let state = {
       'querySet': orgList,
@@ -368,7 +367,7 @@
           </a>
           <ul>
             <li class="nav-item">
-              <a href="/admin/cursos/turnos/edit/${element.IDTURN}" class="nav-link">
+              <a href="/admin/cursos/turnos/edit/<%- datos.curso.IDCURS %>/${element.IDTURN}" class="nav-link">
                 <i class="bi bi-pencil dropdown-item-icon"></i>Editar turno
               </a>
             </li>
