@@ -38,8 +38,14 @@ const cambioSql = `BEGIN OPORRAK_PKG.CAMBIOESTADOCURSO(
 `
 // turnos
 const turnoSql = `SELECT 
-  tt.*
-FROM turnos
+  tt.idturn,
+  tt.destur,
+  TO_CHAR(tt.initur, 'YYYY-MM-DD') "INITUR",
+  TO_CHAR(tt.fintur, 'YYYY-MM-DD') "FINTUR",
+  LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS "INIHOR",
+  LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS "FINHOR",
+  tt.loctur
+FROM turnos tt
 WHERE tt.idturn = :idturn
 `
 const turnosSql = `SELECT 
@@ -144,15 +150,13 @@ INNER JOIN (
 SELECT uc.idusua FROM usuarioscurso uc
 WHERE uc.idcurs = :idcurs
 MINUS
-SELECT ut.idusua FROM usuariosturno ut WHERE ut.idturn = :idturn
+SELECT ut.idusua FROM usuariosturno ut 
+INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn
+WHERE tc.idcurs = :idcurs
 ) p1 ON p1.idusua = uu.idusua
 `
 const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
   :idturn,
-  TO_DATE(:initur, 'YYYY-MM-DD'),
-  TO_DATE(:fintur, 'YYYY-MM-DD'),
-  :inihor,
-  :finhor,
   :arrusu,
   :usumov,
   :tipmov
@@ -401,7 +405,6 @@ export const usuariosTurnoPendientes = async (context) => {
 export const insertUsuarioTurno = async (bind) => {
   let result
 
-  console.log(insertUsuarioTurnoSql, bind)
   try {
     await simpleExecute(insertUsuarioTurnoSql, bind)
 

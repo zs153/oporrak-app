@@ -130,11 +130,7 @@ const deleteUsuarioFromRec = (req) => {
 }
 const insertUsuarioTurnoFromRec = (req) => {
   const turno = {
-    idturn: req.body.turno.idturn,
-    initur: req.body.turno.initur,
-    fintur: req.body.turno.fintur,
-    inihor: req.body.turno.inihor,
-    finhor: req.body.turno.finhor,
+    idturn: req.body.turnocurso.idturn,
   }
   const usuarios = {
     arrusu: {
@@ -149,8 +145,7 @@ const insertUsuarioTurnoFromRec = (req) => {
   return Object.assign(turno,usuarios,movimiento)
 }
 const deleteUsuarioTurnoFromRec = (req) => {
-  const turnocurso = {
-    idcurs: req.body.turnocurso.idcurs,
+  const turno = {
     idturn: req.body.turnocurso.idturn,
   }
   const usuario = {
@@ -161,7 +156,7 @@ const deleteUsuarioTurnoFromRec = (req) => {
     tipmov: req.body.movimiento.tipmov,
   }
 
-  return Object.assign(turnocurso, usuario, movimiento)
+  return Object.assign(turno, usuario, movimiento)
 }
 
 // cursos
@@ -245,7 +240,6 @@ export const cambioEstado = async (req, res) => {
 // turnos
 export const turno = async (req, res) => {
   const context = req.body.turno
-
   try {
     const result = await DAL.turno(context)
 
@@ -390,6 +384,7 @@ export const usuariosTurno = async (req, res) => {
 export const usuariosTurnoPendientes = async (req, res) => {
   const context = req.body.turnocurso
 
+  delete context.idturn
   try {
     const result = await DAL.usuariosTurnoPendientes(context)
 
@@ -403,7 +398,6 @@ export const usuariosTurnoPendientes = async (req, res) => {
   }
 }
 export const crearUsuarioTurno = async (req, res) => {  
-  console.log(insertUsuarioTurnoFromRec(req))
   try {
     const result = await DAL.insertUsuarioTurno(insertUsuarioTurnoFromRec(req))
 

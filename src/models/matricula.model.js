@@ -57,8 +57,13 @@ const usuariosMatriculaSql = `SELECT
 FROM usuarios uu
 INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+WHERE um.idmatr = :idmatr
 `
-const usuariosPendientesSql = `SELECT uu.idusua, uu.nomusu, oo.desofi
+const usuariosPendientesSql = `SELECT 
+  uu.idusua, 
+  uu.nomusu, 
+  oo.desofi,
+  0 AS "STAT"
 FROM usuarios uu
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 INNER JOIN (
@@ -164,16 +169,9 @@ export const change = async (bind) => {
 export const usuariosMatricula = async (context) => {
   let result
   let query = usuariosMatriculaSql
-  let binds = {}
 
-  if (context.idcurs) {
-    binds.idcurs = context.idcurs
-    query += `WHERE um.idmatr = :idmatr
-    ORDER BY uu.nomusu
-    `
-  }
   try {
-    result = await simpleExecute(query, binds)
+    result = await simpleExecute(query, context)
   } catch (error) {
     result = null
   }
@@ -194,7 +192,7 @@ export const usuariosPendientes = async (context) => {
 }
 export const insertUsuario = async (bind) => {
   let result
-console.log(insertUsuarioSql,bind)
+
   try {
     await simpleExecute(insertUsuarioSql, bind)
 
