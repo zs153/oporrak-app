@@ -62,8 +62,7 @@ WHERE um.idmatr = :idmatr
 const usuariosPendientesSql = `SELECT 
   uu.idusua, 
   uu.nomusu, 
-  oo.desofi,
-  0 AS "STAT"
+  oo.desofi
 FROM usuarios uu
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 INNER JOIN (

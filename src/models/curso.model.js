@@ -331,6 +331,7 @@ export const usuarios = async (context) => {
     ORDER BY uu.nomusu
     `
   }
+
   try {
     result = await simpleExecute(query, binds)
   } catch (error) {
@@ -404,7 +405,7 @@ export const usuariosTurnoPendientes = async (context) => {
 }
 export const insertUsuarioTurno = async (bind) => {
   let result
-
+  
   try {
     await simpleExecute(insertUsuarioTurnoSql, bind)
 
