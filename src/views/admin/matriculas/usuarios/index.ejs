@@ -45,6 +45,18 @@
       display: block;
       flex: 1 1 auto;
     }
+
+    .dots-menu .nav-divider {
+      height: 0;
+      margin: 0;
+      padding: 0 !important;
+      overflow: hidden;
+      border-top: 1px solid rgba(101, 109, 119, 0.16);
+    }
+
+    .pagination {
+      float: right;
+    }
   </style>
 </head>
 
@@ -55,7 +67,7 @@
         <div class="page-wrapper">
           <div class="container-xl">
             <div class="page-body">
-              <div class="row row-deck row-cards">
+              <div class="row">
                 <div class="col-12">
                   <div class="card">
                     <div class="card-header">
@@ -80,7 +92,7 @@
                               <line x1="12" y1="5" x2="12" y2="19"></line>
                               <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
-                            Añadir
+                            Añadir Usuarios
                           </a>
                         </div>
                       </div>
@@ -98,12 +110,14 @@
                         <tbody id="table-body">
                         </tbody>
                       </table>
-                      <div id="pagination-wrapper" class="pagination py-1"></div>
+                    </div>
+                    <div class="card-footer">
+                      <div id="pagination-wrapper" class="pagination"></div>
+                      <div class="ms-auto">
+                        <a href="/admin/matriculas" class="btn btn-link">Salir</a>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-12 mt-0">
-                  <a href="/admin/matriculas" class="btn btn-link">Salir</a>
                 </div>
               </div>
             </div>
@@ -141,6 +155,90 @@
                   <input type="hidden" id="idusua" name="idusua" value="">
                   <input type="hidden" id="idmatr" name="idmatr" value="<%- datos.matricula.IDMATR %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar usuario</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal modal-blur fade" id="modal-usuarios" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-danger"></div>
+        <div class="modal-body text-center py-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
+            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 9v2m0 4v.01"></path>
+            <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
+          </svg>
+
+                <div class="card">
+                  <div class="card-header">
+                    Usuarios
+                  </div>
+                  <div class="card-body overflow-auto">
+                    <table class="table table-vcenter card-table table-fixHead" id="tblUusarios">
+                      <thead>
+                        <tr class="header">
+                          <th class="w-4"></th>
+                          <th>Oficina</th>
+                          <th>Nombre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% datos.usuarios.forEach(element => { %>
+                          <tr>
+                            <td class="w-4">
+                              <input class='form-check-input m-0 align-middle' type='checkbox' aria-label='Seleccionar usuario'>
+                            </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium">
+                                    <%- element.DESOFI %>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="d-flex py-1 align-items-center">
+                                <div class="flex-fill">
+                                  <div class="font-weight-medium">
+                                    <%- element.NOMUSU %>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="display: none">
+                                <%- element.IDUSUA %>
+                              </div>
+                            </td>
+                          </tr>
+                          <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+        </div>
+        <div class="modal-footer">
+          <div class="w-100">
+            <div class="row">
+              <div class="col">
+                <a href="/admin/matriculas/usuarios/<%- datos.matricula.IDMATR %>" class="btn btn-white w-100"
+                  data-bs-dismiss="modal">Cancelar</a>
+              </div>
+              <div class="col">
+                <form action="/admin/matriculas/usuarios/insert" method="POST">
+                  <input type="hidden" name="idmatr" id="idmatr" value="<%- datos.matricula.IDMATR %>">
+                  <input type="hidden" name="arrusu" id="arrusu" value="">
+                  <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
                 </form>
               </div>
             </div>
@@ -223,14 +321,14 @@
     }
   </script>
   <script>
-    const IDMATR = <%- datos.matricula.IDMATR %>
-    const orgList = <%- datos.usuarios %>
-      let state = {
-        'querySet': orgList,
-        'page': 1,
-        'rows': 9,
-        'window': 3,
-      }
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
+
+    let state = {
+      'querySet': orgList,
+      'page': 1,
+      'rows': 8,
+      'window': 3,
+    }
 
     elemBuscar.value = getCookie('filtro')
     if (elemBuscar.value !== '') {

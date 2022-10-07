@@ -45,6 +45,10 @@
       display: block;
       flex: 1 1 auto;
     }
+
+    .pagination {
+      float: right;
+    }
   </style>
 </head>
 
@@ -98,12 +102,14 @@
                         <tbody id="table-body">
                         </tbody>
                       </table>
-                      <div id="pagination-wrapper" class="pagination py-1"></div>
+                      </div>
+                      <div class="card-footer">
+                        <div id="pagination-wrapper" class="pagination"></div>
+                        <div class="ms-auto">
+                          <a href="/admin/cursos/turnos/<%- datos.turnocurso.IDCURS %>" class="btn btn-link">Salir</a>
+                        </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-12 mt-0">
-                  <a href="/admin/cursos/turnos/<%- datos.turnocurso.IDCURS %>" class="btn btn-link">Salir</a>
                 </div>
               </div>
             </div>
@@ -229,7 +235,7 @@
     let state = {
       'querySet': orgList,
       'page': 1,
-      'rows': 9,
+      'rows': 8,
       'window': 3,
     }
 

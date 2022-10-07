@@ -143,7 +143,7 @@ export const editTurnoPage = async (req, res) => {
       curso,      
       turno: result.data,
     };
-console.log(datos)
+
     res.render("admin/cursos/turnos/edit", { user, datos });
   } catch (error) {
     const msg =
@@ -171,7 +171,7 @@ export const usuariosPage = async (req, res) => {
     });
     const datos = {
       curso: result.data,
-      usuarios: JSON.stringify(usuarios.data),
+      usuarios: usuarios.data,
     };
 
     res.render("admin/cursos/usuarios", { user, datos });

@@ -37,6 +37,10 @@
       overflow: hidden;
       border-top: 1px solid rgba(101, 109, 119, 0.16);
     } 
+
+    .pagination {
+      float: right;
+    }
   </style>
 </head>
 
@@ -67,7 +71,7 @@
                               <line x1="12" y1="5" x2="12" y2="19"></line>
                               <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
-                            Nueva
+                            Nueva Matrícula
                           </a>
                         </div>
                       </div>
@@ -88,7 +92,9 @@
                         <tbody id="table-body">
                         </tbody>
                       </table>
-                      <div id="pagination-wrapper" class="pagination py-1"></div>
+                    </div>
+                    <div class="card-footer">
+                      <div id="pagination-wrapper" class="pagination"></div>
                     </div>
                   </div>
                 </div>
@@ -213,7 +219,7 @@
     let state = {
       'querySet': orgList,
       'page': 1,
-      'rows': 9,
+      'rows': 8,
       'window': 3,
     }
 
@@ -355,7 +361,7 @@
               <div class="nav-divider"></div>
               <li class="nav-item">
                 <a href="/admin/matriculas/usuarios/${element.IDMATR}" class="nav-link">
-                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios matriculados
                 </a>
               </li>
             </ul>

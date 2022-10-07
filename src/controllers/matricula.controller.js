@@ -86,7 +86,7 @@ export const usuariosPage = async (req, res) => {
     });
     const datos = {
       matricula: result.data,
-      usuarios: JSON.stringify(usuarios.data),
+      usuarios: usuarios.data,
     };
 
     res.render("admin/matriculas/usuarios", { user, datos });
@@ -174,7 +174,7 @@ export const update = async (req, res) => {
     usumov: user.id,
     tipmov: tiposMovimiento.modificarMatricula,
   }
-console.log(matricula)
+
   try {
     await axios.post('http://localhost:8100/api/matriculas/update', {
       matricula,

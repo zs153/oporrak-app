@@ -32,7 +32,11 @@
       padding: 0 !important;
       overflow: hidden;
       border-top: 1px solid rgba(101, 109, 119, 0.16);
-    }     
+    }
+
+    .pagination {
+      float: right;
+    }
   </style>
 </head>
 
@@ -63,7 +67,7 @@
                               <line x1="12" y1="5" x2="12" y2="19"></line>
                               <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
-                            Nuevo
+                            Nuevo Curso
                           </a>
                         </div>
                       </div>
@@ -81,7 +85,9 @@
                         <tbody id="table-body">
                         </tbody>
                       </table>
-                      <div id="pagination-wrapper" class="pagination py-1"></div>
+                    </div>
+                    <div class="card-footer">
+                      <div id="pagination-wrapper" class="pagination"></div>
                     </div>
                   </div>
                 </div>
@@ -206,7 +212,7 @@
     let state = {
       'querySet': orgList,
       'page': 1,
-      'rows': 9,
+      'rows': 8,
       'window': 3,
     }
 
@@ -320,14 +326,14 @@
               </li>
               <div class="nav-divider"></div>
               <li class="nav-item">
-                <a href="/admin/cursos/turnos/${element.IDCURS}" class="nav-link">
-                  <i class="bi bi-diagram-2 dropdown-item-icon"></i>Turnos
+                <a href="/admin/cursos/usuarios/${element.IDCURS}" class="nav-link">
+                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios inscritos
                 </a>
               </li>
               <div class="nav-divider"></div>
               <li class="nav-item">
-                <a href="/admin/cursos/usuarios/${element.IDCURS}" class="nav-link">
-                  <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                <a href="/admin/cursos/turnos/${element.IDCURS}" class="nav-link">
+                  <i class="bi bi-diagram-2 dropdown-item-icon"></i>Turnos
                 </a>
               </li>
             </ul>

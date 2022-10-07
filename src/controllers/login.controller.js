@@ -98,7 +98,7 @@ export const forgotPassword = async (req, res) => {
     tipmov: tiposMovimiento.olvidoPassword,
     saltus: randomString,
   };
-  console.log(passHash, randomString)
+
   try {
     const result = await axios.post(
       "http://localhost:8100/api/usuarios/forgot",

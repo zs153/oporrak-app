@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/css/navbar.css">
   <style>
     .sortable th {
-      matricular: pointer;
+      cursor: pointer;
     }
 
     .sortable .th-sort-asc::after {
@@ -41,9 +41,13 @@
 
     .table-fixHead tbody {
       overflow-y: scroll;
-      height: 24vh;
+      height: 55vh;
       display: block;
       flex: 1 1 auto;
+    }
+
+    .pagination {
+      float: right;
     }
   </style>
 </head>
@@ -77,7 +81,7 @@
                         </div>
                       </div>
                       <div class="card-body">
-                        <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                        <table class="table table-vcenter table-striped table-fixHead sortable" id="tblUsuarios">
                           <thead>
                             <tr class="header">
                               <th class="w-4"></th>
@@ -90,13 +94,15 @@
                         </table>
                         <div id="pagination-wrapper" class="pagination py-1"></div>
                       </div>
+                      <div class="card-footer">
+                        <div class="col-12 d-flex">
+                          <a href="/admin/matriculas/usuarios/<%- datos.matricula.IDMATR %>" class="btn btn-link">Salir</a>
+                          <input type="hidden" name="idmatr" id="idmatr" value="<%- datos.matricula.IDMATR %>">
+                          <input type="hidden" name="arrusu" id="arrusu" value="">
+                          <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-12 d-flex">
-                      <a href="/admin/matriculas/usuarios/<%- datos.matricula.IDMATR %>" class="btn btn-link">Salir</a>
-                      <input type="hidden" name="idmatr" id="idmatr" value="<%- datos.matricula.IDMATR %>">
-                      <input type="hidden" name="arrusu" id="arrusu" value="">
-                      <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
                   </div>
                 </form>
               </div>
@@ -180,7 +186,7 @@
     let state = {
       'querySet': orgList,
       'page': 1,
-      'rows': 9,
+      'rows': 9999,
       'window': 3,
     }
 
@@ -248,7 +254,7 @@
         const row = document.createElement('tr')
         let cell = document.createElement('td')
         cell.classList.add("w-4")
-        cell.innerHTML = `<input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select invoice" ${element.STAT} === 1 ? checked : ''>`
+        cell.innerHTML = `<input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select usuario" >`
         row.appendChild(cell)
 
         // col2
@@ -278,20 +284,20 @@
         table.appendChild(row)
       })
 
-      pageButtons(data.pages)
+      //pageButtons(data.pages)
 
-      const checkboxes = document.querySelectorAll("tr input");
-      checkboxes.forEach(e => {
-        e.addEventListener('click', function () {
-          // const cb = e.parentNode.querySelector('.checkbox input');
-          //cb.checked = !cb.checked;
-          state.querySet.findIndex(x => {
-            if (x.IDUSUA === e.parentNode.parentNode.cells[3].value) {
-              x.STAT = e.checked ? 1:0
-            }
-          })
-        });
-      })
+      // const checkboxes = document.querySelectorAll("tr input");
+      // checkboxes.forEach(e => {
+      //   e.addEventListener('click', function () {
+      //     // const cb = e.parentNode.querySelector('.checkbox input');
+      //     //cb.checked = !cb.checked;
+      //     state.querySet.findIndex(x => {
+      //       if (x.IDUSUA === e.parentNode.parentNode.cells[3].value) {
+      //         x.STAT = e.checked ? 1:0
+      //       }
+      //     })
+      //   });
+      // })
     }
 
     const addUsuarios = () => {

@@ -41,9 +41,13 @@
 
     .table-fixHead tbody {
       overflow-y: scroll;
-      height: 24vh;
+      height: 55vh;
       display: block;
       flex: 1 1 auto;
+    }
+
+    .pagination {
+      float: right;
     }
   </style>
 </head>
@@ -77,7 +81,7 @@
                         </div>
                       </div>
                       <div class="card-body">
-                        <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                        <table class="table table-vcenter table-striped table-fixHead sortable" id="tblUsuarios">
                           <thead>
                             <tr class="header">
                               <th class="w-4"></th>
@@ -88,16 +92,19 @@
                           <tbody id="table-body">
                           </tbody>
                         </table>
-                        <div id="pagination-wrapper" class="pagination py-1"></div>
+                      </div>
+                      <div class="card-footer">
+                        <div id="pagination-wrapper" class="pagination"></div>
+                        <div class="col-12 d-flex">
+                          <a href="/admin/cursos/usuarios/<%- datos.curso.IDCURS %>" class="btn btn-link">Salir</a>
+                          <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
+                          <input type="hidden" name="arrusu" id="arrusu" value="">
+                          <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-12 d-flex">
-                      <a href="/admin/cursos/usuarios/<%- datos.curso.IDCURS %>" class="btn btn-link">Salir</a>
-                      <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
-                      <input type="hidden" name="arrusu" id="arrusu" value="">
-                      <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
-                  </div>
+
                 </form>
               </div>
             </div>
@@ -176,12 +183,11 @@
     });
   </script>
   <script>
-    const IDCURS = <%- datos.curso.IDCURS %>
     const orgList = <%- datos.usuarios %>
     let state = {
       'querySet': orgList,
       'page': 1,
-      'rows': 9,
+      'rows': 9999,
       'window': 3,
     }
 
@@ -279,7 +285,7 @@
         table.appendChild(row)
       })
 
-      pageButtons(data.pages)
+      // pageButtons(data.pages)
     }
 
     const addUsuarios = () => {
