@@ -2,158 +2,158 @@ import * as DAL from '../models/curso.model'
 
 const insertFromRec = (req) => {
   const curso = {
-    descur: req.body.curso.descur,
-    stacur: req.body.curso.stacur,
+    DESCUR: req.body.curso.DESCUR,
+    STACUR: req.body.curso.STACUR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
 }
 const updateFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
-    descur: req.body.curso.descur,
-    stacur: req.body.curso.stacur,
+    IDCURS: req.body.curso.IDCURS,
+    DESCUR: req.body.curso.DESCUR,
+    STACUR: req.body.curso.STACUR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
 }
 const deleteFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
+    IDCURS: req.body.curso.IDCURS,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
 }
 const cambioFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
-    stacur: req.body.curso.stacur,
+    IDCURS: req.body.curso.IDCURS,
+    STACUR: req.body.curso.STACUR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
 }
 const insertTurnoFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
+    IDCURS: req.body.curso.IDCURS,
   }
   const turno = {
-    destur: req.body.turno.destur,
-    initur: req.body.turno.initur,
-    fintur: req.body.turno.fintur,
-    inihor: req.body.turno.inihor,
-    finhor: req.body.turno.finhor,
-    loctur: req.body.turno.loctur,
+    DESTUR: req.body.turno.DESTUR,
+    INITUR: req.body.turno.INITUR,
+    FINTUR: req.body.turno.FINTUR,
+    INIHOR: req.body.turno.INIHOR,
+    FINHOR: req.body.turno.FINHOR,
+    LOCTUR: req.body.turno.LOCTUR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, turno, movimiento)
 }
 const updateTurnoFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
+    IDCURS: req.body.curso.IDCURS,
   }
   const turno = {
-    idturn: req.body.turno.idturn,
-    destur: req.body.turno.destur,
-    initur: req.body.turno.initur,
-    fintur: req.body.turno.fintur,
-    inihor: req.body.turno.inihor,
-    finhor: req.body.turno.finhor,
-    loctur: req.body.turno.loctur,
+    IDTURN: req.body.turno.IDTURN,
+    DESTUR: req.body.turno.DESTUR,
+    INITUR: req.body.turno.INITUR,
+    FINTUR: req.body.turno.FINTUR,
+    INIHOR: req.body.turno.INIHOR,
+    FINHOR: req.body.turno.FINHOR,
+    LOCTUR: req.body.turno.LOCTUR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, turno, movimiento)
 }
 const deleteTurnoFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
+    IDCURS: req.body.curso.IDCURS,
   }
   const turno = {
-    idturn: req.body.turno.idturn,
+    IDTURN: req.body.turno.IDTURN,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, turno, movimiento)
 }
 const insertUsuarioFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
+    IDCURS: req.body.curso.IDCURS,
   }
   const usuarios = {
-    arrusu: req.body.usuarios.arrusu,
+    ARRUSU: req.body.usuarios.ARRUSU,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
   return Object.assign(curso, usuarios, movimiento)
 }
 const deleteUsuarioFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.idcurs,
+    IDCURS: req.body.curso.IDCURS,
   }
   const usuario = {
-    idusua: req.body.usuario.idusua,
+    IDUSUA: req.body.usuario.IDUSUA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, usuario, movimiento)
 }
 const insertUsuarioTurnoFromRec = (req) => {
   const turno = {
-    idturn: req.body.turnocurso.idturn,
+    IDTURN: req.body.turnocurso.IDTURN,
   }
   const usuarios = {
-    arrusu: {
+    ARRUSU: {
       type: "USRTYPE",
-      val: req.body.usuarios.arrusu,
+      val: req.body.usuarios.ARRUSU,
     }
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(turno,usuarios,movimiento)
+  return Object.assign(turno, usuarios, movimiento)
 }
 const deleteUsuarioTurnoFromRec = (req) => {
   const turno = {
-    idturn: req.body.turnocurso.idturn,
+    IDTURN: req.body.turnocurso.IDTURN,
   }
   const usuario = {
-    idusua: req.body.usuario.idusua,
+    IDUSUA: req.body.usuario.IDUSUA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(turno, usuario, movimiento)
@@ -240,6 +240,7 @@ export const cambioEstado = async (req, res) => {
 // turnos
 export const turno = async (req, res) => {
   const context = req.body.turno
+
   try {
     const result = await DAL.turno(context)
 
@@ -325,6 +326,7 @@ export const usuarios = async (req, res) => {
 }
 export const usuariosPendientes = async (req, res) => {
   const context = req.body.curso
+
   try {
     const result = await DAL.usuariosPendientes(context)
 
@@ -367,7 +369,7 @@ export const borrarUsuario = async (req, res) => {
 // usuarios turno
 export const usuariosTurno = async (req, res) => {
   const context = req.body.turnocurso
-  delete context.idcurs
+  delete context.IDCURS
 
   try {
     const result = await DAL.usuariosTurno(context)
@@ -384,7 +386,7 @@ export const usuariosTurno = async (req, res) => {
 export const usuariosTurnoPendientes = async (req, res) => {
   const context = req.body.turnocurso
 
-  delete context.idturn
+  delete context.IDTURN
   try {
     const result = await DAL.usuariosTurnoPendientes(context)
 
@@ -397,7 +399,7 @@ export const usuariosTurnoPendientes = async (req, res) => {
     res.status(500).end()
   }
 }
-export const crearUsuarioTurno = async (req, res) => {  
+export const crearUsuarioTurno = async (req, res) => {
   try {
     const result = await DAL.insertUsuarioTurno(insertUsuarioTurnoFromRec(req))
 

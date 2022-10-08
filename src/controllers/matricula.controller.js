@@ -2,81 +2,81 @@ import * as DAL from '../models/matricula.model'
 
 const insertFromRec = (req) => {
   const matricula = {
-    desmat: req.body.matricula.desmat,
-    inimat: req.body.matricula.inimat,
-    finmat: req.body.matricula.finmat,
-    idcurs: req.body.matricula.idcurs,
-    stamat: req.body.matricula.stamat,
+    DESMAT: req.body.matricula.DESMAT,
+    INIMAT: req.body.matricula.INIMAT,
+    FINMAT: req.body.matricula.FINMAT,
+    IDCURS: req.body.matricula.IDCURS,
+    STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(matricula, movimiento)
 }
 const updateFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.idmatr,
-    desmat: req.body.matricula.desmat,
-    inimat: req.body.matricula.inimat,
-    finmat: req.body.matricula.finmat,
-    idcurs: req.body.matricula.idcurs,
-    stamat: req.body.matricula.stamat,
+    IDMATR: req.body.matricula.IDMATR,
+    DESMAT: req.body.matricula.DESMAT,
+    INIMAT: req.body.matricula.INIMAT,
+    FINMAT: req.body.matricula.FINMAT,
+    IDCURS: req.body.matricula.IDCURS,
+    STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(matricula, movimiento)
 }
 const deleteFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.idmatr,
+    IDMATR: req.body.matricula.IDMATR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(matricula, movimiento)
 }
 const cambioFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.idmatr,
-    stamat: req.body.matricula.stamat,
+    IDMATR: req.body.matricula.IDMATR,
+    STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(matricula, movimiento)
 }
 const insertUsuarioFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.idmatr,
+    IDMATR: req.body.matricula.IDMATR,
   }
   const usuarios = {
-    arrusu: req.body.usuarios.arrusu,
+    ARRUSU: req.body.usuarios.ARRUSU,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
   return Object.assign(matricula, usuarios, movimiento)
 }
 const deleteUsuarioFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.idmatr,
+    IDMATR: req.body.matricula.IDMATR,
   }
   const usuario = {
-    idusua: req.body.usuario.idusua,
+    IDUSUA: req.body.usuario.IDUSUA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(matricula, usuario, movimiento)
@@ -177,6 +177,7 @@ export const usuariosMatricula = async (req, res) => {
 }
 export const usuariosPendientes = async (req, res) => {
   const context = req.body.matricula
+
   try {
     const result = await DAL.usuariosPendientes(context)
 

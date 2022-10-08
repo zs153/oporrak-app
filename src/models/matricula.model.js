@@ -1,7 +1,21 @@
 import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
-const baseQuery = `SELECT 
+const matriculaSql = `SELECT 
+  mm.idmatr,
+  mm.desmat,
+  TO_CHAR(mm.inimat, 'YYYY-MM-DD') AS INIMAT,
+  TO_CHAR(mm.finmat, 'YYYY-MM-DD') AS FINMAT,
+  mm.idcurs,
+  mm.stamat,
+  cc.descur,
+  TO_CHAR(mm.inimat, 'DD/MM/YYYY') AS STRINI,
+  TO_CHAR(mm.finmat, 'DD/MM/YYYY') AS STRFIN
+FROM matriculas mm
+INNER JOIN cursos cc ON cc.idcurs = mm.idcurs
+WHERE mm.idmatr = :idmatr
+`
+const matriculasSql = `SELECT 
   mm.idmatr,
   mm.desmat,
   TO_CHAR(mm.inimat, 'YYYY-MM-DD') AS INIMAT,
@@ -88,20 +102,14 @@ const removeUsuarioSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
 
 // matriculas
 export const find = async (context) => {
-  let query = baseQuery
-  let binds = {}
+  let query = matriculaSql
 
-  if (context.idmatr) {
-    binds.idmatr = context.idmatr
-    query += `WHERE mm.idmatr = :idmatr`
-  }
-
-  const result = await simpleExecute(query, binds)
+  const result = await simpleExecute(query, context)
 
   return result.rows
 }
 export const findAll = async () => {
-  let query = baseQuery
+  let query = matriculasSql
   let binds = {}
 
   const result = await simpleExecute(query, binds)
@@ -109,7 +117,7 @@ export const findAll = async () => {
   return result.rows
 }
 export const insert = async (bind) => {
-  bind.idmatr = {
+  bind.IDMATR = {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
@@ -117,7 +125,7 @@ export const insert = async (bind) => {
   try {
     const result = await simpleExecute(insertSql, bind)
 
-    bind.idmatr = await result.outBinds.idmatr
+    bind.IDMATR = await result.outBinds.IDMATR
   } catch (error) {
     bind = null
   }

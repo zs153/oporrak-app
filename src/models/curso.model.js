@@ -1,7 +1,15 @@
 import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
-const baseQuery = `SELECT 
+const cursoSql = `SELECT 
+  idcurs,
+  descur,
+  stacur
+FROM cursos
+WHERE idcurs = :idcurs
+ORDER BY descur
+`
+const cursosSql = `SELECT 
   idcurs,
   descur,
   stacur
@@ -102,6 +110,8 @@ const usuariosSql = `SELECT
 FROM usuarios uu
 INNER JOIN usuarioscurso uc ON uc.idusua = uu.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+WHERE uc.idcurs = :idcurs
+ORDER BY uu.nomusu
 `
 const usuariosPendientesSql = `SELECT uu.idusua, uu.nomusu, oo.desofi
 FROM usuarios uu
@@ -183,27 +193,20 @@ WHERE tc.idcurs = :idcurs AND tc.idturn = :idturn
 
 // cursos
 export const find = async (context) => {
-  let query = baseQuery
-  let binds = {}
+  let query = cursoSql
 
-  if (context.idcurs) {
-    binds.idcurs = context.idcurs
-    query += `WHERE idcurs = :idcurs`
-  }
-
-  const result = await simpleExecute(query, binds)
-
+  const result = await simpleExecute(query, context)
   return result.rows
 }
 export const findAll = async () => {
-  let query = baseQuery
+  let query = cursosSql
   let binds = {}
 
   const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insert = async (bind) => {
-  bind.idcurs = {
+  bind.IDCURS = {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
@@ -211,7 +214,7 @@ export const insert = async (bind) => {
   try {
     const result = await simpleExecute(insertSql, bind)
 
-    bind.idcurs = await result.outBinds.idcurs
+    bind.IDCURS = await result.outBinds.IDCURS
   } catch (error) {
     bind = null
   }
@@ -263,21 +266,16 @@ export const turno = async (context) => {
   let query = turnoSql
 
   const result = await simpleExecute(query, context)
-
   return result.rows
 }
 export const turnos = async (context) => {
   let query = turnosSql
-  let binds = {}
 
-  binds.idcurs = context.idcurs
-
-  const result = await simpleExecute(query, binds)
-
+  const result = await simpleExecute(query, context)
   return result.rows
 }
 export const insertTurno = async (bind) => {
-  bind.idturn = {
+  bind.IDTURN = {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
@@ -285,7 +283,7 @@ export const insertTurno = async (bind) => {
   try {
     const result = await simpleExecute(insertTurnoSql, bind)
 
-    bind.idturn = await result.outBinds.idturn
+    bind.IDTURN = await result.outBinds.IDTURN
   } catch (error) {
     bind = null
   }
@@ -323,17 +321,9 @@ export const removeTurno = async (bind) => {
 export const usuarios = async (context) => {
   let result
   let query = usuariosSql
-  let binds = {}
-
-  if (context.idcurs) {
-    binds.idcurs = context.idcurs
-    query += `WHERE uc.idcurs = :idcurs
-    ORDER BY uu.nomusu
-    `
-  }
 
   try {
-    result = await simpleExecute(query, binds)
+    result = await simpleExecute(query, context)
   } catch (error) {
     result = null
   }
@@ -405,7 +395,7 @@ export const usuariosTurnoPendientes = async (context) => {
 }
 export const insertUsuarioTurno = async (bind) => {
   let result
-  
+
   try {
     await simpleExecute(insertUsuarioTurnoSql, bind)
 
