@@ -63,67 +63,64 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../../partials/header') %>
-      <%- include('../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-        <div class="page-wrapper">
-          <div class="container-xl">
-            <div class="page-body">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-header">
-                      <div>
-                        <h3 class="card-title">Inscritos</h3>
-                        <p class="subtitulo">
-                          <%- datos.matricula.DESMAT %>
-                        </p>
+    <%- include('../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <div class="page-wrapper">
+      <div class="container-xl">
+        <div class="page-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Inscritos</h3>
+                    <p class="subtitulo">
+                      <%- datos.matricula.DESMAT %>
+                    </p>
+                  </div>
+                  <div class="col-auto ms-auto">
+                    <div class="d-flex">
+                      <div class="input-icon me-3">
+                        <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
                       </div>
-                      <div class="col-auto ms-auto">
-                        <div class="d-flex">
-                          <div class="input-icon me-3">
-                            <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox"
-                              onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
-                          </div>
-                          <a href="/admin/matriculas/usuarios/add/<%- datos.matricula.IDMATR %>" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <line x1="12" y1="5" x2="12" y2="19"></line>
-                              <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Añadir Usuarios
-                          </a>
-                        </div>
-                      </div>
+                      <a href="/admin/matriculas/usuarios/add/<%- datos.matricula.IDMATR %>" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Añadir Usuarios
+                      </a>
                     </div>
-                    <div class="card-body">
-                      <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
-                        <thead>
-                          <tr class="header">
-                            <th class="w-4"></th>
-                            <th>Nombre</th>
-                            <th>Oficina</th>
-                            <th class="w-6"></th>
-                          </tr>
-                        </thead>
-                        <tbody id="table-body">
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="card-footer">
-                      <div id="pagination-wrapper" class="pagination"></div>
-                      <div class="ms-auto">
-                        <a href="/admin/matriculas" class="btn btn-link">Salir</a>
-                      </div>
-                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                    <thead>
+                      <tr class="header">
+                        <th class="w-4"></th>
+                        <th>Nombre</th>
+                        <th>Oficina</th>
+                        <th class="w-6"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-footer">
+                  <div id="pagination-wrapper" class="pagination"></div>
+                  <div class="ms-auto">
+                    <a href="/admin/matriculas" class="btn btn-link">Salir</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <%- include('../../../partials/footer') %>
+      </div>
+    </div>
+    <%- include('../../../partials/footer') %>
   </div>
 
   <div class="modal modal-blur fade" id="modal-borrarUsuario" tabindex="-1" role="dialog" aria-hidden="true">
@@ -132,9 +129,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="modal-status bg-danger"></div>
         <div class="modal-body text-center py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
-            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M12 9v2m0 4v.01"></path>
             <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
@@ -147,98 +142,13 @@
           <div class="w-100">
             <div class="row">
               <div class="col">
-                <a href="/admin/matriculas/usuarios/<%- datos.matricula.IDMATR %>" class="btn btn-white w-100"
-                  data-bs-dismiss="modal">Cancelar</a>
+                <a href="/admin/matriculas/usuarios/<%- datos.matricula.IDMATR %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
                 <form action="/admin/matriculas/usuarios/delete" method="POST">
                   <input type="hidden" id="idusua" name="idusua" value="">
                   <input type="hidden" id="idmatr" name="idmatr" value="<%- datos.matricula.IDMATR %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar usuario</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal modal-blur fade" id="modal-usuarios" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="modal-status bg-danger"></div>
-        <div class="modal-body text-center py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
-            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M12 9v2m0 4v.01"></path>
-            <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
-          </svg>
-
-                <div class="card">
-                  <div class="card-header">
-                    Usuarios
-                  </div>
-                  <div class="card-body overflow-auto">
-                    <table class="table table-vcenter card-table table-fixHead" id="tblUusarios">
-                      <thead>
-                        <tr class="header">
-                          <th class="w-4"></th>
-                          <th>Oficina</th>
-                          <th>Nombre</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% datos.usuarios.forEach(element => { %>
-                          <tr>
-                            <td class="w-4">
-                              <input class='form-check-input m-0 align-middle' type='checkbox' aria-label='Seleccionar usuario'>
-                            </td>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium">
-                                    <%- element.DESOFI %>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="d-flex py-1 align-items-center">
-                                <div class="flex-fill">
-                                  <div class="font-weight-medium">
-                                    <%- element.NOMUSU %>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="display: none">
-                                <%- element.IDUSUA %>
-                              </div>
-                            </td>
-                          </tr>
-                          <% }) %>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-        </div>
-        <div class="modal-footer">
-          <div class="w-100">
-            <div class="row">
-              <div class="col">
-                <a href="/admin/matriculas/usuarios/<%- datos.matricula.IDMATR %>" class="btn btn-white w-100"
-                  data-bs-dismiss="modal">Cancelar</a>
-              </div>
-              <div class="col">
-                <form action="/admin/matriculas/usuarios/insert" method="POST">
-                  <input type="hidden" name="idmatr" id="idmatr" value="<%- datos.matricula.IDMATR %>">
-                  <input type="hidden" name="arrusu" id="arrusu" value="">
-                  <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
                 </form>
               </div>
             </div>
@@ -348,6 +258,7 @@
         'pages': pages,
       }
     }
+
     function pageButtons(pages) {
       var wrapper = document.getElementById('pagination-wrapper')
       var maxLeft = (state.page - Math.floor(state.window / 2))
@@ -383,6 +294,7 @@
         })
       }
     }
+
     function buildTable() {
       const table = document.getElementById('table-body')
       const data = pagination(state.querySet, state.page, state.rows)

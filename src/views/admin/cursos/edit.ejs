@@ -17,64 +17,64 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-        <div class="page-wrapper">
-          <div class="page-body">
-            <div class="container-xl">
-              <div class="row row-deck row-cards">
-                <div class="col-12">
-                  <div class="card">
-                    <% if(typeof alerts !='undefined' ) { %>
-                      <% alerts.map(function (alert){ %>
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                          <%- alert.msg %>
-                        </div>
-                        <% }) %>
-                          <% } %>
-                            <form action="/admin/cursos/update" method="POST" onsubmit="return validate();">
-                              <input type="hidden" name="idcurs" id="idcurs" value=<%- datos.curso.IDCURS %>>
-                              <div class="card-header">
-                                <h3 class="card-title">Curso</h3>
-                              </div>
-                              <div class="card-body">
-                                <div class="row">
-                                  <div class="col-12">
-                                    <div class="mb-1">
-                                      <label class="form-label required">Descripción</label>
-                                      <input type="text" name="descur" id="descur" class="form-control"
-                                        value="<%- datos.curso.DESCUR %>" style="text-transform: uppercase;" autofocus />
-                                      <div class="invalid-feedback"></div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-2">
-                                    <div class="mb-1">
-                                      <div class="form-label">Estado</div>
-                                      <select class="form-select" id="cboest" name="stacur" value="">
-                                        <% datos.arrEstadosCurso.map(element=> { %>
-                                          <option value="<%= element.id %>" <%- element.id===datos.curso.STACUR ? " selected" :"" %>><%= element.des %>
-                                          </option>
-                                          <% }) %>
-                                      </select>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="card-footer text-end">
-                                <div class="d-flex">
-                                  <a href="/admin/cursos" class="btn btn-link">Cancelar</a>
-                                  <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar curso</button>
-                                </div>
-                              </div>
-                            </form>
-                  </div>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            <div class="col-12">
+              <div class="card">
+                <% if(typeof alerts !='undefined' ) { %>
+                <% alerts.map(function (alert){ %>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <%- alert.msg %>
                 </div>
+                <% }) %>
+                <% } %>
+                <form action="/admin/cursos/update" method="POST" onsubmit="return validate();">
+                  <input type="hidden" name="idcurs" id="idcurs" value=<%- datos.curso.IDCURS %>>
+                  <div class="card-header">
+                    <h3 class="card-title">Curso</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="mb-1">
+                          <label class="form-label required">Descripción</label>
+                          <input type="text" name="descur" id="descur" class="form-control" value="<%- datos.curso.DESCUR %>" style="text-transform: uppercase;" autofocus />
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <div class="form-label">Estado</div>
+                          <select class="form-select" id="cboest" name="stacur" value="">
+                            <% datos.arrEstadosCurso.map(element=> { %>
+                            <option value="<%= element.id %>" <%- element.id===datos.curso.STACUR ? " selected" :"" %>>
+                              <%= element.des %>
+                            </option>
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer text-end">
+                    <div class="d-flex">
+                      <a href="/admin/cursos" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar curso</button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
-        <%- include('../../partials/footer') %>
+      </div>
+    </div>
+    <%- include('../../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
@@ -86,7 +86,7 @@
 
       if (descurValue === '') {
         setError(descur, 'Descripción requerida')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(descur)
         }, 3000)
         return false

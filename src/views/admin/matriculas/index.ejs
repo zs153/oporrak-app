@@ -36,7 +36,7 @@
       padding: 0 !important;
       overflow: hidden;
       border-top: 1px solid rgba(101, 109, 119, 0.16);
-    } 
+    }
 
     .pagination {
       float: right;
@@ -47,62 +47,59 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-        <div class="page-wrapper">
-          <div class="page-body">
-            <div class="container-xl">
-              <div class="row row-deck row-cards">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-header">
-                      <h3 class="card-title">Matrículas</h3>
-                      <div class="col-auto ms-auto">
-                        <div class="d-flex">
-                          <div class="input-icon me-3">
-                            <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarMatriculaBox"
-                              onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en matriculas">
-                          </div>
-                          <a href="/admin/matriculas/add" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <line x1="12" y1="5" x2="12" y2="19"></line>
-                              <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Nueva Matrícula
-                          </a>
-                        </div>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Matrículas</h3>
+                  <div class="col-auto ms-auto">
+                    <div class="d-flex">
+                      <div class="input-icon me-3">
+                        <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarMatriculaBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en matriculas">
                       </div>
-                    </div>
-                    <div class="card-body">
-                      <table class="table table-vcenter table-striped sortable" id="tblMatriculas">
-                        <thead>
-                          <tr class="header">
-                            <th class="w-4"></th>
-                            <th>Descipción</th>
-                            <th>Fecha de Inicio</th>
-                            <th>Fecha de Fin</th>
-                            <th>Estado</th>
-                            <th>Curso</th>
-                            <th class="w-6"></th>
-                          </tr>
-                        </thead>
-                        <tbody id="table-body">
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="card-footer">
-                      <div id="pagination-wrapper" class="pagination"></div>
+                      <a href="/admin/matriculas/add" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Nueva Matrícula
+                      </a>
                     </div>
                   </div>
+                </div>
+                <div class="card-body">
+                  <table class="table table-vcenter table-striped sortable" id="tblMatriculas">
+                    <thead>
+                      <tr class="header">
+                        <th class="w-4"></th>
+                        <th>Descipción</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Fecha de Fin</th>
+                        <th>Estado</th>
+                        <th>Curso</th>
+                        <th class="w-6"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-footer">
+                  <div id="pagination-wrapper" class="pagination"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <%- include('../../partials/footer') %>
+      </div>
+    </div>
+    <%- include('../../partials/footer') %>
   </div>
 
   <div class="modal modal-blur fade" id="modal-borrar" tabindex="-1" role="dialog" aria-hidden="true">
@@ -111,9 +108,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="modal-status bg-danger"></div>
         <div class="modal-body text-center py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
-            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M12 9v2m0 4v.01"></path>
             <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
@@ -214,8 +209,8 @@
     }
   </script>
   <script>
-    const estados = <%- datos.estados %>
-    const orgList = <%- datos.matriculas %>
+    const estados = <%- JSON.stringify(datos.estados) %>
+    const orgList = <%- JSON.stringify(datos.matriculas) %>
     let state = {
       'querySet': orgList,
       'page': 1,
@@ -241,6 +236,7 @@
         'pages': pages,
       }
     }
+
     function pageButtons(pages) {
       var wrapper = document.getElementById('pagination-wrapper')
       var maxLeft = (state.page - Math.floor(state.window / 2))
@@ -276,6 +272,7 @@
         })
       }
     }
+
     function buildTable() {
       const table = document.getElementById('table-body')
       const data = pagination(state.querySet, state.page, state.rows)

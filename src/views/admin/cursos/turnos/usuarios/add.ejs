@@ -55,64 +55,62 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../../../partials/header') %>
-      <%- include('../../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-        <div class="page-wrapper">
-          <div class="container-xl">
-            <div class="page-body">
-              <div class="row row-deck row-cards">
-                <form id="form" action="/admin/cursos/turnos/usuarios/insert" method="POST" onsubmit="return addUsuarios();">
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-header">
-                        <div>
-                          <h3 class="card-title">Usuarios disponibles</h3>
-                          <p class="subtitulo">
-                            <%- datos.curso.descur %>
-                          </p>
-                        </div>
-                        <div class="col-auto ms-auto">
-                          <div class="d-flex">
-                            <div class="input-icon me-3">
-                              <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                              <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox"
-                                onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card-body">
-                        <table class="table table-vcenter table-striped table-fixHead sortable" id="tblUsuarios">
-                          <thead>
-                            <tr class="header">
-                              <th class="w-4"></th>
-                              <th>Oficina</th>
-                              <th>Nombre</th>
-                            </tr>
-                          </thead>
-                          <tbody id="table-body">
-                          </tbody>
-                        </table>
-                        <div id="pagination-wrapper" class="pagination py-1"></div>
-                      </div>
-                      <div class="card-footer">
-                        <div class="col-12 d-flex">
-                          <a href="/admin/cursos/turnos/usuarios/<%- datos.turnocurso.idcurs %>/<%- datos.turnocurso.idturn %>"
-                            class="btn btn-link">Salir</a>
-                          <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.turnocurso.idcurs %>">
-                          <input type="hidden" name="idturn" id="idturn" value="<%- datos.turnocurso.idturn %>">
-                          <input type="hidden" name="arrusu" id="arrusu" value="">
-                          <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
+    <%- include('../../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <div class="page-wrapper">
+      <div class="container-xl">
+        <div class="page-body">
+          <div class="row row-deck row-cards">
+            <form id="form" action="/admin/cursos/turnos/usuarios/insert" method="POST" onsubmit="return addUsuarios();">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div>
+                      <h3 class="card-title">Usuarios disponibles</h3>
+                      <p class="subtitulo">
+                        <%- datos.curso.DESCUR %>
+                      </p>
+                    </div>
+                    <div class="col-auto ms-auto">
+                      <div class="d-flex">
+                        <div class="input-icon me-3">
+                          <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
                         </div>
                       </div>
                     </div>
                   </div>
-
-                </form>
+                  <div class="card-body">
+                    <table class="table table-vcenter table-striped table-fixHead sortable" id="tblUsuarios">
+                      <thead>
+                        <tr class="header">
+                          <th class="w-4"></th>
+                          <th>Oficina</th>
+                          <th>Nombre</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-body">
+                      </tbody>
+                    </table>
+                    <div id="pagination-wrapper" class="pagination py-1"></div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="col-12 d-flex">
+                      <a href="/admin/cursos/turnos/usuarios/<%- datos.turnocurso.IDCURS %>/<%- datos.turnocurso.IDTURN %>" class="btn btn-link">Salir</a>
+                      <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.turnocurso.IDCURS %>">
+                      <input type="hidden" name="idturn" id="idturn" value="<%- datos.turnocurso.IDTURN %>">
+                      <input type="hidden" name="arrusu" id="arrusu" value="">
+                      <button type="submit" class="btn btn-link ms-auto" id="btnAddU">Añadir usuarios</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+
+            </form>
           </div>
         </div>
-        <%- include('../../../../partials/footer') %>
+      </div>
+    </div>
+    <%- include('../../../../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
@@ -153,6 +151,7 @@
 
       buildTable()
     }
+
     function sortTableByColumn(table, column, asc = true) {
       const dirModifier = asc ? 1 : -1;
       const tBody = table.tBodies[0];
@@ -185,7 +184,7 @@
     });
   </script>
   <script>
-    const orgList = <%- datos.usuarios %>
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
     let state = {
       'querySet': orgList,
       'page': 1,
@@ -211,41 +210,7 @@
         'pages': pages,
       }
     }
-    function pageButtons(pages) {
-      var wrapper = document.getElementById('pagination-wrapper')
-      var maxLeft = (state.page - Math.floor(state.window / 2))
-      var maxRight = (state.page + Math.floor(state.window / 2))
 
-      wrapper.innerHTML = ``
-      if (maxLeft < 1) {
-        maxLeft = 1
-        maxRight = state.window
-      }
-
-      if (maxRight > pages) {
-        maxLeft = pages - (state.window - 1)
-
-        if (maxLeft < 1) {
-          maxLeft = 1
-        }
-        maxRight = pages
-      }
-
-      for (var page = maxLeft; page <= maxRight; page++) {
-        wrapper.innerHTML += `<button value=${page} class="page-item btn btn-primary">${page}</button>`
-      }
-      wrapper.innerHTML = `<button value=${1} class="page-item btn btn-primary">&#171; Primero</button>` + wrapper.innerHTML
-      wrapper.innerHTML += `<button value=${pages} class="page-item btn btn-primary">Último &#187;</button>`
-
-      const elem = document.getElementsByClassName('page-item')
-      for (let i = 0; i < elem.length; i++) {
-        elem[i].addEventListener('click', (e) => {
-          state.page = Number(e.target.value)
-
-          buildTable()
-        })
-      }
-    }
     function buildTable() {
       const table = document.getElementById('table-body')
       const data = pagination(state.querySet, state.page, state.rows)
@@ -292,8 +257,6 @@
 
         table.appendChild(row)
       })
-
-      // pageButtons(data.pages)
     }
 
     const addUsuarios = () => {
@@ -302,14 +265,14 @@
       document.querySelectorAll('input[type=checkbox]').forEach(e => {
         if (e.checked) {
           arrUsuarios.push({
-            IDUSUA: e.parentNode.parentNode.cells[3].value, 
+            IDUSUA: e.parentNode.parentNode.cells[3].value,
             IDOFIC: e.parentNode.parentNode.cells[4].value
           })
         }
       })
       document.getElementById('arrusu').value = JSON.stringify(arrUsuarios)
     }
-</script>
+  </script>
 </body>
 
 </html>

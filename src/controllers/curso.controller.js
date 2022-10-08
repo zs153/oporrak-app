@@ -8,8 +8,8 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.post('http://localhost:8100/api/cursos')
     const datos = {
-      cursos: JSON.stringify(result.data),
-      arrEstadosCurso: JSON.stringify(arrEstadosCurso),
+      cursos: result.data,
+      arrEstadosCurso: arrEstadosCurso,
     }
 
     res.render('admin/cursos', { user, datos })
@@ -24,7 +24,8 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user
   const curso = {
-    stacur: estadosCurso.cerrado,
+    DESCUR: '',
+    STACUR: estadosCurso.cerrado,
   }
   const datos = {
     curso,
@@ -44,7 +45,7 @@ export const addPage = async (req, res) => {
 export const editPage = async (req, res) => {
   const user = req.user
   const curso = {
-    idcurs: req.params.id,
+    IDCURS: req.params.id,
   }
 
   try {
@@ -55,7 +56,6 @@ export const editPage = async (req, res) => {
       curso: result.data,
       arrEstadosCurso,
     }
-
     res.render('admin/cursos/edit', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -70,7 +70,7 @@ export const editPage = async (req, res) => {
 export const turnosPage = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.params.id,
+    IDCURS: req.params.id,
   };
 
   try {
@@ -82,7 +82,7 @@ export const turnosPage = async (req, res) => {
     });
     const datos = {
       curso: result.data,
-      turnos: JSON.stringify(turnos.data),
+      turnos: turnos.data,
     };
 
     res.render("admin/cursos/turnos", { user, datos });
@@ -98,15 +98,15 @@ export const addTurnoPage = async (req, res) => {
   const user = req.user;
   const fecha = new Date();
   const curso = {
-    idcurs: req.params.id,
+    IDCURS: req.params.id,
   };
   const turno = {
-    destur: '',
-    strini: fecha.toISOString().slice(0, 10),
-    strfin: fecha.toISOString().slice(0, 10),
-    inihor: '08:00',
-    finhor: '14:00',
-    loctur: ''
+    DESTUR: '',
+    STRINI: fecha.toISOString().slice(0, 10),
+    STRFIN: fecha.toISOString().slice(0, 10),
+    INIHOR: '08:00',
+    FINHOR: '14:00',
+    LOCTUR: ''
   }
 
   try {
@@ -128,10 +128,10 @@ export const addTurnoPage = async (req, res) => {
 export const editTurnoPage = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.params.idcurs,
+    IDCURS: req.params.idcurs,
   };
   const turno = {
-    idturn: req.params.idturn,
+    IDTURN: req.params.idturn,
   };
 
   try {
@@ -140,7 +140,7 @@ export const editTurnoPage = async (req, res) => {
     });
 
     const datos = {
-      curso,      
+      curso,
       turno: result.data,
     };
 
@@ -159,7 +159,7 @@ export const editTurnoPage = async (req, res) => {
 export const usuariosPage = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.params.id,
+    IDCURS: req.params.id,
   };
 
   try {
@@ -186,7 +186,7 @@ export const usuariosPage = async (req, res) => {
 export const usuariosAddPage = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.params.id,
+    IDCURS: req.params.id,
   };
 
   try {
@@ -198,7 +198,7 @@ export const usuariosAddPage = async (req, res) => {
     });
     const datos = {
       curso: result.data,
-      usuarios: JSON.stringify(usuarios.data),
+      usuarios: usuarios.data,
     };
 
     res.render("admin/cursos/usuarios/add", { user, datos });
@@ -215,8 +215,8 @@ export const usuariosAddPage = async (req, res) => {
 export const usuariosTurnoPage = async (req, res) => {
   const user = req.user
   const turnocurso = {
-    idcurs: req.params.idcurs,
-    idturn: req.params.idturn,
+    IDCURS: req.params.idcurs,
+    IDTURN: req.params.idturn,
   }
 
   try {
@@ -228,7 +228,7 @@ export const usuariosTurnoPage = async (req, res) => {
     })
     const datos = {
       turnocurso: result.data,
-      usuarios: JSON.stringify(usuarios.data),
+      usuarios: usuarios.data,
     }
 
     res.render('admin/cursos/turnos/usuarios', { user, datos })
@@ -243,8 +243,8 @@ export const usuariosTurnoPage = async (req, res) => {
 export const usuariosTurnoAddPage = async (req, res) => {
   const user = req.user;
   const turnocurso = {
-    idcurs: req.params.idcurs,
-    idturn: req.params.idturn,
+    IDCURS: req.params.idcurs,
+    IDTURN: req.params.idturn,
   }
 
   try {
@@ -257,7 +257,7 @@ export const usuariosTurnoAddPage = async (req, res) => {
     const datos = {
       turnocurso,
       curso: { descur: result.data.DESCUR },
-      usuarios: JSON.stringify(usuarios.data),
+      usuarios: usuarios.data,
     };
 
     res.render("admin/cursos/turnos/usuarios/add", { user, datos });
@@ -274,12 +274,12 @@ export const usuariosTurnoAddPage = async (req, res) => {
 export const insert = async (req, res) => {
   const user = req.user
   const curso = {
-    descur: req.body.descur.toUpperCase(),
-    stacur: estadosCurso.cerrado
+    DESCUR: req.body.descur.toUpperCase(),
+    STACUR: estadosCurso.cerrado
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.crearCurso,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearCurso,
   }
 
   try {
@@ -304,13 +304,13 @@ export const insert = async (req, res) => {
 export const update = async (req, res) => {
   const user = req.user
   const curso = {
-    idcurs: req.body.idcurs,
-    descur: req.body.descur.toUpperCase(),
-    stacur: req.body.stacur,
+    IDCURS: req.body.idcurs,
+    DESCUR: req.body.descur.toUpperCase(),
+    STACUR: req.body.stacur,
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.modificarCurso,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.modificarCurso,
   }
 
   try {
@@ -336,11 +336,11 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   const user = req.user
   const curso = {
-    idcur: req.body.IDCURS,
+    IDCURS: req.body.idcurs,
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarCurso,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarCurso,
   }
 
   try {
@@ -363,19 +363,19 @@ export const remove = async (req, res) => {
 export const insertTurno = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.body.idcurs,
+    IDCURS: req.body.idcurs,
   }
   const turno = {
-    destur: req.body.destur.toUpperCase(),
-    initur: req.body.initur,
-    fintur: req.body.fintur,
-    inihor: '+00 ' + req.body.inihor + ':00',
-    finhor: '+00 ' + req.body.finhor + ':00',
-    loctur: req.body.loctur.toUpperCase(),
+    DESTUR: req.body.destur.toUpperCase(),
+    INITUR: req.body.initur,
+    FINTUR: req.body.fintur,
+    INIHOR: '+00 ' + req.body.inihor + ':00',
+    FINHOR: '+00 ' + req.body.finhor + ':00',
+    LOCTUR: req.body.loctur.toUpperCase(),
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.crearTurno,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearTurno,
   }
 
   try {
@@ -385,7 +385,7 @@ export const insertTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/${curso.idcurs}`);
+    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}`);
   } catch (error) {
     const msg = "No se ha podido inserte el turno.";
 
@@ -397,20 +397,20 @@ export const insertTurno = async (req, res) => {
 export const updateTurno = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.body.idcurs,
+    IDCURS: req.body.idcurs,
   }
   const turno = {
-    idturn: req.body.idturn,
-    destur: req.body.destur.toUpperCase(),
-    initur: req.body.initur,
-    fintur: req.body.fintur,
-    inihor: '+00 ' + req.body.inihor + ':00',
-    finhor: '+00 ' + req.body.finhor + ':00',
-    loctur: req.body.loctur.toUpperCase(),
+    IDTURN: req.body.idturn,
+    DESTUR: req.body.destur.toUpperCase(),
+    INITUR: req.body.initur,
+    FINTUR: req.body.fintur,
+    INIHOR: '+00 ' + req.body.inihor + ':00',
+    FINHOR: '+00 ' + req.body.finhor + ':00',
+    LOCTUR: req.body.loctur.toUpperCase(),
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.modificarTurno,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.modificarTurno,
   }
 
   try {
@@ -420,7 +420,7 @@ export const updateTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/${curso.idcurs}`);
+    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}`);
   } catch (error) {
     const msg = "No se ha podido actualizar el turno.";
 
@@ -432,14 +432,14 @@ export const updateTurno = async (req, res) => {
 export const deleteTurno = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.body.idcurs,
+    IDCURS: req.body.idcurs,
   }
   const turno = {
-    idturn: req.body.idturn,
+    IDTURN: req.body.idturn,
   };
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarTurno,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarTurno,
   };
 
   try {
@@ -449,7 +449,7 @@ export const deleteTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/${curso.idcurs}`);
+    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}`);
   } catch (error) {
     const msg = "No se ha podido borrar el turno.";
 
@@ -463,14 +463,15 @@ export const deleteTurno = async (req, res) => {
 export const insertUsuario = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.body.idcurs,
+    IDCURS: req.body.idcurs,
   }
   const usuarios = {
-    arrusu: req.body.arrusu.split(',').map(itm => +itm)
+    //ARRUSU: req.body.arrusu.split(',').map(itm => +itm)
+    ARRUSU: JSON.parse(req.body.arrusu)
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.crearUsuarioCurso,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearUsuarioCurso,
   }
 
   try {
@@ -480,7 +481,7 @@ export const insertUsuario = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/usuarios/${curso.idcurs}`);
+    res.redirect(`/admin/cursos/usuarios/${curso.IDCURS}`);
   } catch (error) {
     const msg = "No se ha podido insertar el usuario.";
 
@@ -492,14 +493,14 @@ export const insertUsuario = async (req, res) => {
 export const deleteUsuario = async (req, res) => {
   const user = req.user;
   const curso = {
-    idcurs: req.body.idcurs,
+    IDCURS: req.body.idcurs,
   }
   const usuario = {
-    idusua: req.body.idusua,
+    IDUSUA: req.body.idusua,
   };
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarUsuarioCurso,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarUsuarioCurso,
   };
 
   try {
@@ -509,7 +510,7 @@ export const deleteUsuario = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/usuarios/${curso.idcurs}`);
+    res.redirect(`/admin/cursos/usuarios/${curso.IDCURS}`);
   } catch (error) {
     const msg = "No se ha podido borrar el usuario.";
 
@@ -523,15 +524,15 @@ export const deleteUsuario = async (req, res) => {
 export const insertUsuarioTurno = async (req, res) => {
   const user = req.user;
   const turnocurso = {
-    idcurs: req.body.idcurs,
-    idturn: req.body.idturn,
+    IDCURS: req.body.idcurs,
+    IDTURN: req.body.idturn,
   }
   const usuarios = {
-    arrusu: JSON.parse(req.body.arrusu)
+    ARRUSU: JSON.parse(req.body.arrusu)
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.insertarUsuarioTurno,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.insertarUsuarioTurno,
   }
 
   try {
@@ -541,9 +542,9 @@ export const insertUsuarioTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.idcurs}/${turnocurso.idturn}`);
-  } catch (error) {    
-    const msg = "No se ha podido insertar el usuario.";
+    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.IDCURS}/${turnocurso.IDTURN}`);
+  } catch (error) {
+    const msg = "No se ha podido insertar los datos.";
 
     res.render("admin/error400", {
       alerts: [{ msg }],
@@ -553,15 +554,15 @@ export const insertUsuarioTurno = async (req, res) => {
 export const deleteUsuarioTurno = async (req, res) => {
   const user = req.user;
   const turnocurso = {
-    idcurs: req.body.idcurs,
-    idturn: req.body.idturn,
+    IDCURS: req.body.idcurs,
+    IDTURN: req.body.idturn,
   }
   const usuario = {
-    idusua: req.body.idusua,
+    IDUSUA: req.body.idusua,
   };
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarUsuarioTurno,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarUsuarioTurno,
   };
 
   try {
@@ -571,7 +572,7 @@ export const deleteUsuarioTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.idcurs}/${turnocurso.idturn}`);
+    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.IDCURS}/${turnocurso.IDTURN}`);
   } catch (error) {
     const msg = "No se ha podido borrar el usuario.";
 

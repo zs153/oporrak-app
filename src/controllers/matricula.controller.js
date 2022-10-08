@@ -8,8 +8,8 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.post('http://localhost:8100/api/matriculas')
     const datos = {
-      estados:JSON.stringify(arrEstadosMatricula),
-      matriculas: JSON.stringify(result.data),
+      estados: arrEstadosMatricula,
+      matriculas: result.data,
     }
 
     res.render('admin/matriculas', { user, datos })
@@ -25,9 +25,10 @@ export const addPage = async (req, res) => {
   const user = req.user
   const fecha = new Date();
   const matricula = {
-    inimat: fecha.toISOString().slice(0, 10),
-    finmat: fecha.toISOString().slice(0, 10),
-    stamat: estadosMatricula.cerrada,
+    DESMAT: '',
+    INIMAT: fecha.toISOString().slice(0, 10),
+    FINMAT: fecha.toISOString().slice(0, 10),
+    STAMAT: estadosMatricula.cerrada,
   }
   const datos = {
     arrEstadosMatricula,
@@ -47,11 +48,11 @@ export const addPage = async (req, res) => {
 export const editPage = async (req, res) => {
   const user = req.user
   const matricula = {
-    idmatr: req.params.id,
+    IDMATR: req.params.id,
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/matricula', {      
+    const result = await axios.post('http://localhost:8100/api/matricula', {
       matricula,
     })
 
@@ -74,7 +75,7 @@ export const editPage = async (req, res) => {
 export const usuariosPage = async (req, res) => {
   const user = req.user;
   const matricula = {
-    idmatr: req.params.id,
+    IDMATR: req.params.id,
   };
 
   try {
@@ -101,19 +102,19 @@ export const usuariosPage = async (req, res) => {
 export const usuariosAddPage = async (req, res) => {
   const user = req.user;
   const matricula = {
-    idmatr: req.params.id,
+    IDMATR: req.params.id,
   };
 
   try {
     const result = await axios.post("http://localhost:8100/api/matricula", {
       matricula,
-    });    
+    });
     const usuarios = await axios.post("http://localhost:8100/api/matriculas/usuarios/pendientes", {
       matricula,
     });
     const datos = {
       matricula: result.data,
-      usuarios: JSON.stringify(usuarios.data),
+      usuarios: usuarios.data,
     };
 
     res.render("admin/matriculas/usuarios/add", { user, datos });
@@ -130,15 +131,15 @@ export const usuariosAddPage = async (req, res) => {
 export const insert = async (req, res) => {
   const user = req.user
   const matricula = {
-    desmat: req.body.desmat.toUpperCase(),
-    inimat: req.body.inimat,
-    finmat: req.body.finmat,
-    idcurs: req.body.idcurs,
-    stamat: req.body.stamat,
+    DESMAT: req.body.desmat.toUpperCase(),
+    INIMAT: req.body.inimat,
+    FINMAT: req.body.finmat,
+    IDCURS: req.body.idcurs,
+    STAMAT: req.body.stamat,
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.crearMatricula,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearMatricula,
   }
 
   try {
@@ -163,16 +164,16 @@ export const insert = async (req, res) => {
 export const update = async (req, res) => {
   const user = req.user
   const matricula = {
-    idmatr: req.body.idmatr,
-    desmat: req.body.desmat.toUpperCase(),
-    inimat: req.body.inimat,
-    finmat: req.body.finmat,
-    idcurs: req.body.idcurs,
-    stamat: req.body.stamat,
+    IDMATR: req.body.idmatr,
+    DESMAT: req.body.desmat.toUpperCase(),
+    INIMAT: req.body.inimat,
+    FINMAT: req.body.finmat,
+    IDCURS: req.body.idcurs,
+    STAMAT: req.body.stamat,
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.modificarMatricula,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.modificarMatricula,
   }
 
   try {
@@ -198,11 +199,11 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   const user = req.user
   const matricula = {
-    idmatr: req.body.idmatr,
+    IDMATR: req.body.idmatr,
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarMatricula,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarMatricula,
   }
 
   try {
@@ -225,14 +226,15 @@ export const remove = async (req, res) => {
 export const insertUsuario = async (req, res) => {
   const user = req.user;
   const matricula = {
-    idmatr: req.body.idmatr,
+    IDMATR: req.body.idmatr,
   }
   const usuarios = {
-    arrusu: req.body.arrusu.split(',').map(itm => +itm)
+    //ARRUSU: req.body.arrusu.split(',').map(itm => +itm)
+    ARRUSU: JSON.parse(req.body.arrusu)
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.crearUsuarioMatricula,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearUsuarioMatricula,
   }
 
   try {
@@ -242,7 +244,7 @@ export const insertUsuario = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/matriculas/usuarios/${matricula.idmatr}`);
+    res.redirect(`/admin/matriculas/usuarios/${matricula.IDMATR}`);
   } catch (error) {
     const msg = "No se ha podido insertar el usuario.";
 
@@ -254,14 +256,14 @@ export const insertUsuario = async (req, res) => {
 export const deleteUsuario = async (req, res) => {
   const user = req.user;
   const matricula = {
-    idmatr: req.body.idmatr,
+    IDMATR: req.body.idmatr,
   }
   const usuario = {
-    idusua: req.body.idusua,
+    IDUSUA: req.body.idusua,
   };
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarUsuarioMatricula,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarUsuarioMatricula,
   };
 
   try {
@@ -271,7 +273,7 @@ export const deleteUsuario = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/matriculas/usuarios/${matricula.idmatr}`);
+    res.redirect(`/admin/matriculas/usuarios/${matricula.IDMATR}`);
   } catch (error) {
     const msg = "No se ha podido borrar el usuario.";
 

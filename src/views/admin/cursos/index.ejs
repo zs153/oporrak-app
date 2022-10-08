@@ -16,16 +16,20 @@
     .sortable th {
       cursor: pointer;
     }
+
     .sortable .th-sort-asc::after {
       content: "\25b4";
     }
+
     .sortable .th-sort-desc::after {
       content: "\25be";
     }
+
     .sortable .th-sort-asc::after,
     .sortable .th-sort-desc::after {
       margin-left: 5px;
     }
+
     .dots-menu .nav-divider {
       height: 0;
       margin: 0;
@@ -43,59 +47,56 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-        <div class="page-wrapper">
-          <div class="page-body">
-            <div class="container-xl">
-              <div class="row row-deck row-cards">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-header">
-                      <h3 class="card-title">Cursos</h3>
-                      <div class="col-auto ms-auto">
-                        <div class="d-flex">
-                          <div class="input-icon me-3">
-                            <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarCursoBox"
-                              onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en cursos">
-                          </div>
-                          <a href="/admin/cursos/add" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <line x1="12" y1="5" x2="12" y2="19"></line>
-                              <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Nuevo Curso
-                          </a>
-                        </div>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Cursos</h3>
+                  <div class="col-auto ms-auto">
+                    <div class="d-flex">
+                      <div class="input-icon me-3">
+                        <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarCursoBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en cursos">
                       </div>
-                    </div>
-                    <div class="card-body">
-                      <table class="table table-vcenter table-striped sortable" id="tblCursos">
-                        <thead>
-                          <tr class="header">
-                            <th class="w-4"></th>
-                            <th>Descipción</th>
-                            <th>Estado</th>
-                            <th class="w-6"></th>
-                          </tr>
-                        </thead>
-                        <tbody id="table-body">
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="card-footer">
-                      <div id="pagination-wrapper" class="pagination"></div>
+                      <a href="/admin/cursos/add" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Nuevo Curso
+                      </a>
                     </div>
                   </div>
+                </div>
+                <div class="card-body">
+                  <table class="table table-vcenter table-striped sortable" id="tblCursos">
+                    <thead>
+                      <tr class="header">
+                        <th class="w-4"></th>
+                        <th>Descipción</th>
+                        <th>Estado</th>
+                        <th class="w-6"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-footer">
+                  <div id="pagination-wrapper" class="pagination"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <%- include('../../partials/footer') %>
+      </div>
+    </div>
+    <%- include('../../partials/footer') %>
   </div>
 
   <div class="modal modal-blur fade" id="modal-borrar" tabindex="-1" role="dialog" aria-hidden="true">
@@ -104,9 +105,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="modal-status bg-danger"></div>
         <div class="modal-body text-center py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
-            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M12 9v2m0 4v.01"></path>
             <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
@@ -123,7 +122,7 @@
               </div>
               <div class="col">
                 <form action="/admin/cursos/delete" method="POST">
-                  <input type="hidden" id="IDCURS" name="IDCURS" value="">
+                  <input type="hidden" id="idcurs" name="idcurs" value="">
                   <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar curso</button>
                 </form>
               </div>
@@ -207,8 +206,8 @@
     }
   </script>
   <script>
-    const estados = <%- datos.arrEstadosCurso %>
-    const orgList = <%- datos.cursos %>
+    const estados = <%- JSON.stringify(datos.arrEstadosCurso) %>
+    const orgList = <%- JSON.stringify(datos.cursos) %>
     let state = {
       'querySet': orgList,
       'page': 1,
@@ -234,6 +233,7 @@
         'pages': pages,
       }
     }
+
     function pageButtons(pages) {
       var wrapper = document.getElementById('pagination-wrapper')
       var maxLeft = (state.page - Math.floor(state.window / 2))
@@ -269,6 +269,7 @@
         })
       }
     }
+
     function buildTable() {
       const table = document.getElementById('table-body')
       const data = pagination(state.querySet, state.page, state.rows)
@@ -320,7 +321,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link" onclick="{document.getElementById('IDCURS').value ='${element.IDCURS}', document.getElementById('delcur').innerHTML ='<p>${element.DESCUR}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                <a href="#" class="nav-link" onclick="{document.getElementById('idcurs').value ='${element.IDCURS}', document.getElementById('delcur').innerHTML ='<p>${element.DESCUR}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
                   <i class="bi bi-trash dropdown-item-icon"></i>Borrar curso
                 </a>
               </li>

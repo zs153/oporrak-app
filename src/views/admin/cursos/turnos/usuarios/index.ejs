@@ -55,67 +55,64 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../../../partials/header') %>
-      <%- include('../../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-        <div class="page-wrapper">
-          <div class="container-xl">
-            <div class="page-body">
-              <div class="row row-deck row-cards">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-header">
-                      <div>
-                        <h3 class="card-title">Inscritos Turno</h3>
-                        <p class="subtitulo">
-                           <%- datos.turnocurso.DESCUR %> <%- datos.turnocurso.DESTUR %>
-                        </p>
+    <%- include('../../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <div class="page-wrapper">
+      <div class="container-xl">
+        <div class="page-body">
+          <div class="row row-deck row-cards">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Inscritos Turno</h3>
+                    <p class="subtitulo">
+                      <%- datos.turnocurso.DESCUR %> <%- datos.turnocurso.DESTUR %>
+                    </p>
+                  </div>
+                  <div class="col-auto ms-auto">
+                    <div class="d-flex">
+                      <div class="input-icon me-3">
+                        <span class="input-icon-addon"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
                       </div>
-                      <div class="col-auto ms-auto">
-                        <div class="d-flex">
-                          <div class="input-icon me-3">
-                            <span class="input-icon-addon"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox"
-                              onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
-                          </div>
-                          <a href="/admin/cursos/turnos/usuarios/add/<%- datos.turnocurso.IDCURS %>/<%- datos.turnocurso.IDTURN %>" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <line x1="12" y1="5" x2="12" y2="19"></line>
-                              <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Añadir usuarios
-                          </a>
-                        </div>
-                      </div>
+                      <a href="/admin/cursos/turnos/usuarios/add/<%- datos.turnocurso.IDCURS %>/<%- datos.turnocurso.IDTURN %>" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Añadir usuarios
+                      </a>
                     </div>
-                    <div class="card-body">
-                      <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
-                        <thead>
-                          <tr class="header">
-                            <th class="w-4"></th>
-                            <th>Nombre</th>
-                            <th>Oficina</th>
-                            <th class="w-6"></th>
-                          </tr>
-                        </thead>
-                        <tbody id="table-body">
-                        </tbody>
-                      </table>
-                      </div>
-                      <div class="card-footer">
-                        <div id="pagination-wrapper" class="pagination"></div>
-                        <div class="ms-auto">
-                          <a href="/admin/cursos/turnos/<%- datos.turnocurso.IDCURS %>" class="btn btn-link">Salir</a>
-                        </div>
-                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                    <thead>
+                      <tr class="header">
+                        <th class="w-4"></th>
+                        <th>Nombre</th>
+                        <th>Oficina</th>
+                        <th class="w-6"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-footer">
+                  <div id="pagination-wrapper" class="pagination"></div>
+                  <div class="ms-auto">
+                    <a href="/admin/cursos/turnos/<%- datos.turnocurso.IDCURS %>" class="btn btn-link">Salir</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <%- include('../../../../partials/footer') %>
+      </div>
+    </div>
+    <%- include('../../../../partials/footer') %>
   </div>
 
   <div class="modal modal-blur fade" id="modal-borrarUsuario" tabindex="-1" role="dialog" aria-hidden="true">
@@ -124,9 +121,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="modal-status bg-danger"></div>
         <div class="modal-body text-center py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
-            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-            stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M12 9v2m0 4v.01"></path>
             <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
@@ -139,8 +134,7 @@
           <div class="w-100">
             <div class="row">
               <div class="col">
-                <a href="/admin/cursos/turnos/usuarios/<%- datos.turnocurso.IDTURN %>" class="btn btn-white w-100"
-                  data-bs-dismiss="modal">Cancelar</a>
+                <a href="/admin/cursos/turnos/usuarios/<%- datos.turnocurso.IDTURN %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
                 <form action="/admin/cursos/turnos/usuarios/delete" method="POST">
@@ -230,8 +224,7 @@
     }
   </script>
   <script>
-    const orgList = <%- datos.usuarios %>
-    
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
     let state = {
       'querySet': orgList,
       'page': 1,
@@ -257,6 +250,7 @@
         'pages': pages,
       }
     }
+
     function pageButtons(pages) {
       var wrapper = document.getElementById('pagination-wrapper')
       var maxLeft = (state.page - Math.floor(state.window / 2))
@@ -292,6 +286,7 @@
         })
       }
     }
+
     function buildTable() {
       const table = document.getElementById('table-body')
       const data = pagination(state.querySet, state.page, state.rows)
