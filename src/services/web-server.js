@@ -19,7 +19,6 @@ import apiCargaRouter from '../routes/carga.router'
 import apiEventoRouter from '../routes/evento.router'
 import apiMatriculaRouter from '../routes/matricula.router'
 import apiCursoRouter from '../routes/curso.router'
-import apiTurnoRouter from '../routes/turno.router'
 
 let httpServer
 
@@ -51,7 +50,6 @@ function initialize() {
     app.use('/api', apiEventoRouter)
     app.use('/api', apiMatriculaRouter)
     app.use('/api', apiCursoRouter)
-    app.use('/api', apiTurnoRouter)
 
     // server
     httpServer

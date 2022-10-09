@@ -18,7 +18,6 @@ import {
   usuariosTurnoPendientes,
   crearUsuarioTurno,
   borrarUsuarioTurno,
-  turnoCurso,
 } from "../controllers/curso.controller";
 
 const apiCursoRouter = express.Router();
@@ -48,8 +47,5 @@ apiCursoRouter.post('/cursos/turnos/usuarios', usuariosTurno)
 apiCursoRouter.post('/cursos/turnos/usuarios/pendientes', usuariosTurnoPendientes)
 apiCursoRouter.post('/cursos/turnos/usuarios/insert', crearUsuarioTurno)
 apiCursoRouter.post('/cursos/turnos/usuarios/delete', borrarUsuarioTurno)
-
-// turnocurso
-apiCursoRouter.post('/cursos/turnocurso', turnoCurso)
 
 export default apiCursoRouter;

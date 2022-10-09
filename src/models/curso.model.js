@@ -7,13 +7,13 @@ const cursoSql = `SELECT
   stacur
 FROM cursos
 WHERE idcurs = :idcurs
-ORDER BY descur
 `
 const cursosSql = `SELECT 
   idcurs,
   descur,
   stacur
 FROM cursos
+ORDER BY descur
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTCURSO(
   :descur,
@@ -178,17 +178,6 @@ const removeUsuarioTurnoSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOTURNO(
   :usumov,
   :tipmov
 ); END;
-`
-// turnocurso
-const turnoCursoSql = `SELECT 
-  cc.idcurs,
-  cc.descur,
-  tt.idturn,
-  tt.destur
-FROM turnoscurso tc
-INNER JOIN cursos cc ON cc.idcurs = tc.idcurs
-INNER JOIN turnos tt ON tt.idturn = tc.idturn
-WHERE tc.idcurs = :idcurs AND tc.idturn = :idturn
 `
 
 // cursos
@@ -418,18 +407,4 @@ export const removeUsuarioTurno = async (bind) => {
   }
 
   return result
-}
-
-// turnos curso
-export const turnoCurso = async (context) => {
-  let result
-  let query = turnoCursoSql
-
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
-  }
-
-  return result.rows
 }

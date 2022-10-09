@@ -129,8 +129,11 @@ const deleteUsuarioFromRec = (req) => {
   return Object.assign(curso, usuario, movimiento)
 }
 const insertUsuarioTurnoFromRec = (req) => {
+  const curso = {
+    IDCURS: req.body.curso.IDCURS,
+  }
   const turno = {
-    IDTURN: req.body.turnocurso.IDTURN,
+    IDTURN: req.body.turno.IDTURN,
   }
   const usuarios = {
     ARRUSU: {
@@ -142,11 +145,14 @@ const insertUsuarioTurnoFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(turno, usuarios, movimiento)
+  return Object.assign(curso, turno, usuarios, movimiento)
 }
 const deleteUsuarioTurnoFromRec = (req) => {
+  const curso = {
+    IDCURS: req.body.curso.IDCURS,
+  }
   const turno = {
-    IDTURN: req.body.turnocurso.IDTURN,
+    IDTURN: req.body.turno.IDTURN,
   }
   const usuario = {
     IDUSUA: req.body.usuario.IDUSUA,
@@ -156,7 +162,7 @@ const deleteUsuarioTurnoFromRec = (req) => {
     TIPMOV: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(turno, usuario, movimiento)
+  return Object.assign(curso, turno, usuario, movimiento)
 }
 
 // cursos
@@ -368,8 +374,7 @@ export const borrarUsuario = async (req, res) => {
 
 // usuarios turno
 export const usuariosTurno = async (req, res) => {
-  const context = req.body.turnocurso
-  delete context.IDCURS
+  const context = req.body.turno
 
   try {
     const result = await DAL.usuariosTurno(context)
@@ -384,9 +389,8 @@ export const usuariosTurno = async (req, res) => {
   }
 }
 export const usuariosTurnoPendientes = async (req, res) => {
-  const context = req.body.turnocurso
+  const context = req.body.curso
 
-  delete context.IDTURN
   try {
     const result = await DAL.usuariosTurnoPendientes(context)
 
@@ -420,23 +424,6 @@ export const borrarUsuarioTurno = async (req, res) => {
       res.status(200).json(result)
     } else {
       res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
-// turnoCurso
-export const turnoCurso = async (req, res) => {
-  const context = req.body.turnocurso
-
-  try {
-    const result = await DAL.turnoCurso(context)
-
-    if (result !== null) {
-      res.status(200).json(result[0])
-    } else {
-      res.status(400).end()
     }
   } catch (err) {
     res.status(500).end()
