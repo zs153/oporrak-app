@@ -214,20 +214,23 @@ export const usuariosAddPage = async (req, res) => {
 // pages usuarios turno
 export const usuariosTurnoPage = async (req, res) => {
   const user = req.user
-  const turnocurso = {
+  const curso = {
     IDCURS: req.params.idcurs,
+  }
+  const turno = {
     IDTURN: req.params.idturn,
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/cursos/turnocurso', {
-      turnocurso,
+    const result = await axios.post('http://localhost:8100/api/cursos/turno', {
+      turno,
     })
     const usuarios = await axios.post('http://localhost:8100/api/cursos/turnos/usuarios', {
-      turnocurso,
+      turno,
     })
     const datos = {
-      turnocurso: result.data,
+      curso,
+      turno: result.data,
       usuarios: usuarios.data,
     }
 
@@ -242,21 +245,23 @@ export const usuariosTurnoPage = async (req, res) => {
 }
 export const usuariosTurnoAddPage = async (req, res) => {
   const user = req.user;
-  const turnocurso = {
+  const curso = {
     IDCURS: req.params.idcurs,
+  }
+  const turno = {
     IDTURN: req.params.idturn,
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/cursos/turnocurso', {
-      turnocurso,
+    const result = await axios.post('http://localhost:8100/api/cursos/turno', {
+      turno,
     })
     const usuarios = await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/pendientes", {
-      turnocurso,
+      curso,
     });
     const datos = {
-      turnocurso,
-      curso: { descur: result.data.DESCUR },
+      curso,
+      turno: result.data,
       usuarios: usuarios.data,
     };
 
@@ -523,8 +528,10 @@ export const deleteUsuario = async (req, res) => {
 // proc usuarios turno
 export const insertUsuarioTurno = async (req, res) => {
   const user = req.user;
-  const turnocurso = {
+  const curso = {
     IDCURS: req.body.idcurs,
+  }
+  const turno = {
     IDTURN: req.body.idturn,
   }
   const usuarios = {
@@ -537,12 +544,13 @@ export const insertUsuarioTurno = async (req, res) => {
 
   try {
     await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/insert", {
-      turnocurso,
+      curso,
+      turno,
       usuarios,
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.IDCURS}/${turnocurso.IDTURN}`);
+    res.redirect(`/admin/cursos/turnos/usuarios/${curso.IDCURS}/${turno.IDTURN}`);
   } catch (error) {
     const msg = "No se ha podido insertar los datos.";
 
@@ -553,8 +561,10 @@ export const insertUsuarioTurno = async (req, res) => {
 }
 export const deleteUsuarioTurno = async (req, res) => {
   const user = req.user;
-  const turnocurso = {
+  const curso = {
     IDCURS: req.body.idcurs,
+  }
+  const turno = {
     IDTURN: req.body.idturn,
   }
   const usuario = {
@@ -567,12 +577,12 @@ export const deleteUsuarioTurno = async (req, res) => {
 
   try {
     await axios.post("http://localhost:8100/api/cursos/turnos/usuarios/delete", {
-      turnocurso,
+      turno,
       usuario,
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/usuarios/${turnocurso.IDCURS}/${turnocurso.IDTURN}`);
+    res.redirect(`/admin/cursos/turnos/usuarios/${curso.IDCURS}/${turno.IDTURN}`);
   } catch (error) {
     const msg = "No se ha podido borrar el usuario.";
 

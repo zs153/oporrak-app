@@ -66,7 +66,7 @@
                   <div>
                     <h3 class="card-title">Inscritos Turno</h3>
                     <p class="subtitulo">
-                      <%- datos.turnocurso.DESCUR %> <%- datos.turnocurso.DESTUR %>
+                      <%- datos.curso.DESCUR %> <%- datos.turno.DESTUR %>
                     </p>
                   </div>
                   <div class="col-auto ms-auto">
@@ -75,7 +75,7 @@
                         <span class="input-icon-addon"><i class="bi bi-search"></i></span>
                         <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
                       </div>
-                      <a href="/admin/cursos/turnos/usuarios/add/<%- datos.turnocurso.IDCURS %>/<%- datos.turnocurso.IDTURN %>" class="btn btn-primary">
+                      <a href="/admin/cursos/turnos/usuarios/add/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                           <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -103,7 +103,7 @@
                 <div class="card-footer">
                   <div id="pagination-wrapper" class="pagination"></div>
                   <div class="ms-auto">
-                    <a href="/admin/cursos/turnos/<%- datos.turnocurso.IDCURS %>" class="btn btn-link">Salir</a>
+                    <a href="/admin/cursos/turnos/<%- datos.curso.IDCURS %>" class="btn btn-link">Salir</a>
                   </div>
                 </div>
               </div>
@@ -134,13 +134,13 @@
           <div class="w-100">
             <div class="row">
               <div class="col">
-                <a href="/admin/cursos/turnos/usuarios/<%- datos.turnocurso.IDTURN %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                <a href="/admin/cursos/turnos/usuarios/<%- datos.turno.IDTURN %>" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
                 <form action="/admin/cursos/turnos/usuarios/delete" method="POST">
                   <input type="hidden" id="idusua" name="idusua" value="">
-                  <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.turnocurso.IDCURS %>">
-                  <input type="hidden" id="idturn" name="idturn" value="<%- datos.turnocurso.IDTURN %>">
+                  <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
+                  <input type="hidden" id="idturn" name="idturn" value="<%- datos.turno.IDTURN %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar usuario</button>
                 </form>
               </div>
