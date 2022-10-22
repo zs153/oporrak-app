@@ -23,7 +23,6 @@ const estadoUsuarioQuery = `SELECT
 FROM estados ee
 WHERE usuest = :usuest
 `
-
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   TO_DATE(:fecest, 'YYYY-MM-DD'),
   :usuest,

@@ -118,7 +118,7 @@ export const borrar = async (req, res) => {
 // usuarios
 export const estadosUsuario = async (req, res) => {
   const context = req.body.estado
-
+  console.log(context)
   try {
     const result = await DAL.estadosUsuario(context)
 
