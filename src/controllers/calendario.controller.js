@@ -5,7 +5,7 @@ import Calendar from 'js-year-calendar'
 export const mainPage = async (req, res) => {
   const user = req.user
   const estado = {
-    usuest: 8 //user.id,
+    usuest: user.id,
   }
 
   try {
