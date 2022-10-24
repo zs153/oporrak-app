@@ -12,68 +12,115 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
-  <link rel='stylesheet' href='/css/js-year-calendar.min.css'>
 </head>
-
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
-    <div class="page-wrapper">
-      <div class="page-body">
-        <div class="container-xl">
-          <div class="col-12">
-            <div class="card">
-              <div class="calendar"></div>
+      <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
+        <div class="page-wrapper">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card mt-3">
+                    <% if(typeof alerts !='undefined' ) { %>
+                      <% alerts.map(function (alert){ %>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                          <%- alert.msg %>
+                        </div>
+                        <% }) %>
+                          <% } %>
+                            <form action="/admin/calendarios/calendario" method="POST" >
+                              <input type="hidden" name="idusua" id="idusua" value="">
+                              <input type="hidden" name="tipest" id="tipest" value="">
+                              <div class="card-header">
+                                <h3 class="card-title">Calendario</h3>
+                              </div>
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-4">
+                                    <div class="mb-1">
+                                      <div class="form-label">Oficina</div>
+                                      <select class="form-select" id="cboofi" name="ofiusu" value="" >
+                                        <% datos.oficinas.map(element=> { %>
+                                          <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
+                                            <%- element.DESOFI %>
+                                          </option>
+                                        <% }) %>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="mb-1">
+                                      <div class="form-label">Usuario</div>
+                                      <select class="form-select" id="cbousu" value="">
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="mb-1">
+                                      <div class="form-label">Estado</div>
+                                      <select class="form-select" id="cboest" value="">
+                                        <% datos.arrTiposEstado.map(element=> { %>
+                                          <option value="<%- element.ID %>">
+                                            <%- element.DES %>
+                                          </option>
+                                          <% }) %>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="card-footer text-end">
+                                <div class="d-flex">
+                                  <button type="submit" class="btn btn-primary ms-auto" id="btnVer">Ver calendario</button>
+                                </div>
+                              </div>
+                            </form>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        <%- include('../../partials/footer') %>
   </div>
-  <script src="/js/js-year-calendar.min.js"></script>
-  <script src="/js/js-year-calendar.es.js"></script>
+
+  <script src="/js/ayuda.min.js"></script>
   <script>
-    const estados = <%- datos.eventos %>
-    let calendario = null
-    const currentYear = new Date().getFullYear()
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
+    const oficina = <%- user.oficina %>
 
-    calendario = new Calendar('.calendar', {
-      language: 'es',
-      // style: 'background',
-      enableRangeSelection: false,
-      allowOverlap: false,
-      minDate: new Date(currentYear, 0, 1),
-      maxDate: new Date(currentYear + 1, 0, 31),
-      dataSource: estados.map(itm => ({
-        idesta: itm.IDESTA,
-        usuest: itm.USUEST,
-        tipest: itm.TIPEST,
-        startDate: new Date(itm.FECEST),
-        endDate: new Date(itm.FECEST),
-        color: '#FF0000',
-      }))
-    })
-    document.querySelector('.calendar').addEventListener('clickDay', function(e) {
-      const evento = {
-        idesta: 0,
-        usuest: 63,
-        tipest: 1,
-        startDate: e.date,
-        endDate: e.date,
-        color: '#FF0000'
-      }
+    arrayFilter(oficina)
 
-      let dataSource = calendario.getDataSource();
-
-      if (e.events.length) {
-        calendario.setDataSource(dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime()))
-      } else {
-        dataSource.push(evento)
-        calendario.setDataSource(dataSource)
-      }
+    document.getElementById('cboofi').addEventListener('change', function () {
+      arrayFilter(this.value)
     });
+    document.getElementById('cbousu').addEventListener('change', function () {
+      document.getElementById('idusua').value = this.value
+    });
+    document.getElementById('cboest').addEventListener('change', function () {
+      document.getElementById('tipest').value = this.value
+    });
+
+
+    function arrayFilter(oficina) {
+      const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
+      const myLista = trimmedData
+      const cbo = document.getElementById('cbousu')
+      cbo.innerHTML = "";
+      
+      myLista.map(itm => {
+        const option = document.createElement('option')
+        option.value = itm.IDUSUA
+        option.text = itm.NOMUSU
+
+        cbo.appendChild(option)
+      })
+
+      document.getElementById('idusua').value = document.getElementById('cbousu').value
+      document.getElementById('tipest').value = document.getElementById('cboest').value
+    }
   </script>
 </body>
-
 </html>

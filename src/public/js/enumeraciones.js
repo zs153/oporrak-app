@@ -125,7 +125,7 @@ export const estadosCarga = {
   pendiente: 0,
   procesado: 1,
 }
-const tiposEstado = {
+export const tiposEstado = {
   traspaso: { ID: -1, DES: "TRASPASADO" },
   vacacion: { ID: 1, DES: "VACACION" },
   baja: { ID: 2, DES: "BAJA" },
@@ -184,7 +184,7 @@ export const arrTiposLiquidacion = [
   { id: 1, des: 'INFRESAR' },
   { id: 2, des: 'DEVOLVER' },
 ]
-const arrTiposEstado = [
+export const arrTiposEstado = [
   { ID: -1, DES: "TRASPASADO" },
   { ID: 1, DES: "VACACION" },
   { ID: 2, DES: "BAJA" },

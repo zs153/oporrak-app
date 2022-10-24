@@ -1,18 +1,16 @@
 import axios from 'axios'
-import { tiposMovimiento } from '../public/js/enumeraciones'
+import { tiposMovimiento, arrTiposEstado, tiposRol } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const estado = {
-    usuest: user.id,
-  }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/estados/usuarios', {
-      estado,
-    })
+    const oficinas = await axios.post('http://localhost:8100/api/oficinas')
+    const usuarios = await axios.post('http://localhost:8100/api/usuarios')
     const datos = {
-      eventos: JSON.stringify(result.data),
+      oficinas: oficinas.data,
+      usuarios: usuarios.data,
+      arrTiposEstado: arrTiposEstado,
     }
 
     res.render('admin/calendarios', { user, datos })
@@ -51,6 +49,33 @@ export const editPage = async (req, res) => {
     }
 
     res.render('admin/calendarios/edit', { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+// vaciones calendar
+export const vacacionesPage = async (req, res) => {
+  const user = req.user
+  const estado = {
+    usuest: req.body.idusua,
+    tipest: req.body.tipest,
+    desde: '2022-01-01',
+    hasta: '2023-01-31'
+  }
+
+  try {
+    const result = await axios.post('http://localhost:8100/api/estados/usuarios', {
+      estado
+    })
+    const datos = {
+      estados: result.data,
+    }
+
+    res.render('admin/calendarios/calendario', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 

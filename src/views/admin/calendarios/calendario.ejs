@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Calendario</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
+  <!-- custom -->
+  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel='stylesheet' href='/css/js-year-calendar.min.css'>
+</head>
+
+<body class="antialiased">
+  <div class="wrapper">
+    <%- include('../../partials/header') %>
+      <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
+        <div class="page-wrapper">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="col-12">
+                <div class="card">
+                  <div class="calendar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  <script src="/js/js-year-calendar.min.js"></script>
+  <script src="/js/js-year-calendar.es.js"></script>
+  <script>
+    const estados = <%- JSON.stringify(datos.estados) %>
+    let calendario = null
+    const currentYear = new Date().getFullYear()
+
+    calendario = new Calendar('.calendar', {
+      language: 'es',
+      // style: 'background',
+      enableRangeSelection: false,
+      allowOverlap: false,
+      minDate: new Date(currentYear, 0, 1),
+      maxDate: new Date(currentYear + 1, 0, 31),
+      dataSource: estados.map(itm => ({
+        idesta: itm.IDESTA,
+        usuest: itm.USUEST,
+        tipest: itm.TIPEST,
+        startDate: new Date(itm.FECEST),
+        endDate: new Date(itm.FECEST),
+        color: '#FF0000',
+      }))
+    })
+    document.querySelector('.calendar').addEventListener('clickDay', function (e) {
+      const evento = {
+        idesta: 0,
+        usuest: 63,
+        tipest: 1,
+        startDate: e.date,
+        endDate: e.date,
+        color: '#FF0000'
+      }
+
+      let dataSource = calendario.getDataSource();
+
+      if (e.events.length) {
+        calendario.setDataSource(dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime()))
+      } else {
+        dataSource.push(evento)
+        calendario.setDataSource(dataSource)
+      }
+    });
+  </script>
+</body>
+
+</html>
