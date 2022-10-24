@@ -20,6 +20,7 @@ const largeQuery = `SELECT
     uu.userid,
     uu.telusu,
     uu.stausu,
+    uu.ofiusu,
     oo.desofi
   FROM usuarios uu
   INNER JOIN oficinas oo ON oo.idofic = ofiusu
@@ -119,14 +120,9 @@ export const find = async (context) => {
   const result = await simpleExecute(query, binds);
   return result.rows;
 };
-export const findAll = async (context) => {
+export const findAll = async () => {
   let query = largeQuery;
   let binds = {}
-
-  if (context.ofiusu) {
-    binds.ofiusu = context.ofiusu;
-    query += "WHERE ofiusu = :ofiusu";
-  }
 
   const result = await simpleExecute(query, binds);
   return result.rows;

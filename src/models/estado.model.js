@@ -12,7 +12,7 @@ const baseQuery = `SELECT
   TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
 FROM estados
 `
-const estadoUsuarioQuery = `SELECT 
+const estadosUsuarioQuery = `SELECT 
   ee.idesta,
   ee.fecest,
   ee.usuest,
@@ -21,7 +21,9 @@ const estadoUsuarioQuery = `SELECT
   LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
   LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR"
 FROM estados ee
-WHERE usuest = :usuest
+WHERE ee.usuest = :usuest AND
+    ee.tipest = :tipest AND
+    ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   TO_DATE(:fecest, 'YYYY-MM-DD'),
@@ -118,7 +120,7 @@ export const remove = async (bind) => {
 
 // usuarios
 export const estadosUsuario = async (context) => {
-  let query = estadoUsuarioQuery
+  let query = estadosUsuarioQuery
 
   const result = await simpleExecute(query, context)
 
