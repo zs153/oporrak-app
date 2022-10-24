@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { tiposMovimiento } from '../public/js/enumeraciones'
-import Calendar from 'js-year-calendar'
 
 export const mainPage = async (req, res) => {
   const user = req.user
