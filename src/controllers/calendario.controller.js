@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { tiposMovimiento, arrTiposEstado, tiposRol } from '../public/js/enumeraciones'
+import { tiposMovimiento, arrTiposEstado, tiposEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
@@ -11,6 +11,7 @@ export const mainPage = async (req, res) => {
       oficinas: oficinas.data,
       usuarios: usuarios.data,
       arrTiposEstado: arrTiposEstado,
+      tiposEstado,
     }
 
     res.render('admin/calendarios', { user, datos })
@@ -37,7 +38,7 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
-  const oficina = {
+  const calendario = {
     idofic: req.params.id,
   }
   try {

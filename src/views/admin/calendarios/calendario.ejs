@@ -18,27 +18,25 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
-        <div class="page-wrapper">
-          <div class="page-body">
-            <div class="container-xl">
-              <div class="col-12">
-                <div class="card">
-                  <div class="calendar"></div>
-                </div>
-              </div>
+    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="col-12">
+            <div class="card">
+              <div class="calendar"></div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
   </div>
   <script src="/js/js-year-calendar.min.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
   <script>
     const estados = <%- JSON.stringify(datos.estados) %>
-    let calendario = null
     const currentYear = new Date().getFullYear()
-
-    calendario = new Calendar('.calendar', {
+    const calendario = new Calendar('.calendar', {
       language: 'es',
       // style: 'background',
       enableRangeSelection: false,
@@ -54,7 +52,8 @@
         color: '#FF0000',
       }))
     })
-    document.querySelector('.calendar').addEventListener('clickDay', function (e) {
+
+    document.querySelector('.calendar').addEventListener('clickDay', function(e) {
       const evento = {
         idesta: 0,
         usuest: 63,
