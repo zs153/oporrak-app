@@ -117,18 +117,13 @@ export const borrar = async (req, res) => {
 
 // usuarios
 export const estadosUsuario = async (req, res) => {
-  const context = req.body.estado
-  console.log(context)
+  //const context = req.body.estado
+  const context = req.body
+
   try {
     const result = await DAL.estadosUsuario(context)
 
     res.status(200).json(result)
-
-    // if (rows !== null) {
-    //   res.status(200).json(result)
-    // } else {
-    //   res.status(404).end()
-    // }
   } catch (err) {
     res.status(400).end()
   }

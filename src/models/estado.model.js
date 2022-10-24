@@ -121,7 +121,7 @@ export const remove = async (bind) => {
 // usuarios
 export const estadosUsuario = async (context) => {
   let query = estadosUsuarioQuery
-
+  console.log(query, context)
   const result = await simpleExecute(query, context)
 
   return result.rows
