@@ -19,11 +19,12 @@ const estadosUsuarioQuery = `SELECT
   ee.tipest,
   ee.ofiest,
   LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
-  LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR"
+  LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR",
+  TO_CHAR(ee.fecest, 'YYYY-MM-DD') AS "STRFEC"
 FROM estados ee
 WHERE ee.usuest = :usuest AND
     ee.tipest = :tipest AND
-    ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+    ee.fecest BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   TO_DATE(:fecest, 'YYYY-MM-DD'),
@@ -121,7 +122,6 @@ export const remove = async (bind) => {
 // usuarios
 export const estadosUsuario = async (context) => {
   let query = estadosUsuarioQuery
-  console.log(query, context)
   const result = await simpleExecute(query, context)
 
   return result.rows
