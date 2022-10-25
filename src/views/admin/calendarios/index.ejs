@@ -24,7 +24,7 @@
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
-              <div class="card mt-3">
+              <div class="card mt-1">
                 <% if(typeof alerts !='undefined' ) { %>
                 <% alerts.map(function (alert){ %>
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -40,19 +40,32 @@
                   </div>
                   <div class="card-body">
                     <div class="row">
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <div class="form-label">Año</div>
+                          <select class="form-select" id="cboyea" value="">
+                            <option value="<%- new Date().getFullYear() %>">
+                              <%- new Date().getFullYear() %>
+                            </option>
+                            <option value="<%- new Date().getFullYear() +1 %>">
+                              <%- new Date().getFullYear() +1 %>
+                            </option>
+                          </select>
+                        </div>
+                      </div>
                       <div class="col-3">
                         <div class="mb-1">
                           <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="ofiusu" value="">
                             <% datos.oficinas.map(element=> { %>
-                            <option value="<%- element.IDOFIC %>" %>>
+                            <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? "selected":"" %>>
                               <%- element.DESOFI %>
                             </option>
                             <% }) %>
                           </select>
                         </div>
                       </div>
-                      <div class="col-6">
+                      <div class="col-4">
                         <div class="mb-1">
                           <div class="form-label">Usuario</div>
                           <select class="form-select" id="cbousu" value="">
@@ -64,7 +77,7 @@
                           <div class="form-label">Estado</div>
                           <select class="form-select" id="cboest" value="">
                             <% datos.arrTiposEstado.map(element=> { %>
-                            <option value="<%- element.ID %>">
+                            <option value="<%- element.ID %>" <%- element.ID === datos.tiposEstado.ID ? "selected":""%> >
                               <%- element.DES %>
                             </option>
                             <% }) %>
@@ -72,7 +85,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="calendar"></div>
+                    <div id="calendar"></div>
                   </div>
                   <!-- <div class="card-footer text-end">
                     <div class="d-flex">
@@ -92,34 +105,68 @@
   <script src="/js/ayuda.min.js"></script>
   <script src="/js/js-year-calendar.min.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
+
   <script>
-    let estados = []
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
+    const oficinaUsuario = <%- user.oficina %>
+    let currentYear = new Date().getFullYear()
     let params = {
       usuest: <%- user.id %>,
-      tipest: <%- JSON.stringify(datos.tiposEstado.vacacion) %>,
-      desde: '2022-01-01',
-      hasta: '2023-01-31'
+      tipest: <%- datos.tiposEstado.ID %>,
+      desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
     }
-    let calendario
-    const orgList = <%- JSON.stringify(datos.usuarios) %>
-    const oficina = <%- user.oficina %>
-    const currentYear = new Date().getFullYear()
-    // const calendario = new Calendar('.calendar', {
-    //   language: 'es',
-    //   // style: 'background',
-    //   enableRangeSelection: false,
-    //   allowOverlap: false,
-    //   minDate: new Date(currentYear, 0, 1),
-    //   maxDate: new Date(currentYear + 1, 0, 31),
-    //   dataSource: estados.map(itm => ({
-    //     idesta: itm.IDESTA,
-    //     usuest: itm.USUEST,
-    //     tipest: itm.TIPEST,
-    //     startDate: new Date(itm.FECEST),
-    //     endDate: new Date(itm.FECEST),
-    //     color: '#FF0000',
-    //   }))
-    // })
+    
+    const calendario = new Calendar("#calendar", {
+      displayHeader: true,
+      minDate: new Date(currentYear, 0, 1),
+      maxDate: new Date(currentYear, 11, 31),
+      language: "es",
+      mouseOnDay: function (e) {
+        if (e.events.length > 0) {
+          var content = "";
+
+          for (var i in e.events) {
+            content +=
+              '<div class="event-tooltip-content">' +
+              '<div class="event-name" style="color:' +
+              e.events[i].color +
+              ';font-weight:bold">' +
+              e.events[i].name +
+              "</div>" +
+              '<div class="event-details" style="color:#bbb">' +
+              e.events[i].details +
+              "</div>" +
+              "</div>";
+          }
+
+          if (tooltip !== null) {
+            tooltip.destroy();
+            tooltip = null;
+          }
+
+          tooltip = tippy(e.element, {
+            placement: "right",
+            content: content,
+            allowHTML: true,
+            animateFill: false,
+            animation: "shift-away",
+            arrow: true
+          });
+          tooltip.show();
+        }
+      }
+    });
+
+    document.getElementById('cboyea').addEventListener('change', function () {
+      calendario.setYear(document.querySelector("#cboyea").value);
+      calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
+      calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
+
+      params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      getEstados()
+    });
     document.getElementById('cboofi').addEventListener('change', function() {
       arrayFilter(this.value)
     });
@@ -135,25 +182,35 @@
 
       getEstados()
     });
-    document.querySelector('.calendar').addEventListener('clickDay', function(e) {
-      const evento = {
-        idesta: 0,
-        usuest: 63,
-        tipest: 1,
-        startDate: e.date,
-        endDate: e.date,
-        color: '#FF0000'
-      }
-
+    document.querySelector('#calendar').addEventListener('clickDay', function(e) {
+      e.preventRendering = true
       let dataSource = calendario.getDataSource();
 
-      if (e.events.length) {
-        calendario.setDataSource(dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime()))
+      if (e.element.style.boxShadow) {
+        e.element.style.boxShadow = null
       } else {
-        dataSource.push(evento)
-        calendario.setDataSource(dataSource)
+        e.element.style.boxShadow = 'rgb(13,128,4) 0px -4px 0px 0px inset'
       }
-    });
+
+      if (e.events.length) {        
+        dataSource = dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime())
+        //calendario.setDataSource(dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime()))
+      } else {        
+        const evento = {
+          idesta: 0,
+          usuest: params.usuest,
+          tipest: params.tipest,
+          ofiest: 
+          startDate: e.date,
+          endDate: e.date,
+          color: '#0D8004'
+        }
+
+        insertEvento(evento)
+        dataSource.push(evento)
+        //calendario.setDataSource(dataSource)
+      }
+    })
 
     const arrayFilter = (oficina) => {
       const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
@@ -166,6 +223,10 @@
         option.value = itm.IDUSUA
         option.text = itm.NOMUSU
 
+        if (itm.IDUSUA === <%- user.id %>) {
+          option.selected = true
+        }
+
         cbo.appendChild(option)
       })
       params.usuest = document.getElementById('cbousu').value
@@ -174,40 +235,50 @@
       document.getElementById('idusua').value = document.getElementById('cbousu').value
       document.getElementById('tipest').value = document.getElementById('cboest').value
 
-      getEstados()
+      //getEstados()
     }
-    const getEstados = () => {
-      const xhr = new XMLHttpRequest();
 
-      xhr.onload = function() {
+    arrayFilter(oficinaUsuario)
+  </script>
+  <script>
+    const insertEvento = (evento) => {
+      const xhr = new XMLHttpRequest()
+
+      xhr.onload = function () {
         if (xhr.status === 200) {
-          const estados = JSON.parse(xhr.response)
-          calendario = new Calendar('.calendar', {
-            language: 'es',
-            // style: 'background',
-            enableRangeSelection: false,
-            allowOverlap: false,
-            minDate: new Date(currentYear, 0, 1),
-            maxDate: new Date(currentYear + 1, 0, 31),
-            dataSource: estados.map(itm => ({
-              idesta: itm.IDESTA,
-              usuest: itm.USUEST,
-              tipest: itm.TIPEST,
-              startDate: new Date(itm.FECEST),
-              endDate: new Date(itm.FECEST),
-              color: '#FF0000',
-            }))
-          })
+          console.log('pass')
         }
       };
+
+      xhr.open('POST', 'http://localhost:8100/api/estados/insert', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify(evento))
+    }
+    const getEstados = () => {
+      const xhr = new XMLHttpRequest()
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          const estados = JSON.parse(xhr.response)
+
+          calendario.setDataSource(estados.map(itm => ({
+            idesta: itm.IDESTA,
+            usuest: itm.USUEST,
+            tipest: itm.TIPEST,
+            startDate: new Date(itm.STRFEC),
+            endDate: new Date(itm.STRFEC),
+            color: '#0D8004',
+          })))
+        }
+      };
+
       xhr.open('POST', 'http://localhost:8100/api/estados/usuarios', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send(JSON.stringify(params))
     }
 
-    arrayFilter(oficina)
     getEstados()
-  </script>
+  </script>  
 </body>
 
 </html>
