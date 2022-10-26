@@ -27,12 +27,12 @@ WHERE ee.usuest = :usuest AND
     ee.fecest BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
-  TO_DATE(:fecest, 'YYYY-MM-DD'),
+  TO_DATE(:fecest, 'DD/MM/YYYY'),
   :usuest,
   :tipest,
   :ofiest,
-  :inihor,
-  :finhor,
+  :deshor,
+  :hashor,
   :usumov,
   :tipmov,
   :idesta
@@ -51,7 +51,9 @@ const updateSql = `BEGIN OPORRAK_PKG.UPDATEESTADO(
 ); END;
 `
 const removeSql = `BEGIN OPORRAK_PKG.DELETEESTADO(
-  :idesta,
+  TO_DATE(:fecest, 'DD/MM/YYYY'),
+  :usuest,
+  :tipest,
   :usumov,
   :tipmov 
 ); END;

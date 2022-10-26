@@ -20,6 +20,7 @@ import apiEventoRouter from '../routes/evento.router'
 import apiMatriculaRouter from '../routes/matricula.router'
 import apiCursoRouter from '../routes/curso.router'
 import apiEstadoRouter from '../routes/estado.router'
+import apiFestivoRouter from '../routes/festivo.router'
 
 let httpServer
 
@@ -52,6 +53,7 @@ function initialize() {
     app.use('/api', apiMatriculaRouter)
     app.use('/api', apiCursoRouter)
     app.use('/api', apiEstadoRouter)
+    app.use('/api', apiFestivoRouter)
 
     // server
     httpServer

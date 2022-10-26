@@ -2,44 +2,46 @@ import * as DAL from '../models/estado.model'
 
 const insertFromRec = (req) => {
   const estado = {
-    fecest: req.body.estado.fecest,
-    usuest: req.body.estado.usuest,
-    tipest: req.body.estado.tipest,
-    ofiest: req.body.estado.ofiest,
-    deshor: req.body.estado.deshor,
-    hashor: req.body.estado.hashor,
+    FECEST: req.body.estado.FECEST,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
+    OFIEST: req.body.estado.OFIEST,
+    DESHOR: req.body.estado.DESHOR,
+    HASHOR: req.body.estado.HASHOR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
 }
 const updateFromRec = (req) => {
   const estado = {
-    idesta: req.body.estado.idesta,
-    fecest: req.body.estado.fecest,
-    usuest: req.body.estado.usuest,
-    tipest: req.body.estado.tipest,
-    ofiest: req.body.estado.ofiest,
-    deshor: req.body.estado.deshor,
-    hashor: req.body.estado.hashor,
+    IDESTA: req.body.estado.IDESTA,
+    FECEST: req.body.estado.FECEST,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
+    OFIEST: req.body.estado.OFIEST,
+    DESHOR: req.body.estado.DESHOR,
+    HASHOR: req.body.estado.HASHOR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
 }
 const deleteFromRec = (req) => {
   const estado = {
-    idesta: req.body.estado.idesta,
+    FECEST: req.body.estado.FECEST,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
