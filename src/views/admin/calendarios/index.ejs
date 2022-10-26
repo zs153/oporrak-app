@@ -77,7 +77,7 @@
                           <div class="form-label">Estado</div>
                           <select class="form-select" id="cboest" value="">
                             <% datos.arrTiposEstado.map(element=> { %>
-                            <option value="<%- element.ID %>" <%- element.ID === datos.tipoEstado.ID ? "selected":""%> >
+                            <option value="<%- element.ID %>" <%- element.ID === datos.tipoEstado.ID ? "selected":""%>>
                               <%- element.DES %>
                             </option>
                             <% }) %>
@@ -109,7 +109,7 @@
     const insertEvento = (evento) => {
       const xhr = new XMLHttpRequest()
 
-      xhr.onload = function () {
+      xhr.onload = function() {
         if (xhr.status === 200) {
           console.log('pass')
         }
@@ -120,22 +120,22 @@
       xhr.send(JSON.stringify(evento))
     }
     const deleteEvento = (evento) => {
-        const xhr = new XMLHttpRequest()
+      const xhr = new XMLHttpRequest()
 
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            console.log('pass')
-          }
-        };
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          console.log('pass')
+        }
+      };
 
-        xhr.open('POST', 'http://localhost:8100/api/estados/delete', true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      }
+      xhr.open('POST', 'http://localhost:8100/api/estados/delete', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify(evento))
+    }
     const getEstados = (params) => {
       const xhr = new XMLHttpRequest()
 
-      xhr.onload = function () {
+      xhr.onload = function() {
         if (xhr.status === 200) {
           const estados = JSON.parse(xhr.response)
 
@@ -157,18 +157,27 @@
     const getFestivos = (oficina, year) => {
       const prms = {
         IDOFIC: oficina,
-        DESDE: new Date(year, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-        HASTA: new Date(year, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        DESDE: new Date(year, 0, 1).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
+        HASTA: new Date(year, 11, 31).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
       }
       const xhr = new XMLHttpRequest()
 
-      xhr.onload = function () {
+      xhr.onload = function() {
         if (xhr.status === 200) {
           let dataSource = calendario.getDataSource();
           const festivos = JSON.parse(xhr.response)
 
           festivos.map(itm => {
-            const estado =  {
+            const estado = {
+              idesta: 0,
               startDate: new Date(itm.FECFES),
               endDate: new Date(itm.FECFES),
               color: '#FF0000',
@@ -178,7 +187,7 @@
           calendario.setDataSource(dataSource)
         }
       };
-      
+
       xhr.open('POST', 'http://localhost:8100/api/festivos/oficinas', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send(JSON.stringify(prms))
@@ -215,16 +224,24 @@
     let params = {
       usuest: <%- user.id %>,
       tipest: <%- datos.tipoEstado.ID %>,
-      desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
+      hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
     }
-    
+
     const calendario = new Calendar("#calendar", {
       displayHeader: true,
       minDate: new Date(currentYear, 0, 1),
       maxDate: new Date(currentYear, 11, 31),
       language: "es",
-      mouseOnDay: function (e) {
+      mouseOnDay: function(e) {
         if (e.events.length > 0) {
           var content = "";
 
@@ -260,15 +277,23 @@
       }
     });
 
-    document.getElementById('cboyea').addEventListener('change', function () {
+    document.getElementById('cboyea').addEventListener('change', function() {
       calendario.setYear(document.querySelector("#cboyea").value);
       calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
       calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
 
       currentYear = document.querySelector("#cboyea").value
-      params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      
+      params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      })
+      params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      })
+
       getEstados(params)
       getFestivos(oficinaUsuario, currentYear)
     });
@@ -291,8 +316,13 @@
       params.tipest = this.value
 
       getEstados(params)
+      getFestivos(oficinaUsuario, currentYear)
     });
     document.querySelector('#calendar').addEventListener('clickDay', function(e) {
+      if (e.events.length > 0 && e.events[0].idesta === 0) {
+        return
+      }
+
       let dataSource = calendario.getDataSource();
 
       if (e.element.style.boxShadow) {
@@ -301,10 +331,14 @@
         e.element.style.boxShadow = 'rgb(13,128,4) 0px -4px 0px 0px inset'
       }
 
-      if (e.events.length) { 
+      if (e.events.length) {
         const evento = {
           estado: {
-            FECEST: e.date.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+            FECEST: e.date.toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            }),
             USUEST: params.usuest,
             TIPEST: params.tipest,
           },
@@ -317,10 +351,14 @@
         deleteEvento(evento)
         dataSource = dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime())
         //calendario.setDataSource(dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime()))
-      } else {        
+      } else {
         const evento = {
-          estado : {
-            FECEST: e.date.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+          estado: {
+            FECEST: e.date.toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            }),
             USUEST: params.usuest,
             TIPEST: params.tipest,
             OFIEST: oficinaUsuario,
