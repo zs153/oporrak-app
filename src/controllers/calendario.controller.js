@@ -11,7 +11,8 @@ export const mainPage = async (req, res) => {
       oficinas: oficinas.data,
       usuarios: usuarios.data,
       arrTiposEstado: arrTiposEstado,
-      tiposEstado: tiposEstado.vacacion,
+      tipoEstado: tiposEstado.vacacion,
+      tiposMovimiento,
     }
 
     res.render('admin/calendarios', { user, datos })

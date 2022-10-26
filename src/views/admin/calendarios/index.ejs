@@ -77,7 +77,7 @@
                           <div class="form-label">Estado</div>
                           <select class="form-select" id="cboest" value="">
                             <% datos.arrTiposEstado.map(element=> { %>
-                            <option value="<%- element.ID %>" <%- element.ID === datos.tiposEstado.ID ? "selected":""%> >
+                            <option value="<%- element.ID %>" <%- element.ID === datos.tipoEstado.ID ? "selected":""%> >
                               <%- element.DES %>
                             </option>
                             <% }) %>
@@ -105,14 +105,116 @@
   <script src="/js/ayuda.min.js"></script>
   <script src="/js/js-year-calendar.min.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
-
   <script>
+    const insertEvento = (evento) => {
+      const xhr = new XMLHttpRequest()
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('pass')
+        }
+      };
+
+      xhr.open('POST', 'http://localhost:8100/api/estados/insert', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify(evento))
+    }
+    const deleteEvento = (evento) => {
+        const xhr = new XMLHttpRequest()
+
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            console.log('pass')
+          }
+        };
+
+        xhr.open('POST', 'http://localhost:8100/api/estados/delete', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(evento))
+      }
+    const getEstados = (params) => {
+      const xhr = new XMLHttpRequest()
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          const estados = JSON.parse(xhr.response)
+
+          calendario.setDataSource(estados.map(itm => ({
+            idesta: itm.IDESTA,
+            usuest: itm.USUEST,
+            tipest: itm.TIPEST,
+            startDate: new Date(itm.STRFEC),
+            endDate: new Date(itm.STRFEC),
+            color: '#0D8004',
+          })))
+        }
+      };
+
+      xhr.open('POST', 'http://localhost:8100/api/estados/usuarios', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify(params))
+    }
+    const getFestivos = (oficina, year) => {
+      const prms = {
+        IDOFIC: oficina,
+        DESDE: new Date(year, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        HASTA: new Date(year, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      }
+      const xhr = new XMLHttpRequest()
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          let dataSource = calendario.getDataSource();
+          const festivos = JSON.parse(xhr.response)
+
+          festivos.map(itm => {
+            const estado =  {
+              startDate: new Date(itm.FECFES),
+              endDate: new Date(itm.FECFES),
+              color: '#FF0000',
+            }
+            dataSource.push(estado)
+          })
+          calendario.setDataSource(dataSource)
+        }
+      };
+      
+      xhr.open('POST', 'http://localhost:8100/api/festivos/oficinas', true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.send(JSON.stringify(prms))
+    }
+    const arrayFilter = (oficina) => {
+      const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
+      const myLista = trimmedData
+      const cbo = document.getElementById('cbousu')
+      cbo.innerHTML = "";
+
+      myLista.map(itm => {
+        const option = document.createElement('option')
+        option.value = itm.IDUSUA
+        option.text = itm.NOMUSU
+
+        if (itm.IDUSUA === <%- user.id %>) {
+          option.selected = true
+        }
+
+        cbo.appendChild(option)
+      })
+      params.usuest = document.getElementById('cbousu').value
+      params.tipest = document.getElementById('cboest').value
+
+      document.getElementById('idusua').value = document.getElementById('cbousu').value
+      document.getElementById('tipest').value = document.getElementById('cboest').value
+    }
+  </script>
+  <script>
+    const borrar = <%- datos.tiposMovimiento.crearEstado %>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
-    const oficinaUsuario = <%- user.oficina %>
+    let oficinaUsuario = <%- user.oficina %>
     let currentYear = new Date().getFullYear()
     let params = {
       usuest: <%- user.id %>,
-      tipest: <%- datos.tiposEstado.ID %>,
+      tipest: <%- datos.tipoEstado.ID %>,
       desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
     }
@@ -140,20 +242,20 @@
               "</div>";
           }
 
-          if (tooltip !== null) {
-            tooltip.destroy();
-            tooltip = null;
-          }
+          // if (tooltip !== null) {
+          //   tooltip.destroy();
+          //   tooltip = null;
+          // }
 
-          tooltip = tippy(e.element, {
-            placement: "right",
-            content: content,
-            allowHTML: true,
-            animateFill: false,
-            animation: "shift-away",
-            arrow: true
-          });
-          tooltip.show();
+          // tooltip = tippy(e.element, {
+          //   placement: "right",
+          //   content: content,
+          //   allowHTML: true,
+          //   animateFill: false,
+          //   animation: "shift-away",
+          //   arrow: true
+          // });
+          // tooltip.show();
         }
       }
     });
@@ -163,27 +265,34 @@
       calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
       calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
 
+      currentYear = document.querySelector("#cboyea").value
       params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      getEstados()
+      
+      getEstados(params)
+      getFestivos(oficinaUsuario, currentYear)
     });
     document.getElementById('cboofi').addEventListener('change', function() {
-      arrayFilter(this.value)
+      oficinaUsuario = this.value
+
+      arrayFilter(oficinaUsuario)
+      getEstados(params)
+      getFestivos(oficinaUsuario, currentYear)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
       params.usuest = this.value
 
-      getEstados()
+      getEstados(params)
+      getFestivos(oficinaUsuario, currentYear)
     });
     document.getElementById('cboest').addEventListener('change', function() {
       document.getElementById('tipest').value = this.value
       params.tipest = this.value
 
-      getEstados()
+      getEstados(params)
     });
     document.querySelector('#calendar').addEventListener('clickDay', function(e) {
-      e.preventRendering = true
       let dataSource = calendario.getDataSource();
 
       if (e.element.style.boxShadow) {
@@ -192,18 +301,36 @@
         e.element.style.boxShadow = 'rgb(13,128,4) 0px -4px 0px 0px inset'
       }
 
-      if (e.events.length) {        
+      if (e.events.length) { 
+        const evento = {
+          estado: {
+            FECEST: e.date.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+            USUEST: params.usuest,
+            TIPEST: params.tipest,
+          },
+          movimiento: {
+            USUMOV: <%- user.id %>,
+            TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+          }
+        }
+
+        deleteEvento(evento)
         dataSource = dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime())
         //calendario.setDataSource(dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime()))
       } else {        
         const evento = {
-          idesta: 0,
-          usuest: params.usuest,
-          tipest: params.tipest,
-          ofiest: 
-          startDate: e.date,
-          endDate: e.date,
-          color: '#0D8004'
+          estado : {
+            FECEST: e.date.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+            USUEST: params.usuest,
+            TIPEST: params.tipest,
+            OFIEST: oficinaUsuario,
+            DESHOR: '+00 08:30:00',
+            HASHOR: '+00 14:00:00',
+          },
+          movimiento: {
+            USUMOV: <%- user.id %>,
+            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+          }
         }
 
         insertEvento(evento)
@@ -212,73 +339,11 @@
       }
     })
 
-    const arrayFilter = (oficina) => {
-      const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
-      const myLista = trimmedData
-      const cbo = document.getElementById('cbousu')
-      cbo.innerHTML = "";
-
-      myLista.map(itm => {
-        const option = document.createElement('option')
-        option.value = itm.IDUSUA
-        option.text = itm.NOMUSU
-
-        if (itm.IDUSUA === <%- user.id %>) {
-          option.selected = true
-        }
-
-        cbo.appendChild(option)
-      })
-      params.usuest = document.getElementById('cbousu').value
-      params.tipest = document.getElementById('cboest').value
-
-      document.getElementById('idusua').value = document.getElementById('cbousu').value
-      document.getElementById('tipest').value = document.getElementById('cboest').value
-
-      //getEstados()
-    }
-
     arrayFilter(oficinaUsuario)
+    getEstados(params)
+    getFestivos(oficinaUsuario, currentYear)
   </script>
-  <script>
-    const insertEvento = (evento) => {
-      const xhr = new XMLHttpRequest()
 
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          console.log('pass')
-        }
-      };
-
-      xhr.open('POST', 'http://localhost:8100/api/estados/insert', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify(evento))
-    }
-    const getEstados = () => {
-      const xhr = new XMLHttpRequest()
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          const estados = JSON.parse(xhr.response)
-
-          calendario.setDataSource(estados.map(itm => ({
-            idesta: itm.IDESTA,
-            usuest: itm.USUEST,
-            tipest: itm.TIPEST,
-            startDate: new Date(itm.STRFEC),
-            endDate: new Date(itm.STRFEC),
-            color: '#0D8004',
-          })))
-        }
-      };
-
-      xhr.open('POST', 'http://localhost:8100/api/estados/usuarios', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify(params))
-    }
-
-    getEstados()
-  </script>  
 </body>
 
 </html>
