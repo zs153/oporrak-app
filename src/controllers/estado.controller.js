@@ -35,7 +35,7 @@ const updateFromRec = (req) => {
 }
 const deleteFromRec = (req) => {
   const estado = {
-    FECEST: req.body.estado.FECEST,
+    FECEST: req.body.estado.FECEST,    
     USUEST: req.body.estado.USUEST,
     TIPEST: req.body.estado.TIPEST,
   }

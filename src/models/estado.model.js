@@ -25,6 +25,13 @@ FROM estados ee
 WHERE ee.usuest = :usuest AND
     ee.tipest = :tipest AND
     ee.fecest BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
+UNION
+SELECT 0 AS "IDESTA", ff.fecfes, 0 AS "USUEST", 1 AS "TIPEST", 1 AS "OFIEST", '08:30' AS "DESHOR", '14:00' AS "HASHOR", TO_CHAR(ff.fecfes, 'YYYY-MM-DD') AS "STRFEC"
+FROM festivosoficina fo
+INNER JOIN festivos ff ON ff.idfest = fo.idfest
+INNER JOIN oficinas oo ON oo.idofic = fo.idofic
+WHERE fo.idofic = :idofic AND
+  TRUNC(ff.fecfes) BETWEEN :desde AND :hasta
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   TO_DATE(:fecest, 'DD/MM/YYYY'),
