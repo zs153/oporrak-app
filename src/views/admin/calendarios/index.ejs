@@ -134,19 +134,31 @@
     }
     const getEstados = (params) => {
       const xhr = new XMLHttpRequest()
+      let data = []
 
-      xhr.onload = function() {
+      xhr.onreadystatechange = function () {      
         if (xhr.status === 200) {
-          const estados = JSON.parse(xhr.response)
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              // resolve(JSON.parse(xhr.response))
+              const estados = JSON.parse(xhr.response)
 
-          calendario.setDataSource(estados.map(itm => ({
-            idesta: itm.IDESTA,
-            usuest: itm.USUEST,
-            tipest: itm.TIPEST,
-            startDate: new Date(itm.STRFEC),
-            endDate: new Date(itm.STRFEC),
-            color: '#0D8004',
-          })))
+              estados.map(itm => {
+                const estado = {
+                  idesta: itm.IDESTA,
+                  usuest: itm.USUEST,
+                  tipest: itm.TIPEST,
+                  startDate: new Date(itm.STRFEC),
+                  endDate: new Date(itm.STRFEC),
+                  color: '#0D8004',
+                }
+                data.push(estado)
+              })
+              calendario.setDataSource(data)
+            }
+          }
         }
       };
 
@@ -186,12 +198,122 @@
           })
           calendario.setDataSource(dataSource)
         }
-      };
+      }
 
       xhr.open('POST', 'http://localhost:8100/api/festivos/oficinas', true);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.send(JSON.stringify(prms))
     }
+    async function getFestivosWithPromise(prms) {
+      var xhr = new XMLHttpRequest();
+      
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {              
+              resolve(JSON.parse(xhr.response))
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8100/api/festivos/oficinas', true)
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+        xhr.send(JSON.stringify(prms))
+      })
+    }
+    async function festivosOficina(oficina, year) {
+      const prms = {
+        IDOFIC: oficina,
+        DESDE: new Date(year, 0, 1).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
+        HASTA: new Date(year, 11, 31).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
+      }
+
+      const result = await getFestivosWithPromise(prms)      
+      return result.map(itm => ({
+        startDate: new Date(itm.FECFES),
+        endDate: new Date(itm.FECFES),
+        color: '#FF0000'
+      }))
+    }
+    async function getEstadosWithPromise(prms) {
+      var xhr = new XMLHttpRequest();
+
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              resolve(JSON.parse(xhr.response))
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8100/api/estados/usuarios', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+        xhr.send(JSON.stringify(prms))
+      })
+    }
+    async function estadosUsuario(prms) {
+      let data = []
+      const result = await getEstadosWithPromise(prms)
+
+      result.map(itm => {
+        const estado = {
+          idesta: itm.IDESTA,
+          usuest: itm.USUEST,
+          tipest: itm.TIPEST,
+          startDate: new Date(itm.STRFEC),
+          endDate: new Date(itm.STRFEC),
+          color: itm.IDESTA === 0 ? '#FF0000' : '#0D8004',
+        }
+        data.push(estado)
+      })
+      calendario.setDataSource(data)
+    }
+    const allEstados = async () => {
+      const prms = {
+        IDOFIC: oficinaUsuario,
+        DESDE: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
+        HASTA: new Date(currentYear, 11, 31).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
+      }
+
+      let result = []
+      const estados = await getEstadosWithPromise(params)
+
+      estados.map(itm => {
+        const estado = {
+          IDESTA: itm.IDESTA,
+          USUEST: itm.USUEST,
+          TIPEST: itm.TIPEST,
+          startDate: new Date(itm.STRFEC),
+          endDate: new Date(itm.STRFEC),
+          color: itm.IDESTA === 0 ? '#FF0000':'#0D8004',
+        }
+        result.push(estado)
+      })
+
+      return result
+    }
+
     const arrayFilter = (oficina) => {
       const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
       const myLista = trimmedData
@@ -217,11 +339,11 @@
     }
   </script>
   <script>
-    const borrar = <%- datos.tiposMovimiento.crearEstado %>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     let oficinaUsuario = <%- user.oficina %>
     let currentYear = new Date().getFullYear()
     let params = {
+      idofic: <%- user.oficina %>,
       usuest: <%- user.id %>,
       tipest: <%- datos.tipoEstado.ID %>,
       desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
@@ -235,47 +357,15 @@
         day: '2-digit'
       }),
     }
-
     const calendario = new Calendar("#calendar", {
       displayHeader: true,
       minDate: new Date(currentYear, 0, 1),
       maxDate: new Date(currentYear, 11, 31),
       language: "es",
-      mouseOnDay: function(e) {
-        if (e.events.length > 0) {
-          var content = "";
-
-          for (var i in e.events) {
-            content +=
-              '<div class="event-tooltip-content">' +
-              '<div class="event-name" style="color:' +
-              e.events[i].color +
-              ';font-weight:bold">' +
-              e.events[i].name +
-              "</div>" +
-              '<div class="event-details" style="color:#bbb">' +
-              e.events[i].details +
-              "</div>" +
-              "</div>";
-          }
-
-          // if (tooltip !== null) {
-          //   tooltip.destroy();
-          //   tooltip = null;
-          // }
-
-          // tooltip = tippy(e.element, {
-          //   placement: "right",
-          //   content: content,
-          //   allowHTML: true,
-          //   animateFill: false,
-          //   animation: "shift-away",
-          //   arrow: true
-          // });
-          // tooltip.show();
-        }
+      dataSource: function() {
+        return allEstados()
       }
-    });
+    })
 
     document.getElementById('cboyea').addEventListener('change', function() {
       calendario.setYear(document.querySelector("#cboyea").value);
@@ -294,29 +384,28 @@
         day: '2-digit'
       })
 
-      getEstados(params)
-      getFestivos(oficinaUsuario, currentYear)
+      estadosUsuario(params)
     });
     document.getElementById('cboofi').addEventListener('change', function() {
       oficinaUsuario = this.value
 
       arrayFilter(oficinaUsuario)
-      getEstados(params)
-      getFestivos(oficinaUsuario, currentYear)
+      //getEstados(params)
+      //getFestivos(oficinaUsuario, currentYear)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
       params.usuest = this.value
 
-      getEstados(params)
-      getFestivos(oficinaUsuario, currentYear)
+      //getEstados(params)
+      //getFestivos(oficinaUsuario, currentYear)
     });
     document.getElementById('cboest').addEventListener('change', function() {
       document.getElementById('tipest').value = this.value
       params.tipest = this.value
 
-      getEstados(params)
-      getFestivos(oficinaUsuario, currentYear)
+      //getEstados(params)
+      //getFestivos(oficinaUsuario, currentYear)
     });
     document.querySelector('#calendar').addEventListener('clickDay', function(e) {
       if (e.events.length > 0 && e.events[0].idesta === 0) {
@@ -378,8 +467,6 @@
     })
 
     arrayFilter(oficinaUsuario)
-    getEstados(params)
-    getFestivos(oficinaUsuario, currentYear)
   </script>
 
 </body>
