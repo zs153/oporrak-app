@@ -76,8 +76,11 @@
                         <div class="mb-1">
                           <div class="form-label">Estado</div>
                           <select class="form-select" id="cboest" value="">
+                            <option value="0" data-foo="" selected>
+                              TODOS
+                            </option>
                             <% datos.arrTiposEstado.map(element=> { %>
-                            <option value="<%- element.ID %>" <%- element.ID === datos.tipoEstado.ID ? "selected":""%>>
+                            <option value="<%- element.ID %>" data-foo="<%- element.COLOR %>">
                               <%- element.DES %>
                             </option>
                             <% }) %>
@@ -122,7 +125,7 @@
                 id: result.idesta,
                 startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
                 endDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
-                color: '#0D8004',
+                color,
               }
 
               dataSource.push(estado)
@@ -188,7 +191,7 @@
           id: itm.IDESTA,
           startDate: new Date(itm.STRFEC),
           endDate: new Date(itm.STRFEC),
-          color: '#0D8004',
+          color,
         }
         data.push(estado)
       })
@@ -221,7 +224,8 @@
   </script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
-    let calendario = null;
+    let calendario = null
+    let color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
     let oficinaUsuario = <%- user.oficina %>
     let currentYear = new Date().getFullYear()
     let params = {
@@ -280,19 +284,25 @@
     });
     document.getElementById('cboest').addEventListener('change', function() {
       document.getElementById('tipest').value = this.value
+
+      color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
       params.tipest = this.value
 
       estadosUsuario(params)
     });
     document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
-      if (e.events.length > 0 && e.events[0].idesta === 0 || e.element.classList.contains('domingo')) {
+
+      if (e.events.length > 0 &&
+        e.events[0].idesta === 0 ||
+        e.element.classList.contains('domingo') ||
+        color === '') {
         return
       }
 
       if (e.element.style.boxShadow) {
         e.element.style.boxShadow = null
       } else {
-        e.element.style.boxShadow = 'rgb(13,128,4) 0px -4px 0px 0px inset'
+        e.element.style.boxShadow = color + ' 0px -4px 0px 0px inset'
       }
 
       if (e.events.length) {

@@ -139,6 +139,19 @@ export const tiposEstado = {
   acumuladoEstados: { ID: 10, DES: "ACUMULADO ESTADOS" },
   teletrabajo: { ID: 11, DES: "TELETRABAJO" }
 };
+const coloresEstado = {
+  TRASPASADO: { ID: -1, COLOR: "#808000" },
+  VACACION: { ID: 1, COLOR: "#0D8004" },
+  BAJA: { ID: 2, COLOR: "#800209" },
+  TRASPASO: { ID: 3, COLOR: "#803807" },
+  FORMACION: { ID: 4, COLOR: "#063780" },
+  CONCILIACION: { ID: 5, COLOR: "#DD900A" },
+  REUNION: { ID: 6, COLOR: "#DCD20D" },
+  TURNO: { ID: 7, COLOR: "#A19DA3" },
+  HORAS_BOLSA: { ID: 8, COLOR: "#05CBF5" },
+  HORAS_FAMILIAR: { ID: 9, COLOR: "#C3038F" },
+  TELETRABAJO: { ID: 11, COLOR: "#7FB3D5" }
+};
 
 /* arrays */
 export const arrTiposRol = [
@@ -185,16 +198,29 @@ export const arrTiposLiquidacion = [
   { id: 2, des: 'DEVOLVER' },
 ]
 export const arrTiposEstado = [
-  { ID: -1, DES: "TRASPASADO" },
-  { ID: 1, DES: "VACACION" },
-  { ID: 2, DES: "BAJA" },
-  { ID: 3, DES: "TRASPASO" },
-  { ID: 4, DES: "FORMACION" },
-  { ID: 5, DES: "CONCILIACION" },
-  { ID: 6, DES: "REUNION" },
-  { ID: 7, DES: "TURNO" },
-  { ID: 8, DES: "HORAS BOLSA" },
-  { ID: 9, DES: "HORAS ATENCION FAMILIAR" },
-  { ID: 10, DES: "ACUMULADO ESTADOS" },
-  { ID: 11, DES: "TELETRABAJO" }
+  { ID: -1, DES: "TRASPASADO", COLOR: "#808000" },
+  { ID: 1, DES: "VACACION", COLOR: "#0D8004" },
+  { ID: 2, DES: "BAJA", COLOR: "#803807" },
+  { ID: 3, DES: "TRASPASO", COLOR: "#800209" },
+  { ID: 4, DES: "FORMACION", COLOR: "#063780" },
+  { ID: 5, DES: "CONCILIACION", COLOR: "#DD900A" },
+  { ID: 6, DES: "REUNION", COLOR: "#DCD20D" },
+  { ID: 7, DES: "TURNO", COLOR: "#A19DA3" },
+  { ID: 8, DES: "HORAS BOLSA", COLOR: "#05CBF5" },
+  { ID: 9, DES: "HORAS ATENCION FAMILIAR", COLOR: "#C3038F" },
+  { ID: 10, DES: "ACUMULADO ESTADOS", COLOR: "#FFFFFF" },
+  { ID: 11, DES: "TELETRABAJO", COLOR: "#7FB3D5" }
+]
+const arrColoresEstado = [
+  { ID: -1, DES: "TRASPASADO", COLOR: "#808000" },
+  { ID: 1, DES: "VACACION", COLOR: "#0D8004" },
+  { ID: 3, DES: "BAJA", COLOR: "#803807" },
+  { ID: 2, DES: "TRASPASO", COLOR: "#800209" },
+  { ID: 4, DES: "FORMACION", COLOR: "#063780" },
+  { ID: 5, DES: "CONCILIACION", COLOR: "#DD900A" },
+  { ID: 6, DES: "REUNION", COLOR: "#DCD20D" },
+  { ID: 7, DES: "TURNO", COLOR: "#A19DA3" },
+  { ID: 8, DES: "HORAS_BOLSA", COLOR: "#05CBF5" },
+  { ID: 9, DES: "HORAS_FAMILIAR", COLOR: "#C3038F" },
+  { ID: 11, DES: "TELETRABAJO", COLOR: "#7FB3D5" }
 ]
