@@ -12,12 +12,7 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
-  <link rel='stylesheet' href='/css/js-year-calendar.min.css'>
-  <style>
-    .domingo {
-      color: red
-    }
-  </style>
+  <link rel='stylesheet' href='/css/js-year-calendar.css'>
 </head>
 
 <body class="antialiased">
@@ -115,7 +110,22 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              return JSON.parse(xhr.response).idesta
+              const result = JSON.parse(xhr.response)
+              const arrFecha = result.FECEST.split('/')
+
+              // insert en el calendario
+              let dataSource = calendario.getDataSource()
+              const estado = {
+                idesta: result.idesta,
+                usuest: params.usuest,
+                tipest: params.tipest,
+                id: result.idesta,
+                startDate: new Date(arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0]),
+                endDate: new Date(arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0]),
+                color: '#0D8004',
+              }
+
+              dataSource.push(estado)
             }
           }
         }
@@ -134,7 +144,10 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              return null
+              // update el calendario
+              let dataSource = calendario.getDataSource()
+
+              dataSource = dataSource.filter(itm => itm.idesta !== evento.estado.IDESTA)
             }
           }
         }
@@ -143,47 +156,6 @@
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
-    }
-    async function getFestivosWithPromise(prms) {
-      let xhr = new XMLHttpRequest();
-
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              resolve(JSON.parse(xhr.response))
-            }
-          }
-        }
-
-        xhr.open('POST', 'http://localhost:8100/api/festivos/oficinas', true)
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
-        xhr.send(JSON.stringify(prms))
-      })
-    }
-    async function festivosOficina(oficina, year) {
-      const prms = {
-        IDOFIC: oficina,
-        DESDE: new Date(year, 0, 1).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }),
-        HASTA: new Date(year, 11, 31).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }),
-      }
-
-      const result = await getFestivosWithPromise(prms)
-      return result.map(itm => ({
-        startDate: new Date(itm.FECFES),
-        endDate: new Date(itm.FECFES),
-        color: '#FF0000'
-      }))
     }
     async function getEstadosWithPromise(prms) {
       var xhr = new XMLHttpRequest();
@@ -221,45 +193,6 @@
         data.push(estado)
       })
       calendario.setDataSource(data)
-    }
-    async function getData() {
-      return await calendario.getDataSource()
-    }
-    async function setData(data) {
-      await calendario.setDataSource(data)
-    }
-    const allEstados = async () => {
-      const prms = {
-        IDOFIC: oficinaUsuario,
-        DESDE: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }),
-        HASTA: new Date(currentYear, 11, 31).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }),
-      }
-
-      let result = []
-      const estados = await getEstadosWithPromise(params)
-
-      estados.map(itm => {
-        const estado = {
-          IDESTA: itm.IDESTA,
-          USUEST: itm.USUEST,
-          TIPEST: itm.TIPEST,
-          id: itm.IDESTA,
-          startDate: new Date(itm.STRFEC),
-          endDate: new Date(itm.STRFEC),
-          color: itm.IDESTA === 0 ? '#FF0000' : '#0D8004',
-        }
-        result.push(estado)
-      })
-
-      return result
     }
 
     const arrayFilter = (oficina) => {
@@ -308,13 +241,9 @@
     }
 
     calendario = new Calendar("#calendar", {
-      displayHeader: true,
       minDate: new Date(currentYear, 0, 1),
       maxDate: new Date(currentYear, 11, 31),
       language: "es",
-      // dataSource: function() {
-      //   return allEstados()
-      // }
     })
 
     document.getElementById('cboyea').addEventListener('change', function() {
@@ -360,8 +289,6 @@
         return
       }
 
-      let dataSource = await getData()
-
       if (e.element.style.boxShadow) {
         e.element.style.boxShadow = null
       } else {
@@ -372,13 +299,7 @@
         if (e.events[0].id > 0) {
           const evento = {
             estado: {
-              FECEST: e.date.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-              }),
-              USUEST: params.usuest,
-              TIPEST: params.tipest,
+              IDESTA: e.events[0].idesta,
             },
             movimiento: {
               USUMOV: <%- user.id %>,
@@ -387,10 +308,8 @@
           }
 
           await deleteEvento(evento)
-          dataSource = dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime())
         }
       } else {
-
         const evento = {
           estado: {
             FECEST: e.date.toLocaleDateString(undefined, {
@@ -410,18 +329,9 @@
           }
         }
 
-        const idesta = await insertEvento(evento)
-        const estado = {
-          idesta,
-          usuest: params.usuest,
-          tipest: params.tipest,
-          id: idesta,
-          startDate: e.date,
-          endDate: e.date,
-          color: '#0D8004',
-        }
-        dataSource.push(estado)
+        await insertEvento(evento)
       }
+
       await setData(dataSource)
     })
 
