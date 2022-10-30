@@ -111,7 +111,7 @@
               reject("Error, status code = " + xhr.status)
             } else {
               const result = JSON.parse(xhr.response)
-              const arrFecha = result.FECEST.split('/')
+              const d = result.FECEST.split('/')
 
               // insert en el calendario
               let dataSource = calendario.getDataSource()
@@ -120,8 +120,8 @@
                 usuest: params.usuest,
                 tipest: params.tipest,
                 id: result.idesta,
-                startDate: new Date(arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0]),
-                endDate: new Date(arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0]),
+                startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+                endDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
                 color: '#0D8004',
               }
 
