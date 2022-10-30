@@ -16,28 +16,9 @@ const insertFromRec = (req) => {
 
   return Object.assign(estado, movimiento)
 }
-const updateFromRec = (req) => {
-  const estado = {
-    IDESTA: req.body.estado.IDESTA,
-    FECEST: req.body.estado.FECEST,
-    USUEST: req.body.estado.USUEST,
-    TIPEST: req.body.estado.TIPEST,
-    OFIEST: req.body.estado.OFIEST,
-    DESHOR: req.body.estado.DESHOR,
-    HASHOR: req.body.estado.HASHOR,
-  }
-  const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
-  }
-
-  return Object.assign(estado, movimiento)
-}
 const deleteFromRec = (req) => {
   const estado = {
-    FECEST: req.body.estado.FECEST,    
-    USUEST: req.body.estado.USUEST,
-    TIPEST: req.body.estado.TIPEST,
+    IDESTA: req.body.estado.IDESTA,
   }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
@@ -80,19 +61,6 @@ export const estados = async (req, res) => {
 export const crear = async (req, res) => {
   try {
     const result = await DAL.insert(insertFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const modificar = async (req, res) => {
-  try {
-    const result = await DAL.update(updateFromRec(req))
 
     if (result !== null) {
       res.status(200).json(result)

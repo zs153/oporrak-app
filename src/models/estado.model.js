@@ -45,22 +45,8 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   :idesta
 ); END;
 `
-const updateSql = `BEGIN OPORRAK_PKG.UPDATEESTADO(
-  :idesta,
-  TO_DATE(:fecest, 'YYYY-MM-DD'),
-  :usuest,
-  :tipest,
-  :ofiest,
-  :inihor,
-  :finhor,
-  :usumov,
-  :tipmov
-); END;
-`
 const removeSql = `BEGIN OPORRAK_PKG.DELETEESTADO(
-  TO_DATE(:fecest, 'DD/MM/YYYY'),
-  :usuest,
-  :tipest,
+  :idesta,
   :usumov,
   :tipmov 
 ); END;
@@ -100,19 +86,6 @@ export const insert = async (bind) => {
   }
 
   return bind
-}
-export const update = async (bind) => {
-  let result
-
-  try {
-    await simpleExecute(updateSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
-  }
-
-  return result
 }
 export const remove = async (bind) => {
   let result
