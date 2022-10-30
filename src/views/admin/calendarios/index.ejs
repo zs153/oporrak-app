@@ -13,6 +13,11 @@
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <link rel='stylesheet' href='/css/js-year-calendar.min.css'>
+  <style>
+    .domingo {
+      color: red
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -87,11 +92,6 @@
                     </div>
                     <div id="calendar"></div>
                   </div>
-                  <!-- <div class="card-footer text-end">
-                    <div class="d-flex">
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnVer">Ver calendario</button>
-                    </div>
-                  </div> -->
                 </form>
               </div>
             </div>
@@ -103,116 +103,56 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/js-year-calendar.min.js"></script>
+  <script src="/js/js-year-calendar.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
   <script>
-    const insertEvento = (evento) => {
-      const xhr = new XMLHttpRequest()
+    async function insertEvento(evento) {
+      let xhr = new XMLHttpRequest()
 
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          console.log('pass')
-        }
-      };
-
-      xhr.open('POST', 'http://localhost:8100/api/estados/insert', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify(evento))
-    }
-    const deleteEvento = (evento) => {
-      const xhr = new XMLHttpRequest()
-
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          console.log('pass')
-        }
-      };
-
-      xhr.open('POST', 'http://localhost:8100/api/estados/delete', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify(evento))
-    }
-    const getEstados = (params) => {
-      const xhr = new XMLHttpRequest()
-      let data = []
-
-      xhr.onreadystatechange = function () {      
-        if (xhr.status === 200) {
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              // resolve(JSON.parse(xhr.response))
-              const estados = JSON.parse(xhr.response)
-
-              estados.map(itm => {
-                const estado = {
-                  idesta: itm.IDESTA,
-                  usuest: itm.USUEST,
-                  tipest: itm.TIPEST,
-                  startDate: new Date(itm.STRFEC),
-                  endDate: new Date(itm.STRFEC),
-                  color: '#0D8004',
-                }
-                data.push(estado)
-              })
-              calendario.setDataSource(data)
+              return JSON.parse(xhr.response).idesta
             }
           }
         }
-      };
 
-      xhr.open('POST', 'http://localhost:8100/api/estados/usuarios', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify(params))
+        xhr.open('POST', 'http://localhost:8100/api/estados/insert', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(evento))
+      })
     }
-    const getFestivos = (oficina, year) => {
-      const prms = {
-        IDOFIC: oficina,
-        DESDE: new Date(year, 0, 1).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }),
-        HASTA: new Date(year, 11, 31).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }),
-      }
+    async function deleteEvento(evento) {
       const xhr = new XMLHttpRequest()
 
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          let dataSource = calendario.getDataSource();
-          const festivos = JSON.parse(xhr.response)
-
-          festivos.map(itm => {
-            const estado = {
-              idesta: 0,
-              startDate: new Date(itm.FECFES),
-              endDate: new Date(itm.FECFES),
-              color: '#FF0000',
-            }
-            dataSource.push(estado)
-          })
-          calendario.setDataSource(dataSource)
-        }
-      }
-
-      xhr.open('POST', 'http://localhost:8100/api/festivos/oficinas', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send(JSON.stringify(prms))
-    }
-    async function getFestivosWithPromise(prms) {
-      var xhr = new XMLHttpRequest();
-      
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
-            } else {              
+            } else {
+              return null
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8100/api/estados/delete', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(evento))
+      })
+    }
+    async function getFestivosWithPromise(prms) {
+      let xhr = new XMLHttpRequest();
+
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
               resolve(JSON.parse(xhr.response))
             }
           }
@@ -238,7 +178,7 @@
         }),
       }
 
-      const result = await getFestivosWithPromise(prms)      
+      const result = await getFestivosWithPromise(prms)
       return result.map(itm => ({
         startDate: new Date(itm.FECFES),
         endDate: new Date(itm.FECFES),
@@ -248,8 +188,8 @@
     async function getEstadosWithPromise(prms) {
       var xhr = new XMLHttpRequest();
 
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
@@ -273,13 +213,20 @@
           idesta: itm.IDESTA,
           usuest: itm.USUEST,
           tipest: itm.TIPEST,
+          id: itm.IDESTA,
           startDate: new Date(itm.STRFEC),
           endDate: new Date(itm.STRFEC),
-          color: itm.IDESTA === 0 ? '#FF0000' : '#0D8004',
+          color: '#0D8004',
         }
         data.push(estado)
       })
       calendario.setDataSource(data)
+    }
+    async function getData() {
+      return await calendario.getDataSource()
+    }
+    async function setData(data) {
+      await calendario.setDataSource(data)
     }
     const allEstados = async () => {
       const prms = {
@@ -304,9 +251,10 @@
           IDESTA: itm.IDESTA,
           USUEST: itm.USUEST,
           TIPEST: itm.TIPEST,
+          id: itm.IDESTA,
           startDate: new Date(itm.STRFEC),
           endDate: new Date(itm.STRFEC),
-          color: itm.IDESTA === 0 ? '#FF0000':'#0D8004',
+          color: itm.IDESTA === 0 ? '#FF0000' : '#0D8004',
         }
         result.push(estado)
       })
@@ -340,6 +288,7 @@
   </script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
+    let calendario = null;
     let oficinaUsuario = <%- user.oficina %>
     let currentYear = new Date().getFullYear()
     let params = {
@@ -357,14 +306,15 @@
         day: '2-digit'
       }),
     }
-    const calendario = new Calendar("#calendar", {
+
+    calendario = new Calendar("#calendar", {
       displayHeader: true,
       minDate: new Date(currentYear, 0, 1),
       maxDate: new Date(currentYear, 11, 31),
       language: "es",
-      dataSource: function() {
-        return allEstados()
-      }
+      // dataSource: function() {
+      //   return allEstados()
+      // }
     })
 
     document.getElementById('cboyea').addEventListener('change', function() {
@@ -388,31 +338,29 @@
     });
     document.getElementById('cboofi').addEventListener('change', function() {
       oficinaUsuario = this.value
+      params.idofic = this.value
 
       arrayFilter(oficinaUsuario)
-      //getEstados(params)
-      //getFestivos(oficinaUsuario, currentYear)
+      estadosUsuario(params)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
       params.usuest = this.value
 
-      //getEstados(params)
-      //getFestivos(oficinaUsuario, currentYear)
+      estadosUsuario(params)
     });
     document.getElementById('cboest').addEventListener('change', function() {
       document.getElementById('tipest').value = this.value
       params.tipest = this.value
 
-      //getEstados(params)
-      //getFestivos(oficinaUsuario, currentYear)
+      estadosUsuario(params)
     });
-    document.querySelector('#calendar').addEventListener('clickDay', function(e) {
-      if (e.events.length > 0 && e.events[0].idesta === 0) {
+    document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
+      if (e.events.length > 0 && e.events[0].idesta === 0 || e.element.classList.contains('domingo')) {
         return
       }
 
-      let dataSource = calendario.getDataSource();
+      let dataSource = await getData()
 
       if (e.element.style.boxShadow) {
         e.element.style.boxShadow = null
@@ -421,26 +369,28 @@
       }
 
       if (e.events.length) {
-        const evento = {
-          estado: {
-            FECEST: e.date.toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit'
-            }),
-            USUEST: params.usuest,
-            TIPEST: params.tipest,
-          },
-          movimiento: {
-            USUMOV: <%- user.id %>,
-            TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+        if (e.events[0].id > 0) {
+          const evento = {
+            estado: {
+              FECEST: e.date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+              }),
+              USUEST: params.usuest,
+              TIPEST: params.tipest,
+            },
+            movimiento: {
+              USUMOV: <%- user.id %>,
+              TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+            }
           }
-        }
 
-        deleteEvento(evento)
-        dataSource = dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime())
-        //calendario.setDataSource(dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime()))
+          await deleteEvento(evento)
+          dataSource = dataSource.filter(itm => itm.startDate.getTime() !== e.date.getTime())
+        }
       } else {
+
         const evento = {
           estado: {
             FECEST: e.date.toLocaleDateString(undefined, {
@@ -460,13 +410,23 @@
           }
         }
 
-        insertEvento(evento)
-        dataSource.push(evento)
-        //calendario.setDataSource(dataSource)
+        const idesta = await insertEvento(evento)
+        const estado = {
+          idesta,
+          usuest: params.usuest,
+          tipest: params.tipest,
+          id: idesta,
+          startDate: e.date,
+          endDate: e.date,
+          color: '#0D8004',
+        }
+        dataSource.push(estado)
       }
+      await setData(dataSource)
     })
 
     arrayFilter(oficinaUsuario)
+    estadosUsuario(params)
   </script>
 
 </body>
