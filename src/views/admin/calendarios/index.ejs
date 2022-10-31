@@ -204,12 +204,10 @@
       params.usuest = document.getElementById('cbousu').value
       params.tipest = 0
 
-      // document.getElementById('idusua').value = params.usuest
-      // document.getElementById('tipest').value = params.tipest
       document.getElementById('cboest').selectedIndex = params.tipest
     }
     const getEstadosTipo = (tipo) => {
-      estadosTipo = tipo === 0 ? estados:estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
+      estadosTipo = tipo === 0 ? estados : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
 
       let data = []
 
@@ -219,8 +217,8 @@
           usuest: itm.USUEST,
           tipest: itm.TIPEST,
           id: itm.IDESTA,
-          startDate: new Date(itm.STRFEC),
-          endDate: new Date(itm.STRFEC),
+          startDate: new Date(itm.FECEST),
+          endDate: new Date(itm.FECEST),
           color: colores[itm.TIPEST].COLOR,
         }
         data.push(estado)
@@ -236,7 +234,6 @@
     let estadosTipo = null
     let calendario = null
     let color = ''
-    let oficinaUsuario = <%- user.oficina %>
     let currentYear = new Date().getFullYear()
     let params = {
       idofic: <%- user.oficina %>,
@@ -258,13 +255,13 @@
       minDate: new Date(currentYear, 0, 1),
       maxDate: new Date(currentYear, 11, 31),
       language: "es",
-      mouseOnDay: function (e) {
+      mouseOnDay: function(e) {
         if (e.events.length > 0) {
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
           e.element.setAttribute('title', colores[e.events[0].tipest].DES)
         }
-      },      
+      },
     })
 
     document.getElementById('cboyea').addEventListener('change', function() {
@@ -272,7 +269,7 @@
       calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
       calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
 
-      currentYear = document.querySelector("#cboyea").value
+      currentYear = parseInt(document.querySelector("#cboyea").value)
       params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, {
         year: 'numeric',
         month: '2-digit',
@@ -287,20 +284,16 @@
       estadosUsuario(params)
     });
     document.getElementById('cboofi').addEventListener('change', function() {
-      oficinaUsuario = this.value
-      params.idofic = this.value
-      
-      arrayFilterOficinas(oficinaUsuario)
+      params.idofic = parseInt(this.value)
+
+      arrayFilterOficinas(params.idofic)
       estadosUsuario(params)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
-      params.usuest = this.value
+      params.usuest = parseInt(this.value)
       params.tipest = 0
 
-      color = ''
-      // document.getElementById('idusua').value = params.usuest
-      // document.getElementById('tipest').value = params.tipest
       document.getElementById('cboest').selectedIndex = params.tipest
       estadosUsuario(params)
     });
@@ -308,9 +301,9 @@
       document.getElementById('tipest').value = this.value
 
       color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
-      params.tipest = this.value
+      params.tipest = parseInt(this.value)
 
-      getEstadosTipo(params.tipest)
+      estadosUsuario(params)
     });
     document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
       // bloquear festivos
@@ -318,14 +311,16 @@
         e.events[0].idesta === 0 ||
         e.element.classList.contains('domingo') ||
         color === '') {
-          alert('No se puede editar el calendario.')          
+        alert('No se puede editar el calendario.')
         return
       }
       // bloquear solapes
-      if (e.events.length === 0) {
-        console.log(estados)
-        // TODO
-      }
+      const fecha = e.date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+      console.log(estados.find(itm => itm.STRFEC === fecha))
 
       if (e.element.style.boxShadow) {
         e.element.style.boxShadow = null
@@ -357,7 +352,7 @@
             }),
             USUEST: params.usuest,
             TIPEST: params.tipest,
-            OFIEST: oficinaUsuario,
+            OFIEST: params.idofic,
             DESHOR: '+00 08:30:00',
             HASHOR: '+00 14:00:00',
           },
@@ -371,7 +366,7 @@
       }
     })
 
-    arrayFilterOficinas(oficinaUsuario)
+    arrayFilterOficinas(params.idofic)
     estadosUsuario(params)
   </script>
 
