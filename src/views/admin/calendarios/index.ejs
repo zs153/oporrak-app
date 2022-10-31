@@ -322,10 +322,12 @@
 
       const result = estados.find(itm => itm.STRFEC === fecha)
       if (result) {
-        e.element.setAttribute('data-bs-trigger', 'hover')
-        e.element.setAttribute('data-bs-toggle', 'popover')
-        e.element.setAttribute('title', 'Solape de horas')
-        return
+        if (result.TIPEST !== tipo) {
+          e.element.setAttribute('data-bs-trigger', 'hover')
+          e.element.setAttribute('data-bs-toggle', 'popover')
+          e.element.setAttribute('title', 'Solape de horas')
+          return
+        }
       }
 
       if (e.element.style.boxShadow) {
