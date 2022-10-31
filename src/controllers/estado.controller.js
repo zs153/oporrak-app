@@ -98,3 +98,14 @@ export const estadosUsuario = async (req, res) => {
     res.status(400).end()
   }
 }
+export const estadosFechaUsuario = async (req, res) => {
+  const context = req.body
+
+  try {
+    const result = await DAL.estadosFechaUsuario(context)
+
+    res.status(200).json(result)
+  } catch (err) {
+    res.status(400).end()
+  }
+}
