@@ -198,12 +198,11 @@ export const arrTiposLiquidacion = [
   { id: 2, des: 'DEVOLVER' },
 ]
 export const arrTiposEstado = [
-  { ID: -1, DES: "TRASPASADO", COLOR: "#808000" },
   { ID: 1, DES: "VACACION", COLOR: "#0D8004" },
-  { ID: 2, DES: "BAJA", COLOR: "#803807" },
+  { ID: 2, DES: "BAJA", COLOR: "#FF0000" },
   { ID: 3, DES: "TRASPASO", COLOR: "#800209" },
   { ID: 4, DES: "FORMACION", COLOR: "#063780" },
-  { ID: 5, DES: "CONCILIACION", COLOR: "#DD900A" },
+  { ID: 5, DES: "CONCILIACION 9:30", COLOR: "#DD900A" },
   { ID: 6, DES: "REUNION", COLOR: "#DCD20D" },
   { ID: 7, DES: "TURNO", COLOR: "#A19DA3" },
   { ID: 8, DES: "HORAS BOLSA", COLOR: "#05CBF5" },
@@ -211,16 +210,17 @@ export const arrTiposEstado = [
   { ID: 10, DES: "ACUMULADO ESTADOS", COLOR: "#FFFFFF" },
   { ID: 11, DES: "TELETRABAJO", COLOR: "#7FB3D5" }
 ]
-const arrColoresEstado = [
-  { ID: -1, DES: "TRASPASADO", COLOR: "#808000" },
+export const arrColoresEstado = [
+  { ID: 0, DES: "FESTIVO", COLOR: "#000000" },
   { ID: 1, DES: "VACACION", COLOR: "#0D8004" },
-  { ID: 3, DES: "BAJA", COLOR: "#803807" },
+  { ID: 3, DES: "BAJA", COLOR: "#FF0000" },
   { ID: 2, DES: "TRASPASO", COLOR: "#800209" },
   { ID: 4, DES: "FORMACION", COLOR: "#063780" },
-  { ID: 5, DES: "CONCILIACION", COLOR: "#DD900A" },
+  { ID: 5, DES: "CONCILIACION 9:30", COLOR: "#DD900A" },
   { ID: 6, DES: "REUNION", COLOR: "#DCD20D" },
   { ID: 7, DES: "TURNO", COLOR: "#A19DA3" },
-  { ID: 8, DES: "HORAS_BOLSA", COLOR: "#05CBF5" },
-  { ID: 9, DES: "HORAS_FAMILIAR", COLOR: "#C3038F" },
+  { ID: 8, DES: "HORAS BOLSA", COLOR: "#05CBF5" },
+  { ID: 9, DES: "HORAS ATENCION FAMILIAR", COLOR: "#C3038F" },
+  { ID: 10, DES: "ACUMULADO ESTADOS", COLOR: "#FFFFFF" },
   { ID: 11, DES: "TELETRABAJO", COLOR: "#7FB3D5" }
 ]

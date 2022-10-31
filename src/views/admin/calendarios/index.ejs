@@ -180,25 +180,11 @@
       })
     }
     async function estadosUsuario(prms) {
-      let data = []
-      const result = await getEstadosWithPromise(prms)
-
-      result.map(itm => {
-        const estado = {
-          idesta: itm.IDESTA,
-          usuest: itm.USUEST,
-          tipest: itm.TIPEST,
-          id: itm.IDESTA,
-          startDate: new Date(itm.STRFEC),
-          endDate: new Date(itm.STRFEC),
-          color,
-        }
-        data.push(estado)
-      })
-      calendario.setDataSource(data)
+      estados = await getEstadosWithPromise(prms)
+      getEstadosTipo(prms.tipest)
     }
 
-    const arrayFilter = (oficina) => {
+    const arrayFilterOficinas = (oficina) => {
       const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
       const myLista = trimmedData
       const cbo = document.getElementById('cbousu')
@@ -216,22 +202,46 @@
         cbo.appendChild(option)
       })
       params.usuest = document.getElementById('cbousu').value
-      params.tipest = document.getElementById('cboest').value
+      params.tipest = 0
 
-      document.getElementById('idusua').value = document.getElementById('cbousu').value
-      document.getElementById('tipest').value = document.getElementById('cboest').value
+      // document.getElementById('idusua').value = params.usuest
+      // document.getElementById('tipest').value = params.tipest
+      document.getElementById('cboest').selectedIndex = params.tipest
+    }
+    const getEstadosTipo = (tipo) => {
+      estadosTipo = tipo === 0 ? estados:estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
+
+      let data = []
+
+      estadosTipo.map(itm => {
+        const estado = {
+          idesta: itm.IDESTA,
+          usuest: itm.USUEST,
+          tipest: itm.TIPEST,
+          id: itm.IDESTA,
+          startDate: new Date(itm.STRFEC),
+          endDate: new Date(itm.STRFEC),
+          color: colores[itm.TIPEST].COLOR,
+        }
+        data.push(estado)
+      })
+      calendario.setDataSource(data)
     }
   </script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
+    const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
+
+    let estados = null
+    let estadosTipo = null
     let calendario = null
-    let color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
+    let color = ''
     let oficinaUsuario = <%- user.oficina %>
     let currentYear = new Date().getFullYear()
     let params = {
       idofic: <%- user.oficina %>,
       usuest: <%- user.id %>,
-      tipest: <%- datos.tipoEstado.ID %>,
+      tipest: 0,
       desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
         year: 'numeric',
         month: '2-digit',
@@ -248,6 +258,13 @@
       minDate: new Date(currentYear, 0, 1),
       maxDate: new Date(currentYear, 11, 31),
       language: "es",
+      mouseOnDay: function (e) {
+        if (e.events.length > 0) {
+          e.element.setAttribute('data-bs-trigger', 'hover')
+          e.element.setAttribute('data-bs-toggle', 'popover')
+          e.element.setAttribute('title', colores[e.events[0].tipest].DES)
+        }
+      },      
     })
 
     document.getElementById('cboyea').addEventListener('change', function() {
@@ -272,14 +289,19 @@
     document.getElementById('cboofi').addEventListener('change', function() {
       oficinaUsuario = this.value
       params.idofic = this.value
-
-      arrayFilter(oficinaUsuario)
+      
+      arrayFilterOficinas(oficinaUsuario)
       estadosUsuario(params)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
       params.usuest = this.value
+      params.tipest = 0
 
+      color = ''
+      // document.getElementById('idusua').value = params.usuest
+      // document.getElementById('tipest').value = params.tipest
+      document.getElementById('cboest').selectedIndex = params.tipest
       estadosUsuario(params)
     });
     document.getElementById('cboest').addEventListener('change', function() {
@@ -288,15 +310,21 @@
       color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
       params.tipest = this.value
 
-      estadosUsuario(params)
+      getEstadosTipo(params.tipest)
     });
     document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
-
+      // bloquear festivos
       if (e.events.length > 0 &&
         e.events[0].idesta === 0 ||
         e.element.classList.contains('domingo') ||
         color === '') {
+          alert('No se puede editar el calendario.')          
         return
+      }
+      // bloquear solapes
+      if (e.events.length === 0) {
+        console.log(estados)
+        // TODO
       }
 
       if (e.element.style.boxShadow) {
@@ -341,11 +369,9 @@
 
         await insertEvento(evento)
       }
-
-      await setData(dataSource)
     })
 
-    arrayFilter(oficinaUsuario)
+    arrayFilterOficinas(oficinaUsuario)
     estadosUsuario(params)
   </script>
 
