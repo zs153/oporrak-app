@@ -126,12 +126,12 @@ export const estadosCarga = {
   procesado: 1,
 }
 export const tiposEstado = {
-  traspaso: { ID: -1, DES: "TRASPASADO" },
+  festivo: { ID: 0, DES: "FESTIVO" },
   vacacion: { ID: 1, DES: "VACACION" },
   baja: { ID: 2, DES: "BAJA" },
   traspaso: { ID: 3, DES: "TRASPASO" },
   formacion: { ID: 4, DES: "FORMACION" },
-  conciliacion: { ID: 5, DES: "CONCILIACION" },
+  conciliacion: { ID: 5, DES: "CONCILIACION 9:30" },
   reunion: { ID: 6, DES: "REUNION" },
   turno: { ID: 7, DES: "TURNO" },
   horasBolsa: { ID: 8, DES: "HORAS BOLSA" },
