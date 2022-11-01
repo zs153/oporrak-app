@@ -1,4 +1,5 @@
 import express from 'express'
+import authRoutes from '../middleware/auth'
 import {
   mainPage,
   errorPage,
@@ -6,7 +7,6 @@ import {
   changePassword,
   updatePerfil,
 } from '../controllers/admin.controller'
-import authRoutes from '../middleware/auth'
 
 const adminRouter = express.Router()
 
