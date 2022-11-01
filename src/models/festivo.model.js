@@ -15,50 +15,47 @@ const festivosSql = `SELECT
   tipfes,
   TO_CHAR(fecfes, 'DD/MM/YYYY') "STRFES"
 FROM festivos
+WHERE fecfes BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
 const festivosOficinaSql = `SELECT 
   ff.idfest,
   TO_CHAR(ff.fecfes, 'YYYY-MM-DD') "FECFES",
-  ff.tipfes,
+  ff.ofifes,
   TO_CHAR(ff.fecfes, 'DD/MM/YYYY') "STRFES",
-  oo.idofic,
   oo.desofi
-FROM festivosoficina fo
-INNER JOIN festivos ff ON ff.idfest = fo.idfest
-INNER JOIN oficinas oo ON oo.idofic = fo.idofic
-WHERE fo.idofic = :idofic AND
-  TRUNC(ff.fecfes) BETWEEN :desde AND :hasta
+FROM festivos ff
+LEFT JOIN oficinas oo ON oo.idofic = ff.ofifes
+WHERE ff.ofifes = :ofifes AND
+  fecfes BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTFESTIVO(
-  :idofic,  
   TO_DATE(:fecfes, 'DD/MM/YYYY'),
-  :tipfes,
+  :ofifes,
   :usumov,
   :tipmov,
   :idfest
 ); END;
 `
 const removeSql = `BEGIN OPORRAK_PKG.DELETEFESTIVO(
-  :idofic,
-  TO_DATE(:fecfes, 'DD/MM/YYYY'),
-  :tipfes,
+  :idfest,
+  :ofifes,
   :usumov,
   :tipmov
 ); END;
 `
 
-// estados
+// festivos
 export const find = async (context) => {
   let query = festivoSql
 
   const result = await simpleExecute(query, context)
   return result.rows
 }
-export const findAll = async () => {
-  let query = festivosSql
-  let bind = {}
+export const findAll = async (context) => {
+  let query = festivosComunesSql
 
-  const result = await simpleExecute(query, bind)
+  const result = await simpleExecute(query, context)
+
   return result.rows
 }
 export const insert = async (bind) => {

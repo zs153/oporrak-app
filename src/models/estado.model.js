@@ -25,7 +25,6 @@ FROM estados
 WHERE usuest = :usuest AND
   fecest = TO_DATE(:fecest, 'DD/MM/YYYY')
 `
-
 const estadosUsuarioQuery = `SELECT 
   0 AS "IDESTA", 
   TO_CHAR(ff.fecfes, 'YYYY-MM-DD') AS "FECEST", 
@@ -35,10 +34,8 @@ const estadosUsuarioQuery = `SELECT
   '08:30' AS "DESHOR", 
   '14:00' AS "HASHOR", 
   TO_CHAR(ff.fecfes, 'DD/MM/YYYY') AS "STRFEC"
-FROM festivosoficina fo
-INNER JOIN festivos ff ON ff.idfest = fo.idfest
-INNER JOIN oficinas oo ON oo.idofic = fo.idofic
-WHERE fo.idofic = :idofic AND
+FROM festivos ff
+WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
   TRUNC(ff.fecfes) BETWEEN :desde AND :hasta
 UNION
 SELECT 

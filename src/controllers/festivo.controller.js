@@ -1,34 +1,28 @@
 import * as DAL from '../models/festivo.model'
 
 const insertFromRec = (req) => {
-  const oficina = {
-    IDOFIC: req.body.oficina.IDOFIC,
-  }
   const festivo = {
-    FECFES: req.body.festivo.FECCOM,
-    TIPFES: req.body.festivo.TIPFES,
+    FECFES: req.body.festivo.FECFES,
+    OFIFES: req.body.festivo.OFIFES,
   }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(oficina, festivo, movimiento)
+  return Object.assign(festivo, movimiento)
 }
 const deleteFromRec = (req) => {
-  const oficina = {
-    IDOFIC: req.body.oficina.IDOFIC,
-  }
   const festivo = {
-    FECFES: req.body.festivo.FECCOM,
-    TIPFES: req.body.festivo.TIPFES,
+    IDFEST: req.body.festivo.IDFEST,
+    OFIFES: req.body.festivo.OFIFES,
   }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(oficina, festivo, movimiento)
+  return Object.assign(festivo, movimiento)
 }
 
 // festivo
@@ -52,11 +46,7 @@ export const festivos = async (req, res) => {
   try {
     const result = await DAL.findAll(context)
 
-    if (rows !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(400).end()
   }
@@ -84,6 +74,7 @@ export const borrar = async (req, res) => {
       res.status(404).end()
     }
   } catch (err) {
+    console.log(err)
     res.status(500).end()
   }
 }

@@ -7,15 +7,15 @@ import {
   festivosOficina,
 } from '../controllers/festivo.controller'
 
-const apifestivoRouter = express.Router()
+const apiFestivoRouter = express.Router()
 
-// festivos comunes
-apifestivoRouter.post('/festivo', festivo)
-apifestivoRouter.post('/festivos', festivos)
-apifestivoRouter.post('/festivos/insert', crear)
-apifestivoRouter.post('/festivos/delete', borrar)
+// festivos
+apiFestivoRouter.post('/festivo', festivo)
+apiFestivoRouter.post('/festivos', festivos)
+apiFestivoRouter.post('/festivos/insert', crear)
+apiFestivoRouter.post('/festivos/delete', borrar)
 
-// festivos locales
-apifestivoRouter.post('/festivos/oficinas', festivosOficina)
+// festivos oficina
+apiFestivoRouter.post('/festivos/oficinas', festivosOficina)
 
-export default apifestivoRouter
+export default apiFestivoRouter
