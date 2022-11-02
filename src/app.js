@@ -18,6 +18,7 @@ import subtipoRouter from "./routes/subtipo.router";
 import cargaRouter from "./routes/carga.router";
 import calendarioRouter from "./routes/calendario.router";
 import festivoRouter from "./routes/festivo.router";
+import traspasoRouter from "./routes/traspaso.router";
 import estadisticaRouter from "./routes/estadisticas.router";
 import matriculaRouter from "./routes/matricula.router";
 import cursoRouter from "./routes/curso.router";
@@ -51,6 +52,7 @@ app.use("/admin", estadisticaRouter);
 app.use("/admin", matriculaRouter);
 app.use("/admin", calendarioRouter);
 app.use("/admin", festivoRouter);
+app.use("/admin", traspasoRouter);
 app.use("/admin", cursoRouter);
 app.use("/log", loginRouter);
 

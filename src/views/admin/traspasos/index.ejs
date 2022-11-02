@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Calendario</title>
+  <title>Traspasos</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -18,7 +18,7 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
+    <%- include('../../partials/navbar', {opcion: 'ASMINISTRACION' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -32,11 +32,10 @@
                 </div>
                 <% }) %>
                 <% } %>
-                <form action="/admin/calendarios/calendario" method="POST">
                   <input type="hidden" name="idusua" id="idusua" value="">
                   <input type="hidden" name="tipest" id="tipest" value="">
                   <div class="card-header">
-                    <h3 class="card-title">Calendario</h3>
+                    <h3 class="card-title">Calendario de traspasos</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -55,8 +54,8 @@
                       </div>
                       <div class="col-3">
                         <div class="mb-1">
-                          <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofiusu" value="">
+                          <div class="form-label">Oficina origen</div>
+                          <select class="form-select" id="cboorg" name="orgusu" value="">
                             <% datos.oficinas.map(element=> { %>
                             <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? "selected":"" %>>
                               <%- element.DESOFI %>
@@ -74,67 +73,25 @@
                       </div>
                       <div class="col-3">
                         <div class="mb-1">
-                          <div class="form-label">Estado</div>
-                          <select class="form-select" id="cboest" value="">
-                            <option value="0" data-foo="" selected>
-                              TODOS
-                            </option>
-                            <% datos.arrTiposEstado.map(element=> { %>
-                            <option value="<%- element.ID %>" data-foo="<%- element.COLOR %>">
-                              <%- element.DES %>
-                            </option>
-                            <% }) %>
+                          <div class="form-label">Oficina destino</div>
+                          <select class="form-select" id="cbodes" name="desusu" value="">
+                            <% datos.oficinas.map(element=> { %>
+                              <option value="<%- element.IDOFIC %>" <%- element.IDOFIC===user.oficina ? "selected" :"" %>>
+                                <%- element.DESOFI %>
+                              </option>
+                              <% }) %>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div id="calendar"></div>
                   </div>
-                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-tras" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="container-xl">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title mt-0">Traspaso</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="mb-1">
-                      <div class="form-label">Oficina destino</div>
-                      <select class="form-select" id="cbodes" name="idofic" value="">
-                        <% datos.oficinas.map(element=> { %>
-                          <option value="<%- element.IDOFIC %>">
-                            <%- element.DESOFI %>
-                          </option>
-                          <% }) %>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <input type="hidden" name="fecest" id="fecest">
-              <button type="button" class="btn btn-link" id="btnCancel" data-bs-dismiss="modal"
-                aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" id="btnAcept"
-                onclick="eventoTraspaso()">Aceptar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <%- include('../../partials/footer') %>
   </div>
 
@@ -167,10 +124,6 @@
               }
 
               dataSource.push(estado)
-              if (estado.tipest === <%- datos.tiposEstado.traspaso.ID %>) {
-                document.getElementById('modal-tras').style.display = 'none'
-                calendario.render()
-              }
             }
           }
         }
@@ -225,25 +178,6 @@
       estados = await getEstadosWithPromise(prms)
       getEstadosTipo(tipo)
     }
-    const eventoTraspaso = async (e) => {
-      const fecha = document.getElementById('fecest').value
-      const evento = {
-        estado: {
-          FECEST: fecha,
-          USUEST: params.usuest,
-          TIPEST: tipo,
-          OFIEST: params.idofic,
-          DESHOR: '+00 08:30:00',
-          HASHOR: '+00 14:00:00',
-        },
-        movimiento: {
-          USUMOV: <%- user.id %>,
-          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-      }
-      }
-
-      await insertEvento(evento)
-    }
 
     const arrayFilterOficinas = (oficina) => {
       const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
@@ -286,25 +220,11 @@
       })
       calendario.setDataSource(data)
     }
-    const editEvento = (e) => {
-      const modalTraspaso = document.getElementById('modal-tras')
-      const fecha = e.date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
-
-      document.getElementById('fecest').value = fecha
-      calendarElement = e.element
-
-      modalTraspaso.style.display = 'flex'
-    }
-</script>
+  </script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
 
-    let calendarElement = null
     let estados = null
     let estadosTipo = null
     let calendario = null
@@ -359,7 +279,7 @@
 
       estadosUsuario(params, tipo)
     });
-    document.getElementById('cboofi').addEventListener('change', function() {
+    document.getElementById('cboorg').addEventListener('change', function() {
       params.idofic = parseInt(this.value)
 
       arrayFilterOficinas(params.idofic)
@@ -405,9 +325,6 @@
         }
       }
 
-      if (tipo === <%- datos.tiposEstado.traspaso.ID %> && e.events.length === 0) {
-        editEvento(e)
-      } else {
       if (e.element.style.boxShadow) {
         e.element.style.boxShadow = null
       } else {
@@ -449,7 +366,6 @@
         }
 
         await insertEvento(evento)
-      }
       }
     })
 
