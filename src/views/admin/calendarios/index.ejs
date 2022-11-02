@@ -111,12 +111,12 @@
                   <div class="col-12">
                     <div class="mb-1">
                       <div class="form-label">Oficina destino</div>
-                      <select class="form-select" id="cbodes" name="idofic" value="">
+                      <select class="form-select" id="cbodes" name="ofides" value="">
                         <% datos.oficinas.map(element=> { %>
-                          <option value="<%- element.IDOFIC %>">
-                            <%- element.DESOFI %>
-                          </option>
-                          <% }) %>
+                        <option value="<%- element.IDOFIC %>">
+                          <%- element.DESOFI %>
+                        </option>
+                        <% }) %>
                       </select>
                     </div>
                   </div>
@@ -124,11 +124,44 @@
               </div>
             </div>
             <div class="modal-footer">
-              <input type="hidden" name="fecest" id="fecest">
-              <button type="button" class="btn btn-link" id="btnCancel" data-bs-dismiss="modal"
-                aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" id="btnAcept"
-                onclick="eventoTraspaso()">Aceptar</button>
+              <input type="hidden" name="fecest" id="fectra">
+              <button type="button" class="btn btn-link" id="btnCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto" id="btnAcept" onclick="eventoTraspaso()">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-bolsa" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title mt-0">Horas bolsa</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde</div>
+                      <!-- TODO -->
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">hASTA</div>
+                      <!-- TODO -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="fecest" id="fectra">
+              <button type="button" class="btn btn-link" id="btnCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto" id="btnAcept" onclick="eventoTraspaso()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -169,7 +202,7 @@
               dataSource.push(estado)
               if (estado.tipest === <%- datos.tiposEstado.traspaso.ID %>) {
                 document.getElementById('modal-tras').style.display = 'none'
-                calendario.render()
+                calendario.setDataSource(dataSource)
               }
             }
           }
@@ -193,6 +226,9 @@
               let dataSource = calendario.getDataSource()
 
               dataSource = dataSource.filter(itm => itm.idesta !== evento.estado.IDESTA)
+              calendario.setDataSource(dataSource, {
+                preventRendering: false
+              })
             }
           }
         }
@@ -226,25 +262,32 @@
       getEstadosTipo(tipo)
     }
     const eventoTraspaso = async (e) => {
-      const fecha = document.getElementById('fecest').value
+      let fecha = null
+      if (tipo === <%- datos.tiposEstado.traspaso.ID %>) {
+        fecha = document.getElementById('fectra').value
+      } else if (tipo === <%- datos.tiposEstado.conciliacion.ID %>) {
+        //TODO
+      } else if (tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
+        //TODO
+      }
+
       const evento = {
         estado: {
           FECEST: fecha,
           USUEST: params.usuest,
           TIPEST: tipo,
-          OFIEST: params.idofic,
+          OFIEST: destino,
           DESHOR: '+00 08:30:00',
           HASHOR: '+00 14:00:00',
         },
         movimiento: {
           USUMOV: <%- user.id %>,
           TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-      }
+        }
       }
 
       await insertEvento(evento)
     }
-
     const arrayFilterOficinas = (oficina) => {
       const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
       const myLista = trimmedData
@@ -268,8 +311,7 @@
       document.getElementById('cboest').selectedIndex = params.tipest
     }
     const getEstadosTipo = (tipo) => {
-      estadosTipo = tipo === 0 ? estados : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
-
+      const estadosTipo = tipo === 0 ? estados : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
       let data = []
 
       estadosTipo.map(itm => {
@@ -287,26 +329,36 @@
       calendario.setDataSource(data)
     }
     const editEvento = (e) => {
-      const modalTraspaso = document.getElementById('modal-tras')
       const fecha = e.date.toLocaleDateString(undefined, {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
       })
 
-      document.getElementById('fecest').value = fecha
-      calendarElement = e.element
+      if (tipo === <%- datos.tiposEstado.traspaso.ID %>) {
+        const modalTraspaso = document.getElementById('modal-tras')
 
-      modalTraspaso.style.display = 'flex'
+        document.getElementById('fectra').value = fecha
+        modalTraspaso.style.display = 'flex'
+      } else if (tipo === <%- datos.tiposEstado.conciliacion.ID %>) {
+        const modalBolsa = document.getElementById('modal-bolsa')
+
+        document.getElementById('feccon').value = fecha
+        modalBolsa.style.display = 'flex'
+      } else if (tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
+        const modalBolsa = document.getElementById('modal-bolsa')
+
+        document.getElementById('fecbol').value = fecha
+        modalBolsa.style.display = 'flex'
+      }
     }
-</script>
+  </script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
 
-    let calendarElement = null
+    let destino = 0
     let estados = null
-    let estadosTipo = null
     let calendario = null
     let color = ''
     let tipo = 0
@@ -340,6 +392,20 @@
       },
     })
 
+    // modal
+    document.getElementById('btnCancel').addEventListener('click', function() {
+      document.getElementById('modal-tras').style.display = 'none'
+    })
+    document.addEventListener('keydown', function(e) {
+      const mTraspaso = document.getElementById('modal-tras')
+      const keyCode = e.keyCode;
+
+      if (keyCode === 27 && mTraspaso.style.display === 'flex') {
+        mTraspaso.style.display = 'none'
+      }
+    })
+
+    // calendario
     document.getElementById('cboyea').addEventListener('change', function() {
       calendario.setYear(document.querySelector("#cboyea").value);
       calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
@@ -364,6 +430,9 @@
 
       arrayFilterOficinas(params.idofic)
       estadosUsuario(params, tipo)
+    });
+    document.getElementById('cbodes').addEventListener('change', function() {
+      destino = parseInt(this.value)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
@@ -405,51 +474,53 @@
         }
       }
 
-      if (tipo === <%- datos.tiposEstado.traspaso.ID %> && e.events.length === 0) {
+      if (e.events.length === 0 && tipo === <%- datos.tiposEstado.traspaso.ID %>) {
+        editEvento(e)
+      } else if (e.events.length === 0 && tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
         editEvento(e)
       } else {
-      if (e.element.style.boxShadow) {
-        e.element.style.boxShadow = null
-      } else {
-        e.element.style.boxShadow = color + ' 0px -4px 0px 0px inset'
-      }
+        if (e.element.style.boxShadow) {
+          e.element.style.boxShadow = null
+        } else {
+          e.element.style.boxShadow = color + ' 0px -4px 0px 0px inset'
+        }
 
-      if (e.events.length) {
-        if (e.events[0].id > 0) {
+        if (e.events.length) {
+          if (e.events[0].id > 0) {
+            const evento = {
+              estado: {
+                IDESTA: e.events[0].idesta,
+              },
+              movimiento: {
+                USUMOV: <%- user.id %>,
+                TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+              }
+            }
+
+            await deleteEvento(evento)
+          }
+        } else {
           const evento = {
             estado: {
-              IDESTA: e.events[0].idesta,
+              FECEST: e.date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+              }),
+              USUEST: params.usuest,
+              TIPEST: tipo,
+              OFIEST: params.idofic,
+              DESHOR: '+00 08:30:00',
+              HASHOR: '+00 14:00:00',
             },
             movimiento: {
               USUMOV: <%- user.id %>,
-              TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+              TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
             }
           }
 
-          await deleteEvento(evento)
+          await insertEvento(evento)
         }
-      } else {
-        const evento = {
-          estado: {
-            FECEST: e.date.toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit'
-            }),
-            USUEST: params.usuest,
-            TIPEST: tipo,
-            OFIEST: params.idofic,
-            DESHOR: '+00 08:30:00',
-            HASHOR: '+00 14:00:00',
-          },
-          movimiento: {
-            USUMOV: <%- user.id %>,
-            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-          }
-        }
-
-        await insertEvento(evento)
-      }
       }
     })
 
