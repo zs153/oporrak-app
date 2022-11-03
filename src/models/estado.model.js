@@ -7,6 +7,7 @@ const baseQuery = `SELECT
   usuest,
   tipest,
   ofiest,
+  ofides,
   deshor,
   hashor,
   TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
@@ -18,6 +19,7 @@ const estadosFechaUsuarioQuery = `SELECT
   usuest,
   tipest,
   ofiest,
+  ofides,
   deshor,
   hashor,
   TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
@@ -31,6 +33,7 @@ const estadosUsuarioQuery = `SELECT
   0 AS "USUEST", 
   0 AS "TIPEST", 
   0 AS "OFIEST", 
+  0 AS "OFIDES",
   '08:30' AS "DESHOR", 
   '14:00' AS "HASHOR", 
   TO_CHAR(ff.fecfes, 'DD/MM/YYYY') AS "STRFEC"
@@ -44,6 +47,7 @@ SELECT
   ee.usuest,
   ee.tipest,
   ee.ofiest,
+  ee.ofides,
   LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
   LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR",
   TO_CHAR(ee.fecest, 'DD/MM/YYYY') AS "STRFEC"
@@ -56,6 +60,7 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   :usuest,
   :tipest,
   :ofiest,
+  :ofides,
   :deshor,
   :hashor,
   :usumov,

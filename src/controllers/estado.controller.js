@@ -6,6 +6,7 @@ const insertFromRec = (req) => {
     USUEST: req.body.estado.USUEST,
     TIPEST: req.body.estado.TIPEST,
     OFIEST: req.body.estado.OFIEST,
+    OFIDES: req.body.estado.OFIDES,
     DESHOR: req.body.estado.DESHOR,
     HASHOR: req.body.estado.HASHOR,
   }
