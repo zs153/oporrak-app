@@ -15,87 +15,103 @@
 </head>
 
 <body class="antialiased">
-    <div class="page-wrapper">
-      <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'ESTADO' }) %>
-      <div class="page page-center">
-        <div class="container container-lg mt-4">
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <% if(typeof alerts !='undefined' ) { %>
-                  <% alerts.map(function (alert){ %>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                      <%- alert.msg %>
-                    </div>
-                    <% }) %>
-                      <% } %>
-                        <form action="/admin/estados/visualizar" method="POST" onsubmit="return validate();">
-                          <div class="card-header">
-                            <h3 class="card-title">Usuario</h3>
-                          </div>
-                          <div class="card-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <div class="mb-1">
-                                  <div class="form-label">Oficina</div>
-                                  <select class="form-select" id="cboofi" name="ofiest" value="">
-                                    <% datos.oficinas.map(element=> { %>
-                                      <option value="<%= element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
-                                        <%= element.DESOFI %>
-                                      </option>
-                                      <% }) %>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <div class="mb-1">
-                                  <div class="form-label">Perfil</div>
-                                  <select class="form-select" id="cboper" name="perusu" value="">
-                                    <% datos.arrTiposPerfil.map(element=> { %>
-                                      <option value="<%= element.id %>" >
-                                        <%= element.des %>
-                                      </option>
-                                      <% }) %>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-6">
-                                <div class="mb-1">
-                                  <div class="input-control">
-                                    <label class="form-label required">Fecha inicio</label>
-                                    <input type="date" name="desfec" id="desfec" class="form-control" value="<%- datos.desde %>" />
-                                    <div class="invalid-feedback"></div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <div class="mb-1">
-                                  <div class="input-control">
-                                    <label class="form-label required">Fecha fin</label>
-                                    <input type="date" name="hasfec" id="hasfec" class="form-control" value="<%- datos.hasta %>" />
-                                    <div class="invalid-feedback"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card-footer text-end">
-                            <div class="d-flex">
-                              <button type="submit" class="btn btn-primary ms-auto" id="btnGenerar">Aceptar</button>
-                            </div>
-                          </div>
-                        </form>
+  <div class="page-wrapper">
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/navbar', {opcion: 'ESTADO' }) %>
+    <div class="page page-center">
+      <div class="container container-lg mt-4">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <% if(typeof alerts !='undefined' ) { %>
+              <% alerts.map(function (alert){ %>
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <%- alert.msg %>
               </div>
+              <% }) %>
+              <% } %>
+              <form action="/admin/estados/estados" method="POST" onsubmit="return validate();">
+                <input type="hidden" id="desofi" name="desofi">
+                <input type="hidden" id="desper" name="desper">
+                <div class="card-header">
+                  <h3 class="card-title">Estados</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="mb-1">
+                        <div class="form-label">Oficina</div>
+                        <select class="form-select" id="cboofi" name="ofiest" value="">
+                          <% datos.oficinas.map(element=> { %>
+                          <option value="<%= element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
+                            <%= element.DESOFI %>
+                          </option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="mb-1">
+                        <div class="form-label">Perfil</div>
+                        <select class="form-select" id="cboper" name="perusu" value="">
+                          <% datos.arrTiposPerfil.map(element=> { %>
+                          <option value="<%= element.id %>">
+                            <%= element.des %>
+                          </option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="mb-1">
+                        <div class="input-control">
+                          <label class="form-label required">Fecha inicio</label>
+                          <input type="date" name="desde" id="desfec" class="form-control" value="<%- datos.desde %>" />
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="mb-1">
+                        <div class="input-control">
+                          <label class="form-label required">Fecha fin</label>
+                          <input type="date" name="hasta" id="hasfec" class="form-control" value="<%- datos.hasta %>" />
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer text-end">
+                  <div class="d-flex">
+                    <button type="submit" class="btn btn-primary ms-auto">Estados</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-      <%- include('../../partials/footer') %>
     </div>
+    <%- include('../../partials/footer') %>
+  </div>
   <script src="/js/ayuda.min.js"></script>
+  <script>
+    const cboO = document.getElementById('cboofi');
+    const cboP = document.getElementById('cboper');
+
+    document.getElementById('desofi').value = cboO[cboO.selectedIndex].text
+    document.getElementById('desper').value = cboP[cboP.selectedIndex].text
+
+    cboO.addEventListener('change', (e) => {
+      document.getElementById('desofi').value = e.target.options[e.target.selectedIndex].text
+    })
+    cboP.addEventListener('change', (e) => {
+      document.getElementById('desper').value = e.target.options[e.target.selectedIndex].text
+    })
+  </script>
 
   <script>
     const desfec = document.getElementById('desfec')
@@ -105,9 +121,9 @@
       const desdeValue = desfec.value.trim()
       const hastaValue = desfec.value.trim()
 
-      if (checkDate(desdeValue)) {      
+      if (checkDate(desdeValue)) {
         setError(desfec, 'El formato de fecha no es válido')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(desfec)
         }, 3000)
         return false
@@ -116,7 +132,7 @@
       }
       if (checkDate(hastaValue)) {
         setError(hasfec, 'El formato de fecha no es válido')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(hasfec)
         }, 3000)
         return false
@@ -135,7 +151,7 @@
       inputControl.classList.add('is-valid');
       element.classList.remove('is-invalid');
     }
-    const setError = (element, message) => {      
+    const setError = (element, message) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
 
@@ -151,7 +167,7 @@
       }
 
       return true;
-    }    
+    }
   </script>
 </body>
 

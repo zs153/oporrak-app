@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Estadística</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
+  <!-- custom -->
+  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+</head>
+
+<body class="antialiased">
+  <div class="wrapper">
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION'}) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="d-flex">
+            <span>Oficina: <%- datos.descripcionOficina %></span>
+            <span class="ms-3">Perfil: <%- datos.descripcionPerfil %></span>
+            <span class="ms-3">Periodo: <%- datos.periodo.desde %> al <%- datos.periodo.hasta %></span>
+            <a href="#" class="ms-auto" data-bs-toggle="modal" data-bs-target="#modal-config">
+              <i class="bi bi-gear" style="font-size: 0.9rem; color: #626976;"></i>
+            </a>
+          </div>
+          <div class="row row-deck row-cards">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Estados</h3>
+                </div>
+                <div class="card-body">
+                  <table id="tblEstados" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
+                    <thead class="fixedHeader">
+                    </thead>
+                    <tbody class="scrollContent">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/footer') %>
+  </div>
+
+  <div class="modal modal-blur fade" id="modal-config" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mt-0">Estadística de fraudes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/admin/estadisticas/fraudes" method="POST" onsubmit="return validate();">
+          <input type="hidden" id="destip" name="destip">
+          <input type="hidden" id="refcar" name="refcar">
+          <div class="modal-body">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Oficina</div>
+                    <select class="form-select" id="cboofi" name="ofiest" value="">
+                      <% datos.oficinas.map(element=> { %>
+                      <option value="<%= element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
+                        <%= element.DESOFI %>
+                      </option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Perfil</div>
+                    <select class="form-select" id="cboper" name="perusu" value="">
+                      <% datos.arrTiposPerfil.map(element=> { %>
+                      <option value="<%= element.id %>">
+                        <%= element.des %>
+                      </option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="input-control">
+                      <label class="form-label required">Fecha inicio</label>
+                      <input type="date" name="desfec" id="desfec" class="form-control" value="<%- datos.desde %>" />
+                      <div class="invalid-feedback"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="input-control">
+                      <label class="form-label required">Fecha fin</label>
+                      <input type="date" name="hasfec" id="hasfec" class="form-control" value="<%- datos.hasta %>" />
+                      <div class="invalid-feedback"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+            <button type="submit" class="btn btn-primary ms-auto">Estados</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/ayuda.min.js"></script>
+  <script>
+    const desde = document.getElementById('desfec')
+    const hasta = document.getElementById('hasfec')
+
+    const validate = () => {
+      const desdeValue = desde.value.trim()
+      const hastaValue = hasta.value.trim()
+
+      if (isNaN(Date.parse(desdeValue))) {
+        setError(desde, 'Fecha requerida')
+        setTimeout(function() {
+          setSuccess(desde)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(desde)
+      }
+      if (isNaN(Date.parse(hastaValue))) {
+        setError(hasta, 'Fecha requerida')
+        setTimeout(function() {
+          setSuccess(hasta)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(hasta)
+      }
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+  </script>
+  <script>
+    function CalendarioMes(oficina, perfil, year, mes, desde, hasta) {
+      var calendario = <%- JSON.stringify(datos.estados) %>
+      var tamArray = diasEnMes(mes, year);
+      var totalPersonasHoraOficina = new Array(tamArray).fill(0);
+
+      var oficinaActual = 0;
+      var usuarioActual = 0;
+
+      var desdeDia = stringToFecha(desde).getDate();
+      var hastaDia = stringToFecha(hasta).getDate();
+
+      var arrEstados = new Array();
+      var calendarioSEQ;
+      var delta = 0;
+      var rowCount = 0;
+      var nombreUsuario = null;
+      var calendarioSEQ = null;
+
+      calendario.forEach(function(item) {
+        //periodo
+        var diaItem = stringToFecha(item.FECHA).getDate();
+
+        if (usuarioActual != item.IDUSUA) {
+          if (usuarioActual) {
+            arrEstados[rowCount] = new Array();
+            arrEstados[rowCount][0] = nombreUsuario;
+            arrEstados[rowCount].push(calendarioSEQ);
+
+            //total
+            for (var i = 0; i < tamArray; i++) {
+              if (calendarioSEQ[i] == 0 || calendarioSEQ[i] == -1) {
+                totalPersonasHoraOficina[i]++;
+              }
+            }
+
+            rowCount++;
+          }
+
+          calendarioSEQ = new Array(tamArray).fill(0);
+          usuarioActual = item.IDUSUA;
+          nombreUsuario = item.NOMUSU;
+
+          if (oficinaActual != item.OFIUSU) {
+            if (oficinaActual) {
+              arrEstados[rowCount] = new Array();
+              arrEstados[rowCount][0] = 0; //indicador de total
+              arrEstados[rowCount].push(totalPersonasHoraOficina);
+
+              //reiniciar
+              totalPersonasHoraOficina = new Array(tamArray).fill(0);
+              rowCount++;
+            }
+
+            arrEstados[rowCount] = new Array();
+            arrEstados[rowCount][0] = -1; //indicador de oficina
+            arrEstados[rowCount].push(item.DESOFI);
+
+            oficinaActual = item.OFIUSU;
+            rowCount++;
+          }
+        }
+
+        //acumulado estados
+        calendarioSEQ[diaItem - 1] = Number(item.TIPEST);
+      });
+
+      //usuario
+      arrEstados[rowCount] = new Array();
+      arrEstados[rowCount][0] = nombreUsuario;
+      arrEstados[rowCount].push(calendarioSEQ);
+
+      rowCount++;
+
+      //total ultimo usuario
+      for (var i = 0; i < tamArray; i++) {
+        if (calendarioSEQ[i] == 0 || calendarioSEQ[i] == -1) {
+          totalPersonasHoraOficina[i]++;
+        }
+      }
+
+      //total oficina
+      arrEstados[rowCount] = new Array();
+      arrEstados[rowCount][0] = 0;
+      arrEstados[rowCount].push(totalPersonasHoraOficina);
+
+      var tblBody = document.getElementsByTagName("tbody")[0];
+      var rowOficina = document.createElement("tr");
+      var rowUsuario = document.createElement("tr");
+      var hasHeaderOficina = false;
+
+      var col = null;
+      var texto = null;
+      var hasHeader = false;
+      var headerString = '';
+      var subHeaderString = '';
+
+      //pintar header
+      headerString = '<tr><th style="min-width: 250px; font-size: 13px; color: orangered;">' + ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][mes - 1] + '</th>';
+
+      for (var d = stringToFecha(desde); d <= stringToFecha(hasta); d.setDate(d.getDate() + 1)) {
+        headerString += ('<th colspan="14" style="text-align: center; font-size: 11px">' + ('0' + d.getDate()).slice(-2) + '</th>');
+      }
+
+      arrEstados.forEach(function(item) {
+        if (item[0] == -1) { //oficina
+          rowOficina = document.createElement('tr');
+          col = document.createElement('td');
+          texto = document.createTextNode(item[1]);
+
+          col.appendChild(texto);
+          col.style.cssText = "color: blue; border: none; text-align: center;";
+          col.style.minWidth = "250px";
+
+          rowOficina.appendChild(col);
+          tblBody.appendChild(rowOficina);
+        } else if (item[0] == 0) { //Totales
+          rowOficina = document.createElement('tr');
+          col = document.createElement('td');
+          texto = document.createTextNode('Personal en activo');
+
+          col.appendChild(texto);
+          col.style.cssText = "color: green; border: none; text-align: left;";
+
+          rowOficina.appendChild(col);
+
+          //total
+          for (var i = 0; i < tamArray; i++) {
+            var col = document.createElement("td");
+            col.style.cssText = "color: green; border: none; text-align: center;";
+            var texto = document.createTextNode(item[1][i]);
+
+            col.appendChild(texto);
+            rowOficina.appendChild(col);
+          }
+
+          tblBody.appendChild(rowOficina);
+        } else {
+          rowUsuario = document.createElement('tr');
+          col = document.createElement('td');
+          texto = document.createTextNode(item[0]);
+
+          col.appendChild(texto);
+          rowUsuario.appendChild(col);
+          tblBody.appendChild(rowUsuario);
+
+          //pintar
+          print()
+        }
+      })
+    }
+  </script>
+  <script>
+    const print = () => {
+      for (var i = 0; i < tamArray; i++) {
+        if (item[1][i] === -1) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('traspasado');
+
+          col.className = 'timeline trasdo';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] === 0) {
+          var col = document.createElement("td");
+
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.VACACION.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('vacación');
+
+          col.className = 'timeline vacas';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.BAJA.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('baja');
+
+          col.className = 'timeline bajas';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.TRASPASO.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('traspaso');
+
+          col.className = 'timeline trasp';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.FORMACION.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('formación');
+
+          col.className = 'timeline forma';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.CONCILIACION.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('conciliación');
+
+          col.className = 'timeline conci';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.REUNION.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('reunión');
+
+          col.className = 'timeline reuni';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.TURNO.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('turno');
+
+          col.className = 'timeline turno';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.HORAS_BOLSA.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('horas bolsa');
+
+          col.className = 'timeline horas';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.HORAS_ATENCION_FAMILIAR.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('horas familiar');
+
+          col.className = 'timeline famil';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (item[1][i] == TiposEstado.TELETRABAJO.ID) {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('teletrabajo');
+
+          col.className = 'timeline tele';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else {
+          var col = document.createElement("td");
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('acumulado estados');
+
+          col.className = 'timeline otros';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -22,8 +23,8 @@
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
-              <div class="card">              
-                <form action="/admin/estadisticas/fraudes" method="POST" onsubmit="return validate();" >
+              <div class="card">
+                <form action="/admin/estadisticas/fraudes" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="destip" name="destip">
                   <input type="hidden" id="refcar" name="refcar">
                   <div class="modal-body">
@@ -70,7 +71,7 @@
                   </div>
                   <div class="modal-footer">
                     <!-- <a href="/admin" class="btn btn-link">Cancelar</a> -->
-                    <button type="submit" class="btn btn-primary ms-auto">Generar estadística</button>              
+                    <button type="submit" class="btn btn-primary ms-auto">Generar estadística</button>
                   </div>
                 </form>
               </div>
@@ -87,12 +88,12 @@
     const cboC = document.getElementById('cbocar');
     const cboT = document.getElementById('cbotip');
 
-    cboC.addEventListener('change', (e) => {  
+    cboC.addEventListener('change', (e) => {
       document.getElementById('refcar').value = e.target.options[e.target.selectedIndex].getAttribute('data-foo')
     })
     cboT.addEventListener('change', (e) => {
       document.getElementById('destip').value = e.target.options[e.target.selectedIndex].text
-    })    
+    })
   </script>
   <script>
     const desde = document.getElementById('desde')
@@ -106,7 +107,7 @@
 
       if (isNaN(Date.parse(desdeValue))) {
         setError(desde, 'Fecha requerida')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(desde)
         }, 3000)
         return false
@@ -115,7 +116,7 @@
       }
       if (isNaN(Date.parse(hastaValue))) {
         setError(hasta, 'Fecha requerida')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(hasta)
         }, 3000)
         return false
@@ -124,7 +125,7 @@
       }
       if (isNaN(Date.parse(fechaValue))) {
         setError(fecha, 'Fecha requerida')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(fecha)
         }, 3000)
         return false
@@ -152,7 +153,7 @@
       inputControl.classList.remove('is-valid');
     }
   </script>
-  <script>    
+  <script>
     const Cargas = () => {
       const xhr = new XMLHttpRequest();
 
@@ -169,7 +170,7 @@
 
             cbo.appendChild(option)
           })
-            
+
           document.getElementById('refcar').value = cbo.options[cbo.selectedIndex].getAttribute('data-foo')
         }
       };
@@ -204,4 +205,5 @@
     Cargas();
   </script>
 </body>
+
 </html>
