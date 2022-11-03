@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Cursos</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
+  <!-- custom -->
+  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+</head>
+
+<body class="antialiased">
+    <div class="page-wrapper">
+      <%- include('../../partials/header') %>
+      <%- include('../../partials/navbar', {opcion: 'ESTADO' }) %>
+      <div class="page page-center">
+        <div class="container container-lg mt-4">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <% if(typeof alerts !='undefined' ) { %>
+                  <% alerts.map(function (alert){ %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <%- alert.msg %>
+                    </div>
+                    <% }) %>
+                      <% } %>
+                        <form action="/admin/estados/visualizar" method="POST" onsubmit="return validate();">
+                          <div class="card-header">
+                            <h3 class="card-title">Usuario</h3>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-6">
+                                <div class="mb-1">
+                                  <div class="form-label">Oficina</div>
+                                  <select class="form-select" id="cboofi" name="ofiest" value="">
+                                    <% datos.oficinas.map(element=> { %>
+                                      <option value="<%= element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
+                                        <%= element.DESOFI %>
+                                      </option>
+                                      <% }) %>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="mb-1">
+                                  <div class="form-label">Perfil</div>
+                                  <select class="form-select" id="cboper" name="perusu" value="">
+                                    <% datos.arrTiposPerfil.map(element=> { %>
+                                      <option value="<%= element.id %>" >
+                                        <%= element.des %>
+                                      </option>
+                                      <% }) %>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-6">
+                                <div class="mb-1">
+                                  <div class="input-control">
+                                    <label class="form-label required">Fecha inicio</label>
+                                    <input type="date" name="desfec" id="desfec" class="form-control" value="<%- datos.desde %>" />
+                                    <div class="invalid-feedback"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="mb-1">
+                                  <div class="input-control">
+                                    <label class="form-label required">Fecha fin</label>
+                                    <input type="date" name="hasfec" id="hasfec" class="form-control" value="<%- datos.hasta %>" />
+                                    <div class="invalid-feedback"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card-footer text-end">
+                            <div class="d-flex">
+                              <button type="submit" class="btn btn-primary ms-auto" id="btnGenerar">Aceptar</button>
+                            </div>
+                          </div>
+                        </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include('../../partials/footer') %>
+    </div>
+  <script src="/js/ayuda.min.js"></script>
+
+  <script>
+    const desfec = document.getElementById('desfec')
+    const hasfec = document.getElementById('hasfec')
+
+    const validate = () => {
+      const desdeValue = desfec.value.trim()
+      const hastaValue = desfec.value.trim()
+
+      if (checkDate(desdeValue)) {      
+        setError(desfec, 'El formato de fecha no es válido')
+        setTimeout(function () {
+          setSuccess(desfec)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(desfec)
+      }
+      if (checkDate(hastaValue)) {
+        setError(hasfec, 'El formato de fecha no es válido')
+        setTimeout(function () {
+          setSuccess(hasfec)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(hasfec)
+      }
+
+      return true
+    }
+
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {      
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+    const checkDate = (fecha) => {
+      re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+
+      if (!fecha.match(re)) {
+        return false;
+      }
+
+      return true;
+    }    
+  </script>
+</body>
+
+</html>

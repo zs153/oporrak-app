@@ -21,6 +21,7 @@ import festivoRouter from "./routes/festivo.router";
 import traspasoRouter from "./routes/traspaso.router";
 import estadisticaRouter from "./routes/estadisticas.router";
 import matriculaRouter from "./routes/matricula.router";
+import estadoRouter from "./routes/estado.router";
 import cursoRouter from "./routes/curso.router";
 
 const app = express();
@@ -54,6 +55,7 @@ app.use("/admin", calendarioRouter);
 app.use("/admin", festivoRouter);
 app.use("/admin", traspasoRouter);
 app.use("/admin", cursoRouter);
+app.use("/admin", estadoRouter);
 app.use("/log", loginRouter);
 
 export default app;

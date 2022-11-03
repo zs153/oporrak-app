@@ -125,7 +125,7 @@
             </div>
             <div class="modal-footer">
               <input type="hidden" name="fecest" id="fectra">
-              <button type="button" class="btn btn-link" id="btnCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-link" id="btnTrasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
               <button type="button" class="btn btn-primary ms-auto" id="btnAcept" onclick="eventoTraspaso()">Aceptar</button>
             </div>
           </div>
@@ -146,22 +146,57 @@
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Desde</div>
-                      <!-- TODO -->
+                      <input type="time" id="desbol" name="desbol" class="form-control" min="08:00" max="20:00" >
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">hASTA</div>
-                      <!-- TODO -->
+                      <div class="form-label">Hasta</div>
+                      <input type="time" id="hasbol" name="hasbol" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <input type="hidden" name="fecest" id="fectra">
-              <button type="button" class="btn btn-link" id="btnCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-link" id="btnBolsaCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
               <button type="button" class="btn btn-primary ms-auto" id="btnAcept" onclick="eventoTraspaso()">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-famil" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title mt-0">Horas familiar</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde</div>
+                      <input type="time" id="desfam" name="desfan" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta</div>
+                      <input type="time" id="hasfam" name="hasfam" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" id="btnFamilCancel" data-bs-dismiss="modal"
+                aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto"
+                onclick="eventoTraspaso()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -191,17 +226,23 @@
               let dataSource = calendario.getDataSource()
               const estado = {
                 idesta: result.idesta,
-                usuest: params.usuest,
-                tipest: tipo,
+                usuest: params.usuario,
+                tipest: params.tipo,
                 id: result.idesta,
                 startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
                 endDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
-                color,
+                color: params.color,
               }
 
               dataSource.push(estado)
               if (estado.tipest === <%- datos.tiposEstado.traspaso.ID %>) {
                 document.getElementById('modal-tras').style.display = 'none'
+                calendario.setDataSource(dataSource)
+              } else if (estado.tipest === <%- datos.tiposEstado.horasBolsa.ID %>) {
+                document.getElementById('modal-bolsa').style.display = 'none'
+                calendario.setDataSource(dataSource)
+              } else if (estado.tipest === <%- datos.tiposEstado.horasFamiliar.ID %>) {
+                document.getElementById('modal-famil').style.display = 'none'
                 calendario.setDataSource(dataSource)
               }
             }
@@ -257,26 +298,25 @@
         xhr.send(JSON.stringify(prms))
       })
     }
-    async function estadosUsuario(prms, tipo) {
-      estados = await getEstadosWithPromise(prms)
-      getEstadosTipo(tipo)
-    }
-    const eventoTraspaso = async (e) => {
-      let fecha = null
-      if (tipo === <%- datos.tiposEstado.traspaso.ID %>) {
-        fecha = document.getElementById('fectra').value
-      } else if (tipo === <%- datos.tiposEstado.conciliacion.ID %>) {
-        //TODO
-      } else if (tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
-        //TODO
+    async function estadosUsuario() {
+      const prms =  {
+        idofic: params.oficina,
+        usuest: params.usuario,
+        tipest: params.tipo,
+        desde: params.desde,
+        hasta: params.hasta,
       }
-
+      estados = await getEstadosWithPromise(prms)
+      getEstadosTipo(params.tipo)
+    }
+    const eventoTraspaso = async () => {
       const evento = {
         estado: {
-          FECEST: fecha,
-          USUEST: params.usuest,
-          TIPEST: tipo,
-          OFIEST: destino,
+          FECEST: params.fecha,
+          USUEST: params.usuario,
+          TIPEST: params.tipo,
+          OFIEST: params.oficina,
+          OFIDES: params.destino,
           DESHOR: '+00 08:30:00',
           HASHOR: '+00 14:00:00',
         },
@@ -284,6 +324,16 @@
           USUMOV: <%- user.id %>,
           TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
         }
+      }
+
+      if (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) {
+        evento.estado.HASHOR = '+00 09:30:00'
+      } else if (params.tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
+        evento.estado.DESHOR = '+00 ' + document.getElementById('desbol').value + ':00'
+        evento.estado.HASHOR = '+00 ' + document.getElementById('hasbol').value + ':00'
+      } else if (params.tipo === <%- datos.tiposEstado.horasFamiliar.ID %>) {
+        evento.estado.DESHOR = '+00 ' + document.getElementById('desfam').value + ':00'
+        evento.estado.HASHOR = '+00 ' + document.getElementById('hasfam').value + ':00'
       }
 
       await insertEvento(evento)
@@ -305,10 +355,10 @@
 
         cbo.appendChild(option)
       })
-      params.usuest = document.getElementById('cbousu').value
-      params.tipest = 0
+      params.usuario = document.getElementById('cbousu').value
+      params.tipo = 0
 
-      document.getElementById('cboest').selectedIndex = params.tipest
+      document.getElementById('cboest').selectedIndex = params.tipo
     }
     const getEstadosTipo = (tipo) => {
       const estadosTipo = tipo === 0 ? estados : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
@@ -328,28 +378,23 @@
       })
       calendario.setDataSource(data)
     }
-    const editEvento = (e) => {
-      const fecha = e.date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
-
-      if (tipo === <%- datos.tiposEstado.traspaso.ID %>) {
+    const editEvento = () => {
+      if (params.tipo === <%- datos.tiposEstado.traspaso.ID %>) {
         const modalTraspaso = document.getElementById('modal-tras')
 
-        document.getElementById('fectra').value = fecha
         modalTraspaso.style.display = 'flex'
-      } else if (tipo === <%- datos.tiposEstado.conciliacion.ID %>) {
+      } else if (params.tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
         const modalBolsa = document.getElementById('modal-bolsa')
 
-        document.getElementById('feccon').value = fecha
+        document.getElementById('desbol').value = "08:30"
+        document.getElementById('hasbol').value = "14:00"
         modalBolsa.style.display = 'flex'
-      } else if (tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
-        const modalBolsa = document.getElementById('modal-bolsa')
+      } else if (params.tipo === <%- datos.tiposEstado.horasFamiliar.ID %>) {
+        const modalFamily = document.getElementById('modal-famil')
 
-        document.getElementById('fecbol').value = fecha
-        modalBolsa.style.display = 'flex'
+        document.getElementById('desfam').value = "08:30"
+        document.getElementById('hasfam').value = "14:00"
+        modalFamily.style.display = 'flex'
       }
     }
   </script>
@@ -357,16 +402,21 @@
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
 
-    let destino = 0
+    let oficinaDestino = 0
     let estados = null
     let calendario = null
-    let color = ''
-    let tipo = 0
     let currentYear = new Date().getFullYear()
     let params = {
-      idofic: <%- user.oficina %>,
-      usuest: <%- user.id %>,
-      tipest: 0,
+      fecha: new Date().toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
+      oficina: <%- user.oficina %>,
+      usuario: <%- user.id %>,
+      destino: 0,
+      tipo: 0,
+      color: '',
       desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
         year: 'numeric',
         month: '2-digit',
@@ -393,15 +443,27 @@
     })
 
     // modal
-    document.getElementById('btnCancel').addEventListener('click', function() {
+    document.getElementById('btnFamilCancel').addEventListener('click', function () {
+      document.getElementById('modal-famil').style.display = 'none'
+    })
+    document.getElementById('btnTrasCancel').addEventListener('click', function() {
       document.getElementById('modal-tras').style.display = 'none'
+    })
+    document.getElementById('btnBolsaCancel').addEventListener('click', function () {
+      document.getElementById('modal-bolsa').style.display = 'none'
     })
     document.addEventListener('keydown', function(e) {
       const mTraspaso = document.getElementById('modal-tras')
+      const mBolsa = document.getElementById('modal-bolsa')
+      const mFamilia = document.getElementById('modal-famil')
       const keyCode = e.keyCode;
 
       if (keyCode === 27 && mTraspaso.style.display === 'flex') {
         mTraspaso.style.display = 'none'
+      } else if (keyCode === 27 && mBolsa.style.display === 'flex') {
+        mBolsa.style.display = 'none'
+      } else if (keyCode === 27 && mFamilia.style.display === 'flex') {
+        mFamilia.style.display = 'none'
       }
     })
 
@@ -423,50 +485,51 @@
         day: '2-digit'
       })
 
-      estadosUsuario(params, tipo)
+      estadosUsuario()
     });
     document.getElementById('cboofi').addEventListener('change', function() {
-      params.idofic = parseInt(this.value)
+      params.oficina = parseInt(this.value)
 
-      arrayFilterOficinas(params.idofic)
-      estadosUsuario(params, tipo)
+      arrayFilterOficinas(params.oficina)
+      estadosUsuario()
     });
     document.getElementById('cbodes').addEventListener('change', function() {
-      destino = parseInt(this.value)
+      oficinaDestino = parseInt(this.value)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
-      params.usuest = parseInt(this.value)
+      params.usuario = parseInt(this.value)
 
-      document.getElementById('cboest').selectedIndex = tipo
-      estadosUsuario(params, tipo)
+      document.getElementById('cboest').selectedIndex = params.tipo
+      estadosUsuario()
     });
     document.getElementById('cboest').addEventListener('change', function() {
       document.getElementById('tipest').value = this.value
 
-      color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
-      tipo = parseInt(this.value)
+      params.color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
+      params.tipo = parseInt(this.value)
 
-      estadosUsuario(params, parseInt(this.value))
+      estadosUsuario()
     });
     document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
       // bloquear festivos
       if (e.events.length > 0 &&
         e.events[0].idesta === 0 ||
         e.element.classList.contains('domingo') ||
-        color === '') {
+        params.color === '') {
         return
       }
-      // bloquear solapes
-      const fecha = e.date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
 
-      const result = estados.find(itm => itm.STRFEC === fecha)
+      params.fecha = e.date.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        })
+      
+      // bloquear solapes
+      const result = estados.find(itm => itm.STRFEC === params.fecha)
       if (result) {
-        if (result.TIPEST !== tipo) {
+        if (result.TIPEST !== params.tipo) {
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
           e.element.setAttribute('title', 'Solape de horas')
@@ -474,15 +537,16 @@
         }
       }
 
-      if (e.events.length === 0 && tipo === <%- datos.tiposEstado.traspaso.ID %>) {
-        editEvento(e)
-      } else if (e.events.length === 0 && tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
-        editEvento(e)
+      if (e.events.length === 0 && params.tipo === <%- datos.tiposEstado.traspaso.ID %> || 
+        params.tipo === <%- datos.tiposEstado.conciliacion.ID %> ||
+        params.tipo === <%- datos.tiposEstado.horasBolsa.ID %> ||
+        params.tipo === <%- datos.tiposEstado.horasFamiliar.ID %>) {
+        editEvento()
       } else {
         if (e.element.style.boxShadow) {
           e.element.style.boxShadow = null
         } else {
-          e.element.style.boxShadow = color + ' 0px -4px 0px 0px inset'
+          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
         }
 
         if (e.events.length) {
@@ -502,14 +566,11 @@
         } else {
           const evento = {
             estado: {
-              FECEST: e.date.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-              }),
-              USUEST: params.usuest,
-              TIPEST: tipo,
-              OFIEST: params.idofic,
+              FECEST: params.fecha,
+              USUEST: params.usuario,
+              TIPEST: params.tipo,
+              OFIEST: params.oficina,
+              OFIDES: params.destino,
               DESHOR: '+00 08:30:00',
               HASHOR: '+00 14:00:00',
             },
@@ -524,10 +585,9 @@
       }
     })
 
-    arrayFilterOficinas(params.idofic)
-    estadosUsuario(params, tipo)
+    arrayFilterOficinas(params.oficina)
+    estadosUsuario()
   </script>
 
 </body>
-
 </html>

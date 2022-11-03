@@ -135,7 +135,6 @@ export const tiposEstado = {
   turno: { ID: 7, DES: "TURNO" },
   horasBolsa: { ID: 8, DES: "HORAS BOLSA" },
   horasFamiliar: { ID: 9, DES: "HORAS ATENCION FAMILIAR" },
-  acumuladoEstados: { ID: 10, DES: "ACUMULADO ESTADOS" },
   teletrabajo: { ID: 11, DES: "TELETRABAJO" }
 };
 const coloresEstado = {
@@ -149,6 +148,7 @@ const coloresEstado = {
   TURNO: { ID: 7, COLOR: "#A19DA3" },
   HORAS_BOLSA: { ID: 8, COLOR: "#05CBF5" },
   HORAS_FAMILIAR: { ID: 9, COLOR: "#C3038F" },
+  ACUMULADO_ESTADOS: {ID: 10, COLOR: "#FFFFFF" },  
   TELETRABAJO: { ID: 11, COLOR: "#7FB3D5" }
 };
 
@@ -206,7 +206,6 @@ export const arrTiposEstado = [
   { ID: 7, DES: "TURNO", COLOR: "#A19DA3" },
   { ID: 8, DES: "HORAS BOLSA", COLOR: "#05CBF5" },
   { ID: 9, DES: "HORAS ATENCION FAMILIAR", COLOR: "#C3038F" },
-  { ID: 10, DES: "ACUMULADO ESTADOS", COLOR: "#FFFFFF" },
   { ID: 11, DES: "TELETRABAJO", COLOR: "#7FB3D5" }
 ]
 export const arrColoresEstado = [
