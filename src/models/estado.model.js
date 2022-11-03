@@ -55,6 +55,22 @@ FROM estados ee
 WHERE ee.usuest = :usuest AND
   ee.fecest BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
+const estadosOficinaPerfilQuery = `SELECT 
+  ee.idesta,
+  TO_CHAR(ee.fecest, 'YYYY-MM-DD') "FECEST",
+  ee.usuest,
+  ee.tipest,
+  ee.ofiest,
+  ee.ofides,
+  ee.deshor,
+  ee.hashor
+FROM estados ee
+INNER JOIN usuarios uu ON uu.idusua = ee.usuest
+INNER JOIN oficinas oo ON oo.idofic = ee.ofiest
+WHERE ee.ofiest = :ofiest AND
+  uu.perusu = :perusu AND
+  TRUNC(ee.fecest) BETWEEN :desde AND :hasta
+`
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   TO_DATE(:fecest, 'DD/MM/YYYY'),
   :usuest,
