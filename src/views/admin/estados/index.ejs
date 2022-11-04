@@ -114,30 +114,30 @@
   </script>
 
   <script>
-    const desfec = document.getElementById('desfec')
-    const hasfec = document.getElementById('hasfec')
+    const desde = document.getElementById('desfec')
+    const hasta = document.getElementById('hasfec')
 
     const validate = () => {
-      const desdeValue = desfec.value.trim()
-      const hastaValue = desfec.value.trim()
+      const desdeValue = desde.value.trim()
+      const hastaValue = hasta.value.trim()
 
-      if (checkDate(desdeValue)) {
-        setError(desfec, 'El formato de fecha no es válido')
-        setTimeout(function() {
-          setSuccess(desfec)
+      if (isNaN(Date.parse(desdeValue))) {
+        setError(desde, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(desde)
         }, 3000)
         return false
       } else {
-        setSuccess(desfec)
+        setSuccess(desde)
       }
-      if (checkDate(hastaValue)) {
-        setError(hasfec, 'El formato de fecha no es válido')
-        setTimeout(function() {
-          setSuccess(hasfec)
+      if (isNaN(Date.parse(hastaValue))) {
+        setError(hasta, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(hasta)
         }, 3000)
         return false
       } else {
-        setSuccess(hasfec)
+        setSuccess(hasta)
       }
 
       return true
@@ -158,15 +158,6 @@
       errorDisplay.innerText = message;
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
-    }
-    const checkDate = (fecha) => {
-      re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-
-      if (!fecha.match(re)) {
-        return false;
-      }
-
-      return true;
     }
   </script>
 </body>

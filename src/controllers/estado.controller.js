@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { arrTiposPerfil } from '../public/js/enumeraciones'
+import { tiposEstado, arrTiposPerfil } from '../public/js/enumeraciones'
 
 // pages
 export const mainPage = async (req, res) => {
@@ -36,18 +36,36 @@ export const estadosPage = async (req, res) => {
     desde: req.body.desde,
     hasta: req.body.hasta,
   }
+  const estado = {
+    OFIEST: req.body.ofiest,
+    PERUSU: req.body.perusu,
+    DESDE: periodo.desde,
+    HASTA: periodo.hasta,
+  }
   const descripcionOficina = req.body.desofi
   const descripcionPerfil = req.body.desper
+  const diasPeriodo = Math.ceil(new Date(periodo.hasta).getDate() - new Date(periodo.desde).getDate(), (1000 * 60 * 60 * 24)) + 1
 
   try {
     const oficinas = await axios.post('http://localhost:8100/api/oficinas')
+    const festivos = await axios.post('http://localhost:8100/api/festivos/oficinas', {
+      desde: estado.DESDE,
+      hasta: estado.HASTA,
+      ofifes: estado.OFIEST
+    })
+    const estados = await axios.post('http://localhost:8100/api/estados/oficinas/perfiles', {
+      estado,
+    })
     const datos = {
+      estados: estados.data,
       oficinas: oficinas.data,
+      festivos: festivos.data,
+      tiposEstado,
       arrTiposPerfil,
-      periodo: {
-        desde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-        hasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      },
+      periodo,
+      diasPeriodo,
+      strDesde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      strHasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       descripcionOficina,
       descripcionPerfil,
     }

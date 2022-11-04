@@ -12,6 +12,321 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
+    <style>
+      table {
+        font-size: 11px;
+      }
+
+      div.tableContainer {
+          clear: both;
+          height: 540px;
+          overflow: auto;
+          width: 1250px
+      }
+
+      html>body div.tableContainer {
+          overflow: hidden;
+          width: 1250px;
+          margin: auto;
+      }
+
+      div.tableContainer table {
+          float: left;
+          width: auto;
+      }
+
+      thead.fixedHeader tr {
+          position: relative;
+      }
+
+      #tblEstados thead,
+      tbody {
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+    
+      #tblEstados td,
+      th {
+        min-width: 28px;
+        max-width: 28px;
+        border: 1px solid #dee2e6;
+        text-overflow: ellipsis;
+      }
+    
+      #tblEstados tbody td:first-child {
+        padding-left: 4px;
+      }
+    
+      #tblEstados table tr:hover {
+        background-color: #f1f3f5;
+      }
+    </style>
+    <!-- timeline -->
+    <style>
+      .timeline {
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+      }
+    
+      .timeline.vacas:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #0d8004;
+      }
+    
+      .timeline.bajas:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #800209;
+      }
+    
+      .timeline.trasp:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #803807;
+      }
+    
+      .timeline.trasdo:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #808000;
+      }
+    
+      .timeline.forma:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #063780;
+      }
+    
+      .timeline.conci:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #ffa80a;
+      }
+    
+      .timeline.reuni:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #dcd20d;
+      }
+    
+      .timeline.turno:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #c1bdc3;
+      }
+    
+      .timeline.horas:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #05cbf5;
+      }
+    
+      .timeline.famil:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #c3038f;
+      }
+    
+      .timeline.otros:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 28px;
+        height: 10px;
+        top: 4px;
+        background-color: #000080;
+      }
+    
+      .timeline.vacasH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #0d8004;
+      }
+    
+      .timeline.bajasH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #800209;
+      }
+    
+      .timeline.traspH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #803807;
+      }
+    
+      .timeline.trasdoH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #808000;
+      }
+    
+      .timeline.formaH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #063780;
+      }
+    
+      .timeline.conciH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #ffa80a;
+      }
+    
+      .timeline.reuniH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #dcd20d;
+      }
+    
+      .timeline.turnoH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #c1bdc3;
+      }
+    
+      .timeline.horasH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #05cbf5;
+      }
+    
+      .timeline.familH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #c3038f;
+      }
+    
+      .timeline.otrosH:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -1px;
+        width: 14px;
+        height: 10px;
+        top: 4px;
+        background-color: #000080;
+      }
+    
+      td div.popup {
+        display: none;
+        color: #000;
+        text-decoration: none;
+        padding: 3px;
+      }
+    
+      td:hover div.popup {
+        display: flex;
+        position: absolute;
+        background-color: #FFF;
+        border: 1px solid #CCC;
+        margin: 20px -100px 20px;
+        z-index: 9999;
+      }
+    </style>
 </head>
 
 <body class="antialiased">
@@ -24,7 +339,7 @@
           <div class="d-flex">
             <span>Oficina: <%- datos.descripcionOficina %></span>
             <span class="ms-3">Perfil: <%- datos.descripcionPerfil %></span>
-            <span class="ms-3">Periodo: <%- datos.periodo.desde %> al <%- datos.periodo.hasta %></span>
+            <span class="ms-3">Periodo: <%- datos.strDesde %> al <%- datos.strHasta %></span>
             <a href="#" class="ms-auto" data-bs-toggle="modal" data-bs-target="#modal-config">
               <i class="bi bi-gear" style="font-size: 0.9rem; color: #626976;"></i>
             </a>
@@ -36,12 +351,14 @@
                   <h3 class="card-title">Estados</h3>
                 </div>
                 <div class="card-body">
-                  <table id="tblEstados" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
-                    <thead class="fixedHeader">
-                    </thead>
-                    <tbody class="scrollContent">
-                    </tbody>
-                  </table>
+                  <div class="tableContainer">
+                    <table id="tblEstados" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
+                      <thead class="fixedHeader">
+                      </thead>
+                      <tbody class="scrollContent">
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -56,7 +373,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title mt-0">Estadística de fraudes</h5>
+          <h5 class="modal-title mt-0">Estados</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="/admin/estadisticas/fraudes" method="POST" onsubmit="return validate();">
@@ -170,95 +487,101 @@
     }
   </script>
   <script>
-    function CalendarioMes(oficina, perfil, year, mes, desde, hasta) {
-      var calendario = <%- JSON.stringify(datos.estados) %>
-      var tamArray = diasEnMes(mes, year);
-      var totalPersonasHoraOficina = new Array(tamArray).fill(0);
+    const periodo = {
+      desde: <%- datos.periodo.desde %>,  
+      hasta: <%- datos.periodo.hasta %>,
+    }
 
-      var oficinaActual = 0;
-      var usuarioActual = 0;
+    function estadosGantt(oficina, perfil, year, mes, periodo) {
+      const estados = <%- JSON.stringify(datos.estados) %>
+      const diasPeriodo = <%- datos.diasPeriodo %>
+      const desde = new Date('<%- datos.periodo.desde %>')
+      const hasta = new Date('<%- datos.periodo.hasta %>')
 
-      var desdeDia = stringToFecha(desde).getDate();
-      var hastaDia = stringToFecha(hasta).getDate();
+      let activosOficina = new Array(diasPeriodo).fill(0)
+      let estadosUsuario = []
+      let oficinaActual = 0
+      let usuarioActual = 0
 
-      var arrEstados = new Array();
-      var calendarioSEQ;
-      var delta = 0;
-      var rowCount = 0;
-      var nombreUsuario = null;
-      var calendarioSEQ = null;
+      let rows = new Array();
+      let delta = 0;
+      let rowCount = 0;
+      let nombreUsuario = '';
 
-      calendario.forEach(function(item) {
-        //periodo
-        var diaItem = stringToFecha(item.FECHA).getDate();
+      estados.map(itm => {
+        const dia = new Date(itm.FECHA).getDate();
+        const diaSemana = new Date(itm.FECHA).getDay()
 
-        if (usuarioActual != item.IDUSUA) {
+        if (usuarioActual != itm.IDUSUA) {
           if (usuarioActual) {
-            arrEstados[rowCount] = new Array();
-            arrEstados[rowCount][0] = nombreUsuario;
-            arrEstados[rowCount].push(calendarioSEQ);
+            rows[rowCount] = new Array();
+            rows[rowCount][0] = nombreUsuario;
+            rows[rowCount].push(estadosUsuario);
 
             //total
-            for (var i = 0; i < tamArray; i++) {
-              if (calendarioSEQ[i] == 0 || calendarioSEQ[i] == -1) {
-                totalPersonasHoraOficina[i]++;
+            for (var i = 0; i < diasPeriodo; i++) {
+              if (estadosUsuario[i] === 0 || estadosUsuario[i] === -1) {
+                activosOficina[i]++;
               }
             }
 
             rowCount++;
           }
 
-          calendarioSEQ = new Array(tamArray).fill(0);
-          usuarioActual = item.IDUSUA;
-          nombreUsuario = item.NOMUSU;
+          estadosUsuario = new Array(diasPeriodo).fill(0);
+          usuarioActual = itm.IDUSUA;
+          nombreUsuario = itm.NOMUSU;
 
-          if (oficinaActual != item.OFIUSU) {
+          if (oficinaActual != itm.OFIUSU) {
             if (oficinaActual) {
-              arrEstados[rowCount] = new Array();
-              arrEstados[rowCount][0] = 0; //indicador de total
-              arrEstados[rowCount].push(totalPersonasHoraOficina);
+              rows[rowCount] = new Array();
+              rows[rowCount][0] = 0; //indicador de total usuario
+              rows[rowCount].push(activosOficina);
 
               //reiniciar
-              totalPersonasHoraOficina = new Array(tamArray).fill(0);
+              activosOficina = new Array(diasPeriodo).fill(0);
               rowCount++;
             }
 
-            arrEstados[rowCount] = new Array();
-            arrEstados[rowCount][0] = -1; //indicador de oficina
-            arrEstados[rowCount].push(item.DESOFI);
+            rows[rowCount] = new Array();
+            rows[rowCount][0] = -1; //indicador de total oficina
+            rows[rowCount].push(itm.DESOFI);
 
-            oficinaActual = item.OFIUSU;
+            oficinaActual = itm.OFIUSU;
             rowCount++;
           }
         }
 
         //acumulado estados
-        calendarioSEQ[diaItem - 1] = Number(item.TIPEST);
+        if (diaSemana === 6 || diaSemana === 0) {
+          estadosUsuario[dia - 1] = Number(itm.TIPEST);
+
+        }
       });
 
       //usuario
-      arrEstados[rowCount] = new Array();
-      arrEstados[rowCount][0] = nombreUsuario;
-      arrEstados[rowCount].push(calendarioSEQ);
+      rows[rowCount] = new Array();
+      rows[rowCount][0] = nombreUsuario;
+      rows[rowCount].push(estadosUsuario);
 
       rowCount++;
 
       //total ultimo usuario
-      for (var i = 0; i < tamArray; i++) {
-        if (calendarioSEQ[i] == 0 || calendarioSEQ[i] == -1) {
-          totalPersonasHoraOficina[i]++;
+      for (var i = 0; i < diasPeriodo; i++) {
+        if (estadosUsuario[i] === 0 || estadosUsuario[i] === -1) {
+          activosOficina[i]++;
         }
       }
 
       //total oficina
-      arrEstados[rowCount] = new Array();
-      arrEstados[rowCount][0] = 0;
-      arrEstados[rowCount].push(totalPersonasHoraOficina);
+      rows[rowCount] = new Array();
+      rows[rowCount][0] = 0;
+      rows[rowCount].push(activosOficina);
 
-      var tblBody = document.getElementsByTagName("tbody")[0];
-      var rowOficina = document.createElement("tr");
-      var rowUsuario = document.createElement("tr");
-      var hasHeaderOficina = false;
+      let tblBody = document.getElementsByTagName("tbody")[0];
+      let rowOficina = document.createElement("tr");
+      let rowUsuario = document.createElement("tr");
+      let hasHeaderOficina = false;
 
       var col = null;
       var texto = null;
@@ -269,15 +592,15 @@
       //pintar header
       headerString = '<tr><th style="min-width: 250px; font-size: 13px; color: orangered;">' + ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][mes - 1] + '</th>';
 
-      for (var d = stringToFecha(desde); d <= stringToFecha(hasta); d.setDate(d.getDate() + 1)) {
+      for (var d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
         headerString += ('<th colspan="14" style="text-align: center; font-size: 11px">' + ('0' + d.getDate()).slice(-2) + '</th>');
       }
 
-      arrEstados.forEach(function(item) {
-        if (item[0] == -1) { //oficina
+      rows.map(itm => {
+        if (itm[0] === -1) { // total oficina
           rowOficina = document.createElement('tr');
           col = document.createElement('td');
-          texto = document.createTextNode(item[1]);
+          texto = document.createTextNode(itm[1]);
 
           col.appendChild(texto);
           col.style.cssText = "color: blue; border: none; text-align: center;";
@@ -285,7 +608,7 @@
 
           rowOficina.appendChild(col);
           tblBody.appendChild(rowOficina);
-        } else if (item[0] == 0) { //Totales
+        } else if (itm[0] === 0) { // total usuario
           rowOficina = document.createElement('tr');
           col = document.createElement('td');
           texto = document.createTextNode('Personal en activo');
@@ -296,186 +619,170 @@
           rowOficina.appendChild(col);
 
           //total
-          for (var i = 0; i < tamArray; i++) {
-            var col = document.createElement("td");
-            col.style.cssText = "color: green; border: none; text-align: center;";
-            var texto = document.createTextNode(item[1][i]);
+          for (var i = 0; i < diasPeriodo; i++) {
+            var col = document.createElement("td")
+            col.style.cssText = "color: green; border: none; text-align: center;"
+            var texto = document.createTextNode(itm[1][i])
 
-            col.appendChild(texto);
-            rowOficina.appendChild(col);
+            col.appendChild(texto)
+            rowOficina.appendChild(col)
           }
 
-          tblBody.appendChild(rowOficina);
-        } else {
+          tblBody.appendChild(rowOficina)
+        } else {  //pintar linea
           rowUsuario = document.createElement('tr');
           col = document.createElement('td');
-          texto = document.createTextNode(item[0]);
+          texto = document.createTextNode(itm[0]);
 
           col.appendChild(texto);
           rowUsuario.appendChild(col);
           tblBody.appendChild(rowUsuario);
 
           //pintar
-          print()
+          for (var i = 0; i < diasPeriodo; i++) {
+            if (itm[1][i] === -1) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('traspasado');
+
+              col.className = 'timeline trasdo';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === 0) {
+              var col = document.createElement("td");
+
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.vacacion.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('vacación');
+
+              col.className = 'timeline vacas';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.baja.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('baja');
+
+              col.className = 'timeline bajas';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.traspaso.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('traspaso');
+
+              col.className = 'timeline trasp';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.formacion.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('formación');
+
+              col.className = 'timeline forma';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.conciliacion.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('conciliación');
+
+              col.className = 'timeline conci';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.reunion.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('reunión');
+
+              col.className = 'timeline reuni';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.horasBolsa.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('horas bolsa');
+
+              col.className = 'timeline horas';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.horasFamiliar.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('horas familiar');
+
+              col.className = 'timeline famil';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else if (itm[1][i] === <%- datos.tiposEstado.teletrabajo.ID %>) {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('teletrabajo');
+
+              col.className = 'timeline tele';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            } else {
+              var col = document.createElement("td");
+              var sub = document.createElement("div");
+              var texto = document.createTextNode('acumulado estados');
+
+              col.className = 'timeline otros';
+              rowUsuario.appendChild(col);
+
+              sub.className = 'popup';
+              sub.appendChild(texto);
+              col.appendChild(sub);
+              rowUsuario.appendChild(col);
+            }
+          }          
         }
       })
     }
-  </script>
-  <script>
-    const print = () => {
-      for (var i = 0; i < tamArray; i++) {
-        if (item[1][i] === -1) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('traspasado');
-
-          col.className = 'timeline trasdo';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] === 0) {
-          var col = document.createElement("td");
-
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.VACACION.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('vacación');
-
-          col.className = 'timeline vacas';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.BAJA.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('baja');
-
-          col.className = 'timeline bajas';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.TRASPASO.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('traspaso');
-
-          col.className = 'timeline trasp';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.FORMACION.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('formación');
-
-          col.className = 'timeline forma';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.CONCILIACION.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('conciliación');
-
-          col.className = 'timeline conci';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.REUNION.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('reunión');
-
-          col.className = 'timeline reuni';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.TURNO.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('turno');
-
-          col.className = 'timeline turno';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.HORAS_BOLSA.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('horas bolsa');
-
-          col.className = 'timeline horas';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.HORAS_ATENCION_FAMILIAR.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('horas familiar');
-
-          col.className = 'timeline famil';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else if (item[1][i] == TiposEstado.TELETRABAJO.ID) {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('teletrabajo');
-
-          col.className = 'timeline tele';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        } else {
-          var col = document.createElement("td");
-          var sub = document.createElement("div");
-          var texto = document.createTextNode('acumulado estados');
-
-          col.className = 'timeline otros';
-          rowUsuario.appendChild(col);
-
-          sub.className = 'popup';
-          sub.appendChild(texto);
-          col.appendChild(sub);
-          rowUsuario.appendChild(col);
-        }
-      }
-    }
-  </script>
+    estadosGantt()
+</script>
 </body>
 
 </html>
