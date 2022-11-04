@@ -146,7 +146,7 @@
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Desde</div>
-                      <input type="time" id="desbol" name="desbol" class="form-control" min="08:00" max="20:00" >
+                      <input type="time" id="desbol" name="desbol" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                   <div class="col-6">
@@ -166,12 +166,12 @@
         </div>
       </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-famil" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-tele" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="container-xl">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title mt-0">Horas familiar</h5>
+              <h5 class="modal-title mt-0">Atención telefónica</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -180,23 +180,21 @@
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Desde</div>
-                      <input type="time" id="desfam" name="desfan" class="form-control" min="08:00" max="20:00">
+                      <input type="time" id="destel" name="destel" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Hasta</div>
-                      <input type="time" id="hasfam" name="hasfam" class="form-control" min="08:00" max="20:00">
+                      <input type="time" id="hastel" name="hastel" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-link" id="btnFamilCancel" data-bs-dismiss="modal"
-                aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto"
-                onclick="eventoTraspaso()">Aceptar</button>
+              <button type="button" class="btn btn-link" id="btnFamilCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoTraspaso()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -238,11 +236,11 @@
               if (estado.tipest === <%- datos.tiposEstado.traspaso.ID %>) {
                 document.getElementById('modal-tras').style.display = 'none'
                 calendario.setDataSource(dataSource)
-              } else if (estado.tipest === <%- datos.tiposEstado.horasBolsa.ID %>) {
+              } else if (estado.tipest === <%- datos.tiposEstado.horas.ID %>) {
                 document.getElementById('modal-bolsa').style.display = 'none'
                 calendario.setDataSource(dataSource)
-              } else if (estado.tipest === <%- datos.tiposEstado.horasFamiliar.ID %>) {
-                document.getElementById('modal-famil').style.display = 'none'
+              } else if (estado.tipest === <%- datos.tiposEstado.telefono.ID %>) {
+                document.getElementById('modal-tele').style.display = 'none'
                 calendario.setDataSource(dataSource)
               }
             }
@@ -299,7 +297,7 @@
       })
     }
     async function estadosUsuario() {
-      const prms =  {
+      const prms = {
         idofic: params.oficina,
         usuest: params.usuario,
         tipest: params.tipo,
@@ -328,12 +326,12 @@
 
       if (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) {
         evento.estado.HASHOR = '+00 09:30:00'
-      } else if (params.tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
+      } else if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         evento.estado.DESHOR = '+00 ' + document.getElementById('desbol').value + ':00'
         evento.estado.HASHOR = '+00 ' + document.getElementById('hasbol').value + ':00'
-      } else if (params.tipo === <%- datos.tiposEstado.horasFamiliar.ID %>) {
-        evento.estado.DESHOR = '+00 ' + document.getElementById('desfam').value + ':00'
-        evento.estado.HASHOR = '+00 ' + document.getElementById('hasfam').value + ':00'
+      } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
+        evento.estado.DESHOR = '+00 ' + document.getElementById('destel').value + ':00'
+        evento.estado.HASHOR = '+00 ' + document.getElementById('hastel').value + ':00'
       }
 
       await insertEvento(evento)
@@ -383,17 +381,17 @@
         const modalTraspaso = document.getElementById('modal-tras')
 
         modalTraspaso.style.display = 'flex'
-      } else if (params.tipo === <%- datos.tiposEstado.horasBolsa.ID %>) {
+      } else if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         const modalBolsa = document.getElementById('modal-bolsa')
 
         document.getElementById('desbol').value = "08:30"
         document.getElementById('hasbol').value = "14:00"
         modalBolsa.style.display = 'flex'
-      } else if (params.tipo === <%- datos.tiposEstado.horasFamiliar.ID %>) {
-        const modalFamily = document.getElementById('modal-famil')
+      } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
+        const modalFamily = document.getElementById('modal-tele')
 
-        document.getElementById('desfam').value = "08:30"
-        document.getElementById('hasfam').value = "14:00"
+        document.getElementById('destel').value = "08:30"
+        document.getElementById('hastel').value = "14:00"
         modalFamily.style.display = 'flex'
       }
     }
@@ -443,13 +441,13 @@
     })
 
     // modal
-    document.getElementById('btnFamilCancel').addEventListener('click', function () {
+    document.getElementById('btnFamilCancel').addEventListener('click', function() {
       document.getElementById('modal-famil').style.display = 'none'
     })
     document.getElementById('btnTrasCancel').addEventListener('click', function() {
       document.getElementById('modal-tras').style.display = 'none'
     })
-    document.getElementById('btnBolsaCancel').addEventListener('click', function () {
+    document.getElementById('btnBolsaCancel').addEventListener('click', function() {
       document.getElementById('modal-bolsa').style.display = 'none'
     })
     document.addEventListener('keydown', function(e) {
@@ -521,11 +519,11 @@
       }
 
       params.fecha = e.date.toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        })
-      
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+
       // bloquear solapes
       const result = estados.find(itm => itm.STRFEC === params.fecha)
       if (result) {
@@ -537,10 +535,10 @@
         }
       }
 
-      if (e.events.length === 0 && params.tipo === <%- datos.tiposEstado.traspaso.ID %> || 
+      if (e.events.length === 0 && params.tipo === <%- datos.tiposEstado.traspaso.ID %> ||
         params.tipo === <%- datos.tiposEstado.conciliacion.ID %> ||
-        params.tipo === <%- datos.tiposEstado.horasBolsa.ID %> ||
-        params.tipo === <%- datos.tiposEstado.horasFamiliar.ID %>) {
+        params.tipo === <%- datos.tiposEstado.horas.ID %> ||
+        params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         editEvento()
       } else {
         if (e.element.style.boxShadow) {
@@ -590,4 +588,5 @@
   </script>
 
 </body>
+
 </html>
