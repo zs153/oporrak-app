@@ -5,6 +5,7 @@ import {
   crear,
   borrar,
   festivosOficina,
+  festivosLocal,
 } from '../controllers/festivo.controller'
 
 const apiFestivoRouter = express.Router()
@@ -15,7 +16,8 @@ apiFestivoRouter.post('/festivos', festivos)
 apiFestivoRouter.post('/festivos/insert', crear)
 apiFestivoRouter.post('/festivos/delete', borrar)
 
-// festivos oficina
+// proc
 apiFestivoRouter.post('/festivos/oficinas', festivosOficina)
+apiFestivoRouter.post('/festivos/locales', festivosLocal)
 
 export default apiFestivoRouter

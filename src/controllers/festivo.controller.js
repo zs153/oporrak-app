@@ -91,3 +91,16 @@ export const festivosOficina = async (req, res) => {
     res.status(400).end()
   }
 }
+// local
+export const festivosLocal = async (req, res) => {
+  const context = req.body
+
+  try {
+    const result = await DAL.festivosLocal(context)
+
+    res.status(200).json(result)
+  } catch (err) {
+    res.status(400).end()
+  }
+}
+

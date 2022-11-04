@@ -25,6 +25,18 @@ const festivosOficinaSql = `SELECT
   oo.desofi
 FROM festivos ff
 LEFT JOIN oficinas oo ON oo.idofic = ff.ofifes
+WHERE (ff.ofifes = :ofifes OR
+    ff.ofifes = 0) AND
+  TRUNC(fecfes) BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
+`
+const festivosLocalSql = `SELECT 
+  ff.idfest,
+  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') "FECFES",
+  ff.ofifes,
+  TO_CHAR(ff.fecfes, 'DD/MM/YYYY') "STRFES",
+  oo.desofi
+FROM festivos ff
+LEFT JOIN oficinas oo ON oo.idofic = ff.ofifes
 WHERE ff.ofifes = :ofifes AND
   fecfes BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
@@ -91,6 +103,13 @@ export const remove = async (bind) => {
 // oficinas
 export const festivosOficina = async (context) => {
   let query = festivosOficinaSql
+
+  const result = await simpleExecute(query, context)
+
+  return result.rows
+}
+export const festivosLocal = async (context) => {
+  let query = festivosLocalSql
 
   const result = await simpleExecute(query, context)
 

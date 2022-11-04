@@ -111,7 +111,7 @@ export const estadosFechaUsuario = async (req, res) => {
   }
 }
 export const estadosOficinaPerfil = async (req, res) => {
-  const context = req.body
+  const context = req.body.estado
 
   try {
     const result = await DAL.estadosOficinaPerfil(context)

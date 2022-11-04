@@ -6,6 +6,7 @@ import {
   borrar,
   estadosUsuario,
   estadosFechaUsuario,
+  estadosOficinaPerfil,
 } from '../controllers/estado.controller'
 
 const apiEstadoRouter = express.Router()
@@ -19,5 +20,6 @@ apiEstadoRouter.post('/estados/delete', borrar)
 // usuario
 apiEstadoRouter.post('/estados/usuarios', estadosUsuario)
 apiEstadoRouter.post('/estados/usuarios/fechas', estadosFechaUsuario)
+apiEstadoRouter.post('/estados/oficinas/perfiles', estadosOficinaPerfil)
 
 export default apiEstadoRouter
