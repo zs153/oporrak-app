@@ -28,6 +28,43 @@ const deleteFromRec = (req) => {
 
   return Object.assign(estado, movimiento)
 }
+const insertTraspasoFromRec = (req) => {
+  const estado = {
+    FECEST: req.body.estado.FECEST,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
+    OFIEST: req.body.estado.OFIEST,
+    OFIDES: req.body.estado.OFIDES,
+    DESHOR: req.body.estado.DESHOR,
+    HASHOR: req.body.estado.HASHOR,
+  }
+  const traspaso = {
+    TIPTRA: req.body.traspaso.TIPTRA,
+    OFITRA: req.body.traspaso.OFITRA,
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+  }
+
+  return Object.assign(estado, traspaso, movimiento)
+}
+const deleteTraspasoFromRec = (req) => {
+  const estado = {
+    IDESTA: req.body.estado.IDESTA,
+  }
+  const traspaso = {
+    USUEST: req.body.traspaso.USUEST,
+    FECEST: req.body.traspaso.FECEST,
+    TIPEST: req.body.traspaso.TIPEST,
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+  }
+
+  return Object.assign(estado, traspaso, movimiento)
+}
 
 // estado
 export const estado = async (req, res) => {
@@ -75,6 +112,34 @@ export const crear = async (req, res) => {
 export const borrar = async (req, res) => {
   try {
     const result = await DAL.remove(deleteFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+
+// traspaso
+export const crearTraspaso = async (req, res) => {
+  try {
+    const result = await DAL.insertTraspaso(insertTraspasoFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const borrarTraspaso = async (req, res) => {
+  try {
+    const result = await DAL.removeTraspaso(deleteTraspasoFromRec(req))
 
     if (result !== null) {
       res.status(200).json(result)

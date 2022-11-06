@@ -69,10 +69,13 @@ FROM (
           FROM dual
           CONNECT BY rownum <= TO_DATE(:hasta, 'YYYY-MM-DD') - TO_DATE(:desde, 'YYYY-MM-DD') + 1
       )
-      SELECT uu.ofiusu, uu.idusua, v.fecha
+      SELECT ofiusu, idusua, v.fecha
       FROM vDates v
-      CROSS JOIN usuarios uu
-      WHERE uu.ofiusu = :ofiest
+      CROSS JOIN (SELECT uu.ofiusu, uu.idusua FROM usuarios uu
+        WHERE uu.ofiusu = :ofiest
+        UNION
+        SELECT DISTINCT ee.ofiest, ee.usuest FROM estados ee
+        WHERE ee.ofiest = :ofiest AND ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD'))
   ) p1
   UNION
   SELECT ee.ofiest, ee.usuest, ee.fecest, ee.tipest, 
@@ -103,6 +106,31 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
 `
 const removeSql = `BEGIN OPORRAK_PKG.DELETEESTADO(
   :idesta,
+  :usumov,
+  :tipmov 
+); END;
+`
+const insertTraspasoSql = `BEGIN OPORRAK_PKG.INSERTTRASPASO(
+  TO_DATE(:fecest, 'DD/MM/YYYY'),
+  :usuest,
+  :tipest,
+  :ofiest,
+  :ofides,
+  :deshor,
+  :hashor,
+  :tiptra,
+  :ofitra,
+  :usumov,
+  :tipmov,
+  :idesta,
+  :idtras
+); END;
+`
+const removeTraspasoSql = `BEGIN OPORRAK_PKG.DELETETRASPASO(
+  :idesta,
+  :usuest,
+  :fecest,
+  :tipest,
   :usumov,
   :tipmov 
 ); END;
@@ -157,6 +185,42 @@ export const remove = async (bind) => {
   return result
 }
 
+// traspaso
+export const insertTraspaso = async (bind) => {
+  bind.idesta = {
+    dir: oracledb.BIND_OUT,
+    type: oracledb.NUMBER,
+  }
+  bind.idtras = {
+    dir: oracledb.BIND_OUT,
+    type: oracledb.NUMBER,
+  }
+
+  try {
+    const result = await simpleExecute(insertTraspasoSql, bind)
+
+    bind.idesta = await result.outBinds.idesta
+    bind.idtras = await result.outBinds.idtras
+  } catch (error) {
+    bind = null
+  }
+
+  return bind
+}
+export const removeTraspaso = async (bind) => {
+  let result
+  console.log(removeTraspasoSql, bind)
+  try {
+    await simpleExecute(removeTraspasoSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+
 // usuarios
 export const estadosUsuario = async (context) => {
   let query = estadosUsuarioQuery
@@ -181,7 +245,6 @@ export const estadosFechaUsuario = async (context) => {
 export const estadosOficinaPerfil = async (context) => {
   let query = estadosOficinaPerfilQuery
 
-  console.log(query,context)
   const result = await simpleExecute(query, context)
 
   return result.rows
