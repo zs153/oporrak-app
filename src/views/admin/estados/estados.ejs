@@ -450,9 +450,10 @@
 
     function estadosGantt(oficina, perfil, year, mes, periodo) {
       const estados = <%- JSON.stringify(datos.estados) %>
+      const festivos = <%- JSON.stringify(datos.festivos) %>
       const diasPeriodo = <%- datos.diasPeriodo %>
-      const desde = new Date('<%- datos.periodo.desde %>')
-      const hasta = new Date('<%- datos.periodo.hasta %>')
+      const desde = new Date("<%- datos.periodo.desde %>")
+      const hasta = new Date("<%- datos.periodo.hasta %>")
 
       let activosOficina = new Array(diasPeriodo).fill(0)
       let estadosUsuario = []
@@ -467,6 +468,7 @@
       estados.map(itm => {
         const dia = new Date(itm.FECHA).getDate();
         const diaSemana = new Date(itm.FECHA).getDay()
+        const festivo = festivos.find(q => q.FECFES === itm.FECHA)
 
         if (usuarioActual != itm.IDUSUA) {
           if (usuarioActual) {
@@ -476,8 +478,11 @@
 
             //total
             for (var i = 0; i < diasPeriodo; i++) {
-              if (estadosUsuario[i] === 0 || estadosUsuario[i] === -1 || estadosUsuario[i] !== -2) {
+              if (estadosUsuario[i] === 0 || estadosUsuario[i] === 10) {
                 activosOficina[i]++;
+              }
+              if (estadosUsuario[i] === -1) { // weekend
+                activosOficina[i] = -1
               }
             }
 
@@ -509,12 +514,12 @@
         }
 
         //acumulado estados
-        if (diaSemana === 6 || diaSemana === 0) {
-          estadosUsuario[dia - 1] = -2
+        if (diaSemana === 6 || diaSemana === 0 || festivo) {
+          estadosUsuario[dia - 1] = -1
         } else {
           estadosUsuario[dia - 1] = Number(itm.TIPEST)
         }
-      });
+      })
 
       // ultimo usuario
       rows[rowCount] = new Array();
@@ -525,19 +530,24 @@
 
       //total ultimo usuario
       for (var i = 0; i < diasPeriodo; i++) {
-        if (estadosUsuario[i] === 0 || estadosUsuario[i] === -1 || estadosUsuario[i] !== -2) {
+        if (estadosUsuario[i] === 0) {
           activosOficina[i]++;
+        }
+        if (estadosUsuario[i] === -1) {
+          activosOficina[i] = ''
         }
       }
 
-      //total oficina
       rows[rowCount] = new Array();
       rows[rowCount][0] = 0;
       rows[rowCount].push(activosOficina);
 
+      // pintar tabla
+      let tblHeader = document.getElementsByTagName("thead")[0];
       let tblBody = document.getElementsByTagName("tbody")[0];
       let rowOficina = document.createElement("tr");
       let rowUsuario = document.createElement("tr");
+      let rowHeader = document.createElement("tr");
       let hasHeaderOficina = false;
 
       var col = null;
@@ -546,125 +556,132 @@
       var headerString = '';
       var subHeaderString = '';
 
-      //pintar header
-      headerString = '<tr><th style="min-width: 250px; font-size: 13px; color: orangered;">' + ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][mes - 1] + '</th>';
+      // descripcion header
+      col = document.createElement('th')
+      col.style.cssText = "color: orangered; border: none; text-align: center;"
+      col.style.minWidth = "250px"
 
-      for (var d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
-        headerString += ('<th colspan="14" style="text-align: center; font-size: 11px">' + ('0' + d.getDate()).slice(-2) + '</th>');
+      rowHeader.appendChild(col)
+      tblHeader.appendChild(rowHeader)
+
+      // dias header
+      for (let d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
+        //const dayWeek = new Date(d).getDay()
+        // const festivo = festivos.find(q => new Date(q.FECFES) === d)
+
+        texto = document.createTextNode(('0' + d.getDate()).slice(-2))
+        col = document.createElement('th')
+        col.appendChild(texto)
+        col.style.cssText = "border: none; text-align: center"
+
+        rowHeader.appendChild(col)
+        tblHeader.appendChild(rowHeader)
       }
 
       rows.map(itm => {
-        if (itm[0] === -1) { // total oficina
-          rowOficina = document.createElement('tr');
-          col = document.createElement('td');
-          texto = document.createTextNode(itm[1]);
+        if (itm[0] === -1) {
+          // total oficina
+          rowOficina = document.createElement('tr')
+          col = document.createElement('td')
+          texto = document.createTextNode(itm[1])
 
-          col.appendChild(texto);
-          col.style.cssText = "color: blue; border: none; text-align: center;";
-          col.style.minWidth = "250px";
+          col.appendChild(texto)
+          col.style.cssText = "color: blue; border: none; text-align: center;"
+          col.style.minWidth = "250px"
 
-          rowOficina.appendChild(col);
-          tblBody.appendChild(rowOficina);
-        } else if (itm[0] === 0) { // total usuario
-          rowOficina = document.createElement('tr');
-          col = document.createElement('td');
-          texto = document.createTextNode('Personal en activo');
+          rowOficina.appendChild(col)
+          tblBody.appendChild(rowOficina)
+        } else if (itm[0] === 0) {
+          // total usuario
+          rowOficina = document.createElement('tr')
+          col = document.createElement('td')
+          texto = document.createTextNode('Personal en activo')
 
-          col.appendChild(texto);
-          col.style.cssText = "color: green; border: none; text-align: left;";
+          col.appendChild(texto)
+          col.style.cssText = "color: green; border: none; text-align: left;"
 
-          rowOficina.appendChild(col);
+          rowOficina.appendChild(col)
 
-          //total
           for (var i = 0; i < diasPeriodo; i++) {
             var col = document.createElement("td")
             col.style.cssText = "color: green; border: none; text-align: center;"
             var texto = document.createTextNode(itm[1][i])
-
             col.appendChild(texto)
             rowOficina.appendChild(col)
           }
 
           tblBody.appendChild(rowOficina)
-        } else { //pintar linea
-          rowUsuario = document.createElement('tr');
-          col = document.createElement('td');
-          texto = document.createTextNode(itm[0]);
+        } else {
+          // nombre usuario
+          rowUsuario = document.createElement('tr')
+          col = document.createElement('td')
+          texto = document.createTextNode(itm[0])
 
-          col.appendChild(texto);
-          rowUsuario.appendChild(col);
-          tblBody.appendChild(rowUsuario);
+          col.appendChild(texto)
+          rowUsuario.appendChild(col)
+          tblBody.appendChild(rowUsuario)
 
-          //pintar
+          // tipos de estado
           for (var i = 0; i < diasPeriodo; i++) {
-            if (itm[1][i] === -2) {
-              var col = document.createElement("td");
+            if (itm[1][i] === -1) {
+              // festivo
+              var col = document.createElement("td")
+              col.style.background = '#FAFAFA'
 
-              rowUsuario.appendChild(col);
-            } else if (itm[1][i] === -1) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('traspasado');
-
-              col.className = 'timeline trasdo';
-              rowUsuario.appendChild(col);
-
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
+              rowUsuario.appendChild(col)
             } else if (itm[1][i] === 0) {
-              var col = document.createElement("td");
+              // usuario en activo
+              var col = document.createElement("td")
 
-              rowUsuario.appendChild(col);
+              rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.vacacion.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('vacación');
+              var col = document.createElement("td")
+              var sub = document.createElement("div")
+              var texto = document.createTextNode('vacación')
 
-              col.className = 'timeline vacas';
-              rowUsuario.appendChild(col);
+              col.className = 'timeline vacas'
+              rowUsuario.appendChild(col)
 
-              sub.className = 'popup';
-              sub.appendChild(texto);
+              sub.className = 'popup'
+              sub.appendChild(texto)
               col.appendChild(sub);
-              rowUsuario.appendChild(col);
+              rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.baja.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('baja');
+              var col = document.createElement("td")
+              var sub = document.createElement("div")
+              var texto = document.createTextNode('baja')
 
-              col.className = 'timeline bajas';
-              rowUsuario.appendChild(col);
+              col.className = 'timeline bajas'
+              rowUsuario.appendChild(col)
 
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
+              sub.className = 'popup'
+              sub.appendChild(texto)
+              col.appendChild(sub)
+              rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.traspaso.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('traspaso');
+              var col = document.createElement("td")
+              var sub = document.createElement("div")
+              var texto = document.createTextNode('traspaso')
 
-              col.className = 'timeline trasp';
-              rowUsuario.appendChild(col);
+              col.className = 'timeline trasp'
+              rowUsuario.appendChild(col)
 
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
+              sub.className = 'popup'
+              sub.appendChild(texto)
+              col.appendChild(sub)
+              rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.formacion.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('formación');
+              var col = document.createElement("td")
+              var sub = document.createElement("div")
+              var texto = document.createTextNode('formación')
 
-              col.className = 'timeline forma';
-              rowUsuario.appendChild(col);
+              col.className = 'timeline forma'
+              rowUsuario.appendChild(col)
 
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
+              sub.className = 'popup'
+              sub.appendChild(texto)
+              col.appendChild(sub)
+              rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.conciliacion.ID %>) {
               var col = document.createElement("td");
               var sub = document.createElement("div");
@@ -692,7 +709,7 @@
             } else if (itm[1][i] === <%- datos.tiposEstado.horas.ID %>) {
               var col = document.createElement("td");
               var sub = document.createElement("div");
-              var texto = document.createTextNode('horas bolsa');
+              var texto = document.createTextNode('horas');
 
               col.className = 'timeline horas';
               rowUsuario.appendChild(col);
@@ -713,22 +730,27 @@
               sub.appendChild(texto);
               col.appendChild(sub);
               rowUsuario.appendChild(col);
-            } else {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('acumulado estados');
+            } else if (itm[1][i] === <%- datos.tiposEstado.traspasado.ID %>) {
+              var col = document.createElement("td")
+              var sub = document.createElement("div")
+              var texto = document.createTextNode('traspasado')
 
-              col.className = 'timeline otros';
-              rowUsuario.appendChild(col);
+              col.className = 'timeline trasdo'
+              rowUsuario.appendChild(col)
 
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
+              sub.className = 'popup'
+              sub.appendChild(texto)
+              col.appendChild(sub)
+              rowUsuario.appendChild(col)
             }
           }
         }
       })
+
+      // let tr = document.getElementById('tblEstados').tHead.children[0]
+      // let th = document.createElement('th')
+      // th.innerHTML = headerString
+      // tr.appendChild(th)
     }
     estadosGantt()
   </script>

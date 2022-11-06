@@ -126,7 +126,7 @@
             <div class="modal-footer">
               <input type="hidden" name="fecest" id="fectra">
               <button type="button" class="btn btn-link" id="btnTrasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" id="btnAcept" onclick="eventoTraspaso()">Aceptar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -160,7 +160,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-link" id="btnBolsaCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" id="btnAcept" onclick="eventoTraspaso()">Aceptar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -193,8 +193,8 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-link" id="btnFamilCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" onclick="eventoTraspaso()">Aceptar</button>
+              <button type="button" class="btn btn-link" id="btnTeleCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -208,6 +208,7 @@
   <script src="/js/js-year-calendar.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
   <script>
+    // TODO INSERTTRASPASO
     async function insertEvento(evento) {
       let xhr = new XMLHttpRequest()
 
@@ -307,7 +308,7 @@
       estados = await getEstadosWithPromise(prms)
       getEstadosTipo(params.tipo)
     }
-    const eventoTraspaso = async () => {
+    const eventoEditado = async () => {
       const evento = {
         estado: {
           FECEST: params.fecha,
@@ -332,6 +333,8 @@
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         evento.estado.DESHOR = '+00 ' + document.getElementById('destel').value + ':00'
         evento.estado.HASHOR = '+00 ' + document.getElementById('hastel').value + ':00'
+      } else if (params.tipo === <%- datos.tiposEstado.traspaso.ID %>) {
+        await insertTraspaso(evento)
       }
 
       await insertEvento(evento)
@@ -400,7 +403,6 @@
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
 
-    let oficinaDestino = 0
     let estados = null
     let calendario = null
     let currentYear = new Date().getFullYear()
@@ -441,8 +443,8 @@
     })
 
     // modal
-    document.getElementById('btnFamilCancel').addEventListener('click', function() {
-      document.getElementById('modal-famil').style.display = 'none'
+    document.getElementById('btnTeleCancel').addEventListener('click', function() {
+      document.getElementById('modal-tele').style.display = 'none'
     })
     document.getElementById('btnTrasCancel').addEventListener('click', function() {
       document.getElementById('modal-tras').style.display = 'none'
@@ -453,15 +455,15 @@
     document.addEventListener('keydown', function(e) {
       const mTraspaso = document.getElementById('modal-tras')
       const mBolsa = document.getElementById('modal-bolsa')
-      const mFamilia = document.getElementById('modal-famil')
+      const mTelefono = document.getElementById('modal-tele')
       const keyCode = e.keyCode;
 
       if (keyCode === 27 && mTraspaso.style.display === 'flex') {
         mTraspaso.style.display = 'none'
       } else if (keyCode === 27 && mBolsa.style.display === 'flex') {
         mBolsa.style.display = 'none'
-      } else if (keyCode === 27 && mFamilia.style.display === 'flex') {
-        mFamilia.style.display = 'none'
+      } else if (keyCode === 27 && mTelefono.style.display === 'flex') {
+        mTelefono.style.display = 'none'
       }
     })
 
@@ -492,7 +494,7 @@
       estadosUsuario()
     });
     document.getElementById('cbodes').addEventListener('change', function() {
-      oficinaDestino = parseInt(this.value)
+      params.destino = parseInt(this.value)
     });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
@@ -535,7 +537,8 @@
         }
       }
 
-      if (e.events.length === 0 && params.tipo === <%- datos.tiposEstado.traspaso.ID %> ||
+      if (e.events.length === 0 &&
+        params.tipo === <%- datos.tiposEstado.traspaso.ID %> ||
         params.tipo === <%- datos.tiposEstado.conciliacion.ID %> ||
         params.tipo === <%- datos.tiposEstado.horas.ID %> ||
         params.tipo === <%- datos.tiposEstado.telefono.ID %>) {

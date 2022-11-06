@@ -1,19 +1,23 @@
 import axios from 'axios'
-import { tiposEstado, tiposMovimiento } from '../public/js/enumeraciones'
+import { tiposEstado, tiposMovimiento, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
     const oficinas = await axios.post('http://localhost:8100/api/oficinas')
+    const usuarios = await axios.post('http://localhost:8100/api/usuarios')
     const datos = {
       oficinas: oficinas.data,
-      tiposMovimiento,
+      usuarios: usuarios.data,
       tiposEstado,
+      arrColoresEstado,
+      tiposMovimiento,
     }
 
     res.render('admin/traspasos', { user, datos })
   } catch (error) {
+    console.log(error)
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
     res.render('admin/error400', {

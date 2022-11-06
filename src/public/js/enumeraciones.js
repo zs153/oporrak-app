@@ -125,26 +125,17 @@ export const estadosCarga = {
   procesado: 1,
 }
 export const tiposEstado = {
-  festivo: { ID: 0, DES: "FESTIVO" },
-  vacacion: { ID: 1, DES: "VACACION" },
-  baja: { ID: 2, DES: "BAJA" },
-  traspaso: { ID: 3, DES: "TRASPASO" },
-  formacion: { ID: 4, DES: "FORMACION" },
-  conciliacion: { ID: 5, DES: "CONCILIACION 9:30" },
-  reunion: { ID: 6, DES: "REUNION" },
-  horas: { ID: 8, DES: "HORAS BOLSA" },
-  telefono: { ID: 11, DES: "ATENCION TELEFÓNICA" }
-};
-const coloresEstado = {
-  TRASPASADO: { ID: -1, COLOR: "#808000" },
-  VACACION: { ID: 1, COLOR: "#0D8004" },
-  BAJA: { ID: 2, COLOR: "#800209" },
-  TRASPASO: { ID: 3, COLOR: "#803807" },
-  FORMACION: { ID: 4, COLOR: "#063780" },
-  CONCILIACION: { ID: 5, COLOR: "#DD900A" },
-  REUNION: { ID: 6, COLOR: "#DCD20D" },
-  HORAS: { ID: 8, COLOR: "#05CBF5" },
-  TELEFONO: { ID: 11, COLOR: "#7FB3D5" }
+  festivo: { ID: 0, DES: "FESTIVO O FIN DE SEMANA", COLOR: "#FF0000" },
+  activo: { ID: 1, DES: "ACTIVO", COLOR: "#0101DF" },
+  vacacion: { ID: 2, DES: "VACACION", COLOR: "#0D8004" },
+  baja: { ID: 3, DES: "BAJA", COLOR: "#FFBF00" },
+  traspaso: { ID: 4, DES: "TRASPASO", COLOR: "#800209" },
+  formacion: { ID: 5, DES: "FORMACION", COLOR: "#063780" },
+  conciliacion: { ID: 6, DES: "CONCILIACION 9:30", COLOR: "#DD900A" },
+  reunion: { ID: 7, DES: "REUNION", COLOR: "#DCD20D" },
+  horas: { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
+  telefono: { ID: 9, DES: "ATENCION TELEFÓNICA", COLOR: "#7FB3D5" },
+  traspasado: { ID: 10, DES: "TRASPASADO", COLOR: "#B40486" }
 };
 
 /* arrays */
@@ -192,26 +183,24 @@ export const arrTiposLiquidacion = [
   { id: 2, des: 'DEVOLVER' },
 ]
 export const arrTiposEstado = [
-  { ID: 1, DES: "VACACIÓN", COLOR: "#0D8004" },
-  { ID: 2, DES: "BAJA", COLOR: "#FF0000" },
-  { ID: 3, DES: "TRASPASO", COLOR: "#800209" },
-  { ID: 4, DES: "FORMACIÓN", COLOR: "#063780" },
-  { ID: 5, DES: "CONCILIACIÓN 9:30", COLOR: "#DD900A" },
-  { ID: 6, DES: "REUNION", COLOR: "#DCD20D" },
+  { ID: 2, DES: "VACACIÓN", COLOR: "#0D8004" },
+  { ID: 3, DES: "BAJA", COLOR: "#FFBF00" },
+  { ID: 5, DES: "FORMACIÓN", COLOR: "#063780" },
+  { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#DD900A" },
+  { ID: 7, DES: "REUNION", COLOR: "#DCD20D" },
   { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
-  { ID: 11, DES: "TELÉFONO", COLOR: "#7FB3D5" }
+  { ID: 9, DES: "TELÉFONO", COLOR: "#7FB3D5" },
 ]
 export const arrColoresEstado = [
-  { ID: 0, DES: "FESTIVO", COLOR: "#000000" },
-  { ID: 1, DES: "VACACION", COLOR: "#0D8004" },
-  { ID: 3, DES: "BAJA", COLOR: "#FF0000" },
-  { ID: 2, DES: "TRASPASO", COLOR: "#800209" },
-  { ID: 4, DES: "FORMACION", COLOR: "#063780" },
-  { ID: 5, DES: "CONCILIACION 9:30", COLOR: "#DD900A" },
-  { ID: 6, DES: "REUNION", COLOR: "#DCD20D" },
-  { ID: 7, DES: "TURNO", COLOR: "#A19DA3" },
-  { ID: 8, DES: "HORAS BOLSA", COLOR: "#05CBF5" },
-  { ID: 9, DES: "HORAS ATENCION FAMILIAR", COLOR: "#C3038F" },
-  { ID: 10, DES: "ACUMULADO ESTADOS", COLOR: "#FFFFFF" },
-  { ID: 11, DES: "TELETRABAJO", COLOR: "#7FB3D5" }
+  { ID: 0, DES: "FESTIVO", COLOR: "#FF0000" },
+  { ID: 1, DES: "ACTIVO", COLOR: "#0101DF" },
+  { ID: 2, DES: "VACACIÓN", COLOR: "#0D8004" },
+  { ID: 3, DES: "BAJA", COLOR: "#FFBF00" },
+  { ID: 4, DES: "TRASPASO", COLOR: "#800209" },
+  { ID: 5, DES: "FORMACIÓN", COLOR: "#063780" },
+  { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#DD900A" },
+  { ID: 7, DES: "REUNIÓN", COLOR: "#DCD20D" },
+  { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
+  { ID: 9, DES: "ATENCIÓN TELEFÓNICA", COLOR: "#7FB3D5" },
+  { ID: 10, DES: "TRASPASADO", COLOR: "#B40486" }
 ]

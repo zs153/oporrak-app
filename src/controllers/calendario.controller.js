@@ -26,7 +26,7 @@ export const mainPage = async (req, res) => {
   }
 }
 
-// vaciones calendar
+// proc
 export const insert = async (req, res) => {
   const user = req.user
   const calendario = {

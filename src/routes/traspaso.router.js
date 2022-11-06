@@ -2,11 +2,11 @@ import express from "express";
 import authRoutes from "../middleware/auth";
 import {
   mainPage,
-} from "../controllers/trapaso.controller";
+} from "../controllers/traspaso.controller";
 
-const festivoRouter = express.Router();
+const traspasoRouter = express.Router();
 
 // paginas
-festivoRouter.get("/traspasos", authRoutes, mainPage);
+traspasoRouter.get("/traspasos", authRoutes, mainPage);
 
-export default festivoRouter;
+export default traspasoRouter;
