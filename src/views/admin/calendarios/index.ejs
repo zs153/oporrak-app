@@ -33,8 +33,6 @@
                 <% }) %>
                 <% } %>
                 <form action="/admin/calendarios/calendario" method="POST">
-                  <input type="hidden" name="idusua" id="idusua" value="">
-                  <input type="hidden" name="tipest" id="tipest" value="">
                   <div class="card-header">
                     <h3 class="card-title">Calendario</h3>
                   </div>
@@ -97,7 +95,7 @@
         </div>
       </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-bolsa" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-horas" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="container-xl">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -111,20 +109,20 @@
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Desde</div>
-                      <input type="time" id="desbol" name="desbol" class="form-control" min="08:00" max="20:00">
+                      <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Hasta</div>
-                      <input type="time" id="hasbol" name="hasbol" class="form-control" min="08:00" max="20:00">
+                      <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-link" id="btnBolsaCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-link" id="btnHorasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
               <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
             </div>
           </div>
@@ -172,7 +170,6 @@
   <script src="/js/js-year-calendar.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
   <script>
-    // TODO INSERTTRASPASO
     async function insertEvento(evento) {
       let xhr = new XMLHttpRequest()
 
@@ -198,11 +195,8 @@
               }
 
               dataSource.push(estado)
-              if (estado.tipest === <%- datos.tiposEstado.traspaso.ID %>) {
-                document.getElementById('modal-tras').style.display = 'none'
-                calendario.setDataSource(dataSource)
-              } else if (estado.tipest === <%- datos.tiposEstado.horas.ID %>) {
-                document.getElementById('modal-bolsa').style.display = 'none'
+              if (estado.tipest === <%- datos.tiposEstado.horas.ID %>) {
+                document.getElementById('modal-horas').style.display = 'none'
                 calendario.setDataSource(dataSource)
               } else if (estado.tipest === <%- datos.tiposEstado.telefono.ID %>) {
                 document.getElementById('modal-tele').style.display = 'none'
@@ -265,7 +259,7 @@
       const prms = {
         idofic: params.oficina,
         usuest: params.usuario,
-        tipest: params.tipo,
+        tipest: 0,
         desde: params.desde,
         hasta: params.hasta,
       }
@@ -288,11 +282,9 @@
         }
       }
 
-      if (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) {
-        evento.estado.HASHOR = '+00 09:30:00'
-      } else if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
-        evento.estado.DESHOR = '+00 ' + document.getElementById('desbol').value + ':00'
-        evento.estado.HASHOR = '+00 ' + document.getElementById('hasbol').value + ':00'
+      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+        evento.estado.DESHOR = '+00 ' + document.getElementById('deshor').value + ':00'
+        evento.estado.HASHOR = '+00 ' + document.getElementById('hashor').value + ':00'
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         evento.estado.DESHOR = '+00 ' + document.getElementById('destel').value + ':00'
         evento.estado.HASHOR = '+00 ' + document.getElementById('hastel').value + ':00'
@@ -341,18 +333,18 @@
       calendario.setDataSource(data)
     }
     const editEvento = () => {
-      if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
-        const modalFamily = document.getElementById('modal-tele')
+      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+        const modalHoras = document.getElementById('modal-horas')
 
-        document.getElementById('destel').value = "08:30"
-        document.getElementById('hastel').value = "14:00"
-        modalFamily.style.display = 'flex'
+        document.getElementById('deshor').value = "08:30"
+        document.getElementById('hashor').value = "14:00"
+        modalHoras.style.display = 'flex'
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
-        const modalFamily = document.getElementById('modal-tele')
+        const modalTele = document.getElementById('modal-tele')
 
         document.getElementById('destel').value = "08:30"
         document.getElementById('hastel').value = "14:00"
-        modalFamily.style.display = 'flex'
+        modalTele.style.display = 'flex'
       }
     }
   </script>
@@ -402,18 +394,18 @@
     document.getElementById('btnTeleCancel').addEventListener('click', function() {
       document.getElementById('modal-tele').style.display = 'none'
     })
-    document.getElementById('btnBolsaCancel').addEventListener('click', function() {
-      document.getElementById('modal-bolsa').style.display = 'none'
+    document.getElementById('btnHorasCancel').addEventListener('click', function() {
+      document.getElementById('modal-horas').style.display = 'none'
     })
     document.addEventListener('keydown', function(e) {
-      const mBolsa = document.getElementById('modal-bolsa')
-      const mTelefono = document.getElementById('modal-tele')
+      const modalHoras = document.getElementById('modal-horas')
+      const modalTele = document.getElementById('modal-tele')
       const keyCode = e.keyCode;
 
-      if (keyCode === 27 && mBolsa.style.display === 'flex') {
-        mBolsa.style.display = 'none'
-      } else if (keyCode === 27 && mTelefono.style.display === 'flex') {
-        mTelefono.style.display = 'none'
+      if (keyCode === 27 && modalHoras.style.display === 'flex') {
+        modalHoras.style.display = 'none'
+      } else if (keyCode === 27 && modalTele.style.display === 'flex') {
+        modalTele.style.display = 'none'
       }
     })
 
@@ -444,7 +436,6 @@
       estadosUsuario()
     });
     document.getElementById('cbousu').addEventListener('change', function() {
-      document.getElementById('idusua').value = this.value
       params.usuario = parseInt(this.value)
 
       // cambia el estado al primer elemento TODOS
@@ -452,8 +443,6 @@
       estadosUsuario()
     });
     document.getElementById('cboest').addEventListener('change', function() {
-      document.getElementById('tipest').value = this.value
-
       params.color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
       params.tipo = parseInt(this.value)
 
@@ -518,7 +507,7 @@
               TIPEST: params.tipo,
               OFIEST: params.oficina,
               DESHOR: '+00 08:30:00',
-              HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00': '+0014 00:00:00',
+              HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
             },
             movimiento: {
               USUMOV: <%- user.id %>,

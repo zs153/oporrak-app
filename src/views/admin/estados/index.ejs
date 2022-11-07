@@ -46,7 +46,7 @@
                             TODAS
                           </option>
                           <% datos.oficinas.map(element=> { %>
-                          <option value="<%= element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
+                          <option value="<%= element.IDOFIC %>">
                             <%= element.DESOFI %>
                           </option>
                           <% }) %>
@@ -126,7 +126,7 @@
 
       if (isNaN(Date.parse(desdeValue))) {
         setError(desde, 'Fecha requerida')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(desde)
         }, 3000)
         return false
@@ -135,7 +135,7 @@
       }
       if (isNaN(Date.parse(hastaValue))) {
         setError(hasta, 'Fecha requerida')
-        setTimeout(function () {
+        setTimeout(function() {
           setSuccess(hasta)
         }, 3000)
         return false
