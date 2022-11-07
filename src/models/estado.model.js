@@ -35,7 +35,7 @@ const estadosUsuarioQuery = `SELECT
   '14:00' AS "HASHOR", 
   TO_CHAR(ff.fecfes, 'DD/MM/YYYY') AS "STRFEC"
 FROM festivos ff
-WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
+WHERE (ff.ofifes = :idofic) AND
   TRUNC(ff.fecfes) BETWEEN :desde AND :hasta
 UNION
 SELECT 
@@ -74,7 +74,7 @@ FROM (
         WHERE uu.stausu = 1 AND uu.perusu = :perusu
         UNION
         --usuarios traspasados
-        SELECT DISTINCT ee.ofiest, ee.usuest, 0 AS "TIPEST" FROM estados ee
+        SELECT DISTINCT ee.ofiest, ee.usuest, 1 AS "TIPEST" FROM estados ee
         WHERE ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD'))
   ) p1
   UNION
@@ -238,7 +238,7 @@ export const estadosFechaUsuario = async (context) => {
 }
 export const estadosOficinaPerfil = async (context) => {
   let query = estadosOficinaPerfilQuery
-  
+
   if (context.OFIEST === 0) {
     delete context.OFIEST
     query += `ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
