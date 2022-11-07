@@ -7,7 +7,6 @@ const baseQuery = `SELECT
   usuest,
   tipest,
   ofiest,
-  ofides,
   deshor,
   hashor,
   TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
@@ -19,7 +18,6 @@ const estadosFechaUsuarioQuery = `SELECT
   usuest,
   tipest,
   ofiest,
-  ofides,
   deshor,
   hashor,
   TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
@@ -33,7 +31,6 @@ const estadosUsuarioQuery = `SELECT
   0 AS "USUEST", 
   0 AS "TIPEST", 
   0 AS "OFIEST", 
-  0 AS "OFIDES",
   '08:30' AS "DESHOR", 
   '14:00' AS "HASHOR", 
   TO_CHAR(ff.fecfes, 'DD/MM/YYYY') AS "STRFEC"
@@ -47,20 +44,22 @@ SELECT
   ee.usuest,
   ee.tipest,
   ee.ofiest,
-  ee.ofides,
   LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
   LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR",
   TO_CHAR(ee.fecest, 'DD/MM/YYYY') AS "STRFEC"
 FROM estados ee
 WHERE ee.usuest = :usuest AND
+  ee.ofiest = :idofic AND
   ee.fecest BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
 const estadosOficinaPerfilQuery = `SELECT t1.ofiusu, t1.idusua, 
   TO_CHAR(t1.fecha, 'YYYY-MM-DD') AS "FECHA", 
-  t1.tipest, t1.deshor, t1.hashor, oo.desofi, uu.nomusu
+  t1.tipest, t1.deshor, t1.hashor, 
+  uu.nomusu,
+  oo.desofi 
 FROM (
   SELECT
-    p1.ofiusu, p1.idusua, p1.fecha, 0 AS "TIPEST", 
+    p1.ofiusu, p1.idusua, p1.fecha, p1.tipest, 
     '08:30' AS "DESHOR", 
     '14:00' AS "HASHOR"
     FROM (
@@ -69,34 +68,30 @@ FROM (
           FROM dual
           CONNECT BY rownum <= TO_DATE(:hasta, 'YYYY-MM-DD') - TO_DATE(:desde, 'YYYY-MM-DD') + 1
       )
-      SELECT ofiusu, idusua, v.fecha
+      SELECT ofiusu, idusua, tipest, v.fecha
       FROM vDates v
-      CROSS JOIN (SELECT uu.ofiusu, uu.idusua FROM usuarios uu
-        WHERE uu.ofiusu = :ofiest
+      CROSS JOIN (SELECT uu.ofiusu, uu.idusua, 1 AS "TIPEST" FROM usuarios uu 
+        WHERE uu.stausu = 1 AND uu.perusu = :perusu
         UNION
-        SELECT DISTINCT ee.ofiest, ee.usuest FROM estados ee
-        WHERE ee.ofiest = :ofiest AND ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD'))
+        --usuarios traspasados
+        SELECT DISTINCT ee.ofiest, ee.usuest, 0 AS "TIPEST" FROM estados ee
+        WHERE ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD'))
   ) p1
   UNION
   SELECT ee.ofiest, ee.usuest, ee.fecest, ee.tipest, 
     LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
     LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR"
   FROM estados ee
-  WHERE ee.ofiest = :ofiest AND
-    ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+  WHERE ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 ) t1
 INNER JOIN usuarios uu ON uu.idusua = t1.idusua
 INNER JOIN oficinas oo ON oo.idofic = t1.ofiusu
-WHERE uu.perusu = :perusu AND
-  uu.stausu = 1
-ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   TO_DATE(:fecest, 'DD/MM/YYYY'),
   :usuest,
   :tipest,
   :ofiest,
-  :ofides,
   :deshor,
   :hashor,
   :usumov,
@@ -115,7 +110,6 @@ const insertTraspasoSql = `BEGIN OPORRAK_PKG.INSERTTRASPASO(
   :usuest,
   :tipest,
   :ofiest,
-  :ofides,
   :deshor,
   :hashor,
   :tiptra,
@@ -209,7 +203,7 @@ export const insertTraspaso = async (bind) => {
 }
 export const removeTraspaso = async (bind) => {
   let result
-  console.log(removeTraspasoSql, bind)
+
   try {
     await simpleExecute(removeTraspasoSql, bind)
 
@@ -244,6 +238,13 @@ export const estadosFechaUsuario = async (context) => {
 }
 export const estadosOficinaPerfil = async (context) => {
   let query = estadosOficinaPerfilQuery
+  
+  if (context.OFIEST === 0) {
+    delete context.OFIEST
+    query += `ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
+  } else {
+    query += `WHERE t1.ofiusu = :ofiest ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`;
+  }
 
   const result = await simpleExecute(query, context)
 
