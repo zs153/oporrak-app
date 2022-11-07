@@ -76,6 +76,9 @@
                         <div class="mb-1">
                           <div class="form-label">Oficina destino</div>
                           <select class="form-select" id="cbodes" name="ofides" value="">
+                            <option value="0">
+                              TODOS
+                            </option>
                             <% datos.oficinas.map(element=> { %>
                             <option value="<%- element.IDOFIC %>">
                               <%- element.DESOFI %>
@@ -102,7 +105,6 @@
   <script src="/js/js-year-calendar.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
   <script>
-    // TODO INSERTTRASPASO
     async function insertEvento(evento) {
       let xhr = new XMLHttpRequest()
 
@@ -316,7 +318,10 @@
       if (e.events.length > 0 &&
         (e.events[0].idesta === 0 ||
           e.element.classList.contains('domingo') ||
-          params.color === '')) {
+          params.color === '') ||
+          params.oficina === params.destino ||
+          params.destino === 0
+        ) {
         return
       }
 
