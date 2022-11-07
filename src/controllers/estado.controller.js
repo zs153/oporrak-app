@@ -37,8 +37,8 @@ export const estadosPage = async (req, res) => {
     hasta: req.body.hasta,
   }
   const estado = {
-    OFIEST: req.body.ofiest,
-    PERUSU: req.body.perusu,
+    OFIEST: parseInt(req.body.ofiest),
+    PERUSU: parseInt(req.body.perusu),
     DESDE: periodo.desde,
     HASTA: periodo.hasta,
   }
@@ -56,6 +56,7 @@ export const estadosPage = async (req, res) => {
     const estados = await axios.post('http://localhost:8100/api/estados/oficinas/perfiles', {
       estado,
     })
+    
     const datos = {
       estados: estados.data,
       oficinas: oficinas.data,

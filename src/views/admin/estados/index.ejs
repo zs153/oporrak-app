@@ -42,6 +42,9 @@
                       <div class="mb-1">
                         <div class="form-label">Oficina</div>
                         <select class="form-select" id="cboofi" name="ofiest" value="">
+                          <option value="0">
+                            TODAS
+                          </option>
                           <% datos.oficinas.map(element=> { %>
                           <option value="<%= element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
                             <%= element.DESOFI %>

@@ -39,6 +39,42 @@
       position: relative;
     }
 
+    thead.fixedHeader th {
+      font-weight: normal;
+      padding: 4px 3px;
+      text-align: left;
+      min-width: 28px;
+    }
+
+    html>body tbody.scrollContent {
+      display: block;
+      height: 520px;
+      overflow: auto;
+      width: 1246px;
+    }
+
+    tbody.scrollContent td, tbody.scrollContent tr.normalRow td {
+      border-bottom: 1px solid #DDD;
+      border-left: 1px solid #DDD;
+      border-right: 1px solid #CCC;
+      border-top: none;
+      min-width: 28px;
+    }
+
+    tbody.scrollContent tr.alternateRow td {
+      background: #EEE;
+      border-bottom: none;
+      border-left: none;
+      border-right: 1px solid #CCC;
+      border-top: 1px solid #DDD;
+      min-width: 28px;
+    }
+
+    html>body thead.fixedHeader {
+      display: block;
+      overflow: auto;
+      width: 1246px;
+    }
     #tblEstados thead,
     tbody {
       overflow-y: auto;
@@ -60,7 +96,10 @@
     #tblEstados table tr:hover {
       background-color: #f1f3f5;
     }
+
+
   </style>
+
   <!-- timeline -->
   <style>
     .timeline {
@@ -296,9 +335,6 @@
             <span>Oficina: <%- datos.descripcionOficina %></span>
             <span class="ms-3">Perfil: <%- datos.descripcionPerfil %></span>
             <span class="ms-3">Periodo: <%- datos.strDesde %> al <%- datos.strHasta %></span>
-            <a href="#" class="ms-auto" data-bs-toggle="modal" data-bs-target="#modal-config">
-              <i class="bi bi-gear" style="font-size: 0.9rem; color: #626976;"></i>
-            </a>
           </div>
           <div class="row row-deck row-cards">
             <div class="col-12">
@@ -325,127 +361,11 @@
     <%- include('../../partials/footer') %>
   </div>
 
-  <div class="modal modal-blur fade" id="modal-config" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title mt-0">Estados</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/admin/estadisticas/fraudes" method="POST" onsubmit="return validate();">
-          <input type="hidden" id="destip" name="destip">
-          <input type="hidden" id="refcar" name="refcar">
-          <div class="modal-body">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="form-label">Oficina</div>
-                    <select class="form-select" id="cboofi" name="ofiest" value="">
-                      <% datos.oficinas.map(element=> { %>
-                      <option value="<%= element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? " selected" :"" %>>
-                        <%= element.DESOFI %>
-                      </option>
-                      <% }) %>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="form-label">Perfil</div>
-                    <select class="form-select" id="cboper" name="perusu" value="">
-                      <% datos.arrTiposPerfil.map(element=> { %>
-                      <option value="<%= element.id %>">
-                        <%= element.des %>
-                      </option>
-                      <% }) %>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="input-control">
-                      <label class="form-label required">Fecha inicio</label>
-                      <input type="date" name="desfec" id="desfec" class="form-control" value="<%- datos.desde %>" />
-                      <div class="invalid-feedback"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="input-control">
-                      <label class="form-label required">Fecha fin</label>
-                      <input type="date" name="hasfec" id="hasfec" class="form-control" value="<%- datos.hasta %>" />
-                      <div class="invalid-feedback"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-            <button type="submit" class="btn btn-primary ms-auto">Estados</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
   <script src="/js/ayuda.min.js"></script>
   <script>
-    const desde = document.getElementById('desfec')
-    const hasta = document.getElementById('hasfec')
-
-    const validate = () => {
-      const desdeValue = desde.value.trim()
-      const hastaValue = hasta.value.trim()
-
-      if (isNaN(Date.parse(desdeValue))) {
-        setError(desde, 'Fecha requerida')
-        setTimeout(function() {
-          setSuccess(desde)
-        }, 3000)
-        return false
-      } else {
-        setSuccess(desde)
-      }
-      if (isNaN(Date.parse(hastaValue))) {
-        setError(hasta, 'Fecha requerida')
-        setTimeout(function() {
-          setSuccess(hasta)
-        }, 3000)
-        return false
-      } else {
-        setSuccess(hasta)
-      }
-
-      return true
-    }
-
-    const setSuccess = (element) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = '';
-      inputControl.classList.add('is-valid');
-      element.classList.remove('is-invalid');
-    }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = message;
-      element.classList.add('is-invalid');
-      inputControl.classList.remove('is-valid');
-    }
-  </script>
-  <script>
     const periodo = {
-      desde: <%- datos.periodo.desde %>,
-      hasta: <%- datos.periodo.hasta %>,
+      desde: '<%- datos.periodo.desde %>',
+      hasta: '<%- datos.periodo.hasta %>',
     }
 
     function estadosGantt(oficina, perfil, year, mes, periodo) {
@@ -478,18 +398,18 @@
 
             //total
             for (var i = 0; i < diasPeriodo; i++) {
-              if (estadosUsuario[i] === 0 || estadosUsuario[i] === 10) {
+              if (estadosUsuario[i] === 1 || estadosUsuario[i] === 10) {
                 activosOficina[i]++;
               }
-              if (estadosUsuario[i] === -1) { // weekend
-                activosOficina[i] = -1
+              if (estadosUsuario[i] === -1) {
+                activosOficina[i] = ''
               }
             }
 
             rowCount++;
           }
 
-          estadosUsuario = new Array(diasPeriodo).fill(0);
+          estadosUsuario = new Array(diasPeriodo).fill(1);
           usuarioActual = itm.IDUSUA;
           nombreUsuario = itm.NOMUSU;
 
@@ -530,7 +450,7 @@
 
       //total ultimo usuario
       for (var i = 0; i < diasPeriodo; i++) {
-        if (estadosUsuario[i] === 0) {
+        if (estadosUsuario[i] === 1) {
           activosOficina[i]++;
         }
         if (estadosUsuario[i] === -1) {
@@ -566,9 +486,6 @@
 
       // dias header
       for (let d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
-        //const dayWeek = new Date(d).getDay()
-        // const festivo = festivos.find(q => new Date(q.FECFES) === d)
-
         texto = document.createTextNode(('0' + d.getDate()).slice(-2))
         col = document.createElement('th')
         col.appendChild(texto)
@@ -630,6 +547,12 @@
 
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === 0) {
+              // usuario en activo
+              var col = document.createElement("td")
+              col.style.background = '#FAFAFA'
+
+              rowUsuario.appendChild(col)
+            } else if (itm[1][i] === 1) {
               // usuario en activo
               var col = document.createElement("td")
 
@@ -746,12 +669,8 @@
           }
         }
       })
-
-      // let tr = document.getElementById('tblEstados').tHead.children[0]
-      // let th = document.createElement('th')
-      // th.innerHTML = headerString
-      // tr.appendChild(th)
     }
+
     estadosGantt()
   </script>
 </body>

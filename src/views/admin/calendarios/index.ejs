@@ -97,41 +97,6 @@
         </div>
       </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-tras" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="container-xl">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title mt-0">Traspaso</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="mb-1">
-                      <div class="form-label">Oficina destino</div>
-                      <select class="form-select" id="cbodes" name="ofides" value="">
-                        <% datos.oficinas.map(element=> { %>
-                        <option value="<%- element.IDOFIC %>">
-                          <%- element.DESOFI %>
-                        </option>
-                        <% }) %>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <input type="hidden" name="fecest" id="fectra">
-              <button type="button" class="btn btn-link" id="btnTrasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="modal modal-blur fade" id="modal-bolsa" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="container-xl">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -200,7 +165,6 @@
         </div>
       </div>
     </div>
-
     <%- include('../../partials/footer') %>
   </div>
 
@@ -315,7 +279,6 @@
           USUEST: params.usuario,
           TIPEST: params.tipo,
           OFIEST: params.oficina,
-          OFIDES: params.destino,
           DESHOR: '+00 08:30:00',
           HASHOR: '+00 14:00:00',
         },
@@ -333,8 +296,6 @@
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         evento.estado.DESHOR = '+00 ' + document.getElementById('destel').value + ':00'
         evento.estado.HASHOR = '+00 ' + document.getElementById('hastel').value + ':00'
-      } else if (params.tipo === <%- datos.tiposEstado.traspaso.ID %>) {
-        await insertTraspaso(evento)
       }
 
       await insertEvento(evento)
@@ -380,16 +341,12 @@
       calendario.setDataSource(data)
     }
     const editEvento = () => {
-      if (params.tipo === <%- datos.tiposEstado.traspaso.ID %>) {
-        const modalTraspaso = document.getElementById('modal-tras')
+      if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
+        const modalFamily = document.getElementById('modal-tele')
 
-        modalTraspaso.style.display = 'flex'
-      } else if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
-        const modalBolsa = document.getElementById('modal-bolsa')
-
-        document.getElementById('desbol').value = "08:30"
-        document.getElementById('hasbol').value = "14:00"
-        modalBolsa.style.display = 'flex'
+        document.getElementById('destel').value = "08:30"
+        document.getElementById('hastel').value = "14:00"
+        modalFamily.style.display = 'flex'
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         const modalFamily = document.getElementById('modal-tele')
 
@@ -414,7 +371,6 @@
       }),
       oficina: <%- user.oficina %>,
       usuario: <%- user.id %>,
-      destino: 0,
       tipo: 0,
       color: '',
       desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
@@ -446,21 +402,15 @@
     document.getElementById('btnTeleCancel').addEventListener('click', function() {
       document.getElementById('modal-tele').style.display = 'none'
     })
-    document.getElementById('btnTrasCancel').addEventListener('click', function() {
-      document.getElementById('modal-tras').style.display = 'none'
-    })
     document.getElementById('btnBolsaCancel').addEventListener('click', function() {
       document.getElementById('modal-bolsa').style.display = 'none'
     })
     document.addEventListener('keydown', function(e) {
-      const mTraspaso = document.getElementById('modal-tras')
       const mBolsa = document.getElementById('modal-bolsa')
       const mTelefono = document.getElementById('modal-tele')
       const keyCode = e.keyCode;
 
-      if (keyCode === 27 && mTraspaso.style.display === 'flex') {
-        mTraspaso.style.display = 'none'
-      } else if (keyCode === 27 && mBolsa.style.display === 'flex') {
+      if (keyCode === 27 && mBolsa.style.display === 'flex') {
         mBolsa.style.display = 'none'
       } else if (keyCode === 27 && mTelefono.style.display === 'flex') {
         mTelefono.style.display = 'none'
@@ -493,14 +443,12 @@
       arrayFilterOficinas(params.oficina)
       estadosUsuario()
     });
-    document.getElementById('cbodes').addEventListener('change', function() {
-      params.destino = parseInt(this.value)
-    });
     document.getElementById('cbousu').addEventListener('change', function() {
       document.getElementById('idusua').value = this.value
       params.usuario = parseInt(this.value)
 
-      document.getElementById('cboest').selectedIndex = params.tipo
+      // cambia el estado al primer elemento TODOS
+      //document.getElementById('cboest').selectedIndex = 0
       estadosUsuario()
     });
     document.getElementById('cboest').addEventListener('change', function() {
@@ -538,8 +486,6 @@
       }
 
       if (e.events.length === 0 &&
-        params.tipo === <%- datos.tiposEstado.traspaso.ID %> ||
-        params.tipo === <%- datos.tiposEstado.conciliacion.ID %> ||
         params.tipo === <%- datos.tiposEstado.horas.ID %> ||
         params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         editEvento()
@@ -571,9 +517,8 @@
               USUEST: params.usuario,
               TIPEST: params.tipo,
               OFIEST: params.oficina,
-              OFIDES: params.destino,
               DESHOR: '+00 08:30:00',
-              HASHOR: '+00 14:00:00',
+              HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00': '+0014 00:00:00',
             },
             movimiento: {
               USUMOV: <%- user.id %>,
