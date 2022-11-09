@@ -12,6 +12,22 @@ const baseQuery = `SELECT
   TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
 FROM estados
 `
+const estadosFechaPerfilQuery = `SELECT 
+  p1.nomusu, p1.telusu, p1.estaact, p1.PERROL, oo.desofi 
+FROM (
+  SELECT uu.nomusu, uu.telusu, uu.ofiusu, 
+    CASE WHEN uu.rolusu = 2 THEN uu.perusu -1 ELSE uu.perusu END AS "PERROL",
+    CASE WHEN zz.tipest IS NULL THEN 1 ELSE 0 END AS "ESTAACT"
+    FROM (SELECT ee.usuest, ee.tipest
+        FROM estados ee
+        WHERE ee.fecest = TO_DATE(:fecest,'YYYY-MM-DD')
+    ) zz
+    RIGHT JOIN usuarios uu ON uu.idusua = zz.usuest
+    WHERE uu.stausu = 1
+) p1
+INNER JOIN oficinas oo ON idofic = p1.ofiusu
+ORDER BY p1.PERROL, p1.ofiusu
+`
 const estadosFechaUsuarioQuery = `SELECT 
   idesta,
   TO_CHAR(fecest, 'YYYY-MM-DD') "FECEST",
@@ -35,8 +51,8 @@ const estadosUsuarioQuery = `SELECT
   '14:00' AS "HASHOR", 
   TO_CHAR(ff.fecfes, 'DD/MM/YYYY') AS "STRFEC"
 FROM festivos ff
-WHERE (ff.ofifes = :idofic) AND
-  TRUNC(ff.fecfes) BETWEEN :desde AND :hasta
+WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
+  ff.fecfes BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 UNION
 SELECT 
   ee.idesta,
@@ -74,15 +90,21 @@ FROM (
         WHERE uu.stausu = 1 AND uu.perusu = :perusu
         UNION
         --usuarios traspasados
-        SELECT DISTINCT ee.ofiest, ee.usuest, 1 AS "TIPEST" FROM estados ee
-        WHERE ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD'))
+        SELECT DISTINCT ee.ofiest, ee.usuest, 0 AS "TIPEST" FROM estados ee
+        INNER JOIN usuarios uu ON uu.idusua = ee.usuest
+        WHERE uu.perusu = :perusu AND
+          --ee.tipest = 10 AND
+          ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+      )
   ) p1
-  UNION
+  UNION ALL
   SELECT ee.ofiest, ee.usuest, ee.fecest, ee.tipest, 
     LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
     LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR"
-  FROM estados ee
-  WHERE ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+  FROM estados ee  
+  INNER JOIN usuarios uu ON uu.idusua = ee.usuest
+  WHERE uu.perusu = :perusu AND
+    ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 ) t1
 INNER JOIN usuarios uu ON uu.idusua = t1.idusua
 INNER JOIN oficinas oo ON oo.idofic = t1.ofiusu
@@ -231,6 +253,13 @@ export const estadosUsuario = async (context) => {
 }
 export const estadosFechaUsuario = async (context) => {
   let query = estadosFechaUsuarioQuery
+
+  const result = await simpleExecute(query, context)
+
+  return result.rows
+}
+export const estadosFechaPerfil = async (context) => {
+  let query = estadosFechaPerfilQuery
 
   const result = await simpleExecute(query, context)
 

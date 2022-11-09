@@ -27,7 +27,7 @@ FROM festivos ff
 LEFT JOIN oficinas oo ON oo.idofic = ff.ofifes
 WHERE (ff.ofifes = :ofifes OR
     ff.ofifes = 0) AND
-  TRUNC(fecfes) BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+  fecfes BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
 const festivosLocalSql = `SELECT 
   ff.idfest,
