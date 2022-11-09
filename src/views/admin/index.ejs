@@ -11,6 +11,53 @@
   <!-- custom -->
   <link rel="stylesheet" href="/css/estilos.min.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    .table-container {
+        height: 45em;
+    }
+    table {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+        width: 100%;
+        font-size: 11px;
+    }
+    table thead {
+        /* head takes the height it requires, 
+        and it's not scaled when table is resized */
+        flex: 0 0 auto;
+        width: calc(100% - 0.9em);
+    }
+    table tbody {
+        /* body takes all the remaining available space */
+        flex: 1 1 auto;
+        display: block;
+        overflow-y: scroll;
+    }
+    table tbody tr {
+        width: 100%;
+    }
+    table thead,
+    table tbody tr {
+        display: table;
+        table-layout: fixed;
+    }
+    /* decorations */
+    .table-container {
+        border: 1px solid black;
+        padding: 0.3em;
+    }
+    table {
+        border: 1px solid lightgrey;
+    }
+    table td, table th {
+      /* border: 1px solid lightgrey; */
+      padding-left: 1em;      
+    }
+    table th {
+        border: 1px solid grey;
+    }
+  </style>
 </head>
 <body class="antialiased">
   <div class="wrapper">
@@ -19,9 +66,20 @@
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
-          <div class="row text-center align-items-center flex-row-reverse">
-            <div class="col-12 col-12 col-lg-auto mt-3 mt-lg-0">
-              <h1>Oporrak</h1>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="table-container">
+                    <table id="tblEstados" class="scrollTable">
+                      <thead class="fixedHeader">
+                      </thead>
+                      <tbody class="scrollContent">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -31,5 +89,114 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
+  <script>
+    const estados = <%- JSON.stringify(datos.estados) %>
+    let tblBody = document.getElementsByTagName("tbody")[0];
+    let row = document.createElement("tr");
+    let perfilActual = 0
+    let oficinaActual = ''
+
+    estados.map(itm => {
+      if (perfilActual != itm.PERROL) {
+        if (itm.PERROL === 1) {
+          texto = document.createTextNode('ADMINISTRACIÓN')
+        } else if (itm.PERROL === 2) {
+          texto = document.createTextNode('RESPONSABLES')
+        } else if (itm.PERROL === 3) {
+          texto = document.createTextNode('INFORMADORES')
+        } else if (itm.PERROL === 8) {
+          texto = document.createTextNode('LIQUIDADORES')
+        }
+
+        row = document.createElement('tr')
+        col = document.createElement('td')
+        col.colSpan = 6
+        col.style.cssText = "color: #0A5080; border: none; font-size: 14px; text-align: left;"
+        col.style.height = "30px"
+        col.style.background = '#85CAF5'
+        
+        col.appendChild(texto)
+        row.appendChild(col)
+        tblBody.appendChild(row)
+
+        // nombre
+        row = document.createElement('tr')
+        col = document.createElement('td')
+        col.colSpan = 4
+        col.style.cssText = "border-bottom: 1px solid #F0F0F0; font-size: 10px; text-align: left;"
+        texto = document.createTextNode('Nombre')
+
+        col.appendChild(texto)
+        row.appendChild(col)
+        tblBody.appendChild(row)
+        
+        // telefono
+        col = document.createElement('td')
+        col.style.cssText = "border-bottom: 1px solid #F0F0F0; font-size: 10px;"
+        texto = document.createTextNode('Teléfono')
+
+        col.appendChild(texto)
+        row.appendChild(col)
+        tblBody.appendChild(row)
+        // estado
+        col = document.createElement('td')
+        col.style.cssText = "border-bottom: 1px solid #F0F0F0; font-size: 10px; padding-right: 10px; text-align: right;"
+        texto = document.createTextNode('Estado')
+
+        col.appendChild(texto)
+        row.appendChild(col)
+        tblBody.appendChild(row)
+
+        perfilActual = itm.PERROL
+      }
+
+      if (oficinaActual != itm.DESOFI) {
+        if (itm.DESOFI !== '') {
+          row = document.createElement('tr')
+          col = document.createElement('td')
+          texto = document.createTextNode(itm.DESOFI)
+
+          col.appendChild(texto)
+          col.style.cssText = "color: #38BADA;font-size: 11px; text-align: left;"
+          row.appendChild(col)
+          tblBody.appendChild(row)
+        }
+
+        oficinaActual = itm.DESOFI
+      }
+
+      // nombre
+      texto = document.createTextNode(itm.NOMUSU)
+      row = document.createElement('tr')
+      col = document.createElement('td')
+      col.appendChild(texto)
+      col.style.cssText = "color: #38BADA;font-size: 11px; padding-left: 20px; text-align: left;"
+      col.colSpan = 4
+      col.style.color = itm.ESTAACT === 1 ? '' : 'red'
+      row.appendChild(col)
+      tblBody.appendChild(row)
+      
+      // telefono
+      texto = document.createTextNode(itm.TELUSU)
+      
+      col = document.createElement('td')
+      // col.style.cssText = "padding-right: 10px; text-align: right;"
+      col.style.color = itm.ESTAACT === 1 ? '' : 'red'
+
+      col.appendChild(texto)
+      row.appendChild(col)
+      tblBody.appendChild(row)
+      // estado
+      texto = itm.ESTAACT === 1 ? document.createTextNode('DISPONIBLE') : document.createTextNode('NO DISPONIBLE')
+      
+      col = document.createElement('td')
+      col.style.cssText = "padding-right: 10px; text-align: right;"
+      col.style.color = itm.ESTAACT === 1 ? '':'red'
+      
+      col.appendChild(texto)
+      row.appendChild(col)
+      tblBody.appendChild(row)
+    })
+  </script>
 </body>
 </html>

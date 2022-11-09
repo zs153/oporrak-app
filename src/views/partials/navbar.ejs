@@ -24,7 +24,7 @@
               <li class="nav-item <%- opcion === 'ESTADO' ? 'active':'' %>">
                 <a class="nav-link" href="/admin/estados">
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-bug"></i>
+                    <i class="bi bi-layers"></i>
                   </span>
                   <span class="nav-link-title">
                     Estados
@@ -34,10 +34,30 @@
               <li class="nav-item <%- opcion === 'TRASPASO' ? 'active':'' %>">
                 <a class="nav-link" href="/admin/traspasos">
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-bug"></i>
+                    <i class="bi bi-building"></i>
                   </span>
                   <span class="nav-link-title">
                     Traspasos
+                  </span>
+                </a>
+              </li>
+              <li class="nav-item <%- opcion === 'MATRICULA' ? 'active':'' %>">
+                <a class="nav-link" href="/admin/matriculas">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="bi bi-credit-card"></i>
+                  </span>
+                  <span class="nav-link-title">
+                    Matrículas
+                  </span>
+                </a>
+              </li>
+              <li class="nav-item <%- opcion === 'CURSO' ? 'active':'' %>">
+                <a class="nav-link" href="/admin/cursos">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="bi bi-book"></i>
+                  </span>
+                  <span class="nav-link-title">
+                    Cursos
                   </span>
                 </a>
               </li>
@@ -51,54 +71,12 @@
                       <a href="/admin/oficinas" class="dropdown-item">
                         <i class="bi bi-people dropdown-item-icon"></i>Oficinas
                       </a>
-                      <a href="/admin/cursos" class="dropdown-item">
-                        <i class="bi bi-book dropdown-item-icon"></i>Cursos
-                      </a>
-                      <a href="/admin/matriculas" class="dropdown-item">
-                        <i class="bi bi-basket dropdown-item-icon"></i>Matrículas
-                      </a>
                       <a href="/admin/festivos" class="dropdown-item">
                         <i class="bi bi-basket dropdown-item-icon"></i>Festivos
-                      </a>
-                      <div class="dropend">
-                        <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                          <i class="bi bi-chat-right-dots dropdown-item-icon"></i>Tipos
-                        </a>
-                        <div class="dropdown-menu">
-                          <a href="/admin/tipos/fraudes" class="dropdown-item">
-                            <i class="bi bi-bug dropdown-item-icon"></i>Tipos de Fraude
-                          </a>
-                          <a href="/admin/tipos/hitos" class="dropdown-item">
-                            <i class="bi bi-signpost dropdown-item-icon"></i>Tipos de Hito
-                          </a>
-                          <a href="/admin/tipos/eventos" class="dropdown-item">
-                            <i class="bi bi-flag dropdown-item-icon"></i>Tipos de Evento
-                          </a>
-                        </div>
-                      </div>
-                      <a href="/admin/subtipos" class="dropdown-item">
-                        <i class="bi bi-diagram-2 dropdown-item-icon"></i>Subtipos
                       </a>
                       <a href="/admin/usuarios" class="dropdown-item">
                         <i class="bi bi-people dropdown-item-icon"></i>Usuarios
                       </a>
-                      <a href="/admin/smss" class="dropdown-item">
-                        <i class="bi bi-chat dropdown-item-icon"></i>SMS
-                      </a>
-                      <a href="/admin/cargas" class="dropdown-item">
-                        <i class="bi bi-file-arrow-up dropdown-item-icon"></i>Carga csv
-                      </a>
-                      <div class="dropdown-divider"></div>
-                      <div class="dropend">
-                        <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                          <i class="bi bi-graph-up dropdown-item-icon"></i>Estadísticas
-                        </a>
-                        <div class="dropdown-menu">
-                          <a href="/admin/estadisticas/fraudes" class="dropdown-item">
-                            <i class="bi bi-bug dropdown-item-icon"></i>Fraude
-                          </a>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>

@@ -96,8 +96,6 @@
     #tblEstados table tr:hover {
       background-color: #f1f3f5;
     }
-
-
   </style>
 
   <!-- timeline -->
@@ -336,7 +334,7 @@
             <span class="ms-3">Perfil: <%- datos.descripcionPerfil %></span>
             <span class="ms-3">Periodo: <%- datos.strDesde %> al <%- datos.strHasta %></span>
           </div>
-          <div class="row row-deck row-cards">
+          <div class="row">
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
@@ -344,7 +342,7 @@
                 </div>
                 <div class="card-body">
                   <div class="tableContainer">
-                    <table id="tblEstados" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
+                    <table id="tblEstados" >
                       <thead class="fixedHeader">
                       </thead>
                       <tbody class="scrollContent">
@@ -390,11 +388,12 @@
         const diaSemana = new Date(itm.FECHA).getDay()
         const festivo = festivos.find(q => q.FECFES === itm.FECHA)
 
-        if (usuarioActual != itm.IDUSUA) {
+        if (oficinaActual != itm.OFIUSU || usuarioActual != itm.IDUSUA) {
           if (usuarioActual) {
             rows[rowCount] = new Array();
             rows[rowCount][0] = nombreUsuario;
             rows[rowCount].push(estadosUsuario);
+            rowCount++;
 
             //total
             for (var i = 0; i < diasPeriodo; i++) {
@@ -405,32 +404,30 @@
                 activosOficina[i] = ''
               }
             }
-
-            rowCount++;
           }
 
           estadosUsuario = new Array(diasPeriodo).fill(1);
           usuarioActual = itm.IDUSUA;
           nombreUsuario = itm.NOMUSU;
+        }
 
-          if (oficinaActual != itm.OFIUSU) {
-            if (oficinaActual) {
-              rows[rowCount] = new Array();
-              rows[rowCount][0] = 0; //indicador de total usuario
-              rows[rowCount].push(activosOficina);
-
-              //reiniciar
-              activosOficina = new Array(diasPeriodo).fill(0);
-              rowCount++;
-            }
-
+        if (oficinaActual != itm.OFIUSU) {
+          if (oficinaActual) {
             rows[rowCount] = new Array();
-            rows[rowCount][0] = -1; //indicador de total oficina
-            rows[rowCount].push(itm.DESOFI);
-
-            oficinaActual = itm.OFIUSU;
+            rows[rowCount][0] = 0; //indicador de total usuario
+            rows[rowCount].push(activosOficina);
             rowCount++;
+
+            //reiniciar
+            activosOficina = new Array(diasPeriodo).fill(0)
           }
+
+          rows[rowCount] = new Array();
+          rows[rowCount][0] = -1; //indicador de total oficina
+          rows[rowCount].push(itm.DESOFI);
+          rowCount++;
+
+          oficinaActual = itm.OFIUSU
         }
 
         //acumulado estados
@@ -450,7 +447,7 @@
 
       //total ultimo usuario
       for (var i = 0; i < diasPeriodo; i++) {
-        if (estadosUsuario[i] === 1) {
+        if (estadosUsuario[i] === 1 || estadosUsuario[i] === 10) {
           activosOficina[i]++;
         }
         if (estadosUsuario[i] === -1) {

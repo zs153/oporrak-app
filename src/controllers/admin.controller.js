@@ -9,8 +9,25 @@ import {
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const fecha = {
+    FECEST: new Date().toISOString().split('T')[0]
+  }
 
-  res.render('admin', { user })
+  try {
+    const estados = await axios.post('http://localhost:8100/api/estados/usuarios/perfiles', {
+      fecha,
+    })
+    const datos = {
+      estados: estados.data,
+    }
+    res.render('admin', { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
 }
 export const perfilPage = async (req, res) => {
   const user = req.user

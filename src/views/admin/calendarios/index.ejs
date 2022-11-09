@@ -143,13 +143,27 @@
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Desde</div>
-                      <input type="time" id="destel" name="destel" class="form-control" min="08:00" max="20:00">
+                      <input type="date" id="desfectel" name="desfectel" class="form-control" >
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Hasta</div>
-                      <input type="time" id="hastel" name="hastel" class="form-control" min="08:00" max="20:00">
+                      <input type="date" id="hasfectel" name="hasfectel" class="form-control" >
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde hora</div>
+                      <input type="time" id="deshortel" name="deshortel" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta hora</div>
+                      <input type="time" id="hashortel" name="hashortel" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                 </div>
@@ -315,7 +329,8 @@
       document.getElementById('cboest').selectedIndex = params.tipo
     }
     const getEstadosTipo = (tipo) => {
-      const estadosTipo = tipo === 0 ? estados : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
+      // no mostrar traspasos
+      const estadosTipo = tipo === 0 ? estados.filter(itm => itm.TIPEST !== <%- datos.tiposEstado.traspaso.ID %>) : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
       let data = []
 
       estadosTipo.map(itm => {

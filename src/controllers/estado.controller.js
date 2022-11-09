@@ -49,8 +49,8 @@ export const estadosPage = async (req, res) => {
   try {
     const oficinas = await axios.post('http://localhost:8100/api/oficinas')
     const festivos = await axios.post('http://localhost:8100/api/festivos/oficinas', {
-      desde: estado.DESDE,
-      hasta: estado.HASTA,
+      desde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      hasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       ofifes: estado.OFIEST
     })
     const estados = await axios.post('http://localhost:8100/api/estados/oficinas/perfiles', {
