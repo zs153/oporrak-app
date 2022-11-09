@@ -171,7 +171,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-link" id="btnTeleCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -221,6 +221,45 @@
         }
 
         xhr.open('POST', 'http://localhost:8100/api/estados/insert', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(evento))
+      })
+    }
+    async function insertRangoEvento(evento) {
+      let xhr = new XMLHttpRequest()
+
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              const result = JSON.parse(xhr.response)
+              const d = result.DESDE.split('/')
+              const h = result.HASTA.split('/')
+
+              // insert en el calendario
+              // let dataSource = calendario.getDataSource()
+              // const estado = {
+              //   idesta: result.idesta,
+              //   usuest: params.usuario,
+              //   tipest: params.tipo,
+              //   id: result.idesta,
+              //   startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+              //   endDate: new Date(h[2] + '-' + h[1] + '-' + h[0]),
+              //   color: params.color,
+              // }
+
+              //dataSource.push(estado)
+              // calendario.setDataSource(dataSource, { preventRendering: false })
+              
+              document.getElementById('modal-tele').style.display = 'none'
+              estadosUsuario()
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8100/api/estados/inserts', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -300,11 +339,37 @@
         evento.estado.DESHOR = '+00 ' + document.getElementById('deshor').value + ':00'
         evento.estado.HASHOR = '+00 ' + document.getElementById('hashor').value + ':00'
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
-        evento.estado.DESHOR = '+00 ' + document.getElementById('destel').value + ':00'
-        evento.estado.HASHOR = '+00 ' + document.getElementById('hastel').value + ':00'
+        //TODO dias
+        evento.estado.DESHOR = '+00 ' + document.getElementById('deshortel').value + ':00'
+        evento.estado.HASHOR = '+00 ' + document.getElementById('hashortel').value + ':00'
       }
 
       await insertEvento(evento)
+    }
+    const eventoRango = async () => {
+      const desde = document.getElementById('desfectel').value
+      const hasta = document.getElementById('hasfectel').value
+
+      const evento = {
+        estado: {
+          DESDE: desde,
+          HASTA: hasta,
+          USUEST: params.usuario,
+          TIPEST: params.tipo,
+          OFIEST: params.oficina,
+          DESHOR: '+00 08:30:00',
+          HASHOR: '+00 14:00:00',
+        },
+        movimiento: {
+          USUMOV: <%- user.id %>,
+          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+      }
+      }
+
+      evento.estado.DESHOR = '+00 ' + document.getElementById('deshortel').value + ':00'
+      evento.estado.HASHOR = '+00 ' + document.getElementById('hashortel').value + ':00'
+
+      await insertRangoEvento(evento)
     }
     const arrayFilterOficinas = (oficina) => {
       const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
@@ -347,7 +412,7 @@
       })
       calendario.setDataSource(data)
     }
-    const editEvento = () => {
+    const editEvento = (e) => {
       if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         const modalHoras = document.getElementById('modal-horas')
 
@@ -357,8 +422,11 @@
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         const modalTele = document.getElementById('modal-tele')
 
-        document.getElementById('destel').value = "08:30"
-        document.getElementById('hastel').value = "14:00"
+        const fecha = new Date(e.date.getFullYear(), e.date.getMonth(), e.date.getDate(), 1, 0, 0).toISOString().split('T')[0]
+        document.getElementById('desfectel').value = fecha
+        document.getElementById('hasfectel').value = fecha
+        document.getElementById('deshortel').value = "08:30"
+        document.getElementById('hashortel').value = "14:00"
         modalTele.style.display = 'flex'
       }
     }
@@ -490,9 +558,9 @@
       }
 
       if (e.events.length === 0 &&
-        params.tipo === <%- datos.tiposEstado.horas.ID %> ||
-        params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
-        editEvento()
+        (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
+        params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
+        editEvento(e)
       } else {
         if (e.element.style.boxShadow) {
           e.element.style.boxShadow = null
