@@ -151,6 +151,19 @@ const removeTraspasoSql = `BEGIN OPORRAK_PKG.DELETETRASPASO(
   :tipmov 
 ); END;
 `
+const insertRangoSql = `BEGIN OPORRAK_PKG.INSERTESTADORANGO(
+  TO_DATE(:desde, 'YYYY-MM-DD'),
+  TO_DATE(:hasta, 'YYYY-MM-DD'),
+  :usuest,
+  :tipest,
+  :ofiest,
+  :deshor,
+  :hashor,
+  :usumov,
+  :tipmov,
+  :idesta
+); END;
+`
 
 // estados
 export const find = async (context) => {
@@ -199,6 +212,21 @@ export const remove = async (bind) => {
   }
 
   return result
+}
+export const insertRango = async (bind) => {
+  bind.idesta = {
+    dir: oracledb.BIND_OUT,
+    type: oracledb.NUMBER,
+  }
+  try {
+    const result = await simpleExecute(insertRangoSql, bind)
+
+    bind.idesta = await result.outBinds.idesta
+  } catch (error) {
+    bind = null
+  }
+
+  return bind
 }
 
 // traspaso

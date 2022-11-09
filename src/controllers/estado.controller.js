@@ -63,6 +63,23 @@ const deleteTraspasoFromRec = (req) => {
 
   return Object.assign(estado, traspaso, movimiento)
 }
+const insertRangoFromRec = (req) => {
+  const estado = {
+    DESDE: req.body.estado.DESDE,
+    HASTA: req.body.estado.HASTA,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
+    OFIEST: req.body.estado.OFIEST,
+    DESHOR: req.body.estado.DESHOR,
+    HASHOR: req.body.estado.HASHOR,
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+  }
+
+  return Object.assign(estado, movimiento)
+}
 
 // estado
 export const estado = async (req, res) => {
@@ -110,6 +127,19 @@ export const crear = async (req, res) => {
 export const borrar = async (req, res) => {
   try {
     const result = await DAL.remove(deleteFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const crearRango = async (req, res) => {
+  try {
+    const result = await DAL.insertRango(insertRangoFromRec(req))
 
     if (result !== null) {
       res.status(200).json(result)
