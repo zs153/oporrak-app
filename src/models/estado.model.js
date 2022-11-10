@@ -13,11 +13,11 @@ const baseQuery = `SELECT
 FROM estados
 `
 const estadosFechaPerfilQuery = `SELECT 
-  p1.nomusu, p1.telusu, p1.estaact, p1.PERROL, oo.desofi 
+  p1.nomusu, p1.telusu, p1.PERROL, p1.tipest, oo.desofi 
 FROM (
-  SELECT uu.nomusu, uu.telusu, uu.ofiusu, 
+  SELECT uu.nomusu, uu.telusu, uu.ofiusu,
     CASE WHEN uu.rolusu = 2 THEN uu.perusu -1 ELSE uu.perusu END AS "PERROL",
-    CASE WHEN zz.tipest IS NULL THEN 1 ELSE 0 END AS "ESTAACT"
+    CASE WHEN zz.tipest IS NULL THEN 1 ELSE zz.tipest END AS "TIPEST"
     FROM (SELECT ee.usuest, ee.tipest
         FROM estados ee
         WHERE ee.fecest = TO_DATE(:fecest,'YYYY-MM-DD')
