@@ -88,8 +88,15 @@ FROM (
       FROM vDates v
       CROSS JOIN (SELECT uu.ofiusu, uu.idusua, 1 AS "TIPEST" FROM usuarios uu 
         WHERE uu.stausu = 1 AND uu.perusu = :perusu
+        UNION
+        --usuarios traspasados
+        SELECT DISTINCT ee.ofiest, ee.usuest, 0 AS "TIPEST" FROM estados ee
+        INNER JOIN usuarios uu ON uu.idusua = ee.usuest
+        WHERE uu.perusu = :perusu AND
+          ee.tipest = 10 AND
+          ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
       )
-  ) p1
+    ) p1
   UNION
   SELECT ee.ofiest, ee.usuest, ee.fecest, ee.tipest, 
     LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
