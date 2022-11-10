@@ -15,9 +15,9 @@ export const mainPage = async (req, res) => {
   const user = req.user
   const usuario = {}
 
-  if (user.rol === tiposRol.responsable) {
-    usuario.ofiusu = user.oficina
-  }
+  // if (user.rol === tiposRol.responsable) {
+  //   usuario.ofiusu = user.oficina
+  // }
 
   try {
     const result = await axios.post('http://localhost:8200/api/usuarios', {
@@ -27,7 +27,6 @@ export const mainPage = async (req, res) => {
       usuarios: JSON.stringify(result.data),
       estadosUsuario,
     }
-
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
