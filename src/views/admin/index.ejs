@@ -90,7 +90,7 @@
 
   <script src="/js/ayuda.min.js"></script>
   <script>
-    const estados = <%- JSON.stringify(datos.estados) %>
+    const estados = <%- datos.estados %>
     let tblBody = document.getElementsByTagName("tbody")[0];
     let row = document.createElement("tr");
     let perfilActual = 0
@@ -172,7 +172,7 @@
       col.appendChild(texto)
       col.style.cssText = "color: #38BADA;font-size: 11px; padding-left: 20px; text-align: left;"
       col.colSpan = 4
-      col.style.color = itm.ESTAACT === 1 ? '' : 'red'
+      col.style.color = itm.TIPEST === 1 ? '' : 'red'
       row.appendChild(col)
       tblBody.appendChild(row)
       
@@ -180,18 +180,17 @@
       texto = document.createTextNode(itm.TELUSU)
       
       col = document.createElement('td')
-      // col.style.cssText = "padding-right: 10px; text-align: right;"
-      col.style.color = itm.ESTAACT === 1 ? '' : 'red'
+      col.style.color = itm.TIPEST === 1 ? '' : 'red'
 
       col.appendChild(texto)
       row.appendChild(col)
       tblBody.appendChild(row)
       // estado
-      texto = itm.ESTAACT === 1 ? document.createTextNode('DISPONIBLE') : document.createTextNode('NO DISPONIBLE')
+      texto = itm.TIPEST === 1 ? document.createTextNode('DISPONIBLE') : document.createTextNode('NO DISPONIBLE')
       
       col = document.createElement('td')
       col.style.cssText = "padding-right: 10px; text-align: right;"
-      col.style.color = itm.ESTAACT === 1 ? '':'red'
+      col.style.color = itm.TIPEST === 1 ? '':'red'
       
       col.appendChild(texto)
       row.appendChild(col)

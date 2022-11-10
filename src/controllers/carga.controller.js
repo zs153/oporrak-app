@@ -5,7 +5,7 @@ export const mainPage = async (req, res) => {
   const user = req.user;
 
   try {
-    const result = await axios.post("http://localhost:8100/api/cargas");
+    const result = await axios.post("http://localhost:8200/api/cargas");
     const datos = {
       cargas: JSON.stringify(result.data),
       estadosCarga,
@@ -40,7 +40,7 @@ export const editPage = async (req, res) => {
   };
 
   try {
-    const result = await axios.post("http://localhost:8100/api/carga", {
+    const result = await axios.post("http://localhost:8200/api/carga", {
       carga,
     });
     const datos = {
@@ -71,7 +71,7 @@ export const insert = async (req, res) => {
   };
 
   try {
-    await axios.post("http://localhost:8100/api/cargas/insert", {
+    await axios.post("http://localhost:8200/api/cargas/insert", {
       carga,
       movimiento,
     });
@@ -102,7 +102,7 @@ export const update = async (req, res) => {
   };
 
   try {
-    axios.post("http://localhost:8100/api/cargas/update", {
+    axios.post("http://localhost:8200/api/cargas/update", {
       carga,
       movimiento,
     });
@@ -132,7 +132,7 @@ export const remove = async (req, res) => {
   };
 
   try {
-    await axios.post("http://localhost:8100/api/cargas/delete", {
+    await axios.post("http://localhost:8200/api/cargas/delete", {
       carga,
       movimiento,
     });

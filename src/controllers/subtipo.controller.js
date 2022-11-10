@@ -5,7 +5,7 @@ export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const result = await axios.post('http://localhost:8100/api/subtipos')
+    const result = await axios.post('http://localhost:8200/api/subtipos')
     const datos = {
       subtipos: JSON.stringify(result.data),
     }
@@ -39,7 +39,7 @@ export const editPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/subtipo', {
+    const result = await axios.post('http://localhost:8200/api/subtipo', {
       subtipo,
     })
     const datos = {
@@ -67,7 +67,7 @@ export const insert = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/subtipos/insert', {
+    await axios.post('http://localhost:8200/api/subtipos/insert', {
       subtipo,
       movimiento,
     })
@@ -97,7 +97,7 @@ export const update = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/subtipos/update', {
+    await axios.post('http://localhost:8200/api/subtipos/update', {
       subtipo,
       movimiento,
     })
@@ -127,7 +127,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/subtipos/delete', {
+    await axios.post('http://localhost:8200/api/subtipos/delete', {
       subtipo,
       movimiento,
     })

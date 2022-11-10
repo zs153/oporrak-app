@@ -38,18 +38,18 @@ export const estadisticaFraude = async (req, res) => {
   }
 
   try {
-    const situacion = await axios.post('http://localhost:8100/api/fraudes/stat/situacion', {
+    const situacion = await axios.post('http://localhost:8200/api/fraudes/stat/situacion', {
       periodo,
       fraude,
     })
-    const hitos = await axios.post('http://localhost:8100/api/fraudes/stat/hitos', {
+    const hitos = await axios.post('http://localhost:8200/api/fraudes/stat/hitos', {
       periodo,
       fraude,
     })
-    const oficinas = await axios.post('http://localhost:8100/api/fraudes/stat/oficinas', {
+    const oficinas = await axios.post('http://localhost:8200/api/fraudes/stat/oficinas', {
       carga,
     })
-    const actuacion = await axios.post('http://localhost:8100/api/fraudes/stat/actuacion', {
+    const actuacion = await axios.post('http://localhost:8200/api/fraudes/stat/actuacion', {
       periodo,
       fraude,
     })

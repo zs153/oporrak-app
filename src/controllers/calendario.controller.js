@@ -5,8 +5,8 @@ export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const oficinas = await axios.post('http://localhost:8100/api/oficinas')
-    const usuarios = await axios.post('http://localhost:8100/api/usuarios')
+    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
+    const usuarios = await axios.post('http://localhost:8200/api/usuarios')
     const datos = {
       oficinas: oficinas.data,
       usuarios: usuarios.data,
@@ -40,7 +40,7 @@ export const insert = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/calendarios/insert', {
+    await axios.post('http://localhost:8200/api/calendarios/insert', {
       calendario,
       movimiento,
     })
@@ -69,7 +69,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/calendarios/delete', {
+    await axios.post('http://localhost:8200/api/calendarios/delete', {
       calendario,
       movimiento,
     })

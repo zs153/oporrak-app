@@ -6,7 +6,7 @@ export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const result = await axios.post('http://localhost:8100/api/matriculas')
+    const result = await axios.post('http://localhost:8200/api/matriculas')
     const datos = {
       estados: arrEstadosMatricula,
       matriculas: result.data,
@@ -52,7 +52,7 @@ export const editPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/matricula', {
+    const result = await axios.post('http://localhost:8200/api/matricula', {
       matricula,
     })
 
@@ -79,10 +79,10 @@ export const usuariosPage = async (req, res) => {
   };
 
   try {
-    const result = await axios.post("http://localhost:8100/api/matricula", {
+    const result = await axios.post("http://localhost:8200/api/matricula", {
       matricula,
     });
-    const usuarios = await axios.post("http://localhost:8100/api/matriculas/usuarios", {
+    const usuarios = await axios.post("http://localhost:8200/api/matriculas/usuarios", {
       matricula,
     });
     const datos = {
@@ -106,10 +106,10 @@ export const usuariosAddPage = async (req, res) => {
   };
 
   try {
-    const result = await axios.post("http://localhost:8100/api/matricula", {
+    const result = await axios.post("http://localhost:8200/api/matricula", {
       matricula,
     });
-    const usuarios = await axios.post("http://localhost:8100/api/matriculas/usuarios/pendientes", {
+    const usuarios = await axios.post("http://localhost:8200/api/matriculas/usuarios/pendientes", {
       matricula,
     });
     const datos = {
@@ -143,7 +143,7 @@ export const insert = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/matriculas/insert', {
+    await axios.post('http://localhost:8200/api/matriculas/insert', {
       matricula,
       movimiento,
     })
@@ -177,7 +177,7 @@ export const update = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/matriculas/update', {
+    await axios.post('http://localhost:8200/api/matriculas/update', {
       matricula,
       movimiento,
     })
@@ -207,7 +207,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/matriculas/delete', {
+    await axios.post('http://localhost:8200/api/matriculas/delete', {
       matricula,
       movimiento,
     })
@@ -238,7 +238,7 @@ export const insertUsuario = async (req, res) => {
   }
 
   try {
-    await axios.post("http://localhost:8100/api/matriculas/usuarios/insert", {
+    await axios.post("http://localhost:8200/api/matriculas/usuarios/insert", {
       matricula,
       usuarios,
       movimiento,
@@ -267,7 +267,7 @@ export const deleteUsuario = async (req, res) => {
   };
 
   try {
-    await axios.post("http://localhost:8100/api/matriculas/usuarios/delete", {
+    await axios.post("http://localhost:8200/api/matriculas/usuarios/delete", {
       matricula,
       usuario,
       movimiento,

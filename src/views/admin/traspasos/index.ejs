@@ -134,7 +134,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8100/api/estados/insert/traspaso', true);
+        xhr.open('POST', 'http://localhost:8200/api/estados/insert/traspaso', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -159,7 +159,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8100/api/estados/delete/traspaso', true);
+        xhr.open('POST', 'http://localhost:8200/api/estados/delete/traspaso', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -178,7 +178,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8100/api/estados/usuarios', true);
+        xhr.open('POST', 'http://localhost:8200/api/estados/usuarios', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
         xhr.send(JSON.stringify(prms))
       })
@@ -197,7 +197,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8100/api/festivos/oficinas', true);
+        xhr.open('POST', 'http://localhost:8200/api/festivos/oficinas', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
         xhr.send(JSON.stringify(prms))
       })

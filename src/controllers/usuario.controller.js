@@ -20,7 +20,7 @@ export const mainPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/usuarios', {
+    const result = await axios.post('http://localhost:8200/api/usuarios', {
       usuario
     })
     const datos = {
@@ -69,7 +69,7 @@ export const editPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/usuario', {
+    const result = await axios.post('http://localhost:8200/api/usuario', {
       usuario,
     })
     const datos = {
@@ -96,7 +96,7 @@ export const perfilPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post('http://localhost:8100/api/usuario', {
+    const result = await axios.post('http://localhost:8200/api/usuario', {
       usuario,
     })
 
@@ -144,7 +144,7 @@ export const insert = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8100/api/usuarios/insert',
+      'http://localhost:8200/api/usuarios/insert',
       {
         usuario,
         movimiento,
@@ -184,7 +184,7 @@ export const update = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/usuarios/update', {
+    await axios.post('http://localhost:8200/api/usuarios/update', {
       usuario,
       movimiento,
     })
@@ -215,7 +215,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8100/api/usuarios/delete', {
+    await axios.post('http://localhost:8200/api/usuarios/delete', {
       usuario,
       movimiento,
     })
@@ -244,7 +244,7 @@ export const changePassword = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8100/api/usuarios/cambio',
+      'http://localhost:8200/api/usuarios/cambio',
       {
         usuario,
         movimiento,
@@ -272,7 +272,7 @@ export const updatePerfil = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8100/api/usuarios/perfil',
+      'http://localhost:8200/api/usuarios/perfil',
       {
         usuario,
         movimiento,

@@ -128,14 +128,14 @@ export const tiposEstado = {
   festivo: { ID: 0, DES: "FESTIVO O FIN DE SEMANA", COLOR: "#FF0000" },
   activo: { ID: 1, DES: "ACTIVO", COLOR: "#0101DF" },
   vacacion: { ID: 2, DES: "VACACION", COLOR: "#0D8004" },
-  baja: { ID: 3, DES: "BAJA", COLOR: "#FFBF00" },
-  traspaso: { ID: 4, DES: "TRASPASO", COLOR: "#800209" },
+  baja: { ID: 3, DES: "BAJA", COLOR: "#800209" },
+  traspaso: { ID: 4, DES: "TRASPASO", COLOR: "#61054A" },
   formacion: { ID: 5, DES: "FORMACION", COLOR: "#063780" },
-  conciliacion: { ID: 6, DES: "CONCILIACION 9:30", COLOR: "#DD900A" },
+  conciliacion: { ID: 6, DES: "CONCILIACION 9:30", COLOR: "#FFA80A" },
   reunion: { ID: 7, DES: "REUNION", COLOR: "#DCD20D" },
   horas: { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
-  telefono: { ID: 9, DES: "ATENCION TELEFÓNICA", COLOR: "#7FB3D5" },
-  traspasado: { ID: 10, DES: "TRASPASADO", COLOR: "#B40486" }
+  telefono: { ID: 9, DES: "ATENCION TELEFÓNICA", COLOR: "#FFFB05" },
+  traspasado: { ID: 10, DES: "TRASPASADO", COLOR: "#808000" }
 };
 
 /* arrays */
@@ -184,23 +184,24 @@ export const arrTiposLiquidacion = [
 ]
 export const arrTiposEstado = [
   { ID: 2, DES: "VACACIÓN", COLOR: "#0D8004" },
-  { ID: 3, DES: "BAJA", COLOR: "#FFBF00" },
+  { ID: 3, DES: "BAJA", COLOR: "#800209" },
   { ID: 5, DES: "FORMACIÓN", COLOR: "#063780" },
-  { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#DD900A" },
+  { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#FFA80A" },
   { ID: 7, DES: "REUNION", COLOR: "#DCD20D" },
   { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
-  { ID: 9, DES: "TELÉFONO", COLOR: "#7FB3D5" },
+  { ID: 9, DES: "TELÉFONO", COLOR: "#FFFB05" },
 ]
+
 export const arrColoresEstado = [
   { ID: 0, DES: "FESTIVO", COLOR: "#FF0000" },
   { ID: 1, DES: "ACTIVO", COLOR: "#0101DF" },
   { ID: 2, DES: "VACACIÓN", COLOR: "#0D8004" },
-  { ID: 3, DES: "BAJA", COLOR: "#FFBF00" },
-  { ID: 4, DES: "TRASPASO", COLOR: "#800209" },
+  { ID: 3, DES: "BAJA", COLOR: "#800209" },
+  { ID: 4, DES: "TRASPASO", COLOR: "#61054A" },
   { ID: 5, DES: "FORMACIÓN", COLOR: "#063780" },
-  { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#DD900A" },
+  { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#FFA80A" },
   { ID: 7, DES: "REUNIÓN", COLOR: "#DCD20D" },
   { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
   { ID: 9, DES: "ATENCIÓN TELEFÓNICA", COLOR: "#7FB3D5" },
-  { ID: 10, DES: "TRASPASADO", COLOR: "#B40486" }
+  { ID: 10, DES: "TRASPASADO", COLOR: "#FFFB05" }
 ]

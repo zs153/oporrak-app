@@ -5,6 +5,7 @@ import {
   arrTiposRol,
   arrTiposPerfil,
   tiposMovimiento,
+  tiposEstado,
 } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -14,12 +15,15 @@ export const mainPage = async (req, res) => {
   }
 
   try {
-    const estados = await axios.post('http://localhost:8100/api/estados/usuarios/perfiles', {
+    const result = await axios.post('http://localhost:8200/api/estados/usuarios/perfiles', {
       fecha,
     })
+
+    const estados = result.data.filter(itm => itm.TIPEST !== tiposEstado.traspasado.ID)
     const datos = {
-      estados: estados.data,
+      estados: JSON.stringify(estados)
     }
+
     res.render('admin', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -35,7 +39,7 @@ export const perfilPage = async (req, res) => {
     userid: user.userID,
   }
   try {
-    const result = await axios.post('http://localhost:8100/api/usuario', {
+    const result = await axios.post('http://localhost:8200/api/usuario', {
       usuario,
     })
 
@@ -72,7 +76,7 @@ export const changePassword = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8100/api/usuarios/cambio',
+      'http://localhost:8200/api/usuarios/cambio',
       {
         usuario,
         movimiento,
@@ -100,7 +104,7 @@ export const updatePerfil = async (req, res) => {
 
   try {
     const result = await axios.post(
-      'http://localhost:8100/api/usuarios/perfil',
+      'http://localhost:8200/api/usuarios/perfil',
       {
         usuario,
         movimiento,

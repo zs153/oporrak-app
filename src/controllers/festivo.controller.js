@@ -5,7 +5,7 @@ export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const oficinas = await axios.post('http://localhost:8100/api/oficinas')
+    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
     const datos = {
       oficinas: oficinas.data,
       tiposMovimiento,

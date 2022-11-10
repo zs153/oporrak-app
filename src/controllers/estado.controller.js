@@ -11,7 +11,7 @@ export const mainPage = async (req, res) => {
   const hasta = new Date(currentYear, currentMonth, lastDayMonth, 1, 0, 0).toISOString().split('T')[0]
 
   try {
-    const oficinas = await axios.post('http://localhost:8100/api/oficinas')
+    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
     const datos = {
       oficinas: oficinas.data,
       arrTiposPerfil,
@@ -47,13 +47,13 @@ export const estadosPage = async (req, res) => {
   const diasPeriodo = Math.ceil(new Date(periodo.hasta).getDate() - new Date(periodo.desde).getDate(), (1000 * 60 * 60 * 24)) + 1
 
   try {
-    const oficinas = await axios.post('http://localhost:8100/api/oficinas')
-    const festivos = await axios.post('http://localhost:8100/api/festivos/oficinas', {
+    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
+    const festivos = await axios.post('http://localhost:8200/api/festivos/oficinas', {
       desde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       hasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       ofifes: estado.OFIEST
     })
-    const estados = await axios.post('http://localhost:8100/api/estados/oficinas/perfiles', {
+    const estados = await axios.post('http://localhost:8200/api/estados/oficinas/perfiles', {
       estado,
     })
     
