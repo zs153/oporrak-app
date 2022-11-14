@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Calendario</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/bootstrap-icons.css">
+  <!-- custom -->
+  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel='stylesheet' href='/css/js-year-calendar.css'>
+</head>
+
+<body class="antialiased">
+  <div class="wrapper">
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row">
+            <div class="col-12">
+              <div class="card mt-1">
+                <% if(typeof alerts !='undefined' ) { %>
+                <% alerts.map(function (alert){ %>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <%- alert.msg %>
+                </div>
+                <% }) %>
+                <% } %>
+                <form action="/admin/calendarios/calendario" method="POST">
+                  <div class="card-header">
+                    <h3 class="card-title">Calendario</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <div class="form-label">Año</div>
+                          <select class="form-select" id="cboyea" value="">
+                            <option value="<%- new Date().getFullYear() %>">
+                              <%- new Date().getFullYear() %>
+                            </option>
+                            <option value="<%- new Date().getFullYear() +1 %>">
+                              <%- new Date().getFullYear() +1 %>
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="mb-1">
+                          <div class="form-label">Oficina</div>
+                          <select class="form-select" id="cboofi" name="ofiusu" value="">
+                            <% datos.oficinas.map(element=> { %>
+                            <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? "selected":"" %>>
+                              <%- element.DESOFI %>
+                            </option>
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-1">
+                          <div class="form-label">Usuario</div>
+                          <select class="form-select" id="cbousu" value="">
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="mb-1">
+                          <div class="form-label">Estado</div>
+                          <select class="form-select" id="cboest" value="">
+                            <option value="0" data-foo="" selected>
+                              TODOS
+                            </option>
+                            <% datos.arrTiposEstado.map(element=> { %>
+                            <option value="<%- element.ID %>" data-foo="<%- element.COLOR %>">
+                              <%- element.DES %>
+                            </option>
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="calendar"></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-horas" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title mt-0">Horas bolsa</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde</div>
+                      <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta</div>
+                      <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" id="btnHorasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-tele" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title mt-0">Atención telefónica</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde</div>
+                      <input type="date" id="desfectel" name="desfectel" class="form-control" >
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta</div>
+                      <input type="date" id="hasfectel" name="hasfectel" class="form-control" >
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde hora</div>
+                      <input type="time" id="deshortel" name="deshortel" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta hora</div>
+                      <input type="time" id="hashortel" name="hashortel" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" id="btnTeleCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/footer') %>
+  </div>
+
+  <script src="/js/ayuda.min.js"></script>
+  <script src="/js/js-year-calendar.js"></script>
+  <script src="/js/js-year-calendar.es.js"></script>
+  <script>
+    async function insertEvento(evento) {
+      let xhr = new XMLHttpRequest()
+
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              const result = JSON.parse(xhr.response)
+              const d = result.FECEST.split('/')
+
+              // insert en el calendario
+              let dataSource = calendario.getDataSource()
+              const estado = {
+                idesta: result.idesta,
+                usuest: params.usuario,
+                tipest: params.tipo,
+                id: result.idesta,
+                startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+                endDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+                color: params.color,
+              }
+
+              dataSource.push(estado)
+              if (estado.tipest === <%- datos.tiposEstado.horas.ID %>) {
+                document.getElementById('modal-horas').style.display = 'none'
+                calendario.setDataSource(dataSource)
+              } else if (estado.tipest === <%- datos.tiposEstado.telefono.ID %>) {
+                document.getElementById('modal-tele').style.display = 'none'
+                calendario.setDataSource(dataSource)
+              }
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8200/api/estados/insert', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(evento))
+      })
+    }
+    async function insertRangoEvento(evento) {
+      let xhr = new XMLHttpRequest()
+
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              const result = JSON.parse(xhr.response)
+              const d = result.DESDE.split('/')
+              const h = result.HASTA.split('/')
+
+              // insert en el calendario
+              // let dataSource = calendario.getDataSource()
+              // const estado = {
+              //   idesta: result.idesta,
+              //   usuest: params.usuario,
+              //   tipest: params.tipo,
+              //   id: result.idesta,
+              //   startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+              //   endDate: new Date(h[2] + '-' + h[1] + '-' + h[0]),
+              //   color: params.color,
+              // }
+
+              //dataSource.push(estado)
+              // calendario.setDataSource(dataSource, { preventRendering: false })
+              
+              document.getElementById('modal-tele').style.display = 'none'
+              estadosUsuario()
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8200/api/estados/inserts', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(evento))
+      })
+    }
+    async function deleteEvento(evento) {
+      const xhr = new XMLHttpRequest()
+
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              // update el calendario
+              let dataSource = calendario.getDataSource()
+
+              dataSource = dataSource.filter(itm => itm.idesta !== evento.estado.IDESTA)
+              calendario.setDataSource(dataSource, {
+                preventRendering: false
+              })
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8200/api/estados/delete', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(evento))
+      })
+    }
+    async function getEstadosWithPromise(prms) {
+      var xhr = new XMLHttpRequest();
+
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              resolve(JSON.parse(xhr.response))
+            }
+          }
+        }
+
+        xhr.open('POST', 'http://localhost:8200/api/estados/usuarios', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+        xhr.send(JSON.stringify(prms))
+      })
+    }
+    async function estadosUsuario() {
+      const prms = {
+        idofic: params.oficina,
+        usuest: params.usuario,
+        tipest: 0,
+        desde: params.desde,
+        hasta: params.hasta,
+      }
+      estados = await getEstadosWithPromise(prms)
+      getEstadosTipo(params.tipo)
+    }
+    const eventoEditado = async () => {
+      const evento = {
+        estado: {
+          FECEST: params.fecha,
+          USUEST: params.usuario,
+          TIPEST: params.tipo,
+          OFIEST: params.oficina,
+          DESHOR: '+00 08:30:00',
+          HASHOR: '+00 14:00:00',
+        },
+        movimiento: {
+          USUMOV: <%- user.id %>,
+          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+        }
+      }
+
+      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+        evento.estado.DESHOR = '+00 ' + document.getElementById('deshor').value + ':00'
+        evento.estado.HASHOR = '+00 ' + document.getElementById('hashor').value + ':00'
+      } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
+        //TODO dias
+        evento.estado.DESHOR = '+00 ' + document.getElementById('deshortel').value + ':00'
+        evento.estado.HASHOR = '+00 ' + document.getElementById('hashortel').value + ':00'
+      }
+
+      await insertEvento(evento)
+    }
+    const eventoRango = async () => {
+      const desde = document.getElementById('desfectel').value
+      const hasta = document.getElementById('hasfectel').value
+
+      const evento = {
+        estado: {
+          DESDE: desde,
+          HASTA: hasta,
+          USUEST: params.usuario,
+          TIPEST: params.tipo,
+          OFIEST: params.oficina,
+          DESHOR: '+00 08:30:00',
+          HASHOR: '+00 14:00:00',
+        },
+        movimiento: {
+          USUMOV: <%- user.id %>,
+          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+      }
+      }
+
+      evento.estado.DESHOR = '+00 ' + document.getElementById('deshortel').value + ':00'
+      evento.estado.HASHOR = '+00 ' + document.getElementById('hashortel').value + ':00'
+
+      await insertRangoEvento(evento)
+    }
+    const arrayFilterOficinas = (oficina) => {
+      const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
+      const myLista = trimmedData
+      const cbo = document.getElementById('cbousu')
+      cbo.innerHTML = "";
+
+      myLista.map(itm => {
+        const option = document.createElement('option')
+        option.value = itm.IDUSUA
+        option.text = itm.NOMUSU
+
+        if (itm.IDUSUA === <%- user.id %>) {
+          option.selected = true
+        }
+
+        cbo.appendChild(option)
+      })
+      params.usuario = document.getElementById('cbousu').value
+      params.tipo = 0
+
+      document.getElementById('cboest').selectedIndex = params.tipo
+    }
+    const getEstadosTipo = (tipo) => {
+      // no mostrar traspasos
+      const estadosTipo = tipo === 0 ? estados.filter(itm => itm.TIPEST !== <%- datos.tiposEstado.traspaso.ID %>) : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
+      let data = []
+
+      estadosTipo.map(itm => {
+        const estado = {
+          idesta: itm.IDESTA,
+          usuest: itm.USUEST,
+          tipest: itm.TIPEST,
+          id: itm.IDESTA,
+          startDate: new Date(itm.FECEST),
+          endDate: new Date(itm.FECEST),
+          color: colores[itm.TIPEST].COLOR,
+        }
+        data.push(estado)
+      })
+      calendario.setDataSource(data)
+    }
+    const editEvento = (e) => {
+      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+        const modalHoras = document.getElementById('modal-horas')
+
+        document.getElementById('deshor').value = "08:30"
+        document.getElementById('hashor').value = "14:00"
+        modalHoras.style.display = 'flex'
+      } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
+        const modalTele = document.getElementById('modal-tele')
+
+        const fecha = new Date(e.date.getFullYear(), e.date.getMonth(), e.date.getDate(), 1, 0, 0).toISOString().split('T')[0]
+        document.getElementById('desfectel').value = fecha
+        document.getElementById('hasfectel').value = fecha
+        document.getElementById('deshortel').value = "08:30"
+        document.getElementById('hashortel').value = "14:00"
+        modalTele.style.display = 'flex'
+      }
+    }
+  </script>
+  <script>
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
+    const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
+
+    let estados = null
+    let calendario = null
+    let currentYear = new Date().getFullYear()
+    let params = {
+      fecha: new Date().toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
+      oficina: <%- user.oficina %>,
+      usuario: <%- user.id %>,
+      tipo: 0,
+      color: '',
+      desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
+      hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
+    }
+
+    calendario = new Calendar("#calendar", {
+      minDate: new Date(currentYear, 0, 1),
+      maxDate: new Date(currentYear, 11, 31),
+      language: "es",
+      mouseOnDay: function(e) {
+        if (e.events.length > 0) {
+          e.element.setAttribute('data-bs-trigger', 'hover')
+          e.element.setAttribute('data-bs-toggle', 'popover')
+          e.element.setAttribute('title', colores[e.events[0].tipest].DES)
+        }
+      },
+    })
+
+    // modal
+    document.getElementById('btnTeleCancel').addEventListener('click', function() {
+      document.getElementById('modal-tele').style.display = 'none'
+    })
+    document.getElementById('btnHorasCancel').addEventListener('click', function() {
+      document.getElementById('modal-horas').style.display = 'none'
+    })
+    document.addEventListener('keydown', function(e) {
+      const modalHoras = document.getElementById('modal-horas')
+      const modalTele = document.getElementById('modal-tele')
+      const keyCode = e.keyCode;
+
+      if (keyCode === 27 && modalHoras.style.display === 'flex') {
+        modalHoras.style.display = 'none'
+      } else if (keyCode === 27 && modalTele.style.display === 'flex') {
+        modalTele.style.display = 'none'
+      }
+    })
+
+    // calendario
+    document.getElementById('cboyea').addEventListener('change', function() {
+      calendario.setYear(document.querySelector("#cboyea").value);
+      calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
+      calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
+
+      currentYear = parseInt(document.querySelector("#cboyea").value)
+      params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      })
+      params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      })
+
+      estadosUsuario()
+    });
+    document.getElementById('cboofi').addEventListener('change', function() {
+      params.oficina = parseInt(this.value)
+
+      arrayFilterOficinas(params.oficina)
+      estadosUsuario()
+    });
+    document.getElementById('cbousu').addEventListener('change', function() {
+      params.usuario = parseInt(this.value)
+
+      // cambia el estado al primer elemento TODOS
+      //document.getElementById('cboest').selectedIndex = 0
+      estadosUsuario()
+    });
+    document.getElementById('cboest').addEventListener('change', function() {
+      params.color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
+      params.tipo = parseInt(this.value)
+
+      estadosUsuario()
+    });
+    document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
+      // bloquear festivos
+      if (e.events.length > 0 &&
+        e.events[0].idesta === 0 ||
+        e.element.classList.contains('domingo') ||
+        params.color === '') {
+        return
+      }
+
+      params.fecha = e.date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+
+      // bloquear solapes
+      const result = estados.find(itm => itm.STRFEC === params.fecha)
+      if (result) {
+        if (result.TIPEST !== params.tipo) {
+          e.element.setAttribute('data-bs-trigger', 'hover')
+          e.element.setAttribute('data-bs-toggle', 'popover')
+          e.element.setAttribute('title', 'Solape de horas')
+          return
+        }
+      }
+
+      if (e.events.length === 0 &&
+        (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
+        params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
+        editEvento(e)
+      } else {
+        if (e.element.style.boxShadow) {
+          e.element.style.boxShadow = null
+        } else {
+          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+        }
+
+        if (e.events.length) {
+          if (e.events[0].id > 0) {
+            const evento = {
+              estado: {
+                IDESTA: e.events[0].idesta,
+              },
+              movimiento: {
+                USUMOV: <%- user.id %>,
+                TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+              }
+            }
+
+            await deleteEvento(evento)
+          }
+        } else {
+          const evento = {
+            estado: {
+              FECEST: params.fecha,
+              USUEST: params.usuario,
+              TIPEST: params.tipo,
+              OFIEST: params.oficina,
+              DESHOR: '+00 08:30:00',
+              HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
+            },
+            movimiento: {
+              USUMOV: <%- user.id %>,
+              TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+            }
+          }
+
+          await insertEvento(evento)
+        }
+      }
+    })
+
+    arrayFilterOficinas(params.oficina)
+    estadosUsuario()
+  </script>
+
+</body>
+
+</html>

@@ -21,7 +21,7 @@ export const mainPage = async (req, res) => {
 
     const estados = result.data.filter(itm => itm.TIPEST !== tiposEstado.traspasado.ID)
     const datos = {
-      estados: JSON.stringify(estados)
+      estados,
     }
 
     res.render('admin', { user, datos })

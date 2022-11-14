@@ -191,6 +191,14 @@ export const arrTiposEstado = [
   { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
   { ID: 9, DES: "TELÉFONO", COLOR: "#FFFB05" },
 ]
+export const arrTiposEstadoUsuario = [
+  { ID: 2, DES: "VACACIÓN", COLOR: "#0D8004" },
+  { ID: 3, DES: "BAJA", COLOR: "#800209" },
+  { ID: 5, DES: "FORMACIÓN", COLOR: "#063780" },
+  { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#FFA80A" },
+  { ID: 7, DES: "REUNION", COLOR: "#DCD20D" },
+  { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
+]
 
 export const arrColoresEstado = [
   { ID: 0, DES: "FESTIVO", COLOR: "#FF0000" },
