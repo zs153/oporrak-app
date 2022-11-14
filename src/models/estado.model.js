@@ -13,9 +13,9 @@ const baseQuery = `SELECT
 FROM estados
 `
 const estadosFechaPerfilQuery = `SELECT 
-  p1.nomusu, p1.telusu, p1.PERROL, p1.tipest, oo.desofi 
+  p1.nomusu, p1.userid, p1.telusu, p1.PERROL, p1.tipest, oo.desofi 
 FROM (
-  SELECT uu.nomusu, uu.telusu, uu.ofiusu,
+  SELECT uu.nomusu, uu.telusu, uu.ofiusu, uu.userid,
     CASE WHEN uu.rolusu = 2 THEN uu.perusu -1 ELSE uu.perusu END AS "PERROL",
     CASE WHEN zz.tipest IS NULL THEN 1 ELSE zz.tipest END AS "TIPEST"
     FROM (SELECT ee.usuest, ee.tipest
