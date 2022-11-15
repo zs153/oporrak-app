@@ -114,7 +114,7 @@ export const forgotPassword = async (req, res) => {
 
     res.render("log/sign-in", {
       datos: req.body,
-      alerts: [{ msg }],
+      alerts: [{ error }],
     });
   }
 };
