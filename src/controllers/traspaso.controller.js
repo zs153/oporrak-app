@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { tiposEstado, tiposMovimiento, arrColoresEstado } from '../public/js/enumeraciones'
+import { tiposRol, tiposEstado, tiposMovimiento, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
@@ -11,6 +11,7 @@ export const mainPage = async (req, res) => {
       oficinas: oficinas.data,
       usuarios: usuarios.data,
       tiposEstado,
+      tiposRol,
       arrColoresEstado,
       tiposMovimiento,
     }

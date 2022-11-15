@@ -3,6 +3,7 @@ import {
   arrEstadosSms,
   estadosSms,
   tiposMovimiento,
+  tiposRol,
 } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -20,6 +21,7 @@ export const mainPage = async (req, res) => {
       smss: JSON.stringify(result.data),
       estadosSms,
       verTodo,
+      tiposRol,
     }
 
     res.render('admin/smss', { user, datos })
@@ -37,6 +39,7 @@ export const addPage = async (req, res) => {
   try {
     const datos = {
       arrEstadosSms,
+      tiposRol,
     }
 
     res.render('admin/smss/add', { user, datos })
@@ -61,6 +64,7 @@ export const editPage = async (req, res) => {
     const datos = {
       sms: result.data,
       arrEstadosSms,
+      tiposRol,
     }
 
     res.render('admin/smss/edit', { user, datos })

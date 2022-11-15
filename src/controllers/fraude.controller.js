@@ -50,6 +50,7 @@ export const addPage = async (req, res) => {
     };
     const datos = {
       fraude,
+      tiposRol,
     };
 
     res.render("admin/fraudes/add", { user, datos });
@@ -148,6 +149,7 @@ export const resolverPage = async (req, res) => {
     const datos = {
       fraude: result.data,
       subtipos: subtipos.data,
+      tiposRol,
       hayLiquidacion,
     };
 
@@ -183,6 +185,7 @@ export const hitoseventosPage = async (req, res) => {
       hitos: hitos.data,
       eventos: eventos.data,
       estadosHito,
+      tiposRol,
     };
 
     res.render("admin/fraudes/hitoseventos/index", { user, datos });
@@ -215,6 +218,7 @@ export const roHitosEventosPage = async (req, res) => {
       hitos: hitos.data,
       eventos: eventos.data,
       estadosHito,
+      tiposRol,
     };
 
     res.render("admin/fraudes/hitoseventos/readOnly", { user, datos });
@@ -238,6 +242,7 @@ export const addHitosPage = async (req, res) => {
     const datos = {
       fraude,
       estadosHito,
+      tiposRol,
     };
 
     res.render("admin/fraudes/hitos/add", { user, datos });
@@ -268,6 +273,7 @@ export const editHitosPage = async (req, res) => {
       fraude,
       hito: result.data,
       estadosHito,
+      tiposRol,
     };
 
     res.render("admin/fraudes/hitos/edit", { user, datos });
@@ -291,6 +297,7 @@ export const addEventosPage = async (req, res) => {
   try {
     const datos = {
       fraude,
+      tiposRol,
     };
 
     res.render("admin/fraudes/eventos/add", { user, datos });
@@ -320,6 +327,7 @@ export const editEventosPage = async (req, res) => {
     const datos = {
       fraude,
       evento: result.data,
+      tiposRol,
     };
 
     res.render("admin/fraudes/eventos/edit", { user, datos });
@@ -355,6 +363,7 @@ export const ejercicioPage = async (req, res) => {
 
     const datos = {
       fraude,
+      tiposRol,
     };
 
     res.render("admin/fraudes/ejercicio", { user, datos });
@@ -394,6 +403,7 @@ export const relacionPage = async (req, res) => {
 
     const datos = {
       fraude,
+      tipoRol,
     };
 
     res.render("admin/fraudes/relacion", { user, datos });

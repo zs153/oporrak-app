@@ -6,6 +6,7 @@ import {
   arrTiposPerfil,
   tiposMovimiento,
   tiposEstado,
+  tiposRol,
 } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -22,6 +23,7 @@ export const mainPage = async (req, res) => {
     const estados = result.data.filter(itm => itm.TIPEST !== tiposEstado.traspasado.ID)
     const datos = {
       estados,
+      tiposRol,
     }
 
     res.render('admin', { user, datos })
@@ -45,6 +47,7 @@ export const perfilPage = async (req, res) => {
 
     const datos = {
       usuario: result.data,
+      tiposRol,
       arrTiposRol,
       arrTiposPerfil,
     }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { tiposMovimiento } from '../public/js/enumeraciones'
+import { tiposRol, tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
@@ -8,6 +8,7 @@ export const mainPage = async (req, res) => {
     const result = await axios.post('http://localhost:8200/api/oficinas')
     const datos = {
       oficinas: JSON.stringify(result.data),
+      tiposRol,
     }
 
     res.render('admin/oficinas', { user, datos })
@@ -21,9 +22,12 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
+  const datos = {
+    tiposRol,
+  }
 
   try {
-    res.render('admin/oficinas/add', { user })
+    res.render('admin/oficinas/add', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -43,6 +47,7 @@ export const editPage = async (req, res) => {
     })
     const datos = {
       oficina: result.data,
+      tiposRol,
     }
 
     res.render('admin/oficinas/edit', { user, datos })

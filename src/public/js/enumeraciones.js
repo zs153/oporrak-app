@@ -136,7 +136,7 @@ export const tiposEstado = {
   horas: { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
   telefono: { ID: 9, DES: "ATENCION TELEFÓNICA", COLOR: "#FFFB05" },
   traspasado: { ID: 10, DES: "TRASPASADO", COLOR: "#808000" }
-};
+}
 
 /* arrays */
 export const arrTiposRol = [

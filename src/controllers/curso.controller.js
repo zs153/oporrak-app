@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { arrEstadosCurso, estadosCurso, tiposMovimiento } from '../public/js/enumeraciones'
+import { tiposRol, arrEstadosCurso, estadosCurso, tiposMovimiento } from '../public/js/enumeraciones'
 
 // page cursos
 export const mainPage = async (req, res) => {
@@ -10,6 +10,7 @@ export const mainPage = async (req, res) => {
     const datos = {
       cursos: result.data,
       arrEstadosCurso: arrEstadosCurso,
+      tiposRol,
     }
 
     res.render('admin/cursos', { user, datos })
@@ -30,6 +31,7 @@ export const addPage = async (req, res) => {
   const datos = {
     curso,
     arrEstadosCurso,
+    tiposRol,
   }
 
   try {
@@ -55,6 +57,7 @@ export const editPage = async (req, res) => {
     const datos = {
       curso: result.data,
       arrEstadosCurso,
+      tiposRol,
     }
     res.render('admin/cursos/edit', { user, datos })
   } catch (error) {
@@ -83,6 +86,7 @@ export const turnosPage = async (req, res) => {
     const datos = {
       curso: result.data,
       turnos: turnos.data,
+      tiposRol,
     };
 
     res.render("admin/cursos/turnos", { user, datos });
@@ -113,6 +117,7 @@ export const addTurnoPage = async (req, res) => {
     const datos = {
       curso,
       turno,
+      tiposRol,
     };
 
     res.render("admin/cursos/turnos/add", { user, datos });
@@ -142,6 +147,7 @@ export const editTurnoPage = async (req, res) => {
     const datos = {
       curso,
       turno: result.data,
+      tiposRol,
     };
 
     res.render("admin/cursos/turnos/edit", { user, datos });
@@ -172,6 +178,7 @@ export const usuariosPage = async (req, res) => {
     const datos = {
       curso: result.data,
       usuarios: usuarios.data,
+      tiposRol,
     };
 
     res.render("admin/cursos/usuarios", { user, datos });
@@ -199,6 +206,7 @@ export const usuariosAddPage = async (req, res) => {
     const datos = {
       curso: result.data,
       usuarios: usuarios.data,
+      tiposRol,
     };
 
     res.render("admin/cursos/usuarios/add", { user, datos });
@@ -232,6 +240,7 @@ export const usuariosTurnoPage = async (req, res) => {
       curso,
       turno: result.data,
       usuarios: usuarios.data,
+      tiposRol,
     }
 
     res.render('admin/cursos/turnos/usuarios', { user, datos })
@@ -263,6 +272,7 @@ export const usuariosTurnoAddPage = async (req, res) => {
       curso,
       turno: result.data,
       usuarios: usuarios.data,
+      tiposRol,
     };
 
     res.render("admin/cursos/turnos/usuarios/add", { user, datos });

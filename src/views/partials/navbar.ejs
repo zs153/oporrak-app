@@ -31,56 +31,58 @@
                   </span>
                 </a>
               </li>
-              <li class="nav-item <%- opcion === 'TRASPASO' ? 'active':'' %>">
-                <a class="nav-link" href="/admin/traspasos">
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-building"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Traspasos
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item <%- opcion === 'MATRICULA' ? 'active':'' %>">
-                <a class="nav-link" href="/admin/matriculas">
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-credit-card"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Matrículas
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item <%- opcion === 'CURSO' ? 'active':'' %>">
-                <a class="nav-link" href="/admin/cursos">
-                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                    <i class="bi bi-book"></i>
-                  </span>
-                  <span class="nav-link-title">
-                    Cursos
-                  </span>
-                </a>
-              </li>
-              <li class="nav-item dropdown <%- opcion === 'ADMINISTRACION' ? 'active':'' %>">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
-                  <span>Administración</span>
-                </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <a href="/admin/oficinas" class="dropdown-item">
-                        <i class="bi bi-people dropdown-item-icon"></i>Oficinas
-                      </a>
-                      <a href="/admin/festivos" class="dropdown-item">
-                        <i class="bi bi-basket dropdown-item-icon"></i>Festivos
-                      </a>
-                      <a href="/admin/usuarios" class="dropdown-item">
-                        <i class="bi bi-people dropdown-item-icon"></i>Usuarios
-                      </a>
+              <% if (user.rol === datos.tiposRol.admin || user.rol === datos.tiposRol.responsable) { %>
+                <li class="nav-item <%- opcion === 'TRASPASO' ? 'active':'' %>">
+                  <a class="nav-link" href="/admin/traspasos">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="bi bi-building"></i>
+                    </span>
+                    <span class="nav-link-title">
+                      Traspasos
+                    </span>
+                  </a>
+                </li>
+                <li class="nav-item <%- opcion === 'MATRICULA' ? 'active':'' %>">
+                  <a class="nav-link" href="/admin/matriculas">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="bi bi-credit-card"></i>
+                    </span>
+                    <span class="nav-link-title">
+                      Matrículas
+                    </span>
+                  </a>
+                </li>
+                <li class="nav-item <%- opcion === 'CURSO' ? 'active':'' %>">
+                  <a class="nav-link" href="/admin/cursos">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="bi bi-book"></i>
+                    </span>
+                    <span class="nav-link-title">
+                      Cursos
+                    </span>
+                  </a>
+                </li>
+                <li class="nav-item dropdown <%- opcion === 'ADMINISTRACION' ? 'active':'' %>">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
+                    <span>Administración</span>
+                  </a>
+                  <div class="dropdown-menu">
+                    <div class="dropdown-menu-columns">
+                      <div class="dropdown-menu-column">
+                        <a href="/admin/oficinas" class="dropdown-item">
+                          <i class="bi bi-people dropdown-item-icon"></i>Oficinas
+                        </a>
+                        <a href="/admin/festivos" class="dropdown-item">
+                          <i class="bi bi-basket dropdown-item-icon"></i>Festivos
+                        </a>
+                        <a href="/admin/usuarios" class="dropdown-item">
+                          <i class="bi bi-people dropdown-item-icon"></i>Usuarios
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
+                </li>
+              <% } %>
             </ul>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { tiposMovimiento, estadosCarga } from "../public/js/enumeraciones";
+import { tiposRol, tiposMovimiento, estadosCarga } from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
@@ -8,6 +8,7 @@ export const mainPage = async (req, res) => {
     const result = await axios.post("http://localhost:8200/api/cargas");
     const datos = {
       cargas: JSON.stringify(result.data),
+      tiposRol,
       estadosCarga,
     };
 
@@ -22,9 +23,11 @@ export const mainPage = async (req, res) => {
 };
 export const addPage = async (req, res) => {
   const user = req.user;
-
+  const datos = {
+    tiposRol,
+  }
   try {
-    res.render("admin/cargas/add", { user });
+    res.render("admin/cargas/add", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
 
@@ -45,6 +48,7 @@ export const editPage = async (req, res) => {
     });
     const datos = {
       carga: result.data,
+      tiposRol,
     };
 
     res.render("admin/cargas/edit", { user, datos });

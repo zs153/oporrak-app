@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { tiposMovimiento } from '../public/js/enumeraciones'
+import { tiposRol, tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
@@ -8,6 +8,7 @@ export const mainPage = async (req, res) => {
     const oficinas = await axios.post('http://localhost:8200/api/oficinas')
     const datos = {
       oficinas: oficinas.data,
+      tiposRol,
       tiposMovimiento,
     }
 

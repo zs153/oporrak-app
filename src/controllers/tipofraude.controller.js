@@ -1,5 +1,5 @@
 import axios from "axios";
-import { tiposMovimiento } from "../public/js/enumeraciones";
+import { tiposRol, tiposMovimiento } from "../public/js/enumeraciones";
 
 export const mainPage = async (req, res) => {
   const user = req.user;
@@ -8,6 +8,7 @@ export const mainPage = async (req, res) => {
     const result = await axios.post("http://localhost:8200/api/tipos/fraudes");
     const datos = {
       tipos: JSON.stringify(result.data),
+      tiposRol,
     };
 
     res.render("admin/tipos/fraudes", { user, datos });
@@ -21,8 +22,12 @@ export const mainPage = async (req, res) => {
 };
 export const addPage = async (req, res) => {
   const user = req.user;
+  const datos = {
+    tiposRol,
+  }
+
   try {
-    res.render("admin/tipos/fraudes/add", { user });
+    res.render("admin/tipos/fraudes/add", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los datos de la aplicación.";
 
@@ -43,6 +48,7 @@ export const editPage = async (req, res) => {
     });
     const datos = {
       tipo: result.data,
+      tiposRol,
     };
 
     res.render("admin/tipos/fraudes/edit", { user, datos });

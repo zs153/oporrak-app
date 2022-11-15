@@ -1,17 +1,30 @@
 import axios from 'axios'
-import { tiposEstado, tiposMovimiento, arrTiposEstado, arrColoresEstado } from '../public/js/enumeraciones'
+import { tiposEstado, tiposRol, tiposMovimiento, arrTiposEstado, arrTiposEstadoUsuario, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
-    const usuarios = await axios.post('http://localhost:8200/api/usuarios')
+    let oficinas = await axios.post('http://localhost:8200/api/oficinas')
+    let usuarios = await axios.post('http://localhost:8200/api/usuarios')
+
+    if (req.user.rol === tiposRol.admin) {
+      oficinas = oficinas.data
+      usuarios = usuarios.data
+    } else if (req.user.rol === tiposRol.responsable) {
+      oficinas = oficinas.data.filter(itm => itm.IDOFIC === req.user.oficina)
+      usuarios = usuarios.data.filter(itm => itm.OFIUSU === req.user.oficina)
+    } else {
+      oficinas = oficinas.data.filter(itm => itm.IDOFIC === req.user.oficina)
+      usuarios = usuarios.data.filter(itm => itm.IDUSUA === req.user.id)
+    }
+
     const datos = {
-      oficinas: oficinas.data,
-      usuarios: usuarios.data,
+      oficinas,
+      usuarios,
       tiposEstado,
-      arrTiposEstado,
+      tiposRol,
+      arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario:arrTiposEstado,
       arrColoresEstado,
       tiposMovimiento,
     }

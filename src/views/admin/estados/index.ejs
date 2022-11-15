@@ -42,9 +42,11 @@
                       <div class="mb-1">
                         <div class="form-label">Oficina</div>
                         <select class="form-select" id="cboofi" name="ofiest" value="">
-                          <option value="0">
-                            TODAS
-                          </option>
+                          <% if (datos.oficinas.length > 1 ) { %>
+                            <option value="0">
+                              TODAS
+                            </option>
+                          <% } %>
                           <% datos.oficinas.map(element=> { %>
                           <option value="<%= element.IDOFIC %>">
                             <%= element.DESOFI %>
@@ -136,6 +138,18 @@
       if (isNaN(Date.parse(hastaValue))) {
         setError(hasta, 'Fecha requerida')
         setTimeout(function() {
+          setSuccess(hasta)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(hasta)
+      }
+
+      const mesDesde = desdeValue.split('-')[1]
+      const mesHasta = hastaValue.split('-')[1]
+      if (mesDesde !== mesHasta) {
+        setError(hasta, 'Rango de fechas debe estar en el mismo mes')
+        setTimeout(function () {
           setSuccess(hasta)
         }, 3000)
         return false

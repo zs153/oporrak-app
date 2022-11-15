@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { tiposEstado, arrTiposPerfil } from '../public/js/enumeraciones'
+import { tiposRol, tiposEstado, arrTiposPerfil } from '../public/js/enumeraciones'
 
 // pages
 export const mainPage = async (req, res) => {
@@ -11,10 +11,18 @@ export const mainPage = async (req, res) => {
   const hasta = new Date(currentYear, currentMonth, lastDayMonth, 1, 0, 0).toISOString().split('T')[0]
 
   try {
-    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
+    let oficinas = await axios.post('http://localhost:8200/api/oficinas')
+
+    if (req.user.rol === tiposRol.admin) {
+      oficinas = oficinas.data
+    } else {
+      oficinas = oficinas.data.filter(itm => itm.IDOFIC === req.user.oficina)
+    }
+
     const datos = {
-      oficinas: oficinas.data,
+      oficinas,
       arrTiposPerfil,
+      tiposRol,
       desde,
       hasta,
     }
@@ -62,6 +70,7 @@ export const estadosPage = async (req, res) => {
       oficinas: oficinas.data,
       festivos: festivos.data,
       tiposEstado,
+      tiposRol,
       arrTiposPerfil,
       periodo,
       diasPeriodo,

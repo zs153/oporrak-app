@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { arrEstadosMatricula, estadosMatricula, tiposMovimiento } from '../public/js/enumeraciones'
+import { tiposRol, arrEstadosMatricula, estadosMatricula, tiposMovimiento } from '../public/js/enumeraciones'
 
 // page matriculas
 export const mainPage = async (req, res) => {
@@ -10,6 +10,7 @@ export const mainPage = async (req, res) => {
     const datos = {
       estados: arrEstadosMatricula,
       matriculas: result.data,
+      tiposRol,
     }
 
     res.render('admin/matriculas', { user, datos })
@@ -33,6 +34,7 @@ export const addPage = async (req, res) => {
   const datos = {
     arrEstadosMatricula,
     matricula,
+    tiposRol,
   }
 
   try {
@@ -59,6 +61,7 @@ export const editPage = async (req, res) => {
     const datos = {
       arrEstadosMatricula,
       matricula: result.data,
+      tiposRol,
     }
 
     res.render('admin/matriculas/edit', { user, datos })
@@ -88,6 +91,7 @@ export const usuariosPage = async (req, res) => {
     const datos = {
       matricula: result.data,
       usuarios: usuarios.data,
+      tiposRol,
     };
 
     res.render("admin/matriculas/usuarios", { user, datos });
@@ -115,6 +119,7 @@ export const usuariosAddPage = async (req, res) => {
     const datos = {
       matricula: result.data,
       usuarios: usuarios.data,
+      tiposRol,
     };
 
     res.render("admin/matriculas/usuarios/add", { user, datos });

@@ -1,13 +1,13 @@
 import express from "express";
-import { verifyTokenAndAdmin } from "../middleware/auth";
+import authRoutes from "../middleware/auth";
 import { mainPage, estadosPage } from "../controllers/estado.controller";
 
 const estadoRouter = express.Router();
 
 // paginas
-estadoRouter.get("/estados", verifyTokenAndAdmin, mainPage);
+estadoRouter.get("/estados", authRoutes, mainPage);
 
 // proc
-estadoRouter.post("/estados/estados", verifyTokenAndAdmin, estadosPage);
+estadoRouter.post("/estados/estados", authRoutes, estadosPage);
 
 export default estadoRouter;

@@ -26,6 +26,7 @@ export const mainPage = async (req, res) => {
     const datos = {
       usuarios: JSON.stringify(result.data),
       estadosUsuario,
+      tiposRol,
     }
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
@@ -110,6 +111,7 @@ export const perfilPage = async (req, res) => {
 
     const datos = {
       usuario,
+      tiposRol,
     }
     res.render('admin/usuarios/perfil', { user, datos })
   } catch (error) {
