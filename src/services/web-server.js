@@ -4,7 +4,7 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import cors from 'cors'
-import { port } from '../config/settings'
+import { port, dbPool } from '../config/settings'
 import apiOficinaRouter from '../routes/oficina.router'
 import apiSmsRouter from '../routes/sms.router'
 import apiGenteRouter from '../routes/gente.router'
@@ -59,7 +59,7 @@ function initialize() {
     httpServer
       .listen(port)
       .on('listening', () => {
-        console.log(`Web server listening on localhost:${port}`)
+        console.log(`Web server listening on conexion: ${dbPool.connectString} port:${port} `)
 
         resolve()
       })
