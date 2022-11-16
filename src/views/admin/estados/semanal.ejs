@@ -53,7 +53,8 @@
       width: 1246px;
     }
 
-    tbody.scrollContent td, tbody.scrollContent tr.normalRow td {
+    tbody.scrollContent td,
+    tbody.scrollContent tr.normalRow td {
       border-bottom: 1px solid #DDD;
       border-left: 1px solid #DDD;
       border-right: 1px solid #CCC;
@@ -75,6 +76,7 @@
       overflow: auto;
       width: 1246px;
     }
+
     #tblEstados thead,
     tbody {
       overflow-y: auto;
@@ -111,7 +113,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #0d8004;
@@ -122,7 +124,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #800209;
@@ -133,7 +135,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #61054a;
@@ -144,7 +146,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #808000;
@@ -155,7 +157,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #063780;
@@ -166,7 +168,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #ffa80a;
@@ -177,7 +179,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #dcd20d;
@@ -188,7 +190,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #05cbf5;
@@ -199,7 +201,7 @@
       display: inline-block;
       position: absolute;
       left: -1px;
-      width: 28px;
+      width: 14px;
       height: 10px;
       top: 4px;
       background-color: #fffb05;
@@ -243,7 +245,7 @@
                 </div>
                 <div class="card-body">
                   <div class="tableContainer">
-                    <table id="tblEstados" >
+                    <table id="tblEstados">
                       <thead class="fixedHeader">
                       </thead>
                       <tbody class="scrollContent">
@@ -287,15 +289,15 @@
       if (estados.length === 0) {
         return
       }
-      
+
       estados.map(itm => {
         const dia = new Date(itm.FECHA).getDate();
         const diaSemana = new Date(itm.FECHA).getDay()
         const festivo = festivos.find(q => q.FECFES === itm.FECHA)
         const desdeHora = itm.DESHOR.split(':')
         const hastaHora = itm.HASHOR.split(':')
-        const offsetDesde = (parseInt(desdeHora[0]) -8) *2 + (parseInt(desdeHora[1]) < 30 ? 0:1)
-        const offsetHasta = (parseInt(hastaHora[0]) -8) *2 + (parseInt(hastaHora[1]) < 30 ? 0 : 1)
+        const offsetDesde = (parseInt(desdeHora[0]) - 8) * 2 + (parseInt(desdeHora[1]) < 30 ? 0 : 1)
+        const offsetHasta = (parseInt(hastaHora[0]) - 8) * 2 + (parseInt(hastaHora[1]) < 30 ? 0 : 1)
 
         if (oficinaActual != itm.OFIUSU || usuarioActual != itm.IDUSUA) {
           if (usuarioActual) {
@@ -315,7 +317,7 @@
             }
           }
 
-          estadosUsuario = new Array(diasPeriodo *14).fill(1);  // todos en activo
+          estadosUsuario = new Array(diasPeriodo * 14).fill(1); // todos en activo
           usuarioActual = itm.IDUSUA;
           nombreUsuario = itm.NOMUSU;
         }
@@ -328,7 +330,7 @@
             rowCount++;
 
             //reiniciar
-            activosOficina = new Array(diasPeriodo *14).fill(0)
+            activosOficina = new Array(diasPeriodo * 14).fill(0)
           }
 
           rows[rowCount] = new Array();
@@ -341,12 +343,12 @@
 
         //acumulado estados
         if (diaSemana === 6 || diaSemana === 0 || festivo) {
-          for (let i = offsetDesde; i <= offsetHasta; i++) {
+          for (let i = offsetDesde; i < offsetHasta; i++) {
             estadosUsuario[(diaSemana - 1) * 14 + i] = -1
           }
         } else {
-          for (let i = offsetDesde; i <= offsetHasta; i++) {
-            estadosUsuario[(diaSemana -1) *14 + i] = Number(itm.TIPEST)
+          for (let i = offsetDesde; i < offsetHasta; i++) {
+            estadosUsuario[(diaSemana - 1) * 14 + i] = Number(itm.TIPEST)
           }
         }
       })
@@ -359,7 +361,7 @@
       rowCount++;
 
       //total ultimo usuario
-      for (var i = 0; i < diasPeriodo *14; i++) {
+      for (var i = 0; i < diasPeriodo * 14; i++) {
         if (estadosUsuario[i] === 1 || estadosUsuario[i] === 10) {
           activosOficina[i]++;
         }
@@ -404,6 +406,7 @@
         col.appendChild(texto)
         col.colSpan = 14
         col.style.cssText = "border: none; text-align: center"
+        col.style.minWidth = "14px"
 
         rowHeader.appendChild(col)
         tblHeader.appendChild(rowHeader)
@@ -425,7 +428,26 @@
           col.appendChild(texto)
           col.colSpan = 2
           col.style.cssText = "border: none; text-align: center"
-  
+          col.style.minWidth = "14px"
+
+          rowSubHeader.appendChild(col)
+          tblHeader.appendChild(rowSubHeader)
+        }
+      }
+
+      // temporal
+      rowSubHeader = document.createElement("tr")
+      col = document.createElement('th')
+      col.style.cssText = "border: none;"
+
+      rowSubHeader.appendChild(col)
+      tblHeader.appendChild(rowSubHeader)
+      for (let j = 0; j < diasPeriodo; j++) {
+        for (let i = 0; i < 14; i++) {
+          col = document.createElement('th')
+          col.style.cssText = "border: none;"
+          col.style.minWidth = "14px"
+
           rowSubHeader.appendChild(col)
           tblHeader.appendChild(rowSubHeader)
         }
@@ -439,7 +461,7 @@
           col = document.createElement('td')
           texto = document.createTextNode(itm[1])
 
-          col.appendChild(texto)          
+          col.appendChild(texto)
           col.style.cssText = "color: blue; border: none; text-align: center;"
           col.style.minWidth = "250px"
 
@@ -481,33 +503,32 @@
           for (var i = 0; i < diasPeriodo * 14; i++) {
             if (itm[1][i] === -1) {
               // festivo
-              var col = document.createElement("td")
+              col = document.createElement("td")
               col.style.background = '#FAFAFA'
-              col.colSpan = 2
+              col.style.minWidth = "14px"
 
               rowUsuario.appendChild(col)
-            } else if (itm[1][i] === 0) {
+            } else if (itm[1][i] === <%- datos.tiposEstado.festivo.ID %>) {
               // usuario en activo
-              var col = document.createElement("td")
+              col = document.createElement("td")
               col.style.background = '#FAFAFA'
-              col.colSpan = 2
+              col.style.minWidth = "14px"
 
               rowUsuario.appendChild(col)
-            } else if (itm[1][i] === 1) {
+            } else if (itm[1][i] === <%- datos.tiposEstado.activo.ID %>) {
               // usuario en activo
-              var col = document.createElement("td")
-              //texto = document.createTextNode('H')
-              
-              //col.appendChild(texto)
-              col.colSpan = 2
+              col = document.createElement("td")
+              col.style.minWidth = "14px"
+
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.vacacion.ID %>) {
               var col = document.createElement("td")
               var texto = document.createTextNode('vacación')
-              
+
               col.className = 'timeline vacas'
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
-              
+
               // popup
               var sub = document.createElement("div")
               sub.className = 'popup'
@@ -520,6 +541,7 @@
               var texto = document.createTextNode('baja')
 
               col.className = 'timeline bajas'
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'
@@ -532,6 +554,7 @@
               var texto = document.createTextNode('traspaso')
 
               col.className = 'timeline trasp'
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'
@@ -544,6 +567,7 @@
               var texto = document.createTextNode('formación')
 
               col.className = 'timeline forma'
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'
@@ -553,9 +577,10 @@
             } else if (itm[1][i] === <%- datos.tiposEstado.conciliacion.ID %>) {
               var col = document.createElement("td");
               var sub = document.createElement("div");
-              var texto = document.createTextNode('conciliación');
+              var texto = document.createTextNode(`conciliación`);
 
               col.className = 'timeline conci';
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -568,6 +593,7 @@
               var texto = document.createTextNode('reunión');
 
               col.className = 'timeline reuni';
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -580,6 +606,7 @@
               var texto = document.createTextNode('horas');
 
               col.className = 'timeline horas';
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -592,6 +619,7 @@
               var texto = document.createTextNode('teléfono');
 
               col.className = 'timeline tele';
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -604,6 +632,7 @@
               var texto = document.createTextNode('traspasado')
 
               col.className = 'timeline trasdo'
+              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'
@@ -675,7 +704,7 @@
 
           rowOficina.appendChild(col)
 
-          for (var i = 0; i < diasPeriodo *14; i++) {
+          for (var i = 0; i < diasPeriodo * 14; i++) {
             var col = document.createElement("td")
             col.style.cssText = "color: green; border: none; text-align: center;"
             var texto = document.createTextNode(itm[1][i])
@@ -695,7 +724,7 @@
           tblBody.appendChild(rowUsuario)
 
           // tipos de estado
-          for (var i = 0; i < diasPeriodo *14; i++) {
+          for (var i = 0; i < diasPeriodo * 14; i++) {
             if (itm[1][i] === -1) {
               // festivo
               var col = document.createElement("td")
