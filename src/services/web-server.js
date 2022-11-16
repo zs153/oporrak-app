@@ -59,7 +59,7 @@ function initialize() {
     httpServer
       .listen(port)
       .on('listening', () => {
-        console.log(`Web server listening on conexion: ${dbPool.connectString} port:${port} `)
+        console.log(`Web server listening on conexion: port:${port} `)
 
         resolve()
       })

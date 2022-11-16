@@ -68,7 +68,8 @@ WHERE ee.usuest = :usuest AND
   ee.ofiest = :idofic AND
   ee.fecest BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
 `
-const estadosOficinaPerfilQuery = `SELECT t1.ofiusu, t1.idusua, 
+const estadosOficinaPerfilQuery = `SELECT 
+  t1.ofiusu, t1.idusua, 
   TO_CHAR(t1.fecha, 'YYYY-MM-DD') AS "FECHA", 
   t1.tipest, t1.deshor, t1.hashor, 
   uu.nomusu,
@@ -298,9 +299,11 @@ export const estadosOficinaPerfil = async (context) => {
 
   if (context.OFIEST === 0) {
     delete context.OFIEST
-    query += `ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
+    query += `WHERE SUBSTR(oo.codofi, 1, 1) = 'D'
+      ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
   } else {
-    query += `WHERE t1.ofiusu = :ofiest ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`;
+    query += `WHERE t1.ofiusu = :ofiest
+      ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`    
   }
 
   const result = await simpleExecute(query, context)
