@@ -55,7 +55,6 @@ export const estadosPage = async (req, res) => {
   const diasPeriodo = Math.ceil(new Date(periodo.hasta).getDate() - new Date(periodo.desde).getDate(), (1000 * 60 * 60 * 24)) + 1
 
   try {
-    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
     const festivos = await axios.post('http://localhost:8200/api/festivos/oficinas', {
       desde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       hasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
@@ -67,7 +66,6 @@ export const estadosPage = async (req, res) => {
     
     const datos = {
       estados: estados.data,
-      oficinas: oficinas.data,
       festivos: festivos.data,
       tiposEstado,
       tiposRol,
@@ -81,6 +79,55 @@ export const estadosPage = async (req, res) => {
     }
 
     res.render('admin/estados/estados', { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+export const semanalPage = async (req, res) => {
+  const user = req.user
+  const periodo = {
+    desde: req.body.desde,
+    hasta: req.body.hasta,
+  }
+  const estado = {
+    OFIEST: parseInt(req.body.ofiest),
+    PERUSU: parseInt(req.body.perusu),
+    DESDE: periodo.desde,
+    HASTA: periodo.hasta,
+  }
+  const descripcionOficina = req.body.desofi
+  const descripcionPerfil = req.body.desper
+  const diasPeriodo = Math.ceil(new Date(periodo.hasta).getDate() - new Date(periodo.desde).getDate(), (1000 * 60 * 60 * 24)) + 1
+
+  try {
+    const festivos = await axios.post('http://localhost:8200/api/festivos/oficinas', {
+      desde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      hasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      ofifes: estado.OFIEST
+    })
+    const estados = await axios.post('http://localhost:8200/api/estados/oficinas/perfiles', {
+      estado,
+    })
+
+    const datos = {
+      estados: estados.data,
+      festivos: festivos.data,
+      tiposEstado,
+      tiposRol,
+      arrTiposPerfil,
+      periodo,
+      diasPeriodo,
+      strDesde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      strHasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      descripcionOficina,
+      descripcionPerfil,
+    }
+
+    res.render('admin/estados/semanal', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 

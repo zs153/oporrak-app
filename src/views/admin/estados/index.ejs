@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Cursos</title>
+  <title>Estados</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -30,7 +30,7 @@
               </div>
               <% }) %>
               <% } %>
-              <form action="/admin/estados/estados" method="POST" onsubmit="return validate();">
+              <form action="/admin/estados/semanal" method="POST" onsubmit="return validate();">
                 <input type="hidden" id="desofi" name="desofi">
                 <input type="hidden" id="desper" name="desper">
                 <div class="card-header">
@@ -42,9 +42,9 @@
                       <div class="mb-1">
                         <div class="form-label">Oficina</div>
                         <select class="form-select" id="cboofi" name="ofiest" value="">
-                          <% if (datos.oficinas.length > 1 ) { %>
+                          <% if (datos.oficinas.length > 1) { %>
                             <option value="0">
-                              TODAS
+                              DESCENTRALIZADAS
                             </option>
                           <% } %>
                           <% datos.oficinas.map(element=> { %>

@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-  <title>Fraude</title>
+  <title>Oporrak</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -94,41 +94,40 @@
                             <div class="col-6">
                               <div class="row align-items-center">
                                 <% if(itm.TIPEST === 1) {%>
-                                <span class="avatar avatar-rounded bg-green-lt">
-                                  <h6>
-                                    <%- itm.USERID.slice(0,5) %>
-                                  </h6>
-                                </span>
-                                <div class="col text-truncate">
-                                  <span style="font-size: .7rem;">
-                                    <%- itm.NOMUSU.slice(0,33) %>
+                                  <span class="avatar avatar-rounded bg-green-lt">
+                                    <h6>
+                                      <%- itm.USERID.slice(0,5) %>
+                                    </h6>
                                   </span>
-                                  <div class="col text-truncate text-muted">
-                                    <span style="font-size: .6rem;">
-                                      Oficina: <%- itm.DESOFI %>
+                                  <div class="col text-truncate">
+                                    <span style="font-size: .7rem;">
+                                      <%- itm.NOMUSU.slice(0,33) %>
                                     </span>
-                                    <span style="font-size: .7rem; margin-left: 1rem;">
-                                      Tlf: <%- itm.TELUSU %>
-                                    </span>
+                                    <div class="col text-truncate text-muted">
+                                      <span style="font-size: .6rem;">
+                                        Oficina: <%- itm.DESOFI %>
+                                      </span>
+                                      <span style="font-size: .7rem; margin-left: 1rem;">
+                                        Tlf: <%- itm.TELUSU %>
+                                      </span>
+                                    </div>
                                   </div>
-                                </div>
                                 <% } else { %>
-                                <span class="avatar avatar-rounded bg-red-lt">
-                                  <h6>
-                                    <%- itm.USERID.slice(0,5) %>
-                                  </h6>
-                                </span>
-                                <div class="col text-truncate">
-                                  <span style="font-size: .7rem;">
-                                    <%- itm.NOMUSU.slice(0,33) %>
+                                  <span class="avatar avatar-rounded bg-red-lt">
+                                    <h6>
+                                      <%- itm.USERID.slice(0,5) %>
+                                    </h6>
                                   </span>
-                                  <div class="col text-muted">
-                                    <span style="color: red;font-size: .7rem;">
-                                      NO DISPONIBLE
+                                  <div class="col text-truncate">
+                                    <span style="font-size: .7rem;">
+                                      <%- itm.NOMUSU.slice(0,33) %>
                                     </span>
+                                    <div class="col text-muted">
+                                      <span style="color: red;font-size: .7rem;">
+                                        NO DISPONIBLE
+                                      </span>
+                                    </div>
                                   </div>
-                                </div>
-
                                 <% } %>
                               </div>
                             </div>
@@ -142,36 +141,54 @@
                   <div class="card">
                     <div class="card-header">
                       <div class="card-title">
-                        Liquidadores
+                        Responsables
                       </div>
                     </div>
                     <div class="card-body">
                       <div class="row g-3">
                         <% datos.estados.map(itm=> { %>
-                          <% if (itm.PERROL===8) { %>
+                          <% if (itm.PERROL===2) { %>
                             <div class="col-6">
                               <div class="row align-items-center">
+                                <% if(itm.TIPEST===1) {%>
                                   <span class="avatar avatar-rounded bg-green-lt">
                                     <h6>
                                       <%- itm.USERID.slice(0,5) %>
                                     </h6>
                                   </span>
-                                <div class="col text-truncate">
-                                  <span style="font-size: .7rem;">
-                                    <%- itm.NOMUSU.slice(0,33) %>
-                                  </span>
-                                  <div class="col text-truncate text-muted">
-                                    <span style="font-size: .6rem;">
-                                      Oficina: <%- itm.DESOFI %>
+                                  <div class="col text-truncate">
+                                    <span style="font-size: .7rem;">
+                                      <%- itm.NOMUSU.slice(0,33) %>
                                     </span>
-                                    <span style="font-size: .7rem; margin-left: 1rem;">
-                                      Tlf: <%- itm.TELUSU %>
-                                    </span>
+                                    <div class="col text-truncate text-muted">
+                                      <span style="font-size: .6rem;">
+                                        Oficina: <%- itm.DESOFI %>
+                                      </span>
+                                      <span style="font-size: .7rem; margin-left: 1rem;">
+                                        Tlf: <%- itm.TELUSU %>
+                                      </span>
+                                    </div>
                                   </div>
-                                </div>
+                                <% } else { %>
+                                  <span class="avatar avatar-rounded bg-red-lt">
+                                    <h6>
+                                      <%- itm.USERID.slice(0,5) %>
+                                    </h6>
+                                  </span>
+                                  <div class="col text-truncate">
+                                    <span style="font-size: .7rem;">
+                                      <%- itm.NOMUSU.slice(0,33) %>
+                                    </span>
+                                    <div class="col text-muted">
+                                      <span style="color: red;font-size: .7rem;">
+                                        NO DISPONIBLE
+                                      </span>
+                                    </div>
+                                  </div>
+                                <% } %>
                               </div>
                             </div>
-                            <% } %>
+                          <% } %>
                         <% }) %>
                       </div>
                     </div>
@@ -185,23 +202,23 @@
                   <div class="card">
                     <div class="card-header">
                       <div class="card-title">
-                        Responsables
+                        Liquidadores
                       </div>
                     </div>
                     <div class="card-body">
                       <div class="row g-3">
                         <% datos.estados.map(itm=> { %>
-                          <% if (itm.PERROL===2) { %>
+                          <% if (itm.PERROL===8) { %>
                             <div class="col-6">
                               <div class="row align-items-center">
-                                  <span class="avatar avatar-rounded bg-green-lt">
-                                    <h6>
-                                      <%- itm.USERID.slice(0,5) %>
-                                    </h6>
-                                  </span>
+                                <span class="avatar avatar-rounded bg-green-lt">
+                                  <h6>
+                                    <%- itm.USERID.slice(0,5) %>
+                                  </h6>
+                                </span>
                                 <div class="col text-truncate">
                                   <span style="font-size: .7rem;">
-                                      <%- itm.NOMUSU.slice(0,33) %>
+                                    <%- itm.NOMUSU.slice(0,33) %>
                                   </span>
                                   <div class="col text-truncate text-muted">
                                     <span style="font-size: .6rem;">
@@ -227,7 +244,7 @@
                         Informadores
                       </div>
                     </div>
-                      <div class="list-group list-group-flush overflow-auto" style="max-height: 19.5rem">
+                      <div class="list-group list-group-flush overflow-auto" style="max-height: 27.5rem">
                         <% oficinaActual = '' %>
                         <% datos.estados.map(itm=> { %>
                           <% if (itm.PERROL===3) { %>
@@ -239,24 +256,42 @@
                             <% } %>
                             <div class="list-group-item">
                               <div class="row">
-                                <span class="avatar avatar-rounded bg-green-lt">
-                                  <h6>
-                                    <%- itm.USERID.slice(0,5) %>
-                                  </h6>
-                                </span>
-                                <div class="col-auto">
-                                  <span style="font-size: .7rem;">
-                                    <%- itm.NOMUSU %>
+                                <% if(itm.TIPEST===1) {%>
+                                  <span class="avatar avatar-rounded bg-green-lt">
+                                    <h6>
+                                      <%- itm.USERID.slice(0,5) %>
+                                    </h6>
                                   </span>
-                                  <div class="col text-truncate text-muted">
-                                    <span style="font-size: .6rem;">
-                                      Oficina: <%- itm.DESOFI %>
+                                  <div class="col text-truncate">
+                                    <span style="font-size: .7rem;">
+                                      <%- itm.NOMUSU.slice(0,33) %>
                                     </span>
-                                    <span style="font-size: .7rem; margin-left: 1rem;">
-                                      Tlf: <%- itm.TELUSU %>
-                                    </span>
+                                    <div class="col text-truncate text-muted">
+                                      <span style="font-size: .6rem;">
+                                        Oficina: <%- itm.DESOFI %>
+                                      </span>
+                                      <span style="font-size: .7rem; margin-left: 1rem;">
+                                        Tlf: <%- itm.TELUSU %>
+                                      </span>
+                                    </div>
                                   </div>
-                                </div>
+                                  <% } else { %>
+                                    <span class="avatar avatar-rounded bg-red-lt">
+                                      <h6>
+                                        <%- itm.USERID.slice(0,5) %>
+                                      </h6>
+                                    </span>
+                                    <div class="col text-truncate">
+                                      <span style="font-size: .7rem;">
+                                        <%- itm.NOMUSU.slice(0,33) %>
+                                      </span>
+                                      <div class="col text-muted">
+                                        <span style="color: red;font-size: .7rem;">
+                                          NO DISPONIBLE
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <% } %>
                               </div>
                             </div>
                           <% } %>
