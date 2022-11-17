@@ -48,7 +48,7 @@
 
     html>body tbody.scrollContent {
       display: block;
-      height: 520px;
+      height: 480px;
       overflow: auto;
       width: 1246px;
     }
@@ -276,7 +276,7 @@
       const desde = new Date("<%- datos.periodo.desde %>")
       const hasta = new Date("<%- datos.periodo.hasta %>")
 
-      let activosOficina = new Array(diasPeriodo).fill(0)
+      let activosOficina = new Array(diasPeriodo *14).fill(0)
       let estadosUsuario = []
       let oficinaActual = 0
       let usuarioActual = 0
@@ -456,7 +456,7 @@
       // rows
       rows.map(itm => {
         if (itm[0] === -1) {
-          // total oficina
+          // oficina
           rowOficina = document.createElement('tr')
           col = document.createElement('td')
           texto = document.createTextNode(itm[1])
@@ -468,7 +468,7 @@
           rowOficina.appendChild(col)
           tblBody.appendChild(rowOficina)
         } else if (itm[0] === 0) {
-          // total usuario
+          // total acumulado
           rowOficina = document.createElement('tr')
           col = document.createElement('td')
           texto = document.createTextNode('Personal en activo')
@@ -483,8 +483,9 @@
             const texto = document.createTextNode(itm[1][i])
 
             col.style.cssText = "color: green; border: none; text-align: center;"
+            col.style.minWidth = "14px"
             col.appendChild(texto)
-            col.colSpan = 2
+            //col.colSpan = 2
             rowOficina.appendChild(col)
           }
 

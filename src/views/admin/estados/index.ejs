@@ -55,7 +55,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-3">
                       <div class="mb-1">
                         <div class="form-label">Perfil</div>
                         <select class="form-select" id="cboper" name="perusu" value="">
@@ -64,6 +64,15 @@
                             <%= element.des %>
                           </option>
                           <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="mb-1">
+                        <div class="form-label">Formato</div>
+                        <select class="form-select" id="cbofor" name="format" value="">
+                          <option value="1">MENSUAL</option>
+                          <option value="2">SEMANAL</option>
                         </select>
                       </div>
                     </div>
@@ -91,7 +100,7 @@
                 </div>
                 <div class="card-footer text-end">
                   <div class="d-flex">
-                    <button type="submit" class="btn btn-primary ms-auto">Estados</button>
+                    <button type="submit" class="btn btn-primary ms-auto">Ver estados</button>
                   </div>
                 </div>
               </form>
@@ -145,10 +154,54 @@
         setSuccess(hasta)
       }
 
-      const mesDesde = desdeValue.split('-')[1]
-      const mesHasta = hastaValue.split('-')[1]
-      if (mesDesde !== mesHasta) {
-        setError(hasta, 'Rango de fechas debe estar en el mismo mes')
+      const aDesde = desdeValue.split('-')
+      const aHasta = hastaValue.split('-')
+      // const mesDesde = desdeValue.split('-')[1]
+      // const mesHasta = hastaValue.split('-')[1]
+      const formato = document.getElementById('cbofor').value
+
+      if (formato === '1') {
+        const mesDesde = aDesde[1]
+        const mesHasta = aHasta[1]
+        const diaDesde = aDesde[2]
+        const diaHasta = aHasta[2]
+        const yearDesde = aDesde[0]
+        const yearHasta = aHasta[0]
+        const lastDay = '0' + new Date(yearDesde, mesDesde + 1, 0).getDate().slice(2)
+        
+        if (mesDesde !== mesHasta) {
+          setError(hasta, 'Rango de fechas debe estar en el mismo mes')
+          setTimeout(function () {
+            setSuccess(hasta)
+          }, 3000)
+          return false
+        } else if (diaDesde !== '01'){
+          setError(desde, 'Rango de mes debe comenzar en primer día')
+          setTimeout(function () {
+            setSuccess(desde)
+          }, 3000)
+          return false
+        } else if (diaHasta !== lastDay) {
+          setError(hasta, 'Rango de mes debe finalizar en último día')
+          setTimeout(function () {
+            setSuccess(hasta)
+          }, 3000)
+          return false
+        }
+      }
+
+      if (new Date(desdeValue).getDay() === 0) {
+        setError(desde, 'Fecha no permitida (domingo)')
+        setTimeout(function () {
+          setSuccess(desde)
+        }, 3000)
+        return false
+      } else {
+        setSuccess(desde)
+      }
+
+      if (new Date(hastaValue).getDay() === 0) {
+        setError(hasta, 'Fecha no permitida (domingo)')
         setTimeout(function () {
           setSuccess(hasta)
         }, 3000)
@@ -176,6 +229,41 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
+  </script>
+  <script>
+    document.getElementById('cbofor').addEventListener('change', function (e) {
+      const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
+      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth()
+      const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+
+      let desde = new Date(currentYear, currentMonth, 1,2)
+      let hasta = desde
+
+      if (e.target.value === '1'){
+        desde = new Date(currentYear, currentMonth, 1, 2)
+        hasta = new Date(currentYear, currentMonth, lastDayMonth, 2)
+      } else {
+        let t = new Date()
+
+        t = new Date(document.querySelector("#desfec").value)
+
+        if (t.getDay() > 1) {
+          const primerDiaSemana = t.getDate() - t.getDay()
+          
+          t.setDate(desde.getDate() + primerDiaSemana)
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
+        } else {
+          t = new Date(new Date(document.querySelector("#desfec").value))
+          t.setDate(t.getDate() +4)
+
+          hasta = t
+        }
+      }
+
+      document.querySelector("#desfec").value = desde.toISOString().split('T')[0]
+      document.querySelector("#hasfec").value = hasta.toISOString().split('T')[0]
+    })
   </script>
 </body>
 

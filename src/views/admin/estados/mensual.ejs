@@ -387,7 +387,9 @@
       tblHeader.appendChild(rowHeader)
 
       // dias header
-      for (let d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
+      const limiteSup = hasta
+      limiteSup.setDate(limiteSup.getDate() +1)
+      for (let d = desde; d <= limiteSup; d.setDate(d.getDate() + 1)) {
         texto = document.createTextNode(('0' + d.getDate()).slice(-2))
         col = document.createElement('th')
         col.appendChild(texto)

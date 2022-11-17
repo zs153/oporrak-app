@@ -1,6 +1,6 @@
 import express from "express";
 import authRoutes from "../middleware/auth";
-import { mainPage, estadosPage, semanalPage } from "../controllers/estado.controller";
+import { mainPage, semanalPage, mensualPage } from "../controllers/estado.controller";
 
 const estadoRouter = express.Router();
 
@@ -8,7 +8,7 @@ const estadoRouter = express.Router();
 estadoRouter.get("/estados", authRoutes, mainPage);
 
 // proc
-estadoRouter.post("/estados/estados", authRoutes, estadosPage);
+estadoRouter.post("/estados/mensual", authRoutes, mensualPage);
 estadoRouter.post("/estados/semanal", authRoutes, semanalPage);
 
 export default estadoRouter;

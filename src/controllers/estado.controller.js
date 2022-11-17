@@ -38,7 +38,7 @@ export const mainPage = async (req, res) => {
 }
 
 // proc
-export const estadosPage = async (req, res) => {
+export const mensualPage = async (req, res) => {
   const user = req.user
   const periodo = {
     desde: req.body.desde,
@@ -52,7 +52,7 @@ export const estadosPage = async (req, res) => {
   }
   const descripcionOficina = req.body.desofi
   const descripcionPerfil = req.body.desper
-  const diasPeriodo = Math.ceil(new Date(periodo.hasta).getDate() - new Date(periodo.desde).getDate(), (1000 * 60 * 60 * 24)) + 1
+  const diasPeriodo = Math.ceil(Date.parse(periodo.hasta) - Date.parse(periodo.desde)) / (1000 * 60 * 60 * 24) + 1
 
   try {
     const festivos = await axios.post('http://localhost:8200/api/festivos/oficinas', {
@@ -101,7 +101,7 @@ export const semanalPage = async (req, res) => {
   }
   const descripcionOficina = req.body.desofi
   const descripcionPerfil = req.body.desper
-  const diasPeriodo = Math.ceil(new Date(periodo.hasta).getDate() - new Date(periodo.desde).getDate(), (1000 * 60 * 60 * 24)) + 1
+  const diasPeriodo = Math.ceil(Date.parse(periodo.hasta) - Date.parse(periodo.desde)) / (1000 * 60 * 60 * 24) + 1
 
   try {
     const festivos = await axios.post('http://localhost:8200/api/festivos/oficinas', {
@@ -127,7 +127,11 @@ export const semanalPage = async (req, res) => {
       descripcionPerfil,
     }
 
-    res.render('admin/estados/semanal', { user, datos })
+    if (req.body.format === '1') {
+      res.render('admin/estados/mensual', { user, datos })
+    } else {
+      res.render('admin/estados/semanal', { user, datos })
+    }
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
