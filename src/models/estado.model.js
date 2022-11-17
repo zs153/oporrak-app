@@ -101,7 +101,7 @@ FROM (
   UNION
   SELECT ee.ofiest, ee.usuest, ee.fecest, ee.tipest, 
     LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
-    LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR"
+    LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.hashor), 2, '0') AS "HASHOR"
   FROM estados ee  
   INNER JOIN usuarios uu ON uu.idusua = ee.usuest
   WHERE uu.perusu = :perusu AND
