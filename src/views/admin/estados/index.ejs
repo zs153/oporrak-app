@@ -24,13 +24,13 @@
           <div class="col-12">
             <div class="card">
               <% if(typeof alerts !='undefined' ) { %>
-                <% alerts.map(function (alert){ %>
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <%- alert.msg %>
-                  </div>
-                <% }) %>
+              <% alerts.map(function (alert){ %>
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <%- alert.msg %>
+              </div>
+              <% }) %>
               <% } %>
-              <form action="/admin/estados/semanal" method="POST" onsubmit="return validate();">
+              <form action="/admin/estados/estados" method="POST" onsubmit="return validate();">
                 <input type="hidden" id="desofi" name="desofi">
                 <input type="hidden" id="desper" name="desper">
                 <input type="hidden" id="desde" name="desde" value="<%- datos.desde %>">
@@ -45,9 +45,9 @@
                         <div class="form-label">Oficina</div>
                         <select class="form-select" id="cboofi" name="ofiest" value="">
                           <% if (datos.oficinas.length > 1) { %>
-                            <option value="0">
-                              DESCENTRALIZADAS
-                            </option>
+                          <option value="0">
+                            DESCENTRALIZADAS
+                          </option>
                           <% } %>
                           <% datos.oficinas.map(element=> { %>
                           <option value="<%= element.IDOFIC %>">
@@ -156,14 +156,14 @@
     }
   </script>
   <script>
-    document.getElementById('desfec').addEventListener('change', function (e) {
+    document.getElementById('desfec').addEventListener('change', function(e) {
       const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
       const currentMonth = new Date(document.querySelector("#desfec").value).getMonth()
       const formato = document.getElementById('cbofor').value
-      
+
       let desde = new Date(currentYear, currentMonth, 1, 2)
       let hasta = desde
-      
+
       if (formato === '1') {
         const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
 
@@ -177,7 +177,7 @@
           const primerDiaSemana = t.getDate() - t.getDay()
 
           t.setDate(desde.getDate() + primerDiaSemana)
-          
+
           desde = new Date(t)
           hasta = new Date(t.setDate(t.getDate() + 4))
         } else {
@@ -192,16 +192,16 @@
       document.querySelector("#desde").value = desde.toISOString().split('T')[0]
       document.querySelector("#hasta").value = hasta.toISOString().split('T')[0]
     })
-    document.getElementById('cbofor').addEventListener('change', function (e) {
+    document.getElementById('cbofor').addEventListener('change', function(e) {
       const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
       const currentMonth = new Date(document.querySelector("#desfec").value).getMonth()
-      
+
       let desde = new Date(currentYear, currentMonth, 1, 2)
       let hasta = desde
-      
-      if (e.target.value === '1'){
+
+      if (e.target.value === '1') {
         const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-        
+
         hasta = new Date(currentYear, currentMonth, lastDayMonth, 2)
       } else {
         let t = new Date()
@@ -210,13 +210,13 @@
 
         if (t.getDay() > 1) {
           const primerDiaSemana = t.getDate() - t.getDay()
-          
+
           t.setDate(desde.getDate() + primerDiaSemana)
           desde = new Date(t)
           hasta = new Date(t.setDate(t.getDate() + 4))
         } else {
           t = new Date(new Date(document.querySelector("#desfec").value))
-          t.setDate(t.getDate() +4)
+          t.setDate(t.getDate() + 4)
 
           desde = new Date(new Date(document.querySelector("#desfec").value))
           hasta = t

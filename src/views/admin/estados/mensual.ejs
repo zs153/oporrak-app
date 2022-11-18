@@ -53,7 +53,8 @@
       width: 1246px;
     }
 
-    tbody.scrollContent td, tbody.scrollContent tr.normalRow td {
+    tbody.scrollContent td,
+    tbody.scrollContent tr.normalRow td {
       border-bottom: 1px solid #DDD;
       border-left: 1px solid #DDD;
       border-right: 1px solid #CCC;
@@ -75,6 +76,7 @@
       overflow: auto;
       width: 1246px;
     }
+
     #tblEstados thead,
     tbody {
       overflow-y: auto;
@@ -226,7 +228,7 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION'}) %>
+    <%- include('../../partials/navbar', {opcion: 'ESTADO'}) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -243,7 +245,7 @@
                 </div>
                 <div class="card-body">
                   <div class="tableContainer">
-                    <table id="tblEstados" >
+                    <table id="tblEstados">
                       <thead class="fixedHeader">
                       </thead>
                       <tbody class="scrollContent">
@@ -287,7 +289,7 @@
       if (estados.length === 0) {
         return
       }
-      
+
       estados.map(itm => {
         const dia = new Date(itm.FECHA).getDate();
         const diaSemana = new Date(itm.FECHA).getDay()
@@ -380,7 +382,7 @@
 
       // descripcion header
       col = document.createElement('th')
-      col.style.cssText = "color: orangered; border: none; text-align: center;"
+      col.style.cssText = "border: none; text-align: center;"
       col.style.minWidth = "250px"
 
       rowHeader.appendChild(col)
@@ -405,7 +407,7 @@
           texto = document.createTextNode(itm[1])
 
           col.appendChild(texto)
-          col.style.cssText = "color: blue; border: none; text-align: center;"
+          col.style.cssText = "color: orangered; border: none; text-align: center;"
           col.style.minWidth = "250px"
 
           rowOficina.appendChild(col)
@@ -417,13 +419,13 @@
           texto = document.createTextNode('Personal en activo')
 
           col.appendChild(texto)
-          col.style.cssText = "color: green; border: none; text-align: left;"
+          col.style.cssText = "color: blue; border: none; text-align: left;"
 
           rowOficina.appendChild(col)
 
           for (var i = 0; i < diasPeriodo; i++) {
             var col = document.createElement("td")
-            col.style.cssText = "color: green; border: none; text-align: center;"
+            col.style.cssText = "color: blue; border: none; text-align: center;"
             var texto = document.createTextNode(itm[1][i])
             col.appendChild(texto)
             rowOficina.appendChild(col)

@@ -211,6 +211,6 @@ export const arrColoresEstado = [
   { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#FFA80A" },
   { ID: 7, DES: "REUNIÓN", COLOR: "#DCD20D" },
   { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
-  { ID: 9, DES: "ATENCIÓN TELEFÓNICA", COLOR: "#7FB3D5" },
-  { ID: 10, DES: "TRASPASADO", COLOR: "#FFFB05" }
+  { ID: 9, DES: "ATENCIÓN TELEFÓNICA", COLOR: "#FFFB05" },
+  { ID: 10, DES: "TRASPASADO", COLOR: "#808000" }
 ]

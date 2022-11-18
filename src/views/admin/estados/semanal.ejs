@@ -228,7 +228,7 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION'}) %>
+    <%- include('../../partials/navbar', {opcion: 'ESTADO'}) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -276,7 +276,7 @@
       const desde = new Date("<%- datos.periodo.desde %>")
       const hasta = new Date("<%- datos.periodo.hasta %>")
 
-      let activosOficina = new Array(diasPeriodo *14).fill(0)
+      let activosOficina = new Array(diasPeriodo * 14).fill(0)
       let estadosUsuario = []
       let oficinaActual = 0
       let usuarioActual = 0
@@ -393,7 +393,7 @@
 
       // descripcion header
       col = document.createElement('th')
-      col.style.cssText = "color: orangered; border: none; text-align: center;"
+      col.style.cssText = "border: none; text-align: center;"
       col.style.minWidth = "250px"
 
       rowHeader.appendChild(col)
@@ -462,7 +462,7 @@
           texto = document.createTextNode(itm[1])
 
           col.appendChild(texto)
-          col.style.cssText = "color: blue; border: none; text-align: center;"
+          col.style.cssText = "color: orangered; border: none; text-align: center;"
           col.style.minWidth = "250px"
 
           rowOficina.appendChild(col)
@@ -474,7 +474,7 @@
           texto = document.createTextNode('Personal en activo')
 
           col.appendChild(texto)
-          col.style.cssText = "color: green; border: none; text-align: left;"
+          col.style.cssText = "color: blue; border: none; text-align: left;"
 
           rowOficina.appendChild(col)
 
@@ -482,7 +482,7 @@
             let col = document.createElement("td")
             const texto = document.createTextNode(itm[1][i])
 
-            col.style.cssText = "color: green; border: none; text-align: center;"
+            col.style.cssText = "color: blue; border: none; text-align: center;"
             col.style.minWidth = "14px"
             col.appendChild(texto)
             //col.colSpan = 2
@@ -646,216 +646,6 @@
       })
     }
 
-    function print() {
-      // pintar tabla
-      let tblHeader = document.getElementsByTagName("thead")[0];
-      let tblBody = document.getElementsByTagName("tbody")[0];
-      let rowOficina = document.createElement("tr");
-      let rowUsuario = document.createElement("tr");
-      let rowHeader = document.createElement("tr");
-      let hasHeaderOficina = false;
-
-      var col = null;
-      var texto = null;
-      var hasHeader = false;
-      var headerString = '';
-      var subHeaderString = '';
-
-      // descripcion header
-      col = document.createElement('th')
-      col.style.cssText = "color: orangered; border: none; text-align: center;"
-      col.style.minWidth = "250px"
-
-      rowHeader.appendChild(col)
-      tblHeader.appendChild(rowHeader)
-
-      // dias header
-      for (let d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
-        texto = document.createTextNode(('0' + d.getDate()).slice(-2))
-        col = document.createElement('th')
-        col.appendChild(texto)
-        col.colSpan = 2
-        col.style.cssText = "border: none; text-align: center"
-
-        rowHeader.appendChild(col)
-        tblHeader.appendChild(rowHeader)
-      }
-
-      rows.map(itm => {
-        if (itm[0] === -1) {
-          // total oficina
-          rowOficina = document.createElement('tr')
-          col = document.createElement('td')
-          texto = document.createTextNode(itm[1])
-
-          col.appendChild(texto)
-          col.style.cssText = "color: blue; border: none; text-align: center;"
-          col.style.minWidth = "250px"
-
-          rowOficina.appendChild(col)
-          tblBody.appendChild(rowOficina)
-        } else if (itm[0] === 0) {
-          // total usuario
-          rowOficina = document.createElement('tr')
-          col = document.createElement('td')
-          texto = document.createTextNode('Personal en activo')
-
-          col.appendChild(texto)
-          col.style.cssText = "color: green; border: none; text-align: left;"
-
-          rowOficina.appendChild(col)
-
-          for (var i = 0; i < diasPeriodo * 14; i++) {
-            var col = document.createElement("td")
-            col.style.cssText = "color: green; border: none; text-align: center;"
-            var texto = document.createTextNode(itm[1][i])
-            col.appendChild(texto)
-            rowOficina.appendChild(col)
-          }
-
-          tblBody.appendChild(rowOficina)
-        } else {
-          // nombre usuario
-          rowUsuario = document.createElement('tr')
-          col = document.createElement('td')
-          texto = document.createTextNode(itm[0])
-
-          col.appendChild(texto)
-          rowUsuario.appendChild(col)
-          tblBody.appendChild(rowUsuario)
-
-          // tipos de estado
-          for (var i = 0; i < diasPeriodo * 14; i++) {
-            if (itm[1][i] === -1) {
-              // festivo
-              var col = document.createElement("td")
-              col.style.background = '#FAFAFA'
-
-              rowUsuario.appendChild(col)
-            } else if (itm[1][i] === 0) {
-              // usuario en activo
-              var col = document.createElement("td")
-              col.style.background = '#FAFAFA'
-
-              rowUsuario.appendChild(col)
-            } else if (itm[1][i] === 1) {
-              // usuario en activo
-              var col = document.createElement("td")
-
-              rowUsuario.appendChild(col)
-            } else if (itm[1][i] === <%- datos.tiposEstado.vacacion.ID %>) {
-              var col = document.createElement("td")
-              var sub = document.createElement("div")
-              var texto = document.createTextNode('vacación')
-
-              col.className = 'timeline vacas'
-              rowUsuario.appendChild(col)
-
-              sub.className = 'popup'
-              sub.appendChild(texto)
-              col.appendChild(sub);
-              rowUsuario.appendChild(col)
-            } else if (itm[1][i] === <%- datos.tiposEstado.baja.ID %>) {
-              var col = document.createElement("td")
-              var sub = document.createElement("div")
-              var texto = document.createTextNode('baja')
-
-              col.className = 'timeline bajas'
-              rowUsuario.appendChild(col)
-
-              sub.className = 'popup'
-              sub.appendChild(texto)
-              col.appendChild(sub)
-              rowUsuario.appendChild(col)
-            } else if (itm[1][i] === <%- datos.tiposEstado.traspaso.ID %>) {
-              var col = document.createElement("td")
-              var sub = document.createElement("div")
-              var texto = document.createTextNode('traspaso')
-
-              col.className = 'timeline trasp'
-              rowUsuario.appendChild(col)
-
-              sub.className = 'popup'
-              sub.appendChild(texto)
-              col.appendChild(sub)
-              rowUsuario.appendChild(col)
-            } else if (itm[1][i] === <%- datos.tiposEstado.formacion.ID %>) {
-              var col = document.createElement("td")
-              var sub = document.createElement("div")
-              var texto = document.createTextNode('formación')
-
-              col.className = 'timeline forma'
-              rowUsuario.appendChild(col)
-
-              sub.className = 'popup'
-              sub.appendChild(texto)
-              col.appendChild(sub)
-              rowUsuario.appendChild(col)
-            } else if (itm[1][i] === <%- datos.tiposEstado.conciliacion.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('conciliación');
-
-              col.className = 'timeline conci';
-              rowUsuario.appendChild(col);
-
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
-            } else if (itm[1][i] === <%- datos.tiposEstado.reunion.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('reunión');
-
-              col.className = 'timeline reuni';
-              rowUsuario.appendChild(col);
-
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
-            } else if (itm[1][i] === <%- datos.tiposEstado.horas.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('horas');
-
-              col.className = 'timeline horas';
-              rowUsuario.appendChild(col);
-
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
-            } else if (itm[1][i] === <%- datos.tiposEstado.telefono.ID %>) {
-              var col = document.createElement("td");
-              var sub = document.createElement("div");
-              var texto = document.createTextNode('teléfono');
-
-              col.className = 'timeline tele';
-              rowUsuario.appendChild(col);
-
-              sub.className = 'popup';
-              sub.appendChild(texto);
-              col.appendChild(sub);
-              rowUsuario.appendChild(col);
-            } else if (itm[1][i] === <%- datos.tiposEstado.traspasado.ID %>) {
-              var col = document.createElement("td")
-              var sub = document.createElement("div")
-              var texto = document.createTextNode('traspasado')
-
-              col.className = 'timeline trasdo'
-              rowUsuario.appendChild(col)
-
-              sub.className = 'popup'
-              sub.appendChild(texto)
-              col.appendChild(sub)
-              rowUsuario.appendChild(col)
-            }
-          }
-        }
-      })
-    }
     estadosGantt()
   </script>
 </body>
