@@ -105,8 +105,8 @@ export const semanalPage = async (req, res) => {
 
   try {
     const festivos = await axios.post('http://localhost:8200/api/festivos/oficinas', {
-      desde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      hasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      desde: periodo.desde,
+      hasta: periodo.hasta,
       ofifes: estado.OFIEST
     })
     const estados = await axios.post('http://localhost:8200/api/estados/oficinas/perfiles', {

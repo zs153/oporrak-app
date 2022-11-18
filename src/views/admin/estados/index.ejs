@@ -24,15 +24,17 @@
           <div class="col-12">
             <div class="card">
               <% if(typeof alerts !='undefined' ) { %>
-              <% alerts.map(function (alert){ %>
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <%- alert.msg %>
-              </div>
-              <% }) %>
+                <% alerts.map(function (alert){ %>
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <%- alert.msg %>
+                  </div>
+                <% }) %>
               <% } %>
               <form action="/admin/estados/semanal" method="POST" onsubmit="return validate();">
                 <input type="hidden" id="desofi" name="desofi">
                 <input type="hidden" id="desper" name="desper">
+                <input type="hidden" id="desde" name="desde" value="<%- datos.desde %>">
+                <input type="hidden" id="hasta" name="hasta" value="<%- datos.hasta %>">
                 <div class="card-header">
                   <h3 class="card-title">Estados</h3>
                 </div>
@@ -55,7 +57,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-6">
                       <div class="mb-1">
                         <div class="form-label">Perfil</div>
                         <select class="form-select" id="cboper" name="perusu" value="">
@@ -67,33 +69,24 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-3">
-                      <div class="mb-1">
-                        <div class="form-label">Formato</div>
-                        <select class="form-select" id="cbofor" name="format" value="">
-                          <option value="1">MENSUAL</option>
-                          <option value="2">SEMANAL</option>
-                        </select>
-                      </div>
-                    </div>
                   </div>
                   <div class="row">
                     <div class="col-6">
                       <div class="mb-1">
                         <div class="input-control">
                           <label class="form-label required">Fecha inicio</label>
-                          <input type="date" name="desde" id="desfec" class="form-control" value="<%- datos.desde %>" />
+                          <input type="date" name="desfec" id="desfec" class="form-control" value="<%- datos.desde %>" />
                           <div class="invalid-feedback"></div>
                         </div>
                       </div>
                     </div>
                     <div class="col-6">
                       <div class="mb-1">
-                        <div class="input-control">
-                          <label class="form-label required">Fecha fin</label>
-                          <input type="date" name="hasta" id="hasfec" class="form-control" value="<%- datos.hasta %>" />
-                          <div class="invalid-feedback"></div>
-                        </div>
+                        <div class="form-label">Formato</div>
+                        <select class="form-select" id="cbofor" name="format" value="">
+                          <option value="1">MENSUAL</option>
+                          <option value="2">SEMANAL</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -116,6 +109,7 @@
     const cboO = document.getElementById('cboofi');
     const cboP = document.getElementById('cboper');
 
+    document.querySelector("#desfec").value = new Date().toISOString().split('T')[0]
     document.getElementById('desofi').value = cboO[cboO.selectedIndex].text
     document.getElementById('desper').value = cboP[cboP.selectedIndex].text
 
@@ -128,93 +122,18 @@
   </script>
 
   <script>
-    const desde = document.getElementById('desfec')
-    const hasta = document.getElementById('hasfec')
+    const desfec = document.getElementById('desfec')
 
     const validate = () => {
-      const desdeValue = desde.value.trim()
-      const hastaValue = hasta.value.trim()
+      const desfecValue = desfec.value.trim()
 
-      if (isNaN(Date.parse(desdeValue))) {
-        setError(desde, 'Fecha requerida')
+      if (isNaN(Date.parse(desfecValue))) {
+        setError(desfec, 'Fecha requerida')
         setTimeout(function() {
-          setSuccess(desde)
+          setSuccess(desfec)
         }, 3000)
         return false
-      } else {
-        setSuccess(desde)
       }
-      if (isNaN(Date.parse(hastaValue))) {
-        setError(hasta, 'Fecha requerida')
-        setTimeout(function() {
-          setSuccess(hasta)
-        }, 3000)
-        return false
-      } else {
-        setSuccess(hasta)
-      }
-
-      const aDesde = desdeValue.split('-')
-      const aHasta = hastaValue.split('-')
-      const formato = document.getElementById('cbofor').value
-
-      if (formato === '1') {
-        const mesDesde = aDesde[1]
-        const mesHasta = aHasta[1]
-        const diaDesde = aDesde[2]
-        const diaHasta = aHasta[2]
-        const yearDesde = aDesde[0]
-        const yearHasta = aHasta[0]
-        const lastDay = new Date(yearDesde, mesDesde, 0).getDate()
-
-        if (mesDesde !== mesHasta) {
-          setError(hasta, 'Rango de fechas debe estar en el mismo mes')
-          setTimeout(function () {
-            setSuccess(hasta)
-          }, 3000)
-          return false
-        } else if (diaDesde !== '01'){
-          setError(desde, 'Rango de mes debe comenzar en primer día')
-          setTimeout(function () {
-            setSuccess(desde)
-          }, 3000)
-          return false
-        } else if (parseInt(diaHasta) !== lastDay) {
-          setError(hasta, 'Rango de mes debe finalizar en último día')
-          setTimeout(function () {
-            setSuccess(hasta)
-          }, 3000)
-          return false
-        }
-      } else {
-        const diaDesde = aDesde[2]
-        const diaHasta = aHasta[2]
-        const diff = (new Date(hastaValue).getTime() - new Date(desdeValue).getTime()) / (1000 * 3600 * 24)
-
-        if (diff !== 4) {
-          setError(hasta, 'Rango de semana es de 5 días')
-          setTimeout(function () {
-            setSuccess(hasta)
-          }, 3000)
-          return false
-        }
-      }
-
-      // if (new Date(desdeValue).getDay() === 0) {
-      //   setError(desde, 'Fecha no permitida (domingo)')
-      //   setTimeout(function () {
-      //     setSuccess(desde)
-      //   }, 3000)
-      //   return false
-      // }
-
-      // if (new Date(hastaValue).getDay() === 0) {
-      //   setError(hasta, 'Fecha no permitida (domingo)')
-      //   setTimeout(function () {
-      //     setSuccess(hasta)
-      //   }, 3000)
-      //   return false
-      // }
 
       return true
     }
@@ -237,16 +156,52 @@
     }
   </script>
   <script>
+    document.getElementById('desfec').addEventListener('change', function (e) {
+      const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
+      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth()
+      const formato = document.getElementById('cbofor').value
+      
+      let desde = new Date(currentYear, currentMonth, 1, 2)
+      let hasta = desde
+      
+      if (formato === '1') {
+        const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+
+        hasta = new Date(currentYear, currentMonth, lastDayMonth, 2)
+      } else {
+        let t = new Date()
+
+        t = new Date(document.querySelector("#desfec").value)
+
+        if (t.getDay() > 1) {
+          const primerDiaSemana = t.getDate() - t.getDay()
+
+          t.setDate(desde.getDate() + primerDiaSemana)
+          
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
+        } else {
+          t = new Date(new Date(document.querySelector("#desfec").value))
+          t.setDate(t.getDate() + 4)
+
+          desde = new Date(new Date(document.querySelector("#desfec").value))
+          hasta = t
+        }
+      }
+
+      document.querySelector("#desde").value = desde.toISOString().split('T')[0]
+      document.querySelector("#hasta").value = hasta.toISOString().split('T')[0]
+    })
     document.getElementById('cbofor').addEventListener('change', function (e) {
       const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
       const currentMonth = new Date(document.querySelector("#desfec").value).getMonth()
-      const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-
-      let desde = new Date(currentYear, currentMonth, 1,2)
+      
+      let desde = new Date(currentYear, currentMonth, 1, 2)
       let hasta = desde
-
+      
       if (e.target.value === '1'){
-        desde = new Date(currentYear, currentMonth, 1, 2)
+        const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+        
         hasta = new Date(currentYear, currentMonth, lastDayMonth, 2)
       } else {
         let t = new Date()
@@ -263,12 +218,13 @@
           t = new Date(new Date(document.querySelector("#desfec").value))
           t.setDate(t.getDate() +4)
 
+          desde = new Date(new Date(document.querySelector("#desfec").value))
           hasta = t
         }
       }
 
-      document.querySelector("#desfec").value = desde.toISOString().split('T')[0]
-      document.querySelector("#hasfec").value = hasta.toISOString().split('T')[0]
+      document.querySelector("#desde").value = desde.toISOString().split('T')[0]
+      document.querySelector("#hasta").value = hasta.toISOString().split('T')[0]
     })
   </script>
 </body>
