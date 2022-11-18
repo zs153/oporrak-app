@@ -61,6 +61,7 @@ export const tiposMovimiento = {
   olvidoPassword: 61,
   restablecerPassword: 62,
   registroUsuario: 63,
+  activarUsuario: 64,
 }
 export const tiposPerfil = {
   general: 1,
