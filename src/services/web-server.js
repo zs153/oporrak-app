@@ -2,21 +2,10 @@ import http from 'http'
 import logger from 'morgan'
 import express from 'express'
 import cookieParser from 'cookie-parser'
-import path from 'path'
 import cors from 'cors'
 import { port, dbPool } from '../config/settings'
 import apiOficinaRouter from '../routes/oficina.router'
-import apiSmsRouter from '../routes/sms.router'
-import apiGenteRouter from '../routes/gente.router'
 import apiUsuarioRouter from '../routes/usuario.router'
-import apiFraudeRouter from '../routes/fraude.router'
-import apiTipoHitoRouter from '../routes/tipohito.router'
-import apiTipoFraudeRouter from '../routes/tipofraude.router'
-import apiTipoEventoRouter from '../routes/tipoevento.router'
-import apiSubtipoRouter from '../routes/subtipo.router'
-import apiHitoRouter from '../routes/hito.router'
-import apiCargaRouter from '../routes/carga.router'
-import apiEventoRouter from '../routes/evento.router'
 import apiMatriculaRouter from '../routes/matricula.router'
 import apiCursoRouter from '../routes/curso.router'
 import apiEstadoRouter from '../routes/estado.router'
@@ -40,17 +29,7 @@ function initialize() {
 
     // routes
     app.use('/api', apiOficinaRouter)
-    app.use('/api', apiSmsRouter)
-    app.use('/api', apiGenteRouter)
     app.use('/api', apiUsuarioRouter)
-    app.use('/api', apiFraudeRouter)
-    app.use('/api', apiTipoHitoRouter)
-    app.use('/api', apiTipoEventoRouter)
-    app.use('/api', apiTipoFraudeRouter)
-    app.use('/api', apiSubtipoRouter)
-    app.use('/api', apiHitoRouter)
-    app.use('/api', apiCargaRouter)
-    app.use('/api', apiEventoRouter)
     app.use('/api', apiMatriculaRouter)
     app.use('/api', apiCursoRouter)
     app.use('/api', apiEstadoRouter)
