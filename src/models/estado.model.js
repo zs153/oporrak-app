@@ -105,6 +105,7 @@ FROM (
   FROM estados ee  
   INNER JOIN usuarios uu ON uu.idusua = ee.usuest
   WHERE uu.perusu = :perusu AND
+    uu.stausu = 1 AND
     ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 ) t1
 INNER JOIN usuarios uu ON uu.idusua = t1.idusua
