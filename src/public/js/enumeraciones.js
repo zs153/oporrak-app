@@ -135,7 +135,7 @@ export const tiposEstado = {
   conciliacion: { ID: 6, DES: "CONCILIACION 9:30", COLOR: "#FFA80A" },
   reunion: { ID: 7, DES: "REUNION", COLOR: "#DCD20D" },
   horas: { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
-  telefono: { ID: 9, DES: "ATENCION TELEFÓNICA", COLOR: "#FFFB05" },
+  telefono: { ID: 9, DES: "ATENCION TELEFÓNICA", COLOR: "#E6B000" },
   traspasado: { ID: 10, DES: "TRASPASADO", COLOR: "#808000" }
 }
 
@@ -190,7 +190,7 @@ export const arrTiposEstado = [
   { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#FFA80A" },
   { ID: 7, DES: "REUNION", COLOR: "#DCD20D" },
   { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
-  { ID: 9, DES: "TELÉFONO", COLOR: "#FFFB05" },
+  { ID: 9, DES: "ATENCIÓN TELÉFONICA", COLOR: "#E6B000" },
 ]
 export const arrTiposEstadoUsuario = [
   { ID: 2, DES: "VACACIÓN", COLOR: "#0D8004" },
@@ -211,6 +211,6 @@ export const arrColoresEstado = [
   { ID: 6, DES: "CONCILIACIÓN 9:30", COLOR: "#FFA80A" },
   { ID: 7, DES: "REUNIÓN", COLOR: "#DCD20D" },
   { ID: 8, DES: "HORAS", COLOR: "#05CBF5" },
-  { ID: 9, DES: "ATENCIÓN TELEFÓNICA", COLOR: "#FFFB05" },
+  { ID: 9, DES: "ATENCIÓN TELEFÓNICA", COLOR: "#E6B000" },
   { ID: 10, DES: "TRASPASADO", COLOR: "#808000" }
 ]

@@ -143,13 +143,13 @@
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Desde</div>
-                      <input type="date" id="desfectel" name="desfectel" class="form-control" >
+                      <input type="date" id="desfectel" name="desfectel" class="form-control">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Hasta</div>
-                      <input type="date" id="hasfectel" name="hasfectel" class="form-control" >
+                      <input type="date" id="hasfectel" name="hasfectel" class="form-control">
                     </div>
                   </div>
                 </div>
@@ -228,31 +228,14 @@
     async function insertRangoEvento(evento) {
       let xhr = new XMLHttpRequest()
 
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              // const result = JSON.parse(xhr.response)
-              // const d = result.DESDE.split('/')
-              // const h = result.HASTA.split('/')
+              const result = JSON.parse(xhr.response)
 
-              // insert en el calendario
-              // let dataSource = calendario.getDataSource()
-              // const estado = {
-              //   idesta: result.idesta,
-              //   usuest: params.usuario,
-              //   tipest: params.tipo,
-              //   id: result.idesta,
-              //   startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
-              //   endDate: new Date(h[2] + '-' + h[1] + '-' + h[0]),
-              //   color: params.color,
-              // }
-
-              //dataSource.push(estado)
-              // calendario.setDataSource(dataSource, { preventRendering: false })
-              
               document.getElementById('modal-tele').style.display = 'none'
               estadosUsuario()
             }
@@ -357,13 +340,13 @@
           USUEST: params.usuario,
           TIPEST: params.tipo,
           OFIEST: params.oficina,
-          DESHOR: '+00 08:30:00',
+          DESHOR: '+00 08:00:00',
           HASHOR: '+00 14:00:00',
         },
         movimiento: {
           USUMOV: <%- user.id %>,
           TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-      }
+        }
       }
 
       evento.estado.DESHOR = '+00 ' + document.getElementById('deshortel').value + ':00'
@@ -421,8 +404,8 @@
         modalHoras.style.display = 'flex'
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         const modalTele = document.getElementById('modal-tele')
+        const fecha = new Date(e.date.getFullYear(), e.date.getMonth(), e.date.getDate(), 2).toISOString().split('T')[0]
 
-        const fecha = new Date(e.date.getFullYear(), e.date.getMonth(), e.date.getDate(), 1, 0, 0).toISOString().split('T')[0]
         document.getElementById('desfectel').value = fecha
         document.getElementById('hasfectel').value = fecha
         document.getElementById('deshortel').value = "08:30"
@@ -559,7 +542,7 @@
 
       if (e.events.length === 0 &&
         (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
-        params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
+          params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
         editEvento(e)
       } else {
         if (e.element.style.boxShadow) {
