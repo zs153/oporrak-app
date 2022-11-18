@@ -220,6 +220,7 @@ export const insertRango = async (bind) => {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
+
   try {
     const result = await simpleExecute(insertRangoSql, bind)
 
@@ -304,7 +305,7 @@ export const estadosOficinaPerfil = async (context) => {
       ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
   } else {
     query += `WHERE t1.ofiusu = :ofiest
-      ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`    
+      ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
   }
 
   const result = await simpleExecute(query, context)
