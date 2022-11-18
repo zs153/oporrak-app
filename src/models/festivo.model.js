@@ -27,7 +27,7 @@ FROM festivos ff
 LEFT JOIN oficinas oo ON oo.idofic = ff.ofifes
 WHERE (ff.ofifes = :ofifes OR
     ff.ofifes = 0) AND
-  fecfes BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
+  fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const festivosLocalSql = `SELECT 
   ff.idfest,
@@ -103,7 +103,7 @@ export const remove = async (bind) => {
 // oficinas
 export const festivosOficina = async (context) => {
   let query = festivosOficinaSql
-
+  
   const result = await simpleExecute(query, context)
 
   return result.rows
