@@ -156,8 +156,6 @@
 
       const aDesde = desdeValue.split('-')
       const aHasta = hastaValue.split('-')
-      // const mesDesde = desdeValue.split('-')[1]
-      // const mesHasta = hastaValue.split('-')[1]
       const formato = document.getElementById('cbofor').value
 
       if (formato === '1') {
@@ -167,8 +165,8 @@
         const diaHasta = aHasta[2]
         const yearDesde = aDesde[0]
         const yearHasta = aHasta[0]
-        const lastDay = '0' + new Date(yearDesde, mesDesde + 1, 0).getDate().slice(2)
-        
+        const lastDay = new Date(yearDesde, mesDesde, 0).getDate()
+
         if (mesDesde !== mesHasta) {
           setError(hasta, 'Rango de fechas debe estar en el mismo mes')
           setTimeout(function () {
@@ -181,8 +179,20 @@
             setSuccess(desde)
           }, 3000)
           return false
-        } else if (diaHasta !== lastDay) {
+        } else if (parseInt(diaHasta) !== lastDay) {
           setError(hasta, 'Rango de mes debe finalizar en último día')
+          setTimeout(function () {
+            setSuccess(hasta)
+          }, 3000)
+          return false
+        }
+      } else {
+        const diaDesde = aDesde[2]
+        const diaHasta = aHasta[2]
+        const diff = (new Date(hastaValue).getTime() - new Date(desdeValue).getTime()) / (1000 * 3600 * 24)
+
+        if (diff !== 4) {
+          setError(hasta, 'Rango de semana es de 5 días')
           setTimeout(function () {
             setSuccess(hasta)
           }, 3000)
@@ -190,25 +200,21 @@
         }
       }
 
-      if (new Date(desdeValue).getDay() === 0) {
-        setError(desde, 'Fecha no permitida (domingo)')
-        setTimeout(function () {
-          setSuccess(desde)
-        }, 3000)
-        return false
-      } else {
-        setSuccess(desde)
-      }
+      // if (new Date(desdeValue).getDay() === 0) {
+      //   setError(desde, 'Fecha no permitida (domingo)')
+      //   setTimeout(function () {
+      //     setSuccess(desde)
+      //   }, 3000)
+      //   return false
+      // }
 
-      if (new Date(hastaValue).getDay() === 0) {
-        setError(hasta, 'Fecha no permitida (domingo)')
-        setTimeout(function () {
-          setSuccess(hasta)
-        }, 3000)
-        return false
-      } else {
-        setSuccess(hasta)
-      }
+      // if (new Date(hastaValue).getDay() === 0) {
+      //   setError(hasta, 'Fecha no permitida (domingo)')
+      //   setTimeout(function () {
+      //     setSuccess(hasta)
+      //   }, 3000)
+      //   return false
+      // }
 
       return true
     }
