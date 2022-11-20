@@ -3,13 +3,12 @@ import { simpleExecute } from '../services/database.js'
 
 const baseQuery = `SELECT 
   idesta,
-  TO_CHAR(fecest, 'YYYY-MM-DD') "FECEST",
+  fecest,
   usuest,
   tipest,
   ofiest,
   deshor,
-  hashor,
-  TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
+  hashor
 FROM estados
 `
 const estadosFechaPerfilQuery = `SELECT 
@@ -35,43 +34,38 @@ const estadosFechaUsuarioQuery = `SELECT
   tipest,
   ofiest,
   deshor,
-  hashor,
-  TO_CHAR(fecest, 'DD/MM/YYYY') "STRFEC"
+  hashor
 FROM estados
 WHERE usuest = :usuest AND
-  fecest = TO_DATE(:fecest, 'DD/MM/YYYY')
+  fecest = TO_DATE(:fecest, 'YYYY-MM-DD')
 `
 const estadosUsuarioQuery = `SELECT 
-  0 AS "IDESTA", 
-  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') AS "FECEST", 
-  0 AS "USUEST", 
-  0 AS "TIPEST", 
-  0 AS "OFIEST", 
-  '08:30' AS "DESHOR", 
-  '14:00' AS "HASHOR", 
-  TO_CHAR(ff.fecfes, 'DD/MM/YYYY') AS "STRFEC"
-FROM festivos ff
-WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
-  ff.fecfes BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
-UNION
-SELECT 
   ee.idesta,
-  TO_CHAR(ee.fecest, 'YYYY-MM-DD') AS "FECEST", 
+  ee.fecest,
   ee.usuest,
   ee.tipest,
   ee.ofiest,
   LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
-  LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR",
-  TO_CHAR(ee.fecest, 'DD/MM/YYYY') AS "STRFEC"
+  LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR"
 FROM estados ee
 WHERE ee.usuest = :usuest AND
   ee.ofiest = :idofic AND
-  ee.fecest BETWEEN TO_DATE(:desde, 'DD/MM/YYYY') AND TO_DATE(:hasta, 'DD/MM/YYYY')
+  ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+UNION
+SELECT 
+  0 AS "IDESTA", 
+  ff.fecfes, 
+  0 AS "USUEST", 
+  0 AS "TIPEST", 
+  0 AS "OFIEST", 
+  '08:30' AS "DESHOR", 
+  '14:00' AS "HASHOR"
+FROM festivos ff
+WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
+  ff.fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const estadosOficinaPerfilQuery = `SELECT 
-  t1.ofiusu, t1.idusua, 
-  TO_CHAR(t1.fecha, 'YYYY-MM-DD') AS "FECHA", 
-  t1.tipest, t1.deshor, t1.hashor, 
+  t1.ofiusu, t1.idusua, t1.fecha, t1.tipest, t1.deshor, t1.hashor, 
   uu.nomusu,
   oo.desofi 
 FROM (
@@ -112,7 +106,7 @@ INNER JOIN usuarios uu ON uu.idusua = t1.idusua
 INNER JOIN oficinas oo ON oo.idofic = t1.ofiusu
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
-  TO_DATE(:fecest, 'DD/MM/YYYY'),
+  TO_DATE(:fecest, 'YYYY-MM-DD'),
   :usuest,
   :tipest,
   :ofiest,
@@ -130,7 +124,7 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETEESTADO(
 ); END;
 `
 const insertTraspasoSql = `BEGIN OPORRAK_PKG.INSERTTRASPASO(
-  TO_DATE(:fecest, 'DD/MM/YYYY'),
+  TO_DATE(:fecest, 'YYYY-MM-DD'),
   :usuest,
   :tipest,
   :ofiest,
@@ -147,7 +141,7 @@ const insertTraspasoSql = `BEGIN OPORRAK_PKG.INSERTTRASPASO(
 const removeTraspasoSql = `BEGIN OPORRAK_PKG.DELETETRASPASO(
   :idesta,
   :usuest,
-  :fecest,
+  TO_DATE(:fecest,'YYYY-MM-DD'),
   :tipest,
   :usumov,
   :tipmov 

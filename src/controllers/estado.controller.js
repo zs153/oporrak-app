@@ -2,80 +2,80 @@ import * as DAL from '../models/estado.model'
 
 const insertFromRec = (req) => {
   const estado = {
-    FECEST: req.body.estado.FECEST,
-    USUEST: req.body.estado.USUEST,
-    TIPEST: req.body.estado.TIPEST,
-    OFIEST: req.body.estado.OFIEST,
-    DESHOR: req.body.estado.DESHOR,
-    HASHOR: req.body.estado.HASHOR,
+    fecest: req.body.estado.FECEST,
+    usuest: req.body.estado.USUEST,
+    tipest: req.body.estado.TIPEST,
+    ofiest: req.body.estado.OFIEST,
+    deshor: req.body.estado.DESHOR,
+    hashor: req.body.estado.HASHOR,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
 }
 const deleteFromRec = (req) => {
   const estado = {
-    IDESTA: req.body.estado.IDESTA,
+    idesta: req.body.estado.IDESTA,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
 }
 const insertTraspasoFromRec = (req) => {
   const estado = {
-    FECEST: req.body.estado.FECEST,
-    USUEST: req.body.estado.USUEST,
-    TIPEST: req.body.estado.TIPEST,
-    OFIEST: req.body.estado.OFIEST,
-    DESHOR: req.body.estado.DESHOR,
-    HASHOR: req.body.estado.HASHOR,
+    fecest: req.body.estado.FECEST,
+    usuest: req.body.estado.USUEST,
+    tipest: req.body.estado.TIPEST,
+    ofiest: req.body.estado.OFIEST,
+    deshor: req.body.estado.DESHOR,
+    hashor: req.body.estado.HASHOR,
   }
   const traspaso = {
-    TIPTRA: req.body.traspaso.TIPTRA,
-    OFITRA: req.body.traspaso.OFITRA,
+    tiptra: req.body.traspaso.TIPTRA,
+    ofitra: req.body.traspaso.OFITRA,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, traspaso, movimiento)
 }
 const deleteTraspasoFromRec = (req) => {
   const estado = {
-    IDESTA: req.body.estado.IDESTA,
+    idesta: req.body.estado.IDESTA,
   }
   const traspaso = {
-    USUEST: req.body.traspaso.USUEST,
-    FECEST: req.body.traspaso.FECEST,
-    TIPEST: req.body.traspaso.TIPEST,
+    usuest: req.body.traspaso.USUEST,
+    fecest: req.body.traspaso.FECEST,
+    tipest: req.body.traspaso.TIPEST,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, traspaso, movimiento)
 }
 const insertRangoFromRec = (req) => {
   const estado = {
-    DESDE: req.body.estado.DESDE,
-    HASTA: req.body.estado.HASTA,
-    USUEST: req.body.estado.USUEST,
-    TIPEST: req.body.estado.TIPEST,
-    OFIEST: req.body.estado.OFIEST,
-    DESHOR: req.body.estado.DESHOR,
-    HASHOR: req.body.estado.HASHOR,
+    desde: req.body.estado.DESDE,
+    hasta: req.body.estado.HASTA,
+    usuest: req.body.estado.USUEST,
+    tipest: req.body.estado.TIPEST,
+    ofiest: req.body.estado.OFIEST,
+    deshor: req.body.estado.DESHOR,
+    hashor: req.body.estado.HASHOR,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
