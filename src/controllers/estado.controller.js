@@ -5,10 +5,10 @@ import { tiposRol, tiposEstado, arrTiposPerfil } from '../public/js/enumeracione
 export const mainPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
-  const currentMonth = new Date().getMonth()
-  const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-  const desde = new Date(currentYear, currentMonth, 1, 1, 0, 0).toISOString().split('T')[0]
-  const hasta = new Date(currentYear, currentMonth, lastDayMonth, 1, 0, 0).toISOString().split('T')[0]
+  const currentMonth = new Date().getMonth() + 1
+  const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
+  const desde = yearMonthDayToUTCString(currentYear, currentMonth, 1)
+  const hasta = yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth)
 
   try {
     let oficinas = await axios.post('http://localhost:8200/api/oficinas')
@@ -90,4 +90,14 @@ export const estadosPage = async (req, res) => {
       alerts: [{ msg }],
     })
   }
+}
+const yearMonthDayToUTCString = (year, month, day) => {
+  const yearCDM = ('000' + year).slice(-4)
+  const monthCDM = ('0' + month).slice(-2)
+  const dayCDM = ('0' + day).slice(-2)
+
+  const fecha = new Date(`${yearCDM}-${monthCDM}-${dayCDM}T00:00:00`)
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+  return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
 }

@@ -76,6 +76,7 @@
                         <div class="mb-1">
                           <div class="form-label">Oficina destino</div>
                           <select class="form-select" id="cbodes" name="ofides" value="">
+                            <option value="0">SELECCIONE DESTINO</option>
                             <% datos.oficinas.map(element=> { %>
                             <option value="<%- element.IDOFIC %>">
                               <%- element.DESOFI %>
@@ -112,17 +113,16 @@
               reject("Error, status code = " + xhr.status)
             } else {
               const result = JSON.parse(xhr.response)
-              const d = result.FECEST.split('/')
 
               // insert en el calendario
               let dataSource = calendario.getDataSource()
               const estado = {
                 idesta: result.idesta,
-                usuest: params.usuario,
-                tipest: params.tipo,
+                usuest: evento.USUEST,
+                tipest: evento.TIPEST,
                 id: result.idesta,
-                startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
-                endDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+                startDate: new Date(evento.FECTRA),
+                endDate: new Date(evento.FECTRA),
                 color: params.color,
               }
 
@@ -186,8 +186,8 @@
     async function getFestivosWithPromise(prms) {
       var xhr = new XMLHttpRequest();
 
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
+      return new Promise(function(resolve, reject) {
+        xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
@@ -220,6 +220,12 @@
         hasta: params.hasta,
       }
       festivos = await getFestivosWithPromise(prms)
+    }
+    const dateISOToUTCString = (dateISO) => {
+      const fecha = new Date(dateISO)
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
     }
     const arrayFilterOficinas = (oficina) => {
       const trimmedData = usuarios.filter(itm => itm.OFIUSU === parseInt(oficina))
@@ -268,31 +274,19 @@
     let calendario = null
     let currentYear = new Date().getFullYear()
     let params = {
-      fecha: new Date().toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
+      fecha: dateISOToUTCString(new Date()),
       oficina: <%- user.oficina %>,
       usuario: <%- user.id %>,
       destino: 0,
       tipo: <%- datos.tiposEstado.traspaso.ID %>,
       color: '<%- datos.tiposEstado.traspaso.COLOR %>',
-      desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
-      hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
+      desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+      hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
     }
 
     calendario = new Calendar("#calendar", {
-      minDate: new Date(currentYear, 0, 1),
-      maxDate: new Date(currentYear, 11, 31),
+      minDate: new Date(params.desde),
+      maxDate: new Date(params.hasta),
       language: "es",
       mouseOnDay: function(e) {
         if (e.events.length > 0) {
@@ -305,21 +299,14 @@
 
     // calendario
     document.getElementById('cboyea').addEventListener('change', function() {
-      calendario.setYear(document.querySelector("#cboyea").value);
-      calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
-      calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
-
       currentYear = parseInt(document.querySelector("#cboyea").value)
-      params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })
-      params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })
+
+      params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+      params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
+
+      calendario.setMinDate(new Date(params.desde));
+      calendario.setMaxDate(new Date(params.hasta));
+      calendario.setYear(currentYear)
 
       estadosUsuario()
     });
@@ -345,18 +332,14 @@
       if (e.events.length > 0 &&
         (e.events[0].idesta === 0 ||
           e.element.classList.contains('domingo') ||
-          params.color === '') ||
-          params.oficina === params.destino ||
-          params.destino === 0
-        ) {
+          params.color === '' ||
+        params.oficina === params.destino ||
+        params.destino === 0)
+      ) {
         return
       }
 
-      params.fecha = e.date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
+      params.fecha = dateISOToUTCString(e.date.toISOString())
 
       // bloquear solapes
       const result = estados.find(itm => itm.STRFEC === params.fecha)

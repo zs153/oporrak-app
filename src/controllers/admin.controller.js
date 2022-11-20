@@ -12,7 +12,7 @@ import {
 export const mainPage = async (req, res) => {
   const user = req.user
   const fecha = {
-    FECEST: new Date().toISOString().split('T')[0]
+    FECEST: new Date().toISOString().slice(0, 10)
   }
 
   try {

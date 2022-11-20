@@ -95,15 +95,14 @@
               reject("Error, status code = " + xhr.status)
             } else {
               const result = JSON.parse(xhr.response)
-              const d = result.FECFES.split('/')
 
               // insert en el calendario
               let dataSource = calendario.getDataSource()
               const estado = {
                 idfest: result.idfest,
                 id: result.idfest,
-                startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
-                endDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+                startDate: new Date(evento.FECFES),
+                endDate: new Date(evento.FECFES),
                 color: "#FF0000",
               }
 
@@ -176,47 +175,41 @@
 
       calendario.setDataSource(data)
     }
+    const dateISOToUTCString = (dateISO) => {
+      const fecha = new Date(dateISO)
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
+    }
   </script>
   <script>
     let estados = null
     let calendario = null
-    let currentYear = new Date().getFullYear()
+    let currentYear = new Date().getFullYear()    
+    let fecha = dateISOToUTCString(new Date())
+
     let params = {
       ofifes: 0,
-      desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
-      hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
+      desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+      hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
     }
 
     calendario = new Calendar("#calendar", {
-      minDate: new Date(currentYear, 0, 1),
-      maxDate: new Date(currentYear, 11, 31),
+      minDate: new Date(params.desde),
+      maxDate: new Date(params.hasta),
       language: "es",
     })
+    calendario.setYear(currentYear)
 
     document.getElementById('cboyea').addEventListener('change', function() {
-      calendario.setYear(document.querySelector("#cboyea").value);
-      calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
-      calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
-
       currentYear = parseInt(document.querySelector("#cboyea").value)
-      params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })
-      params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })
+
+      params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+      params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
+
+      calendario.setMinDate(new Date(params.desde));
+      calendario.setMaxDate(new Date(params.hasta));
+      calendario.setYear(currentYear)
 
       getFestivos(params)
     });
@@ -238,6 +231,8 @@
         e.element.style.boxShadow = '#FF0000 0px -4px 0px 0px inset'
       }
 
+      fecha = dateISOToUTCString(e.date.toISOString())
+
       if (e.events.length) {
         if (e.events[0].id > 0) {
           const evento = {
@@ -256,11 +251,7 @@
       } else {
         const evento = {
           festivo: {
-            FECFES: e.date.toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit'
-            }),
+            FECFES: fecha,
             OFIFES: params.ofifes,
           },
           movimiento: {

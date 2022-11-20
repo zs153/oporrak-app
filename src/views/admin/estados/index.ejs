@@ -75,7 +75,7 @@
                       <div class="mb-1">
                         <div class="input-control">
                           <label class="form-label required">Fecha inicio</label>
-                          <input type="date" name="desfec" id="desfec" class="form-control" value="<%- datos.desde %>" />
+                          <input type="date" name="desfec" id="desfec" class="form-control" />
                           <div class="invalid-feedback"></div>
                         </div>
                       </div>
@@ -109,7 +109,7 @@
     const cboO = document.getElementById('cboofi');
     const cboP = document.getElementById('cboper');
 
-    document.querySelector("#desfec").value = new Date().toISOString().split('T')[0]
+    document.querySelector("#desfec").value = new Date().toISOString().slice(0, 10)
     document.getElementById('desofi').value = cboO[cboO.selectedIndex].text
     document.getElementById('desper').value = cboP[cboP.selectedIndex].text
 
@@ -156,75 +156,94 @@
     }
   </script>
   <script>
-    document.getElementById('desfec').addEventListener('change', function(e) {
-      const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
-      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth()
-      const formato = document.getElementById('cbofor').value
+    const yearMonthDayToUTCString = (year, month, day) => {
+      const yearCDM = ('000' + year).slice(-4)
+      const monthCDM = ('0' + month).slice(-2)
+      const dayCDM = ('0' + day).slice(-2)
 
-      let desde = new Date(currentYear, currentMonth, 1, 2)
+      const fecha = new Date(`${yearCDM}-${monthCDM}-${dayCDM}T00:00:00`)
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
+    }
+    document.getElementById('desfec').addEventListener('change', function(e) {
+      const formato = document.getElementById('cbofor').value
+      const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
+      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth() +1
+
+      let desde = new Date(yearMonthDayToUTCString(currentYear, currentMonth, 1))
       let hasta = desde
 
       if (formato === '1') {
-        const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+        const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
 
-        hasta = new Date(currentYear, currentMonth, lastDayMonth, 2)
+        hasta = new Date(yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth))
       } else {
         let t = new Date()
 
         t = new Date(document.querySelector("#desfec").value)
 
-        if (t.getDay() > 1) {
-          const primerDiaSemana = t.getDate() - t.getDay()
-
-          t.setDate(desde.getDate() + primerDiaSemana)
+        if (t.getDay() === 0) {
+          t.setDate(t.getDate() + 1)
 
           desde = new Date(t)
           hasta = new Date(t.setDate(t.getDate() + 4))
-        } else {
+        } else if (t.getDay() === 1) {
           t = new Date(new Date(document.querySelector("#desfec").value))
           t.setDate(t.getDate() + 4)
 
           desde = new Date(new Date(document.querySelector("#desfec").value))
           hasta = t
+        } else {
+          const primerDiaSemana = t.getDate() - t.getDay()
+
+          t.setDate(desde.getDate() + primerDiaSemana)
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
         }
       }
 
-      document.querySelector("#desde").value = desde.toISOString().split('T')[0]
-      document.querySelector("#hasta").value = hasta.toISOString().split('T')[0]
+      document.querySelector("#desde").value = desde.toISOString().slice(0, 10)
+      document.querySelector("#hasta").value = hasta.toISOString().slice(0, 10)
     })
     document.getElementById('cbofor').addEventListener('change', function(e) {
       const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
-      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth()
+      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth() +1
 
-      let desde = new Date(currentYear, currentMonth, 1, 2)
+      let desde = new Date(yearMonthDayToUTCString(currentYear, currentMonth, 1))
       let hasta = desde
 
       if (e.target.value === '1') {
-        const lastDayMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+        const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
 
-        hasta = new Date(currentYear, currentMonth, lastDayMonth, 2)
+        hasta = new Date(yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth))
       } else {
         let t = new Date()
 
         t = new Date(document.querySelector("#desfec").value)
 
-        if (t.getDay() > 1) {
-          const primerDiaSemana = t.getDate() - t.getDay()
+        if (t.getDay() === 0) {
+          t.setDate(t.getDate() + 1)
 
-          t.setDate(desde.getDate() + primerDiaSemana)
           desde = new Date(t)
           hasta = new Date(t.setDate(t.getDate() + 4))
-        } else {
+        } else if (t.getDay() === 1) {
           t = new Date(new Date(document.querySelector("#desfec").value))
           t.setDate(t.getDate() + 4)
 
           desde = new Date(new Date(document.querySelector("#desfec").value))
           hasta = t
+        } else {
+          const primerDiaSemana = t.getDate() - t.getDay()
+
+          t.setDate(desde.getDate() + primerDiaSemana)
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
         }
       }
 
-      document.querySelector("#desde").value = desde.toISOString().split('T')[0]
-      document.querySelector("#hasta").value = hasta.toISOString().split('T')[0]
+      document.querySelector("#desde").value = desde.toISOString().slice(0, 10)
+      document.querySelector("#hasta").value = hasta.toISOString().slice(0, 10)
     })
   </script>
 </body>

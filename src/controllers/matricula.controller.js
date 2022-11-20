@@ -24,11 +24,11 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const fecha = new Date();
+  const fecha = new Date().toISOString().slice(0, 10)
   const matricula = {
     DESMAT: '',
-    INIMAT: fecha.toISOString().slice(0, 10),
-    FINMAT: fecha.toISOString().slice(0, 10),
+    INIMAT: fecha,
+    FINMAT: fecha,
     STAMAT: estadosMatricula.cerrada,
   }
   const datos = {

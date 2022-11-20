@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
@@ -109,13 +109,27 @@
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Desde</div>
-                      <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="20:00">
+                      <input type="date" id="desfec" name="desfec" class="form-control">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
                       <div class="form-label">Hasta</div>
-                      <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="20:00">
+                      <input type="date" id="hasfec" name="hasfec" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde</div>
+                      <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="14:00">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta</div>
+                      <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="14:00">
                     </div>
                   </div>
                 </div>
@@ -123,7 +137,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-link" id="btnHorasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" onclick="eventoEditado()">Aceptar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -194,28 +208,23 @@
               reject("Error, status code = " + xhr.status)
             } else {
               const result = JSON.parse(xhr.response)
-              const d = result.FECEST.split('/')
 
-              // insert en el calendario
               let dataSource = calendario.getDataSource()
               const estado = {
                 idesta: result.idesta,
-                usuest: params.usuario,
-                tipest: params.tipo,
+                usuest: result.usuest,
+                tipest: result.tipest,
                 id: result.idesta,
-                startDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
-                endDate: new Date(d[2] + '-' + d[1] + '-' + d[0]),
+                startDate: result.fecest,
+                endDate: result.fecest,
                 color: params.color,
               }
 
               dataSource.push(estado)
-              if (estado.tipest === <%- datos.tiposEstado.horas.ID %>) {
-                document.getElementById('modal-horas').style.display = 'none'
-                calendario.setDataSource(dataSource)
-              } else if (estado.tipest === <%- datos.tiposEstado.telefono.ID %>) {
-                document.getElementById('modal-tele').style.display = 'none'
-                calendario.setDataSource(dataSource)
-              }
+
+              calendario.setDataSource(dataSource, {
+                preventRendering: false
+              })
             }
           }
         }
@@ -234,9 +243,13 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              const result = JSON.parse(xhr.response)
-
               document.getElementById('modal-tele').style.display = 'none'
+
+              if (evento.estado.TIPEST === <%- datos.tiposEstado.horas.ID %>) {
+                document.getElementById('modal-horas').style.display = 'none'
+              } else if (evento.estado.TIPEST === <%- datos.tiposEstado.telefono.ID %>) {
+                document.getElementById('modal-tele').style.display = 'none'
+              }
               estadosUsuario()
             }
           }
@@ -256,7 +269,6 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              // update el calendario
               let dataSource = calendario.getDataSource()
 
               dataSource = dataSource.filter(itm => itm.idesta !== evento.estado.IDESTA)
@@ -302,55 +314,28 @@
       estados = await getEstadosWithPromise(prms)
       getEstadosTipo(params.tipo)
     }
-    const eventoEditado = async () => {
-      const evento = {
-        estado: {
-          FECEST: params.fecha,
-          USUEST: params.usuario,
-          TIPEST: params.tipo,
-          OFIEST: params.oficina,
-          DESHOR: '+00 08:30:00',
-          HASHOR: '+00 14:00:00',
-        },
-        movimiento: {
-          USUMOV: <%- user.id %>,
-          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-        }
-      }
+    const dateISOToUTCString = (dateISO) => {
+      const fecha = new Date(dateISO)
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
 
-      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
-        evento.estado.DESHOR = '+00 ' + document.getElementById('deshor').value + ':00'
-        evento.estado.HASHOR = '+00 ' + document.getElementById('hashor').value + ':00'
-      } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
-        //TODO dias
-        evento.estado.DESHOR = '+00 ' + document.getElementById('deshortel').value + ':00'
-        evento.estado.HASHOR = '+00 ' + document.getElementById('hashortel').value + ':00'
-      }
-
-      await insertEvento(evento)
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
     }
     const eventoRango = async () => {
-      const desde = document.getElementById('desfectel').value
-      const hasta = document.getElementById('hasfectel').value
-
       const evento = {
         estado: {
-          DESDE: desde,
-          HASTA: hasta,
+          DESDE: params.tipo === <%- datos.tiposEstado.horas.ID %> ? document.getElementById('desfec').value : document.getElementById('desfectel').value,
+          HASTA: params.tipo === <%- datos.tiposEstado.horas.ID %> ? document.getElementById('hasfec').value : document.getElementById('hasfectel').value,
           USUEST: params.usuario,
           TIPEST: params.tipo,
           OFIEST: params.oficina,
-          DESHOR: '+00 08:00:00',
-          HASHOR: '+00 14:00:00',
+          DESHOR: params.tipo === <%- datos.tiposEstado.horas.ID %> ? `+00 ${document.getElementById('deshor').value}:00` : `+00 ${document.getElementById('deshortel').value}:00`,
+          HASHOR: params.tipo === <%- datos.tiposEstado.horas.ID %> ? `+00 ${document.getElementById('hashor').value}:00` : `+00 ${document.getElementById('hashortel').value}:00`,
         },
         movimiento: {
           USUMOV: <%- user.id %>,
           TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
         }
       }
-
-      evento.estado.DESHOR = '+00 ' + document.getElementById('deshortel').value + ':00'
-      evento.estado.HASHOR = '+00 ' + document.getElementById('hashortel').value + ':00'
 
       await insertRangoEvento(evento)
     }
@@ -396,15 +381,18 @@
       calendario.setDataSource(data)
     }
     const editEvento = (e) => {
+      const fecha = dateISOToUTCString(e.date.toISOString())
+
       if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         const modalHoras = document.getElementById('modal-horas')
 
+        document.getElementById('desfec').value = fecha
+        document.getElementById('hasfec').value = fecha
         document.getElementById('deshor').value = "08:30"
         document.getElementById('hashor').value = "14:00"
         modalHoras.style.display = 'flex'
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         const modalTele = document.getElementById('modal-tele')
-        const fecha = new Date(e.date.getFullYear(), e.date.getMonth(), e.date.getDate(), 2).toISOString().split('T')[0]
 
         document.getElementById('desfectel').value = fecha
         document.getElementById('hasfectel').value = fecha
@@ -421,31 +409,20 @@
     let estados = null
     let calendario = null
     let currentYear = new Date().getFullYear()
+
     let params = {
-      fecha: new Date().toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
+      fecha: dateISOToUTCString(new Date()),
       oficina: <%- user.oficina %>,
       usuario: <%- user.id %>,
       tipo: 0,
       color: '',
-      desde: new Date(currentYear, 0, 1).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
-      hasta: new Date(currentYear, 11, 31).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
+      desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+      hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
     }
 
     calendario = new Calendar("#calendar", {
-      minDate: new Date(currentYear, 0, 1),
-      maxDate: new Date(currentYear, 11, 31),
+      minDate: new Date(params.desde),
+      maxDate: new Date(params.hasta),
       language: "es",
       mouseOnDay: function(e) {
         if (e.events.length > 0) {
@@ -455,6 +432,7 @@
         }
       },
     })
+    calendario.setYear(currentYear)
 
     // modal
     document.getElementById('btnTeleCancel').addEventListener('click', function() {
@@ -477,21 +455,14 @@
 
     // calendario
     document.getElementById('cboyea').addEventListener('change', function() {
-      calendario.setYear(document.querySelector("#cboyea").value);
-      calendario.setMinDate(new Date(document.querySelector("#cboyea").value, 0, 1));
-      calendario.setMaxDate(new Date(document.querySelector("#cboyea").value, 11, 31));
-
       currentYear = parseInt(document.querySelector("#cboyea").value)
-      params.desde = new Date(document.querySelector("#cboyea").value, 0, 1).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })
-      params.hasta = new Date(document.querySelector("#cboyea").value, 11, 31).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })
+
+      params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+      params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
+
+      calendario.setMinDate(new Date(params.desde));
+      calendario.setMaxDate(new Date(params.hasta));
+      calendario.setYear(currentYear)
 
       estadosUsuario()
     });
@@ -504,8 +475,6 @@
     document.getElementById('cbousu').addEventListener('change', function() {
       params.usuario = parseInt(this.value)
 
-      // cambia el estado al primer elemento TODOS
-      //document.getElementById('cboest').selectedIndex = 0
       estadosUsuario()
     });
     document.getElementById('cboest').addEventListener('change', function() {
@@ -523,14 +492,10 @@
         return
       }
 
-      params.fecha = e.date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
+      params.fecha = dateISOToUTCString(e.date.toISOString())
 
       // bloquear solapes
-      const result = estados.find(itm => itm.STRFEC === params.fecha)
+      const result = estados.find(itm => itm.FECEST === params.fecha)
       if (result) {
         if (result.TIPEST !== params.tipo) {
           e.element.setAttribute('data-bs-trigger', 'hover')

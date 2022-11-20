@@ -100,14 +100,14 @@ export const turnosPage = async (req, res) => {
 }
 export const addTurnoPage = async (req, res) => {
   const user = req.user;
-  const fecha = new Date();
+  const fecha = new Date().toISOString().slice(0, 10);
   const curso = {
     IDCURS: req.params.id,
   };
   const turno = {
     DESTUR: '',
-    STRINI: fecha.toISOString().slice(0, 10),
-    STRFIN: fecha.toISOString().slice(0, 10),
+    STRINI: fecha,
+    STRFIN: fecha,
     INIHOR: '08:00',
     FINHOR: '14:00',
     LOCTUR: ''

@@ -127,7 +127,7 @@
       width: 14px;
       height: 10px;
       top: 4px;
-      background-color: #800209;
+      background-color: #D80000;
     }
 
     .timeline.trasp:before {
@@ -273,8 +273,8 @@
       const estados = <%- JSON.stringify(datos.estados) %>
       const festivos = <%- JSON.stringify(datos.festivos) %>
       const diasPeriodo = <%- datos.diasPeriodo %>
-      const desde = new Date("<%- datos.periodo.desde %>")
-      const hasta = new Date("<%- datos.periodo.hasta %>")
+      const desde = new Date(periodo.desde)
+      const hasta = new Date(periodo.hasta)
 
       let activosOficina = new Array(diasPeriodo * 14).fill(0)
       let estadosUsuario = []
