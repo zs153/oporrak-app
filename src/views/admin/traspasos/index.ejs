@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Calendario</title>
+  <title>Traspasos</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
@@ -274,7 +274,7 @@
     let calendario = null
     let currentYear = new Date().getFullYear()
     let params = {
-      fecha: dateISOToUTCString(new Date()),
+      fecha: new Date().toISOString().slice(0, 10),
       oficina: <%- user.oficina %>,
       usuario: <%- user.id %>,
       destino: 0,
@@ -329,44 +329,21 @@
     });
     document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
       // bloquear festivos
-      if (e.events.length > 0 &&
-        (e.events[0].idesta === 0 ||
-          e.element.classList.contains('domingo') ||
-          params.color === '' ||
-        params.oficina === params.destino ||
-        params.destino === 0)
+      if (e.element.classList.contains('domingo')) {
+        return
+      }
+
+      // bloquear si no existe destino
+      if (e.events.length === 0 &&
+        (params.destino === 0 || params.oficina === params.destino)
       ) {
         return
       }
 
       params.fecha = dateISOToUTCString(e.date.toISOString())
 
-      // bloquear solapes
-      const result = estados.find(itm => itm.STRFEC === params.fecha)
-      const festivo = festivos.find(itm => itm.STRFES === params.fecha)
-      if (result || festivo) {
-        if (festivo) {
-          e.element.setAttribute('data-bs-trigger', 'hover')
-          e.element.setAttribute('data-bs-toggle', 'popover')
-          e.element.setAttribute('title', 'Festivo en el destino')
-          return
-        }
-        if (result.TIPEST !== params.tipo) {
-          e.element.setAttribute('data-bs-trigger', 'hover')
-          e.element.setAttribute('data-bs-toggle', 'popover')
-          e.element.setAttribute('title', 'Solape de horas')
-          return
-        }
-      }
-
-      if (e.element.style.boxShadow) {
-        e.element.style.boxShadow = null
-      } else {
-        e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
-      }
-
       if (e.events.length) {
-        if (e.events[0].id > 0) {
+        if (e.events[0].id !== 0) {
           const evento = {
             estado: {
               IDESTA: e.events[0].idesta,
@@ -382,9 +359,34 @@
             }
           }
 
+          // actualizar dia
+          e.element.style.boxShadow = null
+          e.element.removeAttribute('title')
+
+          // borrar
           await deleteEvento(evento)
         }
       } else {
+        // bloquear solapes
+        const result = estados.find(itm => itm.STRFEC === params.fecha)
+        const festivo = festivos.find(itm => itm.STRFES === params.fecha)
+
+        if (result || festivo) {
+          if (festivo) {
+            e.element.setAttribute('data-bs-trigger', 'hover')
+            e.element.setAttribute('data-bs-toggle', 'popover')
+            e.element.setAttribute('title', 'Festivo en el destino')
+            return
+          }
+          if (result.TIPEST !== params.tipo) {
+            e.element.setAttribute('data-bs-trigger', 'hover')
+            e.element.setAttribute('data-bs-toggle', 'popover')
+            e.element.setAttribute('title', 'Solape de horas')
+            return
+          }
+        }
+
+        // evento
         const evento = {
           estado: {
             FECEST: params.fecha,
@@ -404,6 +406,10 @@
           }
         }
 
+        // actualizar dia
+        e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+
+        // crear
         await insertEvento(evento)
       }
 

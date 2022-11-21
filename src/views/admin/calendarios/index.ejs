@@ -209,22 +209,7 @@
             } else {
               const result = JSON.parse(xhr.response)
 
-              let dataSource = calendario.getDataSource()
-              const estado = {
-                idesta: result.idesta,
-                usuest: result.usuest,
-                tipest: result.tipest,
-                id: result.idesta,
-                startDate: result.fecest,
-                endDate: result.fecest,
-                color: params.color,
-              }
-
-              dataSource.push(estado)
-
-              calendario.setDataSource(dataSource, {
-                preventRendering: false
-              })
+              resolve(result)
             }
           }
         }
@@ -243,13 +228,13 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              document.getElementById('modal-tele').style.display = 'none'
-
+              //resolve(evento)
               if (evento.estado.TIPEST === <%- datos.tiposEstado.horas.ID %>) {
                 document.getElementById('modal-horas').style.display = 'none'
               } else if (evento.estado.TIPEST === <%- datos.tiposEstado.telefono.ID %>) {
                 document.getElementById('modal-tele').style.display = 'none'
               }
+
               estadosUsuario()
             }
           }
@@ -269,12 +254,7 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              let dataSource = calendario.getDataSource()
-
-              dataSource = dataSource.filter(itm => itm.idesta !== evento.estado.IDESTA)
-              calendario.setDataSource(dataSource, {
-                preventRendering: false
-              })
+              resolve(evento)
             }
           }
         }
@@ -411,7 +391,7 @@
     let currentYear = new Date().getFullYear()
 
     let params = {
-      fecha: dateISOToUTCString(new Date()),
+      fecha: new Date().toISOString().slice(0, 10),
       oficina: <%- user.oficina %>,
       usuario: <%- user.id %>,
       tipo: 0,
@@ -429,6 +409,15 @@
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
           e.element.setAttribute('title', colores[e.events[0].tipest].DES)
+
+          // e.element.popover({
+          //   trigger: 'manual',
+          //   container: 'body',
+          //   html: true,
+          //   content: '<div class="event-tooltip-content"><div class="event-name" style="color: blue">colores[e.events[0].tipest].DES)</div>'
+          // })
+
+          // e.element.popover('show')
         }
       },
     })
@@ -485,69 +474,100 @@
     });
     document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
       // bloquear festivos
-      if (e.events.length > 0 &&
-        e.events[0].idesta === 0 ||
-        e.element.classList.contains('domingo') ||
-        params.color === '') {
+      if (e.element.classList.contains('domingo')) {
         return
       }
 
-      params.fecha = dateISOToUTCString(e.date.toISOString())
-
-      // bloquear solapes
-      const result = estados.find(itm => itm.FECEST === params.fecha)
-      if (result) {
-        if (result.TIPEST !== params.tipo) {
-          e.element.setAttribute('data-bs-trigger', 'hover')
-          e.element.setAttribute('data-bs-toggle', 'popover')
-          e.element.setAttribute('title', 'Solape de horas')
-          return
-        }
+      // bloquear si no existe destino
+      if (e.events.length === 0 && params.tipo === 0) {
+        return
       }
-
+      
       if (e.events.length === 0 &&
-        (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
-          params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
+      (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
+      params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
         editEvento(e)
-      } else {
-        if (e.element.style.boxShadow) {
-          e.element.style.boxShadow = null
-        } else {
-          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
-        }
-
-        if (e.events.length) {
-          if (e.events[0].id > 0) {
-            const evento = {
-              estado: {
-                IDESTA: e.events[0].idesta,
-              },
-              movimiento: {
-                USUMOV: <%- user.id %>,
-                TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
-              }
-            }
-
-            await deleteEvento(evento)
-          }
-        } else {
+      }
+      
+      if (e.events.length) {
+        if (e.events[0].id > 0) {
           const evento = {
             estado: {
-              FECEST: params.fecha,
-              USUEST: params.usuario,
-              TIPEST: params.tipo,
-              OFIEST: params.oficina,
-              DESHOR: '+00 08:30:00',
-              HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
+              IDESTA: e.events[0].idesta,
             },
             movimiento: {
               USUMOV: <%- user.id %>,
-              TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+              TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
             }
           }
+          
+          // borrar
+          await deleteEvento(evento).then(ret => {
+            
+            // actualiza dia calendario
+            let dataSource = calendario.getDataSource()
+            
+            dataSource = dataSource.filter(itm => itm.idesta !== ret.IDESTA)
+            calendario.setDataSource(dataSource, {
+              preventRendering: false
+            })
 
-          await insertEvento(evento)
+            // actualizar dia
+            e.element.attributes.removeNamedItem("style")
+            e.element.removeAttribute("data-bs-toggle")
+            e.element.removeAttribute("data-bs-trigger")
+          })
+          }
+      } else {
+        params.fecha = dateISOToUTCString(e.date.toISOString())
+
+        // bloquear solapes
+        const result = estados.find(itm => itm.FECEST === params.fecha)
+        if (result) {
+          if (result.TIPEST !== params.tipo) {
+            e.element.setAttribute('data-bs-trigger', 'hover')
+            e.element.setAttribute('data-bs-toggle', 'popover')
+            e.element.setAttribute('title', 'Solape de horas')
+            return
+          }
         }
+
+        const evento = {
+          estado: {
+            FECEST: params.fecha,
+            USUEST: params.usuario,
+            TIPEST: params.tipo,
+            OFIEST: params.oficina,
+            DESHOR: '+00 08:30:00',
+            HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
+          },
+          movimiento: {
+            USUMOV: <%- user.id %>,
+            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+          }
+        }
+        
+        // insertar
+        await insertEvento(evento).then(ret => {
+          // actualiza dia calendario
+          let dataSource = calendario.getDataSource()
+          const estado = {
+            idesta: ret.idesta,
+            usuest: ret.usuest,
+            tipest: ret.tipest,
+            id: ret.idesta,
+            startDate: new Date(ret.fecest),
+            endDate: new Date(ret.fecest),
+            color: params.color,
+          }
+          dataSource.push(estado)
+          calendario.setDataSource(dataSource, {
+            preventRendering: false
+          })
+
+          // actualizar dia
+          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+        })
       }
     })
 
