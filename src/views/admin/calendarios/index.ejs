@@ -253,7 +253,7 @@
           if (xhr.readyState == 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
-            } else {
+            } else {                
               resolve(evento)
             }
           }
@@ -409,15 +409,6 @@
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
           e.element.setAttribute('title', colores[e.events[0].tipest].DES)
-
-          // e.element.popover({
-          //   trigger: 'manual',
-          //   container: 'body',
-          //   html: true,
-          //   content: '<div class="event-tooltip-content"><div class="event-name" style="color: blue">colores[e.events[0].tipest].DES)</div>'
-          // })
-
-          // e.element.popover('show')
         }
       },
     })
@@ -483,6 +474,7 @@
         return
       }
       
+      // evento por rango
       if (e.events.length === 0 &&
       (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
       params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
@@ -490,7 +482,7 @@
       }
       
       if (e.events.length) {
-        if (e.events[0].id > 0) {
+        if (e.events[0].id !== 0) {
           const evento = {
             estado: {
               IDESTA: e.events[0].idesta,
@@ -502,8 +494,7 @@
           }
           
           // borrar
-          await deleteEvento(evento).then(ret => {
-            
+          await deleteEvento(evento).then(ret => {            
             // actualiza dia calendario
             let dataSource = calendario.getDataSource()
             
@@ -514,10 +505,8 @@
 
             // actualizar dia
             e.element.attributes.removeNamedItem("style")
-            e.element.removeAttribute("data-bs-toggle")
-            e.element.removeAttribute("data-bs-trigger")
           })
-          }
+        }
       } else {
         params.fecha = dateISOToUTCString(e.date.toISOString())
 

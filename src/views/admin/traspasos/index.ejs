@@ -114,22 +114,7 @@
             } else {
               const result = JSON.parse(xhr.response)
 
-              // insert en el calendario
-              let dataSource = calendario.getDataSource()
-              const estado = {
-                idesta: result.idesta,
-                usuest: evento.USUEST,
-                tipest: evento.TIPEST,
-                id: result.idesta,
-                startDate: new Date(evento.FECTRA),
-                endDate: new Date(evento.FECTRA),
-                color: params.color,
-              }
-
-              dataSource.push(estado)
-              calendario.setDataSource(dataSource, {
-                preventRendering: false
-              })
+              resolve(result)
             }
           }
         }
@@ -148,13 +133,7 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              // update el calendario
-              let dataSource = calendario.getDataSource()
-
-              dataSource = dataSource.filter(itm => itm.idesta !== evento.estado.IDESTA)
-              calendario.setDataSource(dataSource, {
-                preventRendering: false
-              })
+              resolve(evento)
             }
           }
         }
@@ -359,12 +338,19 @@
             }
           }
 
-          // actualizar dia
-          e.element.style.boxShadow = null
-          e.element.removeAttribute('title')
-
           // borrar
-          await deleteEvento(evento)
+          await deleteEvento(evento).then(ret => {
+            // actualiza dia calendario
+            let dataSource = calendario.getDataSource()
+
+            dataSource = dataSource.filter(itm => itm.idesta !== ret.IDESTA)
+            calendario.setDataSource(dataSource, {
+              preventRendering: false
+            })
+
+            // actualizar dia
+            e.element.attributes.removeNamedItem("style")
+          })
         }
       } else {
         // bloquear solapes
@@ -406,11 +392,27 @@
           }
         }
 
-        // actualizar dia
-        e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+        // insertar
+        await insertEvento(evento).then(ret => {
+          // actualiza dia calendario
+          let dataSource = calendario.getDataSource()
+          const estado = {
+            idesta: ret.idesta,
+            usuest: ret.usuest,
+            tipest: ret.tipest,
+            id: ret.idesta,
+            startDate: new Date(ret.fecest),
+            endDate: new Date(ret.fecest),
+            color: params.color,
+          }
+          dataSource.push(estado)
+          calendario.setDataSource(dataSource, {
+            preventRendering: false
+          })
 
-        // crear
-        await insertEvento(evento)
+          // actualizar dia
+          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+        })
       }
 
     })
