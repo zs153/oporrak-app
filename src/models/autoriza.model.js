@@ -3,10 +3,29 @@ import { simpleExecute } from "../services/database.js";
 const baseQuery = `SELECT idusua, userid, rolusu, ofiusu, pwdusu FROM usuarios
 WHERE userid = :userid
 `
+const olvidoSql = `BEGIN FORMULARIOS_PKG.FORGOTPASSWORD(
+  :emausu,
+  :pwdusu, 
+  :tipmov,
+  :saltus
+); END;
+`
 
 export const find = async (context) => {
-  let query = baseQuery;
+  const result = await simpleExecute(baseQuery, context);
 
-  const result = await simpleExecute(query, context);
   return result.rows;
 }
+export const forgot = async (context) => {
+  let result;
+
+  try {
+    await simpleExecute(olvidoSql, context);
+
+    result = context;
+  } catch (error) {
+    result = null;
+  }
+
+  return result;
+};

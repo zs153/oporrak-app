@@ -2,11 +2,15 @@ import { createPrivateKey, createSecretKey, generateKeyPairSync } from 'crypto'
 import bcrypt from "bcrypt";
 import { V4 } from 'paseto'
 import { privateKey, secreto } from '../config/settings'
+import { tiposMovimiento } from '../public/js/enumeraciones'
 import * as DAL from "../models/autoriza.model";
 
 // pages
 export const loginPage = async (req, res) => {
   res.render("sign-in", { datos: {}, alerts: undefined });
+};
+export const olvidoPage = async (req, res) => {
+  res.render("forgot", { datos: {}, alerts: undefined });
 };
 
 // procs
@@ -101,5 +105,41 @@ export const autorizar = async (req, res) => {
       datos: req.body,
       alerts: [{ msg: 'No se ha podido conectar con la base de datos' }]
     })
+  }
+};
+export const olvido = async (req, res) => {
+  const randomString = Math.random().toString(36).substring(2, 10);
+  const salt = await bcrypt.genSalt(10);
+  const passHash = await bcrypt.hash(randomString, salt);
+  const usuario = {
+    emausu: req.body.emausu,
+    pwdusu: passHash,
+  };
+  const movimiento = {
+    tipmov: tiposMovimiento.olvidoPassword,
+  };
+  const saltus = {
+    saltus: randomString,
+  }
+  const context = Object.assign(usuario, movimiento, saltus)
+
+  try {
+    const result = await DAL.forgot(context);
+
+    if (result) {
+      res.render("okForgot", {
+        datos: req.body,
+        alerts: undefined,
+      });
+    } else {
+      throw new Error()
+    }
+  } catch (error) {
+    const msg = "No se ha podido generar una nueva contraseña";
+
+    res.render("sign-in", {
+      datos: req.body,
+      alerts: [{ msg }],
+    });
   }
 };
