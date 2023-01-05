@@ -128,7 +128,6 @@ export const olvido = async (req, res) => {
 
     if (result) {
       res.render("okForgot", {
-        datos: req.body,
         alerts: undefined,
       });
     } else {
