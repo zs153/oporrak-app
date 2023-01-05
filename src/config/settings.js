@@ -15,7 +15,7 @@ export const connectionString = {
   password: process.env.NODE_ORACLEDB_PASSWORD,
   connectString: process.env.NODE_ORACLEDB_CONNECTIONSTRING,
 };
-export const secreto = process.env.SECRETO
 export const puerto = process.env.PORT;
+export const secreto = process.env.SECRETO
 export const publicKey = process.env.PUBLIC_KEY
 export const privateKey = process.env.PRIVATE_KEY
