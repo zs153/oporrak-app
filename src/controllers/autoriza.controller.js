@@ -1,4 +1,4 @@
-import { createPrivateKey, createSecretKey, generateKeyPairSync } from 'crypto'
+import { createPrivateKey } from 'crypto'
 import bcrypt from "bcrypt";
 import { V4 } from 'paseto'
 import { privateKey, secreto } from '../config/settings'
@@ -44,21 +44,6 @@ export const autorizar = async (req, res) => {
             rol: usuario.ROLUSU,
             oficina: usuario.OFIUSU,
           }
-
-          // const { publicKey, privateKey } = generateKeyPairSync('ed25519', {
-          //   modulus: 4096,
-          //   publicKeyEncoding: {
-          //     type: 'spki',
-          //     format: 'pem',
-          //   },
-          //   privateKeyEncoding: {
-          //     type: 'pkcs8',
-          //     format: 'pem',
-          //     cipher: 'aes-256-cbc',
-          //     passphrase: secreto,
-          //   },
-          // })
-
           const key = createPrivateKey({
             'key': privateKey,
             'format': 'pem',
@@ -66,21 +51,21 @@ export const autorizar = async (req, res) => {
             'cipher': 'aes-256-cbc',
             'passphrase': secreto,
           })
+
           await V4.sign(payload, key, {
             audience: 'urn:client:claim',
-            issuer: 'http://localhost:4000',
+            issuer: 'http://localhost:4200',
             expiresIn: '6 hours',
-          }).then(r => {
-            const token = r
+          }).then(token => {
             const options = {
               path: "/",
               sameSite: true,
               maxAge: 1000 * 60 * 60 * 6, // 6 horas
               httpOnly: true,
-            };
+            }
             res.cookie('auth', token, options)
             res.writeHead(302, {
-              'Location': 'http://localhost:4000/admin',
+              'Location': 'http://localhost:4200/admin',
               'Content-Type': 'text/plain',
             })
             res.end()
