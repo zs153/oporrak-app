@@ -1,7 +1,7 @@
 import { createPrivateKey } from 'crypto'
 import bcrypt from "bcrypt";
 import { V4 } from 'paseto'
-import { privateKey, secreto } from '../config/settings'
+import { privateKey, secreto, serverWEB } from '../config/settings'
 import * as DAL from "../models/autoriza.model";
 
 // pages
@@ -64,7 +64,7 @@ export const autorizar = async (req, res) => {
             }
             res.cookie('auth', token, options)
             res.writeHead(302, {
-              'Location': 'http://localhost:4200/admin',
+              'Location': `http://${serverWEB}:4200/admin`,
               'Content-Type': 'text/plain',
             })
             res.end()
