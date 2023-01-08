@@ -2,7 +2,6 @@ import { createPrivateKey } from 'crypto'
 import bcrypt from "bcrypt";
 import { V4 } from 'paseto'
 import { privateKey, secreto } from '../config/settings'
-import { tiposMovimiento } from '../public/js/enumeraciones'
 import * as DAL from "../models/autoriza.model";
 
 // pages
@@ -96,6 +95,9 @@ export const olvido = async (req, res) => {
   const randomString = Math.random().toString(36).substring(2, 10);
   const salt = await bcrypt.genSalt(10);
   const passHash = await bcrypt.hash(randomString, salt);
+  const tiposMovimiento = {
+    olvidoPassword: 61,
+  }
   const usuario = {
     emausu: req.body.emausu,
     pwdusu: passHash,
@@ -117,12 +119,12 @@ export const olvido = async (req, res) => {
   } catch (error) {
     let msg
 
-    if (error.errorNum === 20001) {
-      msg = 'No se puede enviar el correo electrónico'
-    } else if (error.errorNum === 20100) {
+    if (error.errorNum === 20100) {
       msg = 'El correo electrónico no existe'
-    } else {
-      msg = 'No se han podido actualizar los datos'
+    } else if (error.errorNum === 20101) {
+      msg = 'No se puede enviar el correo electrónico'
+    } else if (error.errorNum === 20102) {
+      msg = 'No se pueden actualizar los datos'
     }
 
     res.render("sign-in", {
