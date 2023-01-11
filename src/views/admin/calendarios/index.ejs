@@ -204,14 +204,20 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Desde</div>
-                      <input type="date" id="desfecfor" name="desfecfor" class="form-control">
+                      <div class="input-control">
+                        <div class="form-label">Desde</div>
+                        <input type="date" id="desfecfor" name="desfecfor" class="form-control">
+                        <div class="invalid-feedback"></div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Hasta</div>
-                      <input type="date" id="hasfecfor" name="hasfecfor" class="form-control">
+                      <div class="input-control">
+                        <div class="form-label">Hasta</div>
+                        <input type="date" id="hasfecfor" name="hasfecfor" class="form-control">
+                        <div class="invalid-feedback"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -351,8 +357,26 @@
 
       return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
     }
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+    const isInRange = (value,range) => {
+      return (value >= range[0] && value <= range[1])
+    }
     const eventoRango = async () => {
-      console.log('first')
       const estado = {
         USUEST: params.usuario,
         TIPEST: params.tipo,
@@ -362,28 +386,57 @@
         USUMOV: <%- user.id %>,
         TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
       }
+      let deshor
+      let hashor
+
       if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+        deshor = document.getElementById('deshor').value
+        hashor = document.getElementById('hashor').value
+
         estado.DESDE = document.getElementById('desfec').value
         estado.HASTA = document.getElementById('hasfec').value
-        estado.DESHOR = `+00 ${document.getElementById('deshor').value}:00`
-        estado.HASHOR = `+00 ${document.getElementById('hashor').value}:00`
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
+        deshor = document.getElementById('deshortel').value
+        hashor = document.getElementById('hashortel').value
+
         estado.DESDE = document.getElementById('desfectel').value
         estado.HASTA = document.getElementById('hasfectel').value
-        estado.DESHOR = `+00 ${document.getElementById('deshortel').value}:00`
-        estado.HASHOR = `+00 ${document.getElementById('hashortel').value}:00`
       } else if (params.tipo === <%- datos.tiposEstado.formacion.ID %>) {
+        deshor = document.getElementById('deshorfor').value
+        hashor = document.getElementById('hashorfor').value
+
         estado.DESDE = document.getElementById('desfecfor').value
         estado.HASTA = document.getElementById('hasfecfor').value
-        estado.DESHOR = `+00 ${document.getElementById('deshorfor').value}:00`
-        estado.HASHOR = `+00 ${document.getElementById('hashorfor').value}:00`
       }
+      estado.DESHOR = `+00 ${deshor}:00`
+      estado.HASHOR = `+00 ${hashor}:00`
       const evento = {
         estado,
         movimiento,
       }
 
-      await insertRangoEvento(evento)
+      let haySolape = false
+      // solapes
+      for (let d = new Date(estado.DESDE); d <= new Date(estado.HASTA); d.setDate(d.getDate() + 1)) {
+        const result = estados.find(itm => itm.STRFEC === d.toISOString().slice(0,10))
+        let rango = [result.DESHOR,result.HASHOR]
+
+        if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
+          haySolape = true
+
+          const desfecfor = document.getElementById('desfecfor')
+          setError(desfecfor, `Solape de eventos el día ${d.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })}.`)
+          setTimeout(function () {
+            setSuccess(desfecfor)
+          }, 3000)          
+          break
+        }
+      }
+
+      if (!haySolape) {
+        // insert rango
+        await insertRangoEvento(evento)
+      }
     }
     const arrayFilterOficinas = (oficina) => {
       const trimmedData = orgList.filter(itm => itm.OFIUSU === parseInt(oficina))
@@ -418,8 +471,8 @@
           usuest: itm.USUEST,
           tipest: itm.TIPEST,
           id: itm.IDESTA,
-          startDate: new Date(itm.FECEST),
-          endDate: new Date(itm.FECEST),
+          startDate: new Date(itm.STRFEC),
+          endDate: new Date(itm.STRFEC),
           color: colores[itm.TIPEST].COLOR,
         }
         data.push(estado)
@@ -513,7 +566,7 @@
       }
     })
 
-    // calendario
+    // eventos
     document.getElementById('cboyea').addEventListener('change', function() {
       currentYear = parseInt(document.querySelector("#cboyea").value)
 
@@ -560,6 +613,7 @@
       params.tipo === <%- datos.tiposEstado.telefono.ID %> ||
       params.tipo === <%- datos.tiposEstado.formacion.ID %>)) {
         editEvento(e)
+        return
       }
       
       if (e.events.length) {
@@ -591,30 +645,30 @@
       } else {
         params.fecha = dateISOToUTCString(e.date.toISOString())
 
-        // bloquear solapes
-        const result = estados.find(itm => itm.FECEST === params.fecha)
+        // solapes
+        const result = estados.find(itm => itm.STRFEC === params.fecha)
         if (result) {
-          if (result.TIPEST !== params.tipo) {
-            e.element.setAttribute('data-bs-trigger', 'hover')
-            e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Solape de horas')
-            return
-          }
+          e.element.setAttribute('data-bs-trigger', 'hover')
+          e.element.setAttribute('data-bs-toggle', 'popover')
+          e.element.setAttribute('title', 'Solape de eventos')
+          return
         }
 
+        const estado = {
+          FECEST: params.fecha,
+          USUEST: params.usuario,
+          TIPEST: params.tipo,
+          OFIEST: params.oficina,
+          DESHOR: '+00 08:30:00',
+          HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
+        }
+        const movimiento = {
+          USUMOV: <%- user.id %>,
+          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+        }
         const evento = {
-          estado: {
-            FECEST: params.fecha,
-            USUEST: params.usuario,
-            TIPEST: params.tipo,
-            OFIEST: params.oficina,
-            DESHOR: '+00 08:30:00',
-            HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
-          },
-          movimiento: {
-            USUMOV: <%- user.id %>,
-            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-          }
+          estado,
+          movimiento,
         }
         
         // insertar
@@ -644,7 +698,6 @@
     arrayFilterOficinas(params.oficina)
     estadosUsuario()
   </script>
-
 </body>
 
 </html>
