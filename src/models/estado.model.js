@@ -41,12 +41,12 @@ WHERE usuest = :usuest AND
 `
 const estadosUsuarioQuery = `SELECT 
   ee.idesta,
-  ee.fecest,
+  TO_CHAR(ee.fecest, 'YYYY-MM-DD') STRFEC,
   ee.usuest,
   ee.tipest,
   ee.ofiest,
-  LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
-  LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "HASHOR"
+  REGEXP_SUBSTR(deshor, '\d{2}:\d{2}'),
+  REGEXP_SUBSTR(hashor, '\d{2}:\d{2}')
 FROM estados ee
 WHERE ee.usuest = :usuest AND
   ee.ofiest = :idofic AND
@@ -54,7 +54,7 @@ WHERE ee.usuest = :usuest AND
 UNION
 SELECT 
   0 AS "IDESTA", 
-  ff.fecfes, 
+  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') STRFEC,
   0 AS "USUEST", 
   0 AS "TIPEST", 
   0 AS "OFIEST", 
