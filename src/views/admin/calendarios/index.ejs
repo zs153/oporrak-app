@@ -191,6 +191,55 @@
         </div>
       </div>
     </div>
+    <div class="modal modal-blur fade" id="modal-forma" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title mt-0">Formación</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde</div>
+                      <input type="date" id="desfecfor" name="desfecfor" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta</div>
+                      <input type="date" id="hasfecfor" name="hasfecfor" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde hora</div>
+                      <input type="time" id="deshorfor" name="deshorfor" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta hora</div>
+                      <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00" max="20:00">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal"
+                aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <%- include('../../partials/footer') %>
   </div>
 
@@ -233,7 +282,9 @@
                 document.getElementById('modal-horas').style.display = 'none'
               } else if (evento.estado.TIPEST === <%- datos.tiposEstado.telefono.ID %>) {
                 document.getElementById('modal-tele').style.display = 'none'
-              }
+              } else if (evento.estado.TIPEST === <%- datos.tiposEstado.formacion.ID %>) {
+                document.getElementById('modal-forma').style.display = 'none'
+              }  
 
               estadosUsuario()
             }
@@ -301,20 +352,34 @@
       return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
     }
     const eventoRango = async () => {
+      const estado = {
+        USUEST: params.usuario,
+        TIPEST: params.tipo,
+        OFIEST: params.oficina,
+      }
+      const movimiento = {
+        USUMOV: <%- user.id %>,
+        TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+      }
+      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+        estado.DESDE = document.getElementById('desfec').value
+        estado.HASTA = document.getElementById('hasfec').value
+        estado.DESHOR = `+00 ${document.getElementById('deshor').value}:00`
+        estado.HASHOR = `+00 ${document.getElementById('hashor').value}:00`
+      } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
+        estado.DESDE = document.getElementById('desfectel').value
+        estado.HASTA = document.getElementById('hasfectel').value
+        estado.DESHOR = `+00 ${document.getElementById('deshortel').value}:00`
+        estado.HASHOR = `+00 ${document.getElementById('hashortel').value}:00`
+      } else if (params.tipo === <%- datos.tiposEstado.formacion.ID %>) {
+        estado.DESDE = document.getElementById('desfecfor').value
+        estado.HASTA = document.getElementById('hasfecfor').value
+        estado.DESHOR = `+00 ${document.getElementById('deshorfor').value}:00`
+        estado.HASHOR = `+00 ${document.getElementById('hashorfor').value}:00`
+      }
       const evento = {
-        estado: {
-          DESDE: params.tipo === <%- datos.tiposEstado.horas.ID %> ? document.getElementById('desfec').value : document.getElementById('desfectel').value,
-          HASTA: params.tipo === <%- datos.tiposEstado.horas.ID %> ? document.getElementById('hasfec').value : document.getElementById('hasfectel').value,
-          USUEST: params.usuario,
-          TIPEST: params.tipo,
-          OFIEST: params.oficina,
-          DESHOR: params.tipo === <%- datos.tiposEstado.horas.ID %> ? `+00 ${document.getElementById('deshor').value}:00` : `+00 ${document.getElementById('deshortel').value}:00`,
-          HASHOR: params.tipo === <%- datos.tiposEstado.horas.ID %> ? `+00 ${document.getElementById('hashor').value}:00` : `+00 ${document.getElementById('hashortel').value}:00`,
-        },
-        movimiento: {
-          USUMOV: <%- user.id %>,
-          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-        }
+        estado,
+        movimiento,
       }
 
       await insertRangoEvento(evento)
@@ -379,6 +444,14 @@
         document.getElementById('deshortel').value = "08:30"
         document.getElementById('hashortel').value = "14:00"
         modalTele.style.display = 'flex'
+      } else if (params.tipo === <%- datos.tiposEstado.formacion.ID %>) {
+        const modalForma = document.getElementById('modal-forma')
+
+        document.getElementById('desfecfor').value = fecha
+        document.getElementById('hasfecfor').value = fecha
+        document.getElementById('deshorfor').value = "08:30"
+        document.getElementById('hashorfor').value = "14:00"
+        modalForma.style.display = 'flex'
       }
     }
   </script>
@@ -421,15 +494,21 @@
     document.getElementById('btnHorasCancel').addEventListener('click', function() {
       document.getElementById('modal-horas').style.display = 'none'
     })
+    document.getElementById('btnFormaCancel').addEventListener('click', function () {
+      document.getElementById('modal-forma').style.display = 'none'
+    })
     document.addEventListener('keydown', function(e) {
       const modalHoras = document.getElementById('modal-horas')
       const modalTele = document.getElementById('modal-tele')
+      const modalForma = document.getElementById('modal-forma')
       const keyCode = e.keyCode;
 
       if (keyCode === 27 && modalHoras.style.display === 'flex') {
         modalHoras.style.display = 'none'
       } else if (keyCode === 27 && modalTele.style.display === 'flex') {
         modalTele.style.display = 'none'
+      } else if (keyCode === 27 && modalForma.style.display === 'flex') {
+        modalForma.style.display = 'none'
       }
     })
 
@@ -477,7 +556,8 @@
       // evento por rango
       if (e.events.length === 0 &&
       (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
-      params.tipo === <%- datos.tiposEstado.telefono.ID %>)) {
+      params.tipo === <%- datos.tiposEstado.telefono.ID %> ||
+      params.tipo === <%- datos.tiposEstado.formacion.ID %>)) {
         editEvento(e)
       }
       
