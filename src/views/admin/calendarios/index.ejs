@@ -108,28 +108,34 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Desde</div>
-                      <input type="date" id="desfec" name="desfec" class="form-control">
+                      <div class="input-control">
+                        <div class="form-label">Desde</div>
+                        <input type="date" id="desfec" name="desfec" class="form-control">
+                        <div class="invalid-feedback"></div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Hasta</div>
-                      <input type="date" id="hasfec" name="hasfec" class="form-control">
+                      <div class="input-control">
+                        <div class="form-label">Hasta</div>
+                        <input type="date" id="hasfec" name="hasfec" class="form-control">
+                        <div class="invalid-feedback"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Desde</div>
-                      <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="14:00">
+                      <div class="form-label">Desde hora</div>
+                      <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Hasta</div>
-                      <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="14:00">
+                      <div class="form-label">Hasta hora</div>
+                      <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="20:00">
                     </div>
                   </div>
                 </div>
@@ -156,14 +162,20 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Desde</div>
-                      <input type="date" id="desfectel" name="desfectel" class="form-control">
+                      <div class="input-control">
+                        <div class="form-label">Desde</div>
+                        <input type="date" id="desfectel" name="desfectel" class="form-control">
+                        <div class="invalid-feedback"></div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="form-label">Hasta</div>
-                      <input type="date" id="hasfectel" name="hasfectel" class="form-control">
+                      <div class="input-control">
+                        <div class="form-label">Hasta</div>
+                        <input type="date" id="hasfectel" name="hasfectel" class="form-control">
+                        <div class="invalid-feedback"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -374,7 +386,7 @@
       inputControl.classList.remove('is-valid');
     }
     const isInRange = (value,range) => {
-      return (value >= range[0] && value <= range[1])
+      return (value > range[0] && value < range[1])
     }
     const eventoRango = async () => {
       const estado = {
@@ -388,22 +400,26 @@
       }
       let deshor
       let hashor
+      let element
 
       if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         deshor = document.getElementById('deshor').value
         hashor = document.getElementById('hashor').value
+        element = document.getElementById('desfec')
 
         estado.DESDE = document.getElementById('desfec').value
         estado.HASTA = document.getElementById('hasfec').value
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         deshor = document.getElementById('deshortel').value
         hashor = document.getElementById('hashortel').value
+        element = document.getElementById('desfectel')
 
         estado.DESDE = document.getElementById('desfectel').value
         estado.HASTA = document.getElementById('hasfectel').value
       } else if (params.tipo === <%- datos.tiposEstado.formacion.ID %>) {
         deshor = document.getElementById('deshorfor').value
         hashor = document.getElementById('hashorfor').value
+        element = document.getElementById('desfecfor')
 
         estado.DESDE = document.getElementById('desfecfor').value
         estado.HASTA = document.getElementById('hasfecfor').value
@@ -416,25 +432,33 @@
       }
 
       let haySolape = false
+      let arrFechas = []
+
       // solapes
       for (let d = new Date(estado.DESDE); d <= new Date(estado.HASTA); d.setDate(d.getDate() + 1)) {
-        const result = estados.find(itm => itm.STRFEC === d.toISOString().slice(0,10))
-        if (result) {
-          let rango = [result.DESHOR,result.HASHOR]
-          if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
-            haySolape = true
-  
-            const desfecfor = document.getElementById('desfecfor')
-            setError(desfecfor, `Solape de eventos el día ${d.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })}.`)
-            setTimeout(function () {
-              setSuccess(desfecfor)
-            }, 3000)
-            break
+        estados.filter(itm => {
+          if (itm.STRFEC === d.toISOString().slice(0,10)) {
+            arrFechas.push(itm)
           }
+        })
+        if (arrFechas.length > 0) {
+          arrFechas.every(element => {
+            let rango = [element.DESHOR,element.HASHOR]
+            if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
+              haySolape = true
+              return false
+            }
+            return true
+          });
         }
       }
 
-      if (!haySolape) {
+      if (haySolape) {
+        setError(element, `Solape de eventos el día ${estado.DESDE} ${deshor}`)
+        setTimeout(function () {
+          setSuccess(element)
+        }, 3000)
+      } else {
         // insert rango
         await insertRangoEvento(evento)
       }
@@ -534,9 +558,17 @@
       language: "es",
       mouseOnDay: function(e) {
         if (e.events.length > 0) {
+          let content = '';
+
+          for (let i in e.events) {
+            content += '<div>'
+              + '<div>' + colores[e.events[i].tipest].DES + '</div>'
+              + '</div>';
+          }
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
           e.element.setAttribute('title', colores[e.events[0].tipest].DES)
+          //e.element.setAttribute('title', content)
         }
       },
     })
