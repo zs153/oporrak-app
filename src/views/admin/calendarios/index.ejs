@@ -419,17 +419,18 @@
       // solapes
       for (let d = new Date(estado.DESDE); d <= new Date(estado.HASTA); d.setDate(d.getDate() + 1)) {
         const result = estados.find(itm => itm.STRFEC === d.toISOString().slice(0,10))
-        let rango = [result.DESHOR,result.HASHOR]
-
-        if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
-          haySolape = true
-
-          const desfecfor = document.getElementById('desfecfor')
-          setError(desfecfor, `Solape de eventos el día ${d.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })}.`)
-          setTimeout(function () {
-            setSuccess(desfecfor)
-          }, 3000)          
-          break
+        if (result) {
+          let rango = [result.DESHOR,result.HASHOR]
+          if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
+            haySolape = true
+  
+            const desfecfor = document.getElementById('desfecfor')
+            setError(desfecfor, `Solape de eventos el día ${d.toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })}.`)
+            setTimeout(function () {
+              setSuccess(desfecfor)
+            }, 3000)
+            break
+          }
         }
       }
 
