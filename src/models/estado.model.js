@@ -45,8 +45,8 @@ const estadosUsuarioQuery = `SELECT
   ee.usuest,
   ee.tipest,
   ee.ofiest,
-  REGEXP_SUBSTR(deshor, '\d{2}:\d{2}'),
-  REGEXP_SUBSTR(hashor, '\d{2}:\d{2}')
+  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(deshor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(deshor))), 2, '0'),
+  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(hashor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(hashor))), 2, '0')
 FROM estados ee
 WHERE ee.usuest = :usuest AND
   ee.ofiest = :idofic AND
@@ -75,9 +75,9 @@ FROM (
     '14:00' AS "HASHOR"
     FROM (
       WITH vDates AS (
-          SELECT TO_DATE(:desde, 'YYYY-MM-DD') + ROWNUM - 1 AS fecha
-          FROM dual
-          CONNECT BY rownum <= TO_DATE(:hasta, 'YYYY-MM-DD') - TO_DATE(:desde, 'YYYY-MM-DD') + 1
+        SELECT TO_DATE(:desde, 'YYYY-MM-DD') + ROWNUM - 1 AS fecha
+        FROM dual
+        CONNECT BY rownum <= TO_DATE(:hasta, 'YYYY-MM-DD') - TO_DATE(:desde, 'YYYY-MM-DD') + 1
       )
       SELECT ofiusu, idusua, tipest, v.fecha
       FROM vDates v
@@ -94,8 +94,8 @@ FROM (
     ) p1
   UNION
   SELECT ee.ofiest, ee.usuest, ee.fecest, ee.tipest, 
-    LPAD(EXTRACT(HOUR FROM ee.deshor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.deshor), 2, '0') AS "DESHOR",
-    LPAD(EXTRACT(HOUR FROM ee.hashor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM ee.hashor), 2, '0') AS "HASHOR"
+    LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(deshor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(deshor))), 2, '0'),
+    LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(hashor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(hashor))), 2, '0')
   FROM estados ee  
   INNER JOIN usuarios uu ON uu.idusua = ee.usuest
   WHERE uu.perusu = :perusu AND
