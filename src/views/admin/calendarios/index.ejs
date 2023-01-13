@@ -101,7 +101,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title mt-0">Horas bolsa</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close btn-x-horas" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div class="card-body">
@@ -155,7 +155,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title mt-0">Atención telefónica</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close btn-x-tele" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div class="card-body">
@@ -209,7 +209,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title mt-0">Formación</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close btn-x-forma" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div class="card-body">
@@ -250,8 +250,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal"
-                aria-label="Close">Cancelar</button>
+              <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
               <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
             </div>
           </div>
@@ -264,7 +263,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title mt-0">Eventos</h5>
-              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+              <button type="button" class="btn-close btn-x-evnts" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div class="card-body">
@@ -273,8 +272,6 @@
                       <tr class="header">
                         <th class="w-4"></th>
                         <th>Evento</th>
-                        <th>Tipo</th>
-                        <th class="w-4"></th>
                       </tr>
                     </thead>
                     <tbody id="table-body">
@@ -283,12 +280,47 @@
               </div>
             </div>
             <div class="modal-footer">
-              <!-- <button type="button" class="btn btn-link" id="btnEventCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button> -->
+              <button type="button" class="btn btn-link" id="btnEventCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
             </div>
           </div>
         </div>
       </div>
     </div>
+  <div class="modal modal-blur fade" id="modal-borrar" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-danger"></div>
+        <div class="modal-body text-center py-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
+            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 9v2m0 4v.01"></path>
+            <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
+          </svg>
+          <h3>¿Desea borrar este evento?</h3>
+          <div id="msgbor"></div>
+          <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
+        </div>
+        <div class="modal-footer">
+          <div class="w-100">
+            <div class="row">
+              <div class="col">
+                <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+              </div>
+              <div class="col">
+                <form action="/admin/calendarios" method="POST">
+                  <input type="hidden" id="idesta" name="idesta" value="">
+                  <button type="submit" class="btn btn-danger w-100" id="btnDelete">Borrar evento</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <%- include('../../partials/footer') %>
   </div>
@@ -627,7 +659,7 @@
     })
     calendario.setYear(currentYear)
 
-    // modal
+    // eventos modal
     document.getElementById('btnTeleCancel').addEventListener('click', function() {
       document.getElementById('modal-tele').style.display = 'none'
     })
@@ -636,6 +668,21 @@
     })
     document.getElementById('btnFormaCancel').addEventListener('click', function () {
       document.getElementById('modal-forma').style.display = 'none'
+    })
+    document.getElementById('btnEventCancel').addEventListener('click', function () {
+      document.getElementById('modal-evnts').style.display = 'none'
+    })
+    document.querySelector('.btn-x-horas').addEventListener('click', (e) => {
+      document.getElementById('modal-horas').style.display = 'none'
+    })
+    document.querySelector('.btn-x-tele').addEventListener('click', (e) => {
+      document.getElementById('modal-tele').style.display = 'none'
+    })
+    document.querySelector('.btn-x-forma').addEventListener('click', (e) => {
+      document.getElementById('modal-forma').style.display = 'none'
+    })
+    document.querySelector('.btn-x-evnts').addEventListener('click', (e) => {
+      document.getElementById('modal-evnts').style.display = 'none'
     })
     document.addEventListener('keydown', function(e) {
       const modalHoras = document.getElementById('modal-horas')
@@ -655,7 +702,7 @@
       }
     })
 
-    // eventos
+    // eventos form
     document.getElementById('cboyea').addEventListener('change', function() {
       currentYear = parseInt(document.querySelector("#cboyea").value)
 
@@ -707,8 +754,42 @@
       
       if (e.events.length) {
         if (e.events.length > 1) {
-          // TODO MODAL
           const modalEvent = document.getElementById('modal-evnts')
+          const tbl = document.getElementById("table-body")
+          let innerT = ''
+
+          tbl.innerHTML = innerT;
+          // eventos
+          for (let i = 0; i < e.events.length; i++) {
+            innerT += `<tr>
+              <!-- col1 -->
+              <td class="w-4">
+                <div class="py-1 align-items-center">
+                  <a href="#" class="nav-link"
+                    onclick="{document.getElementById('idesta').value ='${e.events[i].idesta}', document.getElementById('msgbor').innerHTML ='<p>${colores[e.events[i].tipest].DES}</p>'}"
+                    data-bs-toggle="modal" data-bs-target="#modal-borrar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" width="24" height="24" viewBox="0 0 24 24"
+                      stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke-width=".8" fill="none"
+                        d="M7.85 19.575q-.6 0-1.025-.425-.425-.425-.425-1.025v-12.1h-.975V5.4h3.6v-.675H15V5.4h3.6v.625h-.975V18.15q0 .6-.425 1.013-.425.412-1.025.412Zm9.125-13.55H7.05v12.1q0 .35.225.575.225.225.575.225h8.325q.3 0 .55-.25.25-.25.25-.55Zm-6.85 10.925h.625V8h-.625Zm3.15 0h.625V8h-.625ZM7.05 6.025V18.925 18.125Z" />
+                    </svg>
+                  </a>
+                </div>
+              </td>
+              <!-- col2 -->
+              <td>
+                <div class="d-flex py-1 align-items-center">
+                  <div class="flex-fill">
+                    <div class="font-weight-medium">${colores[e.events[i].tipest].DES}</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            `
+          }
+
+          tbl.innerHTML += innerT;
+
           modalEvent.style.display = 'flex'
         } else if (e.events[0].id !== 0) {
           const evento = {
