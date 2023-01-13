@@ -11,21 +11,20 @@ const baseQuery = `SELECT
   hashor
 FROM estados
 `
-const estadosFechaPerfilQuery = `SELECT 
-  p1.nomusu, p1.userid, p1.telusu, p1.PERROL, p1.tipest, oo.desofi 
-FROM (
-  SELECT uu.nomusu, uu.telusu, uu.ofiusu, uu.userid,
-    CASE WHEN uu.rolusu = 2 THEN uu.perusu -1 ELSE uu.perusu END AS "PERROL",
-    CASE WHEN zz.tipest IS NULL THEN 1 ELSE zz.tipest END AS "TIPEST"
-    FROM (SELECT ee.usuest, ee.tipest
-        FROM estados ee
-        WHERE ee.fecest = TO_DATE(:fecest,'YYYY-MM-DD')
-    ) zz
-    RIGHT JOIN usuarios uu ON uu.idusua = zz.usuest
-    WHERE uu.stausu = 1
+const estadosFechaPerfilQuery = `SELECT
+  uu.nomusu, uu.userid, uu.telusu, oo.desofi,
+  CASE WHEN uu.rolusu = 2 THEN uu.perusu -1 ELSE uu.perusu END "PERROL",
+  CASE WHEN p1.usuest IS NULL THEN 1 ELSE 2 END "TIPEST"
+FROM (SELECT 
+  ee.usuest
+  FROM estados ee
+  WHERE ee.fecest = TO_DATE(:fecest,'YYYY-MM-DD')
+  GROUP BY ee.usuest
 ) p1
-INNER JOIN oficinas oo ON idofic = p1.ofiusu
-ORDER BY p1.PERROL, p1.ofiusu
+RIGHT JOIN usuarios uu ON uu.idusua = p1.usuest
+INNER JOIN oficinas oo ON idofic = uu.ofiusu
+WHERE uu.stausu = 1
+ORDER BY PERROL, uu.ofiusu
 `
 const estadosFechaUsuarioQuery = `SELECT 
   idesta,
