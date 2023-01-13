@@ -10,7 +10,7 @@
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <link rel='stylesheet' href='/css/js-year-calendar.css'>
 </head>
@@ -258,6 +258,38 @@
         </div>
       </div>
     </div>
+    <div class="modal modal-blur fade" id="modal-evnts" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title mt-0">Eventos</h5>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+            </div>
+            <div class="modal-body">
+              <div class="card-body">
+                  <table class="table table-vcenter table-striped" id="tblEventos">
+                    <thead>
+                      <tr class="header">
+                        <th class="w-4"></th>
+                        <th>Evento</th>
+                        <th>Tipo</th>
+                        <th class="w-4"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-link" id="btnEventCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <%- include('../../partials/footer') %>
   </div>
 
@@ -365,9 +397,9 @@
     }
     const dateISOToUTCString = (dateISO) => {
       const fecha = new Date(dateISO)
-      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
 
-      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
     }
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
@@ -386,7 +418,7 @@
       inputControl.classList.remove('is-valid');
     }
     const isInRange = (value,range) => {
-      return (value > range[0] && value < range[1])
+      return (value >= range[0] && value <= range[1])
     }
     const eventoRango = async () => {
       const estado = {
@@ -533,6 +565,24 @@
         modalForma.style.display = 'flex'
       }
     }
+    const deleteMenuEvent = async (e) => {
+      const evento = {
+        estado: {
+          IDESTA: e.idesta,
+        },
+        movimiento: {
+          USUMOV: <%- user.id %>,
+          TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+        }
+      }
+
+      // borrar
+      await deleteEvento(evento).then(ret => {
+        let dataSource = calendario.getDataSource()
+
+        calendario.setDataSource(dataSource.filter(item => item.id != e.id));
+      })
+    }
   </script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
@@ -556,21 +606,24 @@
       minDate: new Date(params.desde),
       maxDate: new Date(params.hasta),
       language: "es",
+      enableContextMenu: true,
       mouseOnDay: function(e) {
         if (e.events.length > 0) {
           let content = '';
 
           for (let i in e.events) {
-            content += '<div>'
-              + '<div>' + colores[e.events[i].tipest].DES + '</div>'
-              + '</div>';
+            content += colores[e.events[i].tipest].DES + '\n'
           }
+
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
-          e.element.setAttribute('title', colores[e.events[0].tipest].DES)
-          //e.element.setAttribute('title', content)
+          e.element.setAttribute('title', content)
         }
       },
+      contextMenuItems: [{
+        text: 'Borrar',
+        click: deleteMenuEvent
+      }]
     })
     calendario.setYear(currentYear)
 
@@ -588,6 +641,7 @@
       const modalHoras = document.getElementById('modal-horas')
       const modalTele = document.getElementById('modal-tele')
       const modalForma = document.getElementById('modal-forma')
+      const modalEvent = document.getElementById('modal-evnts')
       const keyCode = e.keyCode;
 
       if (keyCode === 27 && modalHoras.style.display === 'flex') {
@@ -596,6 +650,8 @@
         modalTele.style.display = 'none'
       } else if (keyCode === 27 && modalForma.style.display === 'flex') {
         modalForma.style.display = 'none'
+      } else if (keyCode === 27 && modalEvent.style.display === 'flex') {
+        modalEvent.style.display = 'none'
       }
     })
 
@@ -650,7 +706,11 @@
       }
       
       if (e.events.length) {
-        if (e.events[0].id !== 0) {
+        if (e.events.length > 1) {
+          // TODO MODAL
+          const modalEvent = document.getElementById('modal-evnts')
+          modalEvent.style.display = 'flex'
+        } else if (e.events[0].id !== 0) {
           const evento = {
             estado: {
               IDESTA: e.events[0].idesta,
@@ -660,9 +720,9 @@
               TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
             }
           }
-          
+
           // borrar
-          await deleteEvento(evento).then(ret => {            
+          await deleteEvento(evento).then(ret => {
             // actualiza dia calendario
             let dataSource = calendario.getDataSource()
             
