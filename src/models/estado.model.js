@@ -13,10 +13,14 @@ FROM estados
 `
 const estadosFechaPerfilQuery = `SELECT
   uu.nomusu, uu.userid, uu.telusu, oo.desofi,
+  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.MIN))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.MIN))), 2, '0') "MIN",
+  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.MAX))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.MAX))), 2, '0') "MAX",  
   CASE WHEN uu.rolusu = 2 THEN uu.perusu -1 ELSE uu.perusu END "PERROL",
   CASE WHEN p1.usuest IS NULL THEN 1 ELSE 2 END "TIPEST"
 FROM (SELECT 
-  ee.usuest
+  ee.usuest,
+  MIN(ee.deshor) "MIN",
+  MAX(ee.hashor) "MAX"
   FROM estados ee
   WHERE ee.fecest = TO_DATE(:fecest,'YYYY-MM-DD')
   GROUP BY ee.usuest
