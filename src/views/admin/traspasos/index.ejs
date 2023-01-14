@@ -10,7 +10,7 @@
   <!-- bootstrap -->
   <link rel="stylesheet" href="/css/bootstrap-icons.css">
   <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
+  <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <link rel='stylesheet' href='/css/js-year-calendar.css'>
 </head>
@@ -25,14 +25,7 @@
           <div class="row">
             <div class="col-12">
               <div class="card mt-1">
-                <% if(typeof alerts !='undefined' ) { %>
-                <% alerts.map(function (alert){ %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <%- alert.msg %>
-                </div>
-                <% }) %>
-                <% } %>
-                <form action="/admin/calendarios/calendario" method="POST">
+                <form method="POST">
                   <input type="hidden" name="idusua" id="idusua" value="">
                   <input type="hidden" name="tipest" id="tipest" value="">
                   <div class="card-header">
@@ -164,9 +157,8 @@
     }
     async function getFestivosWithPromise(prms) {
       var xhr = new XMLHttpRequest();
-
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
           if (xhr.readyState == 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
@@ -175,7 +167,6 @@
             }
           }
         }
-
         xhr.open('POST', 'http://localhost:8200/api/festivos/oficinas', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
         xhr.send(JSON.stringify(prms))
@@ -235,8 +226,9 @@
           usuest: itm.USUEST,
           tipest: itm.TIPEST,
           id: itm.IDESTA,
-          startDate: new Date(itm.FECEST),
-          endDate: new Date(itm.FECEST),
+          startDate: new Date(itm.STRFEC),
+          endDate: new Date(itm.STRFEC),
+          rangoH: `(${itm.DESHOR} a ${itm.HASHOR})`,
           color: colores[itm.TIPEST].COLOR,
         }
         data.push(estado)
@@ -268,13 +260,18 @@
       maxDate: new Date(params.hasta),
       language: "es",
       mouseOnDay: function(e) {
-        if (e.events.length > 0) {
-          e.element.setAttribute('data-bs-trigger', 'hover')
-          e.element.setAttribute('data-bs-toggle', 'popover')
-          e.element.setAttribute('title', colores[e.events[0].tipest].DES)
+        let content = '';
+
+        for (let i in e.events) {
+          content += colores[e.events[i].tipest].DES + ' ' + e.events[i].rangoH + '\n'
         }
+
+        e.element.setAttribute('data-bs-trigger', 'hover')
+        e.element.setAttribute('data-bs-toggle', 'popover')
+        e.element.setAttribute('title', content)
       },
     })
+    calendario.setYear(currentYear)
 
     // calendario
     document.getElementById('cboyea').addEventListener('change', function() {
@@ -314,8 +311,7 @@
 
       // bloquear si no existe destino
       if (e.events.length === 0 &&
-        (params.destino === 0 || params.oficina === params.destino)
-      ) {
+        (params.destino === 0 || params.oficina === params.destino)) {
         return
       }
 
@@ -343,7 +339,7 @@
             // actualiza dia calendario
             let dataSource = calendario.getDataSource()
 
-            dataSource = dataSource.filter(itm => itm.idesta !== ret.IDESTA)
+            dataSource = dataSource.filter(itm => itm.idesta !== ret.estado.IDESTA)
             calendario.setDataSource(dataSource, {
               preventRendering: false
             })
@@ -355,19 +351,19 @@
       } else {
         // bloquear solapes
         const result = estados.find(itm => itm.STRFEC === params.fecha)
-        const festivo = festivos.find(itm => itm.STRFES === params.fecha)
+        const festivo = festivos.find(itm => itm.FECFES === params.fecha)
 
         if (result || festivo) {
           if (festivo) {
             e.element.setAttribute('data-bs-trigger', 'hover')
             e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Festivo en el destino')
+            e.element.setAttribute('title', 'Festivo en destino')
             return
           }
           if (result.TIPEST !== params.tipo) {
             e.element.setAttribute('data-bs-trigger', 'hover')
             e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Solape de horas')
+            e.element.setAttribute('title', 'Solape de eventos')
             return
           }
         }
@@ -403,6 +399,7 @@
             id: ret.idesta,
             startDate: new Date(ret.fecest),
             endDate: new Date(ret.fecest),
+            rangoH: `(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
             color: params.color,
           }
           dataSource.push(estado)

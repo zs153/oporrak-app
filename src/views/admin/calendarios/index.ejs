@@ -25,14 +25,7 @@
           <div class="row">
             <div class="col-12">
               <div class="card mt-1">
-                <% if(typeof alerts !='undefined' ) { %>
-                <% alerts.map(function (alert){ %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <%- alert.msg %>
-                </div>
-                <% }) %>
-                <% } %>
-                <form action="/admin/calendarios/calendario" method="POST">
+                <form method="POST">
                   <div class="card-header">
                     <h3 class="card-title">Calendario</h3>
                   </div>
@@ -528,6 +521,7 @@
           id: itm.IDESTA,
           startDate: new Date(itm.STRFEC),
           endDate: new Date(itm.STRFEC),
+          rangoH: `(${itm.DESHOR} a ${itm.HASHOR})`,
           color: colores[itm.TIPEST].COLOR,
         }
         data.push(estado)
@@ -590,7 +584,6 @@
     let estados = null
     let calendario = null
     let currentYear = new Date().getFullYear()
-
     let params = {
       fecha: new Date().toISOString().slice(0, 10),
       oficina: <%- user.oficina %>,
@@ -610,7 +603,7 @@
           let content = '';
 
           for (let i in e.events) {
-            content += colores[e.events[i].tipest].DES + '\n'
+            content += colores[e.events[i].tipest].DES + ' ' + e.events[i].rangoH + '\n'
           }
 
           e.element.setAttribute('data-bs-trigger', 'hover')
@@ -644,7 +637,7 @@
       document.getElementById('modal-forma').style.display = 'none'
     })
     document.querySelector('.btn-x-evnts').addEventListener('click', (e) => {
-      document.getElementById('modal-evnts').style.display = 'none'
+      document.getElementById('modal-evnts').style.display = 'none';
     })
     document.addEventListener('keydown', function(e) {
       const modalHoras = document.getElementById('modal-horas')
@@ -786,21 +779,19 @@
           return
         }
 
-        const estado = {
-          FECEST: params.fecha,
-          USUEST: params.usuario,
-          TIPEST: params.tipo,
-          OFIEST: params.oficina,
-          DESHOR: '+00 08:30:00',
-          HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
-        }
-        const movimiento = {
-          USUMOV: <%- user.id %>,
-          TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-        }
         const evento = {
-          estado,
-          movimiento,
+          estado: {
+            FECEST: params.fecha,
+            USUEST: params.usuario,
+            TIPEST: params.tipo,
+            OFIEST: params.oficina,
+            DESHOR: '+00 08:30:00',
+            HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
+          },
+          movimiento: {
+              USUMOV: <%- user.id %>,
+              TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+          }
         }
         
         // insertar
@@ -814,6 +805,7 @@
             id: ret.idesta,
             startDate: new Date(ret.fecest),
             endDate: new Date(ret.fecest),
+            rangoH: `(${evento.estado.DESHOR.slice(4,9)} a ${evento.estado.HASHOR.slice(4,9)})`,
             color: params.color,
           }
           dataSource.push(estado)

@@ -20,7 +20,14 @@ export const mainPage = async (req, res) => {
       fecha,
     })
 
-    const estados = result.data.filter(itm => itm.TIPEST !== tiposEstado.traspasado.ID)
+    const estados = result.data.map(itm => {
+      if (itm.TIPEST === 2) {
+        if (!(new Date().toTimeString().slice(0, 5) >= itm.MIN && new Date().toTimeString().slice(0, 5) <= itm.MAX)) {
+          itm.TIPEST = 1
+        }
+      }
+      return itm
+    })
     const datos = {
       estados,
       tiposRol,
