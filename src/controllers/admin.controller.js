@@ -20,16 +20,26 @@ export const mainPage = async (req, res) => {
       fecha,
     })
 
-    const estados = result.data.map(itm => {
+    let userid = ''
+    let data = []
+    result.data.map(itm => {
       if (itm.TIPEST === 2) {
-        if (!(new Date().toTimeString().slice(0, 5) >= itm.MIN && new Date().toTimeString().slice(0, 5) <= itm.MAX)) {
-          itm.TIPEST = 1
+        if (itm.USERID === userid) {
+          const hora = new Date().toTimeString().slice(0, 5)
+
+          if (!(hora >= itm.DESHOR && hora <= itm.HASHOR)) {
+            itm.TIPEST = 1
+          }
+
+          data.splice(-1)
         }
+        userid = itm.USERID
       }
-      return itm
+      data.push(itm)
     })
+
     const datos = {
-      estados,
+      estados: data,
       tiposRol,
     }
 

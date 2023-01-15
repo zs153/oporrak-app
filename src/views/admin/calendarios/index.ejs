@@ -13,6 +13,11 @@
   <link rel="stylesheet" href="/css/estilos.css">
   <link rel="stylesheet" href="/css/navbar.css">
   <link rel='stylesheet' href='/css/js-year-calendar.css'>
+  <style>
+    .calendar-header {
+      border: none !important;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -65,21 +70,22 @@
                       </div>
                       <div class="col-3">
                         <div class="mb-1">
-                          <div class="form-label">Estado</div>
-                          <select class="form-select" id="cboest" value="">
-                            <option value="0" data-foo="" selected>
-                              SELECCIONE ESTADO
-                            </option>
-                            <% datos.arrTiposEstado.map(element=> { %>
-                            <option value="<%- element.ID %>" data-foo="<%- element.COLOR %>">
-                              <%- element.DES %>
-                            </option>
-                            <% }) %>
-                          </select>
+                          <div class="input-control">
+                            <div class="form-label">Estado</div>
+                            <select class="form-select form-control" id="cboest" value="">
+                              <option value="0">SELECCIONE ESTADO</option>
+                              <% datos.arrTiposEstado.map(element=> { %>
+                                <option value="<%- element.ID %>" data-foo="<%- element.COLOR %>">
+                                  <%- element.DES %>
+                                </option>
+                              <% }) %>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div id="calendar"></div>
+                    <div id="calendar" class="form-control"></div>
                   </div>
                 </form>
               </div>
@@ -90,12 +96,12 @@
     </div>
     <div class="modal modal-blur fade" id="modal-horas" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="container-xl">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+            <!-- <div class="modal-header">
               <h5 class="modal-title mt-0">Horas bolsa</h5>
               <button type="button" class="btn-close btn-x-horas" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            </div> -->
             <div class="modal-body">
               <div class="card-body">
                 <div class="row">
@@ -136,7 +142,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-link" id="btnHorasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar horas</button>
             </div>
           </div>
         </div>
@@ -274,6 +280,22 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-link" id="btnEventCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="modal-title">Solape de eventos</div>
+              <div>Hay un evento previo en esta fecha</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" id="btnSolapeAcept" data-bs-dismiss="modal"
+                aria-label="Close">Aceptar</button>
             </div>
           </div>
         </div>
@@ -576,6 +598,15 @@
         document.getElementById('btnEventCancel').click()
       })
     }
+    const validate = (ele, msg) => {
+      if (ele.value === '0') {
+        setError(ele, msg)
+        setTimeout(function () {
+          setSuccess(ele)
+        }, 3000)
+        return false
+      }
+    }
   </script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
@@ -627,9 +658,12 @@
     document.getElementById('btnEventCancel').addEventListener('click', function () {
       document.getElementById('modal-evnts').style.display = 'none'
     })
-    document.querySelector('.btn-x-horas').addEventListener('click', (e) => {
-      document.getElementById('modal-horas').style.display = 'none'
+    document.getElementById('btnSolapeAcept').addEventListener('click', function () {
+      document.getElementById('modal-solape').style.display = 'none'
     })
+    // document.querySelector('.btn-x-horas').addEventListener('click', (e) => {
+    //   document.getElementById('modal-horas').style.display = 'none'
+    // })
     document.querySelector('.btn-x-tele').addEventListener('click', (e) => {
       document.getElementById('modal-tele').style.display = 'none'
     })
@@ -644,6 +678,7 @@
       const modalTele = document.getElementById('modal-tele')
       const modalForma = document.getElementById('modal-forma')
       const modalEvent = document.getElementById('modal-evnts')
+      const modalSolape = document.getElementById('modal-solape')
       const keyCode = e.keyCode;
 
       if (keyCode === 27 && modalHoras.style.display === 'flex') {
@@ -654,6 +689,8 @@
         modalForma.style.display = 'none'
       } else if (keyCode === 27 && modalEvent.style.display === 'flex') {
         modalEvent.style.display = 'none'
+      } else if (keyCode === 27 && modalSolape.style.display === 'flex') {
+        modalSolape.style.display = 'none'
       }
     })
 
@@ -695,6 +732,7 @@
 
       // bloquear si no existe destino
       if (e.events.length === 0 && params.tipo === 0) {
+        validate(document.getElementById('cboest'), 'Estado requerido')
         return
       }
       
@@ -773,9 +811,13 @@
         // solapes
         const result = estados.find(itm => itm.STRFEC === params.fecha)
         if (result) {
+          const modalSolape = document.getElementById('modal-solape')
+
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
           e.element.setAttribute('title', 'Solape de eventos')
+          
+          modalSolape.style.display = 'flex'
           return
         }
 
