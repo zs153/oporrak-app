@@ -13,22 +13,19 @@ FROM estados
 `
 const estadosFechaPerfilQuery = `SELECT
   uu.nomusu, uu.userid, uu.telusu, oo.desofi,
-  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.MIN))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.MIN))), 2, '0') "MIN",
-  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.MAX))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.MAX))), 2, '0') "MAX",  
+  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.deshor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.deshor))), 2, '0') "DESHOR",
+  LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.hashor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.hashor))), 2, '0') "HASHOR",  
   CASE WHEN uu.rolusu = 2 THEN uu.perusu -1 ELSE uu.perusu END "PERROL",
   CASE WHEN p1.usuest IS NULL THEN 1 ELSE 2 END "TIPEST"
 FROM (SELECT 
-  ee.usuest,
-  MIN(ee.deshor) "MIN",
-  MAX(ee.hashor) "MAX"
+  ee.usuest, ee.deshor, ee.hashor
   FROM estados ee
   WHERE ee.fecest = TO_DATE(:fecest,'YYYY-MM-DD')
-  GROUP BY ee.usuest
 ) p1
 RIGHT JOIN usuarios uu ON uu.idusua = p1.usuest
 INNER JOIN oficinas oo ON idofic = uu.ofiusu
 WHERE uu.stausu = 1
-ORDER BY PERROL, uu.ofiusu
+ORDER BY PERROL, uu.ofiusu, uu.userid, p1.deshor
 `
 const estadosFechaUsuarioQuery = `SELECT 
   idesta,
