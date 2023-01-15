@@ -406,17 +406,16 @@
         col.appendChild(texto)
         col.colSpan = 14
         col.style.cssText = "border: none; text-align: center"
-        col.style.minWidth = "14px"
 
         rowHeader.appendChild(col)
         tblHeader.appendChild(rowHeader)
       }
 
-      // subheader
+      // horas subheader
       texto = document.createTextNode('')
       col = document.createElement('th')
       col.appendChild(texto)
-      col.style.cssText = "border: none; text-align: center"
+      col.style.cssText = "border: none; text-align: left"
 
       rowSubHeader.appendChild(col)
       tblHeader.appendChild(rowSubHeader)
@@ -428,29 +427,30 @@
           col.appendChild(texto)
           col.colSpan = 2
           col.style.cssText = "border: none; text-align: center"
-          col.style.minWidth = "14px"
 
           rowSubHeader.appendChild(col)
           tblHeader.appendChild(rowSubHeader)
         }
       }
 
-      // temporal
+      // minutos
       rowSubHeader = document.createElement("tr")
       col = document.createElement('th')
       col.style.cssText = "border: none;"
-
       rowSubHeader.appendChild(col)
       tblHeader.appendChild(rowSubHeader)
-      for (let j = 0; j < diasPeriodo; j++) {
-        for (let i = 0; i < 14; i++) {
-          col = document.createElement('th')
-          col.style.cssText = "border: none;"
-          col.style.minWidth = "14px"
-
-          rowSubHeader.appendChild(col)
-          tblHeader.appendChild(rowSubHeader)
+      for (let j = 0; j < diasPeriodo * 14; j++) {
+        if (j % 2 === 0) {
+          texto = document.createTextNode('00')
+        } else {
+          texto = document.createTextNode('30')
         }
+        col = document.createElement('th')
+        col.appendChild(texto)
+        col.style.cssText = "border: none; font-size: 6px"
+        col.style.minWidth = "14px"
+        rowSubHeader.appendChild(col)
+        tblHeader.appendChild(rowSubHeader)
       }
 
       // rows
@@ -485,7 +485,6 @@
             col.style.cssText = "color: blue; border: none; text-align: center;"
             col.style.minWidth = "14px"
             col.appendChild(texto)
-            //col.colSpan = 2
             rowOficina.appendChild(col)
           }
 
@@ -494,6 +493,7 @@
           // nombre usuario
           rowUsuario = document.createElement('tr')
           col = document.createElement('td')
+          col.style.borderRight = "1px solid #9ba9be"
           texto = document.createTextNode(itm[0])
 
           col.appendChild(texto)
@@ -502,32 +502,29 @@
 
           // tipos de estado
           for (var i = 0; i < diasPeriodo * 14; i++) {
+            col = document.createElement("td")
+            col.style.minWidth = "14px"
+            if ((i +1) % 14 === 0) {
+              col.style.borderRight = "1px solid #9ba9be"
+            }
             if (itm[1][i] === -1) {
               // festivo
-              col = document.createElement("td")
               col.style.background = '#FAFAFA'
-              col.style.minWidth = "14px"
 
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.festivo.ID %>) {
               // usuario en activo
-              col = document.createElement("td")
               col.style.background = '#FAFAFA'
-              col.style.minWidth = "14px"
 
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.activo.ID %>) {
               // usuario en activo
-              col = document.createElement("td")
-              col.style.minWidth = "14px"
 
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.vacacion.ID %>) {
-              var col = document.createElement("td")
               var texto = document.createTextNode('vacación')
 
               col.className = 'timeline vacas'
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               // popup
@@ -537,12 +534,10 @@
               col.appendChild(sub);
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.baja.ID %>) {
-              var col = document.createElement("td")
               var sub = document.createElement("div")
               var texto = document.createTextNode('baja')
 
               col.className = 'timeline bajas'
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'
@@ -550,12 +545,10 @@
               col.appendChild(sub)
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.traspaso.ID %>) {
-              var col = document.createElement("td")
               var sub = document.createElement("div")
               var texto = document.createTextNode('traspaso')
 
               col.className = 'timeline trasp'
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'
@@ -563,12 +556,10 @@
               col.appendChild(sub)
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.formacion.ID %>) {
-              var col = document.createElement("td")
               var sub = document.createElement("div")
               var texto = document.createTextNode('formación')
 
               col.className = 'timeline forma'
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'
@@ -576,12 +567,10 @@
               col.appendChild(sub)
               rowUsuario.appendChild(col)
             } else if (itm[1][i] === <%- datos.tiposEstado.conciliacion.ID %>) {
-              var col = document.createElement("td");
               var sub = document.createElement("div");
               var texto = document.createTextNode(`conciliación`);
 
               col.className = 'timeline conci';
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -589,12 +578,10 @@
               col.appendChild(sub);
               rowUsuario.appendChild(col);
             } else if (itm[1][i] === <%- datos.tiposEstado.reunion.ID %>) {
-              var col = document.createElement("td");
               var sub = document.createElement("div");
               var texto = document.createTextNode('reunión');
 
               col.className = 'timeline reuni';
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -602,12 +589,10 @@
               col.appendChild(sub);
               rowUsuario.appendChild(col);
             } else if (itm[1][i] === <%- datos.tiposEstado.horas.ID %>) {
-              var col = document.createElement("td");
               var sub = document.createElement("div");
               var texto = document.createTextNode('horas');
 
               col.className = 'timeline horas';
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -615,12 +600,10 @@
               col.appendChild(sub);
               rowUsuario.appendChild(col);
             } else if (itm[1][i] === <%- datos.tiposEstado.telefono.ID %>) {
-              var col = document.createElement("td");
               var sub = document.createElement("div");
               var texto = document.createTextNode('teléfono');
 
               col.className = 'timeline tele';
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col);
 
               sub.className = 'popup';
@@ -628,12 +611,10 @@
               col.appendChild(sub);
               rowUsuario.appendChild(col);
             } else if (itm[1][i] === <%- datos.tiposEstado.traspasado.ID %>) {
-              var col = document.createElement("td")
               var sub = document.createElement("div")
               var texto = document.createTextNode('traspasado')
 
               col.className = 'timeline trasdo'
-              col.style.minWidth = "14px"
               rowUsuario.appendChild(col)
 
               sub.className = 'popup'

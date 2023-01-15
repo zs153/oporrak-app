@@ -103,20 +103,14 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="input-control">
                         <div class="form-label">Desde</div>
                         <input type="date" id="desfec" name="desfec" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="input-control">
                         <div class="form-label">Hasta</div>
                         <input type="date" id="hasfec" name="hasfec" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -132,6 +126,10 @@
                       <div class="form-label">Hasta hora</div>
                       <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="20:00">
                     </div>
+                  </div>
+                  <div class="input-control">
+                    <input type="hidden" id="msghor" name="msghor" class="form-control">
+                    <div class="invalid-feedback"></div>
                   </div>
                 </div>
               </div>
@@ -153,23 +151,17 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="input-control">
                         <div class="form-label">Desde</div>
                         <input type="date" id="desfectel" name="desfectel" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="input-control">
                         <div class="form-label">Hasta</div>
                         <input type="date" id="hasfectel" name="hasfectel" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
                     </div>
                   </div>
-                </div>
+                </div>                
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
@@ -182,6 +174,10 @@
                       <div class="form-label">Hasta hora</div>
                       <input type="time" id="hashortel" name="hashortel" class="form-control" min="08:00" max="20:00">
                     </div>
+                  </div>
+                  <div class="input-control">
+                    <input type="hidden" id="msgtel" name="msgtel" class="form-control">
+                    <div class="invalid-feedback"></div>
                   </div>
                 </div>
               </div>
@@ -203,20 +199,14 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="input-control">
                         <div class="form-label">Desde</div>
                         <input type="date" id="desfecfor" name="desfecfor" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="mb-1">
-                      <div class="input-control">
                         <div class="form-label">Hasta</div>
                         <input type="date" id="hasfecfor" name="hasfecfor" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -232,6 +222,10 @@
                       <div class="form-label">Hasta hora</div>
                       <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00" max="20:00">
                     </div>
+                  </div>
+                  <div class="input-control">
+                    <input type="hidden" id="msgfor" name="msgfor" class="form-control">
+                    <div class="invalid-feedback"></div>
                   </div>
                 </div>
               </div>
@@ -434,21 +428,21 @@
       if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         deshor = document.getElementById('deshor').value
         hashor = document.getElementById('hashor').value
-        element = document.getElementById('desfec')
+        element = document.getElementById('msghor')
 
         estado.DESDE = document.getElementById('desfec').value
         estado.HASTA = document.getElementById('hasfec').value
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         deshor = document.getElementById('deshortel').value
         hashor = document.getElementById('hashortel').value
-        element = document.getElementById('desfectel')
+        element = document.getElementById('msgtel')
 
         estado.DESDE = document.getElementById('desfectel').value
         estado.HASTA = document.getElementById('hasfectel').value
       } else if (params.tipo === <%- datos.tiposEstado.formacion.ID %>) {
         deshor = document.getElementById('deshorfor').value
         hashor = document.getElementById('hashorfor').value
-        element = document.getElementById('desfecfor')
+        element = document.getElementById('msgfor')
 
         estado.DESDE = document.getElementById('desfecfor').value
         estado.HASTA = document.getElementById('hasfecfor').value
@@ -471,10 +465,16 @@
           }
         })
         if (arrFechas.length > 0) {
-          arrFechas.every(element => {
-            let rango = [element.DESHOR,element.HASHOR]
-            if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
+          arrFechas.every(itm => {
+            let rango = [itm.DESHOR,itm.HASHOR]
+            if (isInRange(deshor, rango) || isInRange(hashor, rango)) {              
               haySolape = true
+
+              setError(element, `Solape de eventos el día ${itm.STRFEC.split("-").reverse().join("-")} ${deshor}`)
+              setTimeout(function () {
+                setSuccess(element)
+              }, 3000)
+
               return false
             }
             return true
@@ -483,10 +483,10 @@
       }
 
       if (haySolape) {
-        setError(element, `Solape de eventos el día ${estado.DESDE} ${deshor}`)
-        setTimeout(function () {
-          setSuccess(element)
-        }, 3000)
+        // setError(element, `Solape de eventos el día ${estado.DESDE} ${deshor}`)
+        // setTimeout(function () {
+        //   setSuccess(element)
+        // }, 3000)
       } else {
         // insert rango
         await insertRangoEvento(evento)
