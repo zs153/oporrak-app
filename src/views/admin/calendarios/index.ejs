@@ -98,11 +98,7 @@
       <div class="container-xl">
         <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
           <div class="modal-content">
-            <!-- <div class="modal-header">
-              <h5 class="modal-title mt-0">Horas bolsa</h5>
-              <button type="button" class="btn-close btn-x-horas" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div> -->
-            <div class="modal-body">
+            <div class="modal-body p-0">
               <div class="card-body">
                 <div class="row">
                   <div class="col-6">
@@ -142,7 +138,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-link" id="btnHorasCancel" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar horas</button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
             </div>
           </div>
         </div>
@@ -150,13 +146,9 @@
     </div>
     <div class="modal modal-blur fade" id="modal-tele" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="container-xl">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title mt-0">Atención telefónica</h5>
-              <button type="button" class="btn-close btn-x-tele" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+            <div class="modal-body p-0">
               <div class="card-body">
                 <div class="row">
                   <div class="col-6">
@@ -204,13 +196,9 @@
     </div>
     <div class="modal modal-blur fade" id="modal-forma" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="container-xl">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title mt-0">Formación</h5>
-              <button type="button" class="btn-close btn-x-forma" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+            <div class="modal-body p-0">
               <div class="card-body">
                 <div class="row">
                   <div class="col-6">
@@ -260,10 +248,6 @@
       <div class="container-xl">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title mt-0">Eventos</h5>
-              <button type="button" class="btn-close btn-x-evnts" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
             <div class="modal-body">
               <div class="card-body">
                   <table class="table table-vcenter table-striped" id="tblEventos">
@@ -661,18 +645,6 @@
     document.getElementById('btnSolapeAcept').addEventListener('click', function () {
       document.getElementById('modal-solape').style.display = 'none'
     })
-    // document.querySelector('.btn-x-horas').addEventListener('click', (e) => {
-    //   document.getElementById('modal-horas').style.display = 'none'
-    // })
-    document.querySelector('.btn-x-tele').addEventListener('click', (e) => {
-      document.getElementById('modal-tele').style.display = 'none'
-    })
-    document.querySelector('.btn-x-forma').addEventListener('click', (e) => {
-      document.getElementById('modal-forma').style.display = 'none'
-    })
-    document.querySelector('.btn-x-evnts').addEventListener('click', (e) => {
-      document.getElementById('modal-evnts').style.display = 'none';
-    })
     document.addEventListener('keydown', function(e) {
       const modalHoras = document.getElementById('modal-horas')
       const modalTele = document.getElementById('modal-tele')
@@ -765,11 +737,7 @@
               <td class="w-4">
                 <div class="py-1 align-items-center">
                   <a href="#" class="nav-link" onclick="deleteMenuEvent(${e.events[i].idesta})">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" width="24" height="24" viewBox="0 0 24 24"
-                      stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke-width=".8" fill="none"
-                        d="M7.85 19.575q-.6 0-1.025-.425-.425-.425-.425-1.025v-12.1h-.975V5.4h3.6v-.675H15V5.4h3.6v.625h-.975V18.15q0 .6-.425 1.013-.425.412-1.025.412Zm9.125-13.55H7.05v12.1q0 .35.225.575.225.225.575.225h8.325q.3 0 .55-.25.25-.25.25-.55Zm-6.85 10.925h.625V8h-.625Zm3.15 0h.625V8h-.625ZM7.05 6.025V18.925 18.125Z" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor" fill="none"><path stroke-width=".4" fill="none" d="M7.85 19.575q-.6 0-1.025-.425-.425-.425-.425-1.025v-12.1h-.975V5.4h3.6v-.675H15V5.4h3.6v.625h-.975V18.15q0 .6-.425 1.013-.425.412-1.025.412Zm9.125-13.55H7.05v12.1q0 .35.225.575.225.225.575.225h8.325q.3 0 .55-.25.25-.25.25-.55Zm-6.85 10.925h.625V8h-.625Zm3.15 0h.625V8h-.625ZM7.05 6.025V18.925 18.125Z"/></svg>
                   </a>
                 </div>
               </td>
