@@ -12,25 +12,31 @@ import {
 export const mainPage = async (req, res) => {
   const user = req.user
   const fecha = {
-    FECEST: new Date().toISOString().slice(0, 10)
+    FECEST: new Date().toISOString().slice(0, 10),
   }
-
+  const tipoExcluido = {
+    TIPEST: tiposEstado.telefono.ID,
+  }
+  
   try {
     const result = await axios.post('http://localhost:8200/api/estados/usuarios/perfiles', {
       fecha,
+      tipoExcluido,
     })
 
     let userid = ''
     let data = []
-    result.data.map(itm => {
+    result.data.map(itm => {      
       if (itm.TIPEST === 2) {
+        const hora = new Date().toTimeString().slice(0, 5)
+        if (!(hora >= itm.DESHOR && hora <= itm.HASHOR)) {
+          itm.TIPEST = 1
+        }
+
         if (itm.USERID === userid) {
-          const hora = new Date().toTimeString().slice(0, 5)
-
-          if (!(hora >= itm.DESHOR && hora <= itm.HASHOR)) {
-            itm.TIPEST = 1
+          if (itm.TIPEST === 1) {
+            itm = data.slice(-1)[0]
           }
-
           data.splice(-1)
         }
         userid = itm.USERID
