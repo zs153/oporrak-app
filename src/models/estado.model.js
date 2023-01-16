@@ -21,6 +21,7 @@ FROM (SELECT
   ee.usuest, ee.deshor, ee.hashor
   FROM estados ee
   WHERE ee.fecest = TO_DATE(:fecest,'YYYY-MM-DD')
+  AND ee.tipest <> :tipest
 ) p1
 RIGHT JOIN usuarios uu ON uu.idusua = p1.usuest
 INNER JOIN oficinas oo ON idofic = uu.ofiusu

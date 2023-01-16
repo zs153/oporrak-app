@@ -193,7 +193,10 @@ export const estadosUsuario = async (req, res) => {
   }
 }
 export const estadosFechaPerfil = async (req, res) => {
-  const context = req.body.fecha
+  const context = {
+    fecest: req.body.fecha.FECEST,
+    tipest: req.body.tipoExcluido.TIPEST,
+  }
 
   try {
     const result = await DAL.estadosFechaPerfil(context)
