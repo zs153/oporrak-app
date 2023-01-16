@@ -10,7 +10,6 @@ import cursoRouter from "./routes/curso.router";
 import estadoRouter from "./routes/estado.router";
 import festivoRouter from "./routes/festivo.router";
 import historicoRouter from "./routes/historico.router";
-import loginRouter from "./routes/login.router";
 import mainRouter from "./routes/main.router";
 import matriculaRouter from "./routes/matricula.router";
 import oficinaRouter from "./routes/oficina.router";
@@ -31,14 +30,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/public")));
 
 // routes
+app.use("/", mainRouter);
 app.use("/admin", adminRouter);
 app.use("/admin", calendarioRouter);
 app.use("/admin", cursoRouter);
 app.use("/admin", estadoRouter);
 app.use("/admin", festivoRouter);
 app.use("/admin", historicoRouter);
-app.use("/log", loginRouter);
-app.use("/", mainRouter);
 app.use("/admin", matriculaRouter);
 app.use("/admin", oficinaRouter);
 app.use("/admin", traspasoRouter);

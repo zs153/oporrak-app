@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { serverAPI } from '../config/settings'
 import { tiposRol, tiposEstado, arrTiposPerfil } from '../public/js/enumeraciones'
 
 // pages
@@ -11,7 +12,7 @@ export const mainPage = async (req, res) => {
   const hasta = yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth)
 
   try {
-    let oficinas = await axios.post('http://localhost:8200/api/oficinas')
+    let oficinas = await axios.post('http://${serverAPI}:8200/api/oficinas')
 
     if (req.user.rol === tiposRol.admin) {
       oficinas = oficinas.data
@@ -55,12 +56,12 @@ export const estadosPage = async (req, res) => {
   const diasPeriodo = Math.ceil(Date.parse(periodo.hasta) - Date.parse(periodo.desde)) / (1000 * 60 * 60 * 24) + 1
 
   try {
-    const festivos = await axios.post('http://localhost:8200/api/festivos/oficinas', {
+    const festivos = await axios.post(`http://${serverAPI}:8200/api/festivos/oficinas`, {
       desde: periodo.desde,
       hasta: periodo.hasta,
       ofifes: estado.OFIEST
     })
-    const estados = await axios.post('http://localhost:8200/api/estados/oficinas/perfiles', {
+    const estados = await axios.post(`http://${serverAPI}:8200/api/estados/oficinas/perfiles`, {
       estado,
     })
 

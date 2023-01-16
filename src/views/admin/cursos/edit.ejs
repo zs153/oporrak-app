@@ -5,13 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Curso</title>
+  <title>Cursos</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap-icons.css">
-  <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
-  <link rel="stylesheet" href="/css/navbar.css">
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body class="antialiased">
@@ -21,16 +18,10 @@
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards">
+          <div class="row">
             <div class="col-12">
               <div class="card">
-                <% if(typeof alerts !='undefined' ) { %>
-                <% alerts.map(function (alert){ %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <%- alert.msg %>
-                </div>
-                <% }) %>
-                <% } %>
+
                 <form action="/admin/cursos/update" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="idcurs" id="idcurs" value=<%- datos.curso.IDCURS %>>
                   <div class="card-header">

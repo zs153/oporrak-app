@@ -1,15 +1,19 @@
-import axios from 'axios'
+import { serverAUTH } from "../config/settings";
 
 export const mainPage = async (req, res) => {
-  const user = req.user
+  res.redirect(`http://${serverAUTH}:9000/auth`)
+};
 
-  try {
-    res.render('admin', { user })
-  } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+export const logout = async (req, res) => {
+  const options = {
+    path: "/",
+    sameSite: true,
+    maxAge: 1,
+    httpOnly: true,
+  };
 
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
-  }
+  res.clearCookie("x-access_token");
+  res.cookie("auth", undefined, options);
+
+  res.redirect('/')
 };

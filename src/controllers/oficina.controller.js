@@ -1,11 +1,12 @@
 import axios from 'axios'
+import { serverAPI } from "../config/settings";
 import { tiposRol, tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const result = await axios.post('http://localhost:8200/api/oficinas')
+    const result = await axios.post(`http://${serverAPI}:8200/api/oficinas`)
     const datos = {
       oficinas: JSON.stringify(result.data),
       tiposRol,
@@ -42,7 +43,7 @@ export const editPage = async (req, res) => {
     idofic: req.params.id,
   }
   try {
-    const result = await axios.post('http://localhost:8200/api/oficina', {
+    const result = await axios.post(`http://${serverAPI}:8200/api/oficina`, {
       oficina,
     })
     const datos = {
@@ -71,7 +72,7 @@ export const insert = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8200/api/oficinas/insert', {
+    await axios.post(`http://${serverAPI}:8200/api/oficinas/insert`, {
       oficina,
       movimiento,
     })
@@ -102,7 +103,7 @@ export const update = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8200/api/oficinas/update', {
+    await axios.post(`http://${serverAPI}:8200/api/oficinas/update`, {
       oficina,
       movimiento,
     })
@@ -132,7 +133,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8200/api/oficinas/delete', {
+    await axios.post(`http://${serverAPI}:8200/api/oficinas/delete`, {
       oficina,
       movimiento,
     })

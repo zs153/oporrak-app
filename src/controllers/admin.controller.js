@@ -1,6 +1,6 @@
 import axios from 'axios'
-import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import { serverAPI } from '../config/settings'
 import {
   arrTiposRol,
   arrTiposPerfil,
@@ -17,16 +17,16 @@ export const mainPage = async (req, res) => {
   const tipoExcluido = {
     TIPEST: tiposEstado.telefono.ID,
   }
-  
+
   try {
-    const result = await axios.post('http://localhost:8200/api/estados/usuarios/perfiles', {
+    const result = await axios.post(`http://${serverAPI}:8200/api/estados/usuarios/perfiles`, {
       fecha,
       tipoExcluido,
     })
 
     let userid = ''
     let data = []
-    result.data.map(itm => {      
+    result.data.map(itm => {
       if (itm.TIPEST === 2) {
         const hora = new Date().toTimeString().slice(0, 5)
         if (!(hora >= itm.DESHOR && hora <= itm.HASHOR)) {
@@ -64,7 +64,7 @@ export const perfilPage = async (req, res) => {
     userid: user.userID,
   }
   try {
-    const result = await axios.post('http://localhost:8200/api/usuario', {
+    const result = await axios.post(`http://${serverAPI}:8000/api/usuario`, {
       usuario,
     })
 
@@ -101,13 +101,10 @@ export const changePassword = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(
-      'http://localhost:8200/api/usuarios/cambio',
-      {
-        usuario,
-        movimiento,
-      }
-    )
+    const result = await axios.post(`http://${serverAPI}:8200/api/usuarios/cambio`, {
+      usuario,
+      movimiento,
+    })
 
     res.redirect('/log/logout')
   } catch (error) {
@@ -129,13 +126,10 @@ export const updatePerfil = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(
-      'http://localhost:8200/api/usuarios/perfil',
-      {
-        usuario,
-        movimiento,
-      }
-    )
+    const result = await axios.post(`http://${serverAPI}:8200/api/usuarios/perfil`, {
+      usuario,
+      movimiento,
+    })
 
     const accessToken = jwt.sign(
       {

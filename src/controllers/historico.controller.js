@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { serverAPI } from '../config/settings'
 import {
   tiposMovimiento,
   tiposRol,
@@ -9,7 +10,7 @@ export const mainPage = async (req, res) => {
   const usuario = {}
 
   try {
-    const result = await axios.post('http://localhost:8200/api/historicos', {
+    const result = await axios.post(`http://${serverAPI}:8200/api/historicos`, {
       usuario
     })
     const datos = {
@@ -39,7 +40,7 @@ export const activar = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8200/api/historicos/activar', {
+    await axios.post(`http://${serverAPI}:8200/api/historicos/activar`, {
       usuario,
       movimiento,
     })

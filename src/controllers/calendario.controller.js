@@ -1,12 +1,13 @@
 import axios from 'axios'
+import { serverAPI } from '../config/settings'
 import { tiposEstado, tiposRol, tiposMovimiento, arrTiposEstado, arrTiposEstadoUsuario, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    let oficinas = await axios.post('http://localhost:8200/api/oficinas')
-    let usuarios = await axios.post('http://localhost:8200/api/usuarios')
+    let oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`)
+    let usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`)
 
     if (req.user.rol === tiposRol.admin) {
       oficinas = oficinas.data
@@ -24,7 +25,7 @@ export const mainPage = async (req, res) => {
       usuarios,
       tiposEstado,
       tiposRol,
-      arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario:arrTiposEstado,
+      arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
       arrColoresEstado,
       tiposMovimiento,
     }
@@ -53,7 +54,7 @@ export const insert = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8200/api/calendarios/insert', {
+    await axios.post(`http://${serverAPI}:8200/api/calendarios/insert`, {
       calendario,
       movimiento,
     })
@@ -82,7 +83,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post('http://localhost:8200/api/calendarios/delete', {
+    await axios.post(`http://${serverAPI}:8200/api/calendarios/delete`, {
       calendario,
       movimiento,
     })

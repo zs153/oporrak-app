@@ -1,12 +1,13 @@
 import axios from 'axios'
+import { serverAPI } from "../config/settings";
 import { tiposRol, tiposEstado, tiposMovimiento, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
 
   try {
-    const oficinas = await axios.post('http://localhost:8200/api/oficinas')
-    const usuarios = await axios.post('http://localhost:8200/api/usuarios')
+    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`)
+    const usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`)
     const datos = {
       oficinas: oficinas.data,
       usuarios: usuarios.data,
