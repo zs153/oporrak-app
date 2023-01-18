@@ -5,13 +5,6 @@ const cursoSql = `SELECT
   cc.*
 FROM cursos cc
 `
-const cursosSql = `SELECT 
-  idcurs,
-  descur,
-  stacur
-FROM cursos
-ORDER BY descur
-`
 const insertSql = `BEGIN OPORRAK_PKG.INSERTCURSO(
   :descur,
   :durcur,
@@ -92,11 +85,9 @@ const removeTurnoSql = `BEGIN OPORRAK_PKG.DELETETURNOCURSO(
 `
 // matricula
 const matriculaSql = `SELECT 
-  mm.idmatr,
-  mm.desmat,
-  TO_CHAR(mm.inimat, 'YYYY-MM-DD') "INIMAT",
-  TO_CHAR(mm.finmat, 'YYYY-MM-DD') "FINMAT",
-  mm.stamat
+  mm.*,
+  TO_CHAR(mm.inimat, 'YYYY-MM-DD') "STRINI",
+  TO_CHAR(mm.finmat, 'YYYY-MM-DD') "STRFIN"
 FROM matriculas mm
 INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
 `
@@ -105,20 +96,17 @@ const insertMatriculaSql = `BEGIN OPORRAK_PKG.INSERTMATRICULACURSO(
   :desmat,
   TO_DATE(:inimat,'YYYY-MM-DD'),
   TO_DATE(:finmat,'YYYY-MM-DD'),
-  :idcurs,
   :stamat,
   :usumov,
   :tipmov,
   :idmatr
 ); END;
 `
-const updateMatriculaSql = `BEGIN OPORRAK_PKG.UPDATEMATRICULACURSO(
-  :idcurs,
+const updateMatriculaSql = `BEGIN OPORRAK_PKG.UPDATEMATRICULA(
   :idmatr,
   :desmat,
   TO_DATE(:inimat,'YYYY-MM-DD'),
   TO_DATE(:finmat,'YYYY-MM-DD'),
-  :idcurs,
   :stamat,
   :usumov,
   :tipmov
@@ -244,7 +232,7 @@ export const find = async (context) => {
     query += `WHERE cc.idcurs = :idcurs`
   }
 
-  const result = await simpleExecute(query, context)
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insert = async (bind) => {
@@ -314,7 +302,7 @@ export const turno = async (context) => {
     query += `WHERE tc.idcurs = :idcurs`
   }
 
-  const result = await simpleExecute(query, context)
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insertTurno = async (bind) => {
@@ -360,7 +348,7 @@ export const removeTurno = async (bind) => {
   return result
 }
 
-// turnos
+// matricula
 export const matricula = async (context) => {
   let query = matriculaSql
   let binds = {}
@@ -370,7 +358,7 @@ export const matricula = async (context) => {
     query += `WHERE mc.idcurs = :idcurs`
   }
 
-  const result = await simpleExecute(query, context)
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insertMatricula = async (bind) => {
