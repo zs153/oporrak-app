@@ -3,24 +3,29 @@ import * as DAL from '../models/curso.model'
 const insertFromRec = (req) => {
   const curso = {
     DESCUR: req.body.curso.DESCUR,
-    STACUR: req.body.curso.STACUR,
+    descur: req.body.curso.DESCUR,
+    durcur: req.body.curso.DURCUR,
+    poncur: req.body.curso.PONCUR,
+    stacur: req.body.curso.STACUR,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
 }
 const updateFromRec = (req) => {
   const curso = {
-    IDCURS: req.body.curso.IDCURS,
-    DESCUR: req.body.curso.DESCUR,
-    STACUR: req.body.curso.STACUR,
+    idcurs: req.body.curso.IDCURS,
+    descur: req.body.curso.DESCUR,
+    durcur: req.body.curso.DURCUR,
+    poncur: req.body.curso.PONCUR,
+    stacur: req.body.curso.STACUR,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
@@ -164,6 +169,42 @@ const deleteUsuarioTurnoFromRec = (req) => {
 
   return Object.assign(curso, turno, usuario, movimiento)
 }
+const insertUsuarioMatriculaFromRec = (req) => {
+  const curso = {
+    IDCURS: req.body.curso.IDCURS,
+  }
+  const matricula = {
+    IDMATR: req.body.matricula.IDMATR,
+  }
+  const usuarios = {
+    ARRUSU: {
+      type: "USRTYPE",
+      val: req.body.usuarios.ARRUSU,
+    }
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+  }
+  return Object.assign(curso, matricula, usuarios, movimiento)
+}
+const deleteUsuarioMatriculaFromRec = (req) => {
+  const curso = {
+    IDCURS: req.body.curso.IDCURS,
+  }
+  const matricula = {
+    IDMATR: req.body.matricula.IDMATR,
+  }
+  const usuario = {
+    IDUSUA: req.body.usuario.IDUSUA,
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+  }
+
+  return Object.assign(curso, matricula, usuario, movimiento)
+}
 
 // cursos
 export const curso = async (req, res) => {
@@ -182,8 +223,10 @@ export const curso = async (req, res) => {
   }
 }
 export const cursos = async (req, res) => {
+  const context = req.body.curso
+
   try {
-    const result = await DAL.findAll()
+    const result = await DAL.find(context)
 
     res.status(200).json(result)
   } catch (err) {
@@ -263,7 +306,7 @@ export const turnos = async (req, res) => {
   const context = req.body.curso
 
   try {
-    const result = await DAL.turnos(context)
+    const result = await DAL.turno(context)
 
     if (result !== null) {
       res.status(200).json(result)
@@ -303,6 +346,77 @@ export const modificarTurno = async (req, res) => {
 export const borrarTurno = async (req, res) => {
   try {
     const result = await DAL.removeTurno(deleteTurnoFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+
+// turnos
+export const matricula = async (req, res) => {
+  const context = req.body.matricula
+
+  try {
+    const result = await DAL.matricula(context)
+
+    if (result.length === 1) {
+      return res.status(200).json(result[0])
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const matriculas = async (req, res) => {
+  const context = req.body.curso
+
+  try {
+    const result = await DAL.matricula(context)
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(400).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const crearMatricula = async (req, res) => {
+  try {
+    const result = await DAL.insertMatricula(insertMatriculaFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const modificarMatricula = async (req, res) => {
+  try {
+    const result = await DAL.updateMatricula(updateMatriculaFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const borrarMatricula = async (req, res) => {
+  try {
+    const result = await DAL.removeMatricula(deleteMatriculaFromRec(req))
 
     if (result !== null) {
       res.status(200).json(result)
@@ -419,6 +533,49 @@ export const crearUsuarioTurno = async (req, res) => {
 export const borrarUsuarioTurno = async (req, res) => {
   try {
     const result = await DAL.removeUsuarioTurno(deleteUsuarioTurnoFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+
+// usuarios matricula
+export const usuariosMatricula = async (req, res) => {
+  const context = req.body.matricula
+
+  try {
+    const result = await DAL.usuariosMatricula(context)
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(400).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const crearUsuarioMatricula = async (req, res) => {
+  try {
+    const result = await DAL.insertUsuarioMatricula(insertUsuarioMatriculaFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
+export const borrarUsuarioMatricula = async (req, res) => {
+  try {
+    const result = await DAL.removeUsuarioMatricula(deleteUsuarioMatriculaFromRec(req))
 
     if (result !== null) {
       res.status(200).json(result)

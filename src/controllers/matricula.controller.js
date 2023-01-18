@@ -98,11 +98,14 @@ export const matricula = async (req, res) => {
   }
 }
 export const matriculas = async (req, res) => {
+  const context = req.body.matricula
+
   try {
-    const result = await DAL.findAll()
+    const result = await DAL.find(context)
 
     res.status(200).json(result)
   } catch (err) {
+    console.log(err)
     res.status(400).end()
   }
 }

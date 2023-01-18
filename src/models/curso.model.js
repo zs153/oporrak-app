@@ -2,11 +2,8 @@ import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const cursoSql = `SELECT 
-  idcurs,
-  descur,
-  stacur
-FROM cursos
-WHERE idcurs = :idcurs
+  cc.*
+FROM cursos cc
 `
 const cursosSql = `SELECT 
   idcurs,
@@ -17,6 +14,8 @@ ORDER BY descur
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTCURSO(
   :descur,
+  :durcur,
+  :poncur,
   :stacur,
   :usumov,
   :tipmov,
@@ -26,6 +25,8 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTCURSO(
 const updateSql = `BEGIN OPORRAK_PKG.UPDATECURSO(
   :idcurs,
   :descur,
+  :durcur,
+  :poncur,
   :stacur,
   :usumov,
   :tipmov
@@ -48,17 +49,6 @@ const cambioSql = `BEGIN OPORRAK_PKG.CAMBIOESTADOCURSO(
 const turnoSql = `SELECT 
   tt.idturn,
   tt.destur,
-  TO_CHAR(tt.initur, 'YYYY-MM-DD') "INITUR",
-  TO_CHAR(tt.fintur, 'YYYY-MM-DD') "FINTUR",
-  LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS "INIHOR",
-  LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS "FINHOR",
-  tt.loctur
-FROM turnos tt
-WHERE tt.idturn = :idturn
-`
-const turnosSql = `SELECT 
-  tt.idturn,
-  tt.destur,
   TO_CHAR(tt.initur, 'DD/MM/YYYY') "STRINI",
   TO_CHAR(tt.fintur, 'DD/MM/YYYY') "STRFIN",
   LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS "INIHOR",
@@ -66,7 +56,6 @@ const turnosSql = `SELECT
   tt.loctur
 FROM turnos tt
 INNER JOIN turnoscurso tc ON tc.idturn = tt.idturn
-WHERE tc.idcurs = :idcurs
 `
 const insertTurnoSql = `BEGIN OPORRAK_PKG.INSERTTURNOCURSO(
   :idcurs,
@@ -101,6 +90,47 @@ const removeTurnoSql = `BEGIN OPORRAK_PKG.DELETETURNOCURSO(
   :tipmov
 ); END;
 `
+// matricula
+const matriculaSql = `SELECT 
+  mm.idmatr,
+  mm.desmat,
+  TO_CHAR(mm.inimat, 'YYYY-MM-DD') "INIMAT",
+  TO_CHAR(mm.finmat, 'YYYY-MM-DD') "FINMAT",
+  mm.stamat
+FROM matriculas mm
+INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
+`
+const insertMatriculaSql = `BEGIN OPORRAK_PKG.INSERTMATRICULACURSO(
+  :idcurs,
+  :desmat,
+  TO_DATE(:inimat,'YYYY-MM-DD'),
+  TO_DATE(:finmat,'YYYY-MM-DD'),
+  :idcurs,
+  :stamat,
+  :usumov,
+  :tipmov,
+  :idmatr
+); END;
+`
+const updateMatriculaSql = `BEGIN OPORRAK_PKG.UPDATEMATRICULACURSO(
+  :idcurs,
+  :idmatr,
+  :desmat,
+  TO_DATE(:inimat,'YYYY-MM-DD'),
+  TO_DATE(:finmat,'YYYY-MM-DD'),
+  :idcurs,
+  :stamat,
+  :usumov,
+  :tipmov
+); END;
+`
+const removeMatriculaSql = `BEGIN OPORRAK_PKG.DELETEMATRICULACURSO(
+  :idcurs,
+  :idmatr,
+  :usumov,
+  :tipmov
+); END;
+`
 // usuarios
 const usuariosSql = `SELECT 
   uu.idusua,
@@ -113,16 +143,15 @@ INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 WHERE uc.idcurs = :idcurs
 ORDER BY uu.nomusu
 `
-const usuariosPendientesSql = `SELECT uu.idusua, uu.nomusu, oo.desofi
-FROM usuarios uu
+const usuariosPendientesSql = `SELECT 
+  uu.idusua, uu.nomusu, oo.desofi 
+FROM usuariosmatricula um
+LEFT JOIN usuarioscurso uc ON uc.idusua = um.idusua AND
+  uc.idcurs= :idcurs
+INNER JOIN usuarios uu ON uu.idusua = um.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-INNER JOIN (
-SELECT um.idusua FROM usuariosmatricula um
-INNER JOIN matriculas mm ON mm.idmatr = um.idmatr
-WHERE mm.idcurs = :idcurs
-MINUS
-SELECT uc.idusua FROM usuarioscurso uc WHERE uc.idcurs = :idcurs
-) p1 ON p1.idusua = uu.idusua
+WHERE um.idmatr = :idmatr
+ORDER BY oo.idofic
 `
 const insertUsuarioSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOCURSO(
   :idcurs,
@@ -179,19 +208,43 @@ const removeUsuarioTurnoSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOTURNO(
   :tipmov
 ); END;
 `
+// usuarios matricula
+const usuariosMatriculaSql = `SELECT 
+  uu.idusua,
+  uu.nomusu,
+  uu.userid,
+  oo.desofi
+FROM usuarios uu
+INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
+INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+WHERE um.idmatr = :idmatr
+`
+const insertUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOMATRICULA(
+  :idmatr,
+  :arrusu,
+  :usumov,
+  :tipmov
+); END;
+`
+const removeUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
+  :idmatr,
+  :idusua,
+  :usumov,
+  :tipmov
+); END;
+`
 
 // cursos
 export const find = async (context) => {
   let query = cursoSql
-
-  const result = await simpleExecute(query, context)
-  return result.rows
-}
-export const findAll = async () => {
-  let query = cursosSql
   let binds = {}
 
-  const result = await simpleExecute(query, binds)
+  if (context.IDCURS) {
+    binds.idcurs = context.IDCURS
+    query += `WHERE cc.idcurs = :idcurs`
+  }
+
+  const result = await simpleExecute(query, context)
   return result.rows
 }
 export const insert = async (bind) => {
@@ -200,6 +253,7 @@ export const insert = async (bind) => {
     type: oracledb.NUMBER,
   }
 
+  console.log(insertSql, bind)
   try {
     const result = await simpleExecute(insertSql, bind)
 
@@ -253,12 +307,12 @@ export const change = async (bind) => {
 // turnos
 export const turno = async (context) => {
   let query = turnoSql
+  let binds = {}
 
-  const result = await simpleExecute(query, context)
-  return result.rows
-}
-export const turnos = async (context) => {
-  let query = turnosSql
+  if (context.IDCURS) {
+    binds.idcurs = context.IDCURS
+    query += `WHERE tc.idcurs = :idcurs`
+  }
 
   const result = await simpleExecute(query, context)
   return result.rows
@@ -297,6 +351,62 @@ export const removeTurno = async (bind) => {
 
   try {
     await simpleExecute(removeTurnoSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+
+// turnos
+export const matricula = async (context) => {
+  let query = matriculaSql
+  let binds = {}
+
+  if (context.IDCURS) {
+    binds.idcurs = context.IDCURS
+    query += `WHERE mc.idcurs = :idcurs`
+  }
+
+  const result = await simpleExecute(query, context)
+  return result.rows
+}
+export const insertMatricula = async (bind) => {
+  bind.IDMATR = {
+    dir: oracledb.BIND_OUT,
+    type: oracledb.NUMBER,
+  }
+
+  try {
+    const result = await simpleExecute(insertMatriculaSql, bind)
+
+    bind.IDMATR = await result.outBinds.IDMATR
+  } catch (error) {
+    bind = null
+  }
+
+  return bind
+}
+export const updateMatricula = async (bind) => {
+  let result
+
+  try {
+    await simpleExecute(updateMatriculaSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+export const removeMatricula = async (bind) => {
+  let result
+
+  try {
+    await simpleExecute(removeMatriculaSql, bind)
 
     result = bind
   } catch (error) {
@@ -400,6 +510,46 @@ export const removeUsuarioTurno = async (bind) => {
 
   try {
     await simpleExecute(removeUsuarioTurnoSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+
+// usuarios matricula
+export const usuariosMatricula = async (context) => {
+  let result
+  let query = usuariosMatriculaSql
+
+  try {
+    result = await simpleExecute(query, context)
+  } catch (error) {
+    result = null
+  }
+
+  return result.rows
+}
+export const insertUsuarioMatricula = async (bind) => {
+  let result
+
+  try {
+    await simpleExecute(insertUsuarioMatriculaSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return bind
+}
+export const removeUsuarioMatricula = async (bind) => {
+  let result
+
+  try {
+    await simpleExecute(removeUsuarioMatriculaSql, bind)
 
     result = bind
   } catch (error) {

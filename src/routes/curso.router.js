@@ -18,6 +18,14 @@ import {
   usuariosTurnoPendientes,
   crearUsuarioTurno,
   borrarUsuarioTurno,
+  matricula,
+  matriculas,
+  crearMatricula,
+  modificarMatricula,
+  borrarMatricula,
+  usuariosMatricula,
+  crearUsuarioMatricula,
+  borrarUsuarioMatricula,
 } from "../controllers/curso.controller";
 
 const apiCursoRouter = express.Router();
@@ -36,6 +44,13 @@ apiCursoRouter.post('/cursos/turnos/insert', crearTurno)
 apiCursoRouter.post('/cursos/turnos/update', modificarTurno)
 apiCursoRouter.post('/cursos/turnos/delete', borrarTurno)
 
+// matriculas
+apiCursoRouter.post("/cursos/matricula", matricula);
+apiCursoRouter.post('/cursos/matriculas', matriculas)
+apiCursoRouter.post('/cursos/matriculas/insert', crearMatricula)
+apiCursoRouter.post('/cursos/matriculas/update', modificarMatricula)
+apiCursoRouter.post('/cursos/matriculas/delete', borrarMatricula)
+
 // usuarios curso
 apiCursoRouter.post('/cursos/usuarios', usuarios)
 apiCursoRouter.post('/cursos/usuarios/pendientes', usuariosPendientes)
@@ -47,5 +62,10 @@ apiCursoRouter.post('/cursos/turnos/usuarios', usuariosTurno)
 apiCursoRouter.post('/cursos/turnos/usuarios/pendientes', usuariosTurnoPendientes)
 apiCursoRouter.post('/cursos/turnos/usuarios/insert', crearUsuarioTurno)
 apiCursoRouter.post('/cursos/turnos/usuarios/delete', borrarUsuarioTurno)
+
+// usuarios matricula
+apiCursoRouter.post('/cursos/matriculas/usuarios', usuariosMatricula)
+apiCursoRouter.post('/cursos/matriculas/usuarios/insert', crearUsuarioMatricula)
+apiCursoRouter.post('/cursos/matriculas/usuarios/delete', borrarUsuarioMatricula)
 
 export default apiCursoRouter;

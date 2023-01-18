@@ -1,21 +1,7 @@
 import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
-const matriculaSql = `SELECT 
-  mm.idmatr,
-  mm.desmat,
-  TO_CHAR(mm.inimat, 'YYYY-MM-DD') AS INIMAT,
-  TO_CHAR(mm.finmat, 'YYYY-MM-DD') AS FINMAT,
-  mm.idcurs,
-  mm.stamat,
-  cc.descur,
-  TO_CHAR(mm.inimat, 'DD/MM/YYYY') AS STRINI,
-  TO_CHAR(mm.finmat, 'DD/MM/YYYY') AS STRFIN
-FROM matriculas mm
-INNER JOIN cursos cc ON cc.idcurs = mm.idcurs
-WHERE mm.idmatr = :idmatr
-`
-const matriculasSql = `SELECT 
+const baseSql = `SELECT 
   mm.idmatr,
   mm.desmat,
   TO_CHAR(mm.inimat, 'YYYY-MM-DD') AS INIMAT,
@@ -74,16 +60,13 @@ INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 WHERE um.idmatr = :idmatr
 `
 const usuariosPendientesSql = `SELECT 
-  uu.idusua, 
-  uu.nomusu, 
-  oo.desofi
-FROM usuarios uu
+  uu.idusua, uu.nomusu, oo.desofi FROM usuarios uu
+LEFT JOIN usuariosmatricula um ON uu.idusua = um.idusua AND
+  um.idmatr= :idmatr
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-INNER JOIN (
-SELECT uu.idusua FROM usuarios uu
-MINUS
-SELECT um.idusua FROM usuariosmatricula um WHERE um.idmatr = :idmatr
-) p1 ON p1.idusua = uu.idusua
+WHERE um.idusua IS NULL AND 
+  uu.stausu = 1
+ORDER BY oo.idofic, uu.nomusu
 `
 const insertUsuarioSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOMATRICULA(
   :idmatr,
@@ -102,18 +85,15 @@ const removeUsuarioSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
 
 // matriculas
 export const find = async (context) => {
-  let query = matriculaSql
-
-  const result = await simpleExecute(query, context)
-
-  return result.rows
-}
-export const findAll = async () => {
-  let query = matriculasSql
+  let query = baseSql
   let binds = {}
 
-  const result = await simpleExecute(query, binds)
+  if (context.IDMATR) {
+    binds.idmatr = context.IDMATR
+    query += `WHERE mm.idmatr = :idmatr`
+  }
 
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insert = async (bind) => {
