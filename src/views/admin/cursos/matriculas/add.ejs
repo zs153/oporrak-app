@@ -21,16 +21,13 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form action="/admin/matriculas/insert" method="POST" onsubmit="return validate();">
+                <form action="/admin/cursos/matriculas/insert" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <div class="card-header">
                     <h3 class="card-title">Matrícula</h3>
-                    <p>
                       <span class="text-muted">
                         <small>Curso: <%- datos.curso.DESCUR %></small>
                       </span>
-
-                    </p>
                   </div>
                   <div class="card-body">
                     <div class="row">

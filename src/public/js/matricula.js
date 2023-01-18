@@ -125,15 +125,6 @@ const buildTable = (state) => {
     </div>`
     row.appendChild(cell)
 
-    // col6
-    cell = document.createElement('td')
-    cell.innerHTML = `<div class="d-flex py-1 align-items-center">
-      <div class="flex-fill">
-        <div class="font-weight-medium">${element.DESCUR} </div>
-      </div>
-    </div>`
-    row.appendChild(cell)
-
     // col7
     cell = document.createElement('td')
     cell.classList.add("w-6")

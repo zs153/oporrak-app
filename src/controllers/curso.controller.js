@@ -157,7 +157,7 @@ export const editTurnoPage = async (req, res) => {
   }
 }
 
-// pages turnos
+// pages matriculas
 export const matriculasPage = async (req, res) => {
   const user = req.user;
   const curso = {
@@ -174,6 +174,7 @@ export const matriculasPage = async (req, res) => {
     const datos = {
       curso: result.data,
       matriculas: matriculas.data,
+      arrEstadosMatricula,
     };
 
     res.render("admin/cursos/matriculas", { user, datos });
@@ -229,6 +230,7 @@ export const editMatriculaPage = async (req, res) => {
     const datos = {
       curso,
       matricula: result.data,
+      arrEstadosMatricula,
     };
 
     res.render("admin/cursos/matriculas/edit", { user, datos });
@@ -630,7 +632,6 @@ export const insertMatricula = async (req, res) => {
     DESMAT: req.body.desmat.toUpperCase(),
     INIMAT: req.body.inimat,
     FINMAT: req.body.finmat,
-    IDCURS: req.body.idcurs,
     STAMAT: req.body.stamat,
   }
   const movimiento = {
@@ -657,14 +658,13 @@ export const insertMatricula = async (req, res) => {
 export const updateMatricula = async (req, res) => {
   const user = req.user;
   const curso = {
-    IDCURS: req.body.idcurs,
+    IDCURS: req.body.idcurs
   }
   const matricula = {
     IDMATR: req.body.idmatr,
     DESMAT: req.body.desmat.toUpperCase(),
     INIMAT: req.body.inimat,
     FINMAT: req.body.finmat,
-    IDCURS: req.body.idcurs,
     STAMAT: req.body.stamat,
   }
   const movimiento = {
@@ -674,14 +674,13 @@ export const updateMatricula = async (req, res) => {
 
   try {
     await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas/update`, {
-      curso,
       matricula,
       movimiento,
     });
 
     res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}`);
   } catch (error) {
-    const msg = "No se ha podido actualizar el turno.";
+    const msg = "No se ha podido actualizar los datos.";
 
     res.render("admin/error400", {
       alerts: [{ msg }],
