@@ -7,20 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Matrículas</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap-icons.css">
-  <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
-  <link rel="stylesheet" href="/css/navbar.css">
-  <style>
-    .subtitulo {
-      position: absolute;
-      top: 1.5rem;
-      color: #656d77;
-      pointer-events: none;
-      font-size: 0.8em;
-    }
-  </style>
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body class="antialiased">
@@ -33,13 +21,6 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <% if(typeof alerts !='undefined' ) { %>
-                <% alerts.map(function (alert){ %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <%- alert.msg %>
-                </div>
-                <% }) %>
-                <% } %>
                 <form action="/admin/matriculas/insert" method="POST" onsubmit="return validate();">
                   <div class="card-header">
                     <h3 class="card-title">Matrícula</h3>
@@ -48,9 +29,11 @@
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                          <label class="form-label required">Descripción</label>
-                          <input type="text" name="desmat" id="desmat" class="form-control" value="<%- datos.matricula.DESMAT %>" style="text-transform: uppercase;" autofocus />
-                          <div class="invalid-feedback"></div>
+                          <div class="input-control">
+                            <label class="form-label required">Descripción</label>
+                            <input type="text" name="desmat" id="desmat" class="form-control" value="" style="text-transform: uppercase;" autofocus />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -75,22 +58,36 @@
                       </div>
                       <div class="col-4">
                         <div class="mb-1">
-                          <div class="form-label">Estado</div>
-                          <select class="form-select" id="cboest" name="stamat" value="">
-                            <% datos.arrEstadosMatricula.map(element=> { %>
-                            <option value="<%= element.id %>" <%- element.id===datos.matricula.STAMAT ? " selected" :"" %>><%= element.des %>
-                            </option>
-                            <% }) %>
-                          </select>
+                          <div class="input-control">
+                            <div class="form-label">Estado</div>
+                            <select class="form-select form-control" id="cboest" name="stamat" value="">
+                              <option value="-1">SELECCIONE ESTADO</option>
+                              <% datos.arrEstadosMatricula.map(element=> { %>
+                              <option value="<%= element.id %>">
+                                <%- element.des %>
+                              </option>
+                              <% }) %>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <div class="mb-1">
-                          <div class="form-label">Curso</div>
-                          <select class="form-select" id="cbocur" name="idcurs" value="<%- datos.matricula.IDCURS %>">
-                          </select>
+                          <div class="input-control">
+                            <div class="form-label">Curso</div>
+                            <select class="form-select form-control" id="cbocur" name="idcurs" value="">
+                              <option value="0">SELECCIONE CURSO</option>
+                              <% datos.cursos.map(element=> { %>
+                                <option value="<%= element.IDCURS %>">
+                                  <%- element.DESCUR %>
+                                </option>
+                              <% }) %>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -114,23 +111,56 @@
   <script src="/js/ayuda.min.js"></script>
   <script>
     const desmat = document.getElementById('desmat')
+    const inimat = document.getElementById('inimat')
+    const finmat = document.getElementById('finmat')
+    const cboest = document.getElementById('cboest')
+    const cbocur = document.getElementById('cbocur')
 
     const validate = () => {
-      const desmatValue = desmat.value.trim()
+      const desmatValue = desmat.value.trim().toUpperCase()
+      const inimatValue = inimat.value
+      const finmatValue = finmat.value
+      const cboestValue = cboest.value
+      const cbocurValue = cbocur.value
 
       if (desmatValue === '') {
         setError(desmat, 'Descripción requerida')
-        setTimeout(function() {
+        setTimeout(function () {
           setSuccess(desmat)
         }, 3000)
         return false
-      } else {
-        setSuccess(desmat)
+      }
+      if (isNaN(Date.parse(inimatValue))) {
+        setError(inimat, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(inimat)
+        }, 3000)
+        return false
+      }
+      if (isNaN(Date.parse(finmatValue))) {
+        setError(finmat, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(finmat)
+        }, 3000)
+        return false
+      }
+      if (cboestValue === '-1') {
+        setError(cboest, 'Estado requerido')
+        setTimeout(function () {
+          setSuccess(cboest)
+        }, 3000)
+        return false
+      }
+      if (cbocurValue === '0') {
+        setError(cbocur, 'Curso requerido')
+        setTimeout(function () {
+          setSuccess(cbocur)
+        }, 3000)
+        return false
       }
 
       return true
     }
-
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
@@ -142,35 +172,10 @@
     const setError = (element, message) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
       errorDisplay.innerText = message;
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
-  </script>
-  <script>
-    const Cursos = () => {
-      const xhr = new XMLHttpRequest();
-
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const cursos = JSON.parse(xhr.response)
-          const cbo = document.getElementById('cbocur')
-
-          cursos.map((itm) => {
-            const option = document.createElement('option')
-            option.value = itm.IDCURS
-            option.text = itm.DESCUR
-
-            cbo.appendChild(option)
-          })
-        }
-      };
-      xhr.open('POST', 'http://localhost:8200/api/cursos', true);
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.send()
-    }
-    Cursos();
   </script>
 </body>
 

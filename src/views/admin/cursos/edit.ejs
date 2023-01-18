@@ -14,14 +14,13 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'CURSO' }) %>
+    <%- include('../../partials/navbar', { opcion: 'CURSO' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
               <div class="card">
-
                 <form action="/admin/cursos/update" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="idcurs" id="idcurs" value=<%- datos.curso.IDCURS %>>
                   <div class="card-header">
@@ -38,16 +37,32 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-2">
+                      <div class="col-4">
                         <div class="mb-1">
-                          <div class="form-label">Estado</div>
-                          <select class="form-select" id="cboest" name="stacur" value="">
-                            <% datos.arrEstadosCurso.map(element=> { %>
-                            <option value="<%= element.id %>" <%- element.id===datos.curso.STACUR ? " selected" :"" %>>
-                              <%= element.des %>
-                            </option>
-                            <% }) %>
-                          </select>
+                          <label class="form-label">Duración</label>
+                          <input type="text" name="durcur" id="durcur" class="form-control" value="<%- datos.curso.DURCUR %> " />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-1">
+                          <label class="form-label">Ponente</label>
+                          <input type="text" name="poncur" id="poncur" class="form-control" value="<%- datos.curso.PONCUR %> " />
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <div class="form-label required">Estado</div>
+                              <select class="form-select" id="cboest" name="stacur" value="">
+                                <% datos.arrEstadosCurso.map(element=> { %>
+                                  <option value="<%- element.id %>" <%- element.id===datos.curso.STACUR ? " selected" :"" %>>
+                                    <%- element.des %>
+                                  </option>
+                                  <% }) %>
+                              </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>

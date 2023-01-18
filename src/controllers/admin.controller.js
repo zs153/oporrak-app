@@ -84,9 +84,7 @@ export const perfilPage = async (req, res) => {
     })
   }
 }
-export const errorPage = async (req, res) => {
-  res.render('admin/error400')
-}
+
 export const changePassword = async (req, res) => {
   const user = req.user
   const salt = await bcrypt.genSalt(10)
@@ -101,12 +99,12 @@ export const changePassword = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/usuarios/cambio`, {
+    await axios.post(`http://${serverAPI}:8200/api/usuarios/cambio`, {
       usuario,
       movimiento,
     })
 
-    res.redirect('/log/logout')
+    res.redirect('/')
   } catch (error) {
     res.redirect('/admin')
   }
@@ -116,7 +114,6 @@ export const updatePerfil = async (req, res) => {
   const usuario = {
     idusua: user.id,
     nomusu: req.body.nomusu.toUpperCase(),
-    ofiusu: req.body.ofiusu,
     emausu: req.body.emausu,
     telusu: req.body.telusu,
   }
@@ -126,33 +123,12 @@ export const updatePerfil = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/usuarios/perfil`, {
+    await axios.post(`http://${serverAPI}:8200/api/usuarios/perfil`, {
       usuario,
       movimiento,
     })
 
-    const accessToken = jwt.sign(
-      {
-        id: user.id,
-        nombre: usuario.nomusu,
-        userID: user.userID,
-        email: usuario.emausu,
-        rol: user.rol,
-        oficina: usuario.ofiusu,
-        telefono: usuario.telusu,
-      },
-      `${process.env.ACCESS_TOKEN_SECRET}`,
-      { expiresIn: '8h' }
-    )
-    const options = {
-      path: '/',
-      sameSite: true,
-      maxAge: 1000 * 60 * 60 * 8, // 8 horas
-      httpOnly: true,
-    }
-
-    res.cookie('auth', accessToken, options)
-    res.redirect('/log/logout')
+    redirect('.')
   } catch (error) {
     res.redirect('/admin')
   }

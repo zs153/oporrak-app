@@ -21,6 +21,12 @@ import {
   deleteUsuario,
   insertUsuarioTurno,
   deleteUsuarioTurno,
+  matriculasPage,
+  addMatriculaPage,
+  editMatriculaPage,
+  insertMatricula,
+  updateMatricula,
+  deleteMatricula,
 } from "../controllers/curso.controller";
 
 const cursoRouter = express.Router();
@@ -34,6 +40,11 @@ cursoRouter.get("/cursos/edit/:id", authRoutes, editPage);
 cursoRouter.get("/cursos/turnos/:id", authRoutes, turnosPage);
 cursoRouter.get("/cursos/turnos/add/:id", authRoutes, addTurnoPage);
 cursoRouter.get("/cursos/turnos/edit/:idcurs/:idturn", authRoutes, editTurnoPage);
+
+// paginas matriculas
+cursoRouter.get("/cursos/matriculas/:id", authRoutes, matriculasPage);
+cursoRouter.get("/cursos/matriculas/add/:id", authRoutes, addMatriculaPage);
+cursoRouter.get("/cursos/matriculas/edit/:idcurs/:idturn", authRoutes, editMatriculaPage);
 
 // paginas usuarios
 cursoRouter.get("/cursos/usuarios/:id", authRoutes, usuariosPage);
@@ -52,6 +63,11 @@ cursoRouter.post("/cursos/delete", authRoutes, remove);
 cursoRouter.post("/cursos/turnos/insert", authRoutes, insertTurno);
 cursoRouter.post("/cursos/turnos/update", authRoutes, updateTurno);
 cursoRouter.post("/cursos/turnos/delete", authRoutes, deleteTurno);
+
+// proc matriculas
+cursoRouter.post("/cursos/matriculas/insert", authRoutes, insertMatricula);
+cursoRouter.post("/cursos/matriculas/update", authRoutes, updateMatricula);
+cursoRouter.post("/cursos/matriculas/delete", authRoutes, deleteMatricula);
 
 // proc usuarios curso
 cursoRouter.post("/cursos/usuarios/insert", authRoutes, insertUsuario);

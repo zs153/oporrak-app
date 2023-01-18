@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Cursos</title>
+  <title>Matrículas</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
@@ -13,17 +13,24 @@
 
 <body class="antialiased">
   <div class="wrapper">
-    <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'CURSO' }) %>
+    <%- include('../../../partials/header') %>
+    <%- include('../../../partials/navbar', { opcion: 'CURSO' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form action="/admin/cursos/insert" method="POST" onsubmit="return validate();">
+                <form action="/admin/matriculas/insert" method="POST" onsubmit="return validate();">
+                  <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <div class="card-header">
-                    <h3 class="card-title">Curso</h3>
+                    <h3 class="card-title">Matrícula</h3>
+                    <p>
+                      <span class="text-muted">
+                        <small>Curso: <%- datos.curso.DESCUR %></small>
+                      </span>
+
+                    </p>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -31,8 +38,8 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label required">Descripción</label>
-                            <input type="text" name="descur" id="descur" class="form-control" value="" style="text-transform: uppercase;" autofocus />
-                            <div class="invalid-feedback"></div>                            
+                            <input type="text" name="desmat" id="desmat" class="form-control" value="" style="text-transform: uppercase;" autofocus />
+                            <div class="invalid-feedback"></div>
                           </div>
                         </div>
                       </div>
@@ -40,28 +47,33 @@
                     <div class="row">
                       <div class="col-4">
                         <div class="mb-1">
-                          <label class="form-label">Duración</label>
-                          <input type="text" name="durcur" id="durcur" class="form-control" value="" />
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <label class="form-label">Ponente</label>
-                          <input type="text" name="poncur" id="poncur" class="form-control" value="" />
-                          <div class="invalid-feedback"></div>
+                          <div class="input-control">
+                            <label class="form-label">Fecha inicio</label>
+                            <input type="date" name="inimat" id="inimat" class="form-control" value="<%- datos.matricula.STRINI %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="input-control">
-                            <div class="form-label required">Estado</div>
-                            <select class="form-select form-control" id="cboest" name="stacur" value="">
+                            <label class="form-label">Fecha fin</label>
+                            <input type="date" name="finmat" id="finmat" class="form-control" value="<%- datos.matricula.STRFIN %>" />
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <div class="form-label">Estado</div>
+                            <select class="form-select form-control" id="cboest" name="stamat" value="">
                               <option value="-1">SELECCIONE ESTADO</option>
-                              <% datos.arrEstadosCurso.map(element=> { %>
-                                <option value="<%= element.id %>">
-                                  <%- element.des %>
-                                </option>
-                                <% }) %>
+                              <% datos.arrEstadosMatricula.map(element=> { %>
+                              <option value="<%= element.id %>">
+                                <%- element.des %>
+                              </option>
+                              <% }) %>
                             </select>
                             <div class="invalid-feedback"></div>
                           </div>
@@ -71,8 +83,8 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/cursos" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear curso</button>
+                      <a href="/admin/matriculas" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear matrícula</button>
                     </div>
                   </div>
                 </form>
@@ -82,22 +94,40 @@
         </div>
       </div>
     </div>
-    <%- include('../../partials/footer') %>
+    <%- include('../../../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
   <script>
-    const descur = document.getElementById('descur')
-    const cobest = document.getElementById('cboest')
+    const desmat = document.getElementById('desmat')
+    const inimat = document.getElementById('inimat')
+    const finmat = document.getElementById('finmat')
+    const cboest = document.getElementById('cboest')
 
     const validate = () => {
-      const descurValue = descur.value.trim()
+      const desmatValue = desmat.value.trim().toUpperCase()
+      const inimatValue = inimat.value
+      const finmatValue = finmat.value
       const cboestValue = cboest.value
 
-      if (descurValue === '') {
-        setError(descur, 'Descripción requerida')
-        setTimeout(function() {
-          setSuccess(descur)
+      if (desmatValue === '') {
+        setError(desmat, 'Descripción requerida')
+        setTimeout(function () {
+          setSuccess(desmat)
+        }, 3000)
+        return false
+      }
+      if (isNaN(Date.parse(inimatValue))) {
+        setError(inimat, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(inimat)
+        }, 3000)
+        return false
+      }
+      if (isNaN(Date.parse(finmatValue))) {
+        setError(finmat, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(finmat)
         }, 3000)
         return false
       }
@@ -111,7 +141,6 @@
 
       return true
     }
-
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
@@ -123,7 +152,6 @@
     const setError = (element, message) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
       errorDisplay.innerText = message;
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');

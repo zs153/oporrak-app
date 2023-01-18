@@ -5,13 +5,15 @@ import { tiposRol, arrEstadosMatricula, estadosMatricula, tiposMovimiento } from
 // page matriculas
 export const mainPage = async (req, res) => {
   const user = req.user
+  const matricula = {}
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/matriculas`)
+    const result = await axios.post(`http://${serverAPI}:8200/api/matriculas`, {
+      matricula,
+    })
     const datos = {
-      estados: arrEstadosMatricula,
       matriculas: result.data,
-      tiposRol,
+      estados: arrEstadosMatricula,
     }
 
     res.render('admin/matriculas', { user, datos })
@@ -27,18 +29,21 @@ export const addPage = async (req, res) => {
   const user = req.user
   const fecha = new Date().toISOString().slice(0, 10)
   const matricula = {
-    DESMAT: '',
     INIMAT: fecha,
     FINMAT: fecha,
-    STAMAT: estadosMatricula.cerrada,
   }
-  const datos = {
-    arrEstadosMatricula,
-    matricula,
-    tiposRol,
-  }
-
+  const curso = {}
+  
   try {
+    const cursos = await axios.post(`http://${serverAPI}:8200/api/cursos`, {
+      curso,
+    })
+    const datos = {
+      matricula,
+      cursos: cursos.data,
+      arrEstadosMatricula,
+    }
+
     res.render('admin/matriculas/add', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -53,16 +58,20 @@ export const editPage = async (req, res) => {
   const matricula = {
     IDMATR: req.params.id,
   }
+  const curso = {}
 
   try {
     const result = await axios.post(`http://${serverAPI}:8200/api/matricula`, {
       matricula,
     })
+    const cursos = await axios.post(`http://${serverAPI}:8200/api/cursos`, {
+      curso,
+    })
 
     const datos = {
-      arrEstadosMatricula,
       matricula: result.data,
-      tiposRol,
+      cursos: cursos.data,
+      arrEstadosMatricula,
     }
 
     res.render('admin/matriculas/edit', { user, datos })
@@ -120,7 +129,6 @@ export const usuariosAddPage = async (req, res) => {
     const datos = {
       matricula: result.data,
       usuarios: usuarios.data,
-      tiposRol,
     };
 
     res.render("admin/matriculas/usuarios/add", { user, datos });

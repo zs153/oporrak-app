@@ -51,7 +51,7 @@
                       <tr class="header">
                         <th class="w-4"></th>
                         <th>Descipción</th>
-                        <th>Estado</th>
+                        <th class="w-8">Estado</th>
                         <th class="w-4"></th>
                       </tr>
                     </thead>
@@ -60,7 +60,7 @@
                   </table>
                 </div>
                 <div class="card-footer">
-                  <div id="pagination-wrapper" class="pagination"></div>
+                  <div id="pagination-wrapper" class="py-1"></div>
                 </div>
               </div>
             </div>
@@ -115,7 +115,6 @@
       'querySet': orgList,
       'page': 1,
       'rows': 9,
-      'window': 3,
     }
 
     buildTable(state)

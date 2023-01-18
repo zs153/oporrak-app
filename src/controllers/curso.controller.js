@@ -1,17 +1,19 @@
 import axios from 'axios'
 import { serverAPI } from '../config/settings'
-import { tiposRol, arrEstadosCurso, estadosCurso, tiposMovimiento } from '../public/js/enumeraciones'
+import { tiposRol, arrEstadosCurso, arrEstadosMatricula, tiposMovimiento } from '../public/js/enumeraciones'
 
 // page cursos
 export const mainPage = async (req, res) => {
   const user = req.user
+  const curso = {}
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/cursos`)
+    const result = await axios.post(`http://${serverAPI}:8200/api/cursos`, {
+      curso
+    })
     const datos = {
       cursos: result.data,
       arrEstadosCurso: arrEstadosCurso,
-      tiposRol,
     }
 
     res.render('admin/cursos', { user, datos })
@@ -25,14 +27,8 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const curso = {
-    DESCUR: '',
-    STACUR: estadosCurso.cerrado,
-  }
   const datos = {
-    curso,
     arrEstadosCurso,
-    tiposRol,
   }
 
   try {
@@ -58,8 +54,8 @@ export const editPage = async (req, res) => {
     const datos = {
       curso: result.data,
       arrEstadosCurso,
-      tiposRol,
     }
+
     res.render('admin/cursos/edit', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
@@ -87,7 +83,6 @@ export const turnosPage = async (req, res) => {
     const datos = {
       curso: result.data,
       turnos: turnos.data,
-      tiposRol,
     };
 
     res.render("admin/cursos/turnos", { user, datos });
@@ -162,6 +157,90 @@ export const editTurnoPage = async (req, res) => {
   }
 }
 
+// pages turnos
+export const matriculasPage = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    IDCURS: req.params.id,
+  };
+
+  try {
+    const result = await axios.post(`http://${serverAPI}:8200/api/curso`, {
+      curso,
+    });
+    const matriculas = await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas`, {
+      curso,
+    });
+    const datos = {
+      curso: result.data,
+      matriculas: matriculas.data,
+    };
+
+    res.render("admin/cursos/matriculas", { user, datos });
+  } catch (error) {
+    const msg = "No se han podido cargar los datos.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+export const addMatriculaPage = async (req, res) => {
+  const user = req.user;
+  const fecha = new Date().toISOString().slice(0, 10);
+  const curso = {
+    IDCURS: req.params.id,
+  };
+  const matricula = {
+    STRINI: fecha,
+    STRFIN: fecha,
+  }
+
+  try {
+    const datos = {
+      curso,
+      matricula,
+      arrEstadosMatricula,
+    };
+
+    res.render("admin/cursos/matriculas/add", { user, datos });
+  } catch (error) {
+    const msg = "No se han podido cargar los datos.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+export const editMatriculaPage = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    IDCURS: req.params.idcurs,
+  };
+  const matricula = {
+    IDMATR: req.params.idmatr,
+  };
+
+  try {
+    const result = await axios.post(`http://${serverAPI}:8200/api/cursos/matricula`, {
+      matricula,
+    });
+
+    const datos = {
+      curso,
+      matricula: result.data,
+    };
+
+    res.render("admin/cursos/matriculas/edit", { user, datos });
+  } catch (error) {
+    const msg = "No se han podido cargar los datos.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+
 // pages usuarios curso
 export const usuariosPage = async (req, res) => {
   const user = req.user;
@@ -179,7 +258,6 @@ export const usuariosPage = async (req, res) => {
     const datos = {
       curso: result.data,
       usuarios: usuarios.data,
-      tiposRol,
     };
 
     res.render("admin/cursos/usuarios", { user, datos });
@@ -196,6 +274,9 @@ export const usuariosAddPage = async (req, res) => {
   const curso = {
     IDCURS: req.params.id,
   };
+  const matricula = {
+    IDMATR: req.params.idmatr
+  }
 
   try {
     const result = await axios.post(`http://${serverAPI}:8200/api/curso`, {
@@ -210,6 +291,7 @@ export const usuariosAddPage = async (req, res) => {
       tiposRol,
     };
 
+    console.log(usuarios)
     res.render("admin/cursos/usuarios/add", { user, datos });
   } catch (error) {
     const msg = "No se ha podido acceder a los turnos del curso seleccionado.";
@@ -286,12 +368,78 @@ export const usuariosTurnoAddPage = async (req, res) => {
   }
 }
 
+// pages usuarios turno
+export const usuariosMatriculaPage = async (req, res) => {
+  const user = req.user
+  const curso = {
+    IDCURS: req.params.idcurs,
+  }
+  const matricula = {
+    IDMATR: req.params.idmatr,
+  }
+
+  try {
+    const result = await axios.post(`http://${serverAPI}:8200/api/cursos/matricula`, {
+      matricula,
+    })
+    const usuarios = await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas/usuarios`, {
+      turno,
+    })
+    const datos = {
+      curso,
+      matricula: result.data,
+      usuarios: usuarios.data,
+    }
+
+    res.render('admin/cursos/matriculas/usuarios', { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+export const usuariosMatriculaAddPage = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    IDCURS: req.params.idcurs,
+  }
+  const matricula = {
+    IDMATR: req.params.idmatr,
+  }
+
+  try {
+    const result = await axios.post(`http://${serverAPI}:8200/api/cursos/matricula`, {
+      matricula,
+    })
+    const usuarios = await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas/usuarios/pendientes`, {
+      curso,
+    });
+    const datos = {
+      curso,
+      matricula: result.data,
+      usuarios: usuarios.data,
+    };
+
+    res.render("admin/cursos/matriculas/usuarios/add", { user, datos });
+  } catch (error) {
+    const msg = "No se ha podido acceder a los turnos del curso seleccionado.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+
 // proc cursos
 export const insert = async (req, res) => {
   const user = req.user
   const curso = {
     DESCUR: req.body.descur.toUpperCase(),
-    STACUR: estadosCurso.cerrado
+    DURCUR: req.body.durcur,
+    PONCUR: req.body.poncur,
+    STACUR: req.body.stacur,
   }
   const movimiento = {
     USUMOV: user.id,
@@ -322,6 +470,8 @@ export const update = async (req, res) => {
   const curso = {
     IDCURS: req.body.idcurs,
     DESCUR: req.body.descur.toUpperCase(),
+    DURCUR: req.body.durcur,
+    PONCUR: req.body.poncur,
     STACUR: req.body.stacur,
   }
   const movimiento = {
@@ -337,12 +487,7 @@ export const update = async (req, res) => {
 
     res.redirect('/admin/cursos')
   } catch (error) {
-    let msg =
-      'No se han podido modificar los datos del curso. Verifique los datos introducidos'
-
-    if (error.response.data.errorNum === 20100) {
-      msg = 'El curso ya existe'
-    }
+    let msg = 'No se han podido guardar los datos.'
 
     res.render('admin/error400', {
       alerts: [{ msg }],
@@ -466,6 +611,104 @@ export const deleteTurno = async (req, res) => {
     });
 
     res.redirect(`/admin/cursos/turnos/${curso.IDCURS}`);
+  } catch (error) {
+    const msg = "No se ha podido borrar el turno.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+
+// proc matricula
+export const insertMatricula = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    IDCURS: req.body.idcurs,
+  }
+  const matricula = {
+    DESMAT: req.body.desmat.toUpperCase(),
+    INIMAT: req.body.inimat,
+    FINMAT: req.body.finmat,
+    IDCURS: req.body.idcurs,
+    STAMAT: req.body.stamat,
+  }
+  const movimiento = {
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearMatricula,
+  }
+
+  try {
+    await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas/insert`, {
+      curso,
+      matricula,
+      movimiento,
+    });
+
+    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}`);
+  } catch (error) {
+    const msg = "No se han podido guardar los datos.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+export const updateMatricula = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    IDCURS: req.body.idcurs,
+  }
+  const matricula = {
+    IDMATR: req.body.idmatr,
+    DESMAT: req.body.desmat.toUpperCase(),
+    INIMAT: req.body.inimat,
+    FINMAT: req.body.finmat,
+    IDCURS: req.body.idcurs,
+    STAMAT: req.body.stamat,
+  }
+  const movimiento = {
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.modificarMatricula,
+  }
+
+  try {
+    await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas/update`, {
+      curso,
+      matricula,
+      movimiento,
+    });
+
+    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}`);
+  } catch (error) {
+    const msg = "No se ha podido actualizar el turno.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+export const deleteMatricula = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    IDCURS: req.body.idcurs,
+  }
+  const matricula = {
+    IDMATR: req.body.idmatr,
+  };
+  const movimiento = {
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarMatricula,
+  };
+
+  try {
+    await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas/delete`, {
+      curso,
+      matricula,
+      movimiento,
+    });
+
+    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}`);
   } catch (error) {
     const msg = "No se ha podido borrar el turno.";
 
