@@ -89,21 +89,15 @@ const buildTable = (state) => {
     cell = document.createElement('td')
     cell.innerHTML = `<div class="d-flex py-1 align-items-center">
       <div class="flex-fill">
-        <div class="font-weight-medium">${element.DESOFI}</div>
+        <div class="font-weight-medium">${element.NOMUSU}</div>
       </div>
+    </div>
+    <div class="text-muted">
+      <small class="text-reset">Oficina: ${element.DESOFI}</small>
     </div>`
     row.appendChild(cell)
 
     // col3
-    cell = document.createElement('td')
-    cell.innerHTML = `<div class="d-flex py-1 align-items-center">
-      <div class="flex-fill">
-        <div class="font-weight-medium">${element.NOMUSU}</div>
-      </div>
-    </div>`
-    row.appendChild(cell)
-
-    // col4
     cell = document.createElement('td')
     cell.style.display = 'none'
     cell.value = element.IDUSUA
@@ -182,7 +176,7 @@ const addUsuarios = () => {
 
   document.querySelectorAll('input[type=checkbox]').forEach(e => {
     if (e.checked) {
-      arrUsuarios.push(e.parentNode.parentNode.cells[3].value)
+      arrUsuarios.push(e.parentNode.parentNode.cells[2].value)
     }
   })
   document.getElementById('arrusu').value = JSON.stringify(arrUsuarios)

@@ -101,19 +101,16 @@ export const addTurnoPage = async (req, res) => {
     IDCURS: req.params.id,
   };
   const turno = {
-    DESTUR: '',
-    STRINI: fecha,
-    STRFIN: fecha,
+    INITUR: fecha,
+    FINTUR: fecha,
     INIHOR: '08:00',
     FINHOR: '14:00',
-    LOCTUR: ''
   }
 
   try {
     const datos = {
       curso,
       turno,
-      tiposRol,
     };
 
     res.render("admin/cursos/turnos/add", { user, datos });
@@ -143,7 +140,6 @@ export const editTurnoPage = async (req, res) => {
     const datos = {
       curso,
       turno: result.data,
-      tiposRol,
     };
 
     res.render("admin/cursos/turnos/edit", { user, datos });
@@ -789,9 +785,6 @@ export const deleteUsuario = async (req, res) => {
 // proc usuarios turno
 export const insertUsuarioTurno = async (req, res) => {
   const user = req.user;
-  const curso = {
-    IDCURS: req.body.idcurs,
-  }
   const turno = {
     IDTURN: req.body.idturn,
   }
@@ -802,10 +795,9 @@ export const insertUsuarioTurno = async (req, res) => {
     USUMOV: user.id,
     TIPMOV: tiposMovimiento.insertarUsuarioTurno,
   }
-
+  console.log(usuarios)
   try {
     await axios.post(`http://${serverAPI}:8200/api/cursos/turnos/usuarios/insert`, {
-      curso,
       turno,
       usuarios,
       movimiento,

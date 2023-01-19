@@ -39,7 +39,7 @@
                             <line x1="21" y1="21" x2="15" y2="15"></line>
                           </svg>
                         </span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarMatriculaBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en matriculas">
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarMatriculaBox" onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en matriculas">
                       </div>
                       <a href="/admin/cursos/matriculas/add/<%- datos.curso.IDCURS %> " class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
@@ -59,7 +59,7 @@
                         <th class="w-7">Fecha Inicio</th>
                         <th class="w-7">Fecha Fin</th>
                         <th class="w-8">Estado</th>
-                        <th class="w-4"></th>
+                        <th class="w-5"></th>
                       </tr>
                     </thead>
                     <tbody id="table-body">

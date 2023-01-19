@@ -100,6 +100,7 @@ const buildTable = (state) => {
 
     // col3
     cell = document.createElement('td')
+    cell.classList.add("w-7")
     cell.innerHTML = `<div class="d-flex py-1 align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${element.STRINI}</div>
@@ -109,6 +110,7 @@ const buildTable = (state) => {
 
     // col4
     cell = document.createElement('td')
+    cell.classList.add("w-7")
     cell.innerHTML = `<div class="d-flex py-1 align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${element.STRFIN}</div>
@@ -118,6 +120,7 @@ const buildTable = (state) => {
 
     // col5
     cell = document.createElement('td')
+    cell.classList.add("w-8")
     cell.innerHTML = `<div class="d-flex py-1 align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${estados[element.STAMAT].des} </div>
@@ -127,11 +130,11 @@ const buildTable = (state) => {
 
     // col7
     cell = document.createElement('td')
-    cell.classList.add("w-6")
+    cell.classList.add("w-5")
     cell.innerHTML = `<ul class="dots-menu">
       <li class="nav-item drop-right">
         <a href="#" class="nav-link">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke-width="1" fill="none" d="M12 18.7q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.687.288-.288.688-.288.4 0 .688.288.287.287.287.687 0 .4-.287.688-.288.287-.688.287Zm0-5.725q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.688.288-.287.688-.287.4 0 .688.287.287.288.287.688 0 .4-.287.688-.288.287-.688.287Zm0-5.725q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.687Q11.6 5.3 12 5.3q.4 0 .688.288.287.287.287.687 0 .4-.287.688-.288.287-.688.287Z"/>
           </svg>
         </a>

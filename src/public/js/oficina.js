@@ -96,7 +96,7 @@ const buildTable = (state) => {
         </div>
       </div>
       <div class="text-muted">
-        <small class="text-reset">Teléfono: ${element.CODOFI}</small>
+        <small class="text-reset">Código: ${element.CODOFI}</small>
     </div>`
     row.appendChild(cell)
     // col3

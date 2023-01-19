@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Cursos-Turno</title>
+  <title>Turno</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
@@ -25,7 +25,12 @@
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <input type="hidden" id="idturn" name="idturn" value=<%- datos.turno.IDTURN %>>
                   <div class="card-header">
-                    <h3 class="card-title">Turno</h3>
+                    <div>
+                      <h3 class="card-title">Turno</h3>
+                      <span class="text-muted">
+                        <small>Curso: <%- datos.curso.DESCUR %></small>
+                      </span>
+                    </div>
                   </div>
                   <div class="card-body">
                     <div class="row">

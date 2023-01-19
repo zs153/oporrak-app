@@ -43,7 +43,7 @@
                                 </svg>
                               </span>
                               <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox"
-                                onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en usuarios">
+                                onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en usuarios">
                             </div>
                           </div>
                         </div>
@@ -53,14 +53,14 @@
                           <thead>
                             <tr class="header">
                               <th class="w-4"></th>
-                              <th>Oficina</th>
                               <th>Nombre</th>
+                              <th></th>
                             </tr>
                           </thead>
                           <tbody id="table-body">
                           </tbody>
                         </table>
-                        <div id="pagination-wrapper" class="pagination py-1"></div>
+                        <div id="pagination-wrapper" class="py-1"></div>
                       </div>
                       <div class="card-footer">
                         <div class="col-12 d-flex">
@@ -74,7 +74,6 @@
                       </div>
                     </div>
                   </div>
-
                 </form>
               </div>
             </div>
@@ -90,7 +89,7 @@
       let state = {
         'querySet': orgList,
         'page': 1,
-        'rows': 14,
+        'rows': 8,
       }
 
       buildTable(state)

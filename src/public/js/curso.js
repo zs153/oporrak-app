@@ -98,7 +98,7 @@ const buildTable = (state) => {
     row.appendChild(cell)
     // col3
     cell = document.createElement('td')
-    cell.classList.add("w-8")
+    cell.classList.add("w-9")
     cell.innerHTML = `<div class="d-flex py-1 align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${estados[element.STACUR].des} </div>
@@ -107,7 +107,7 @@ const buildTable = (state) => {
     row.appendChild(cell)
     // col4
     cell = document.createElement('td')
-    cell.classList.add("w-4")
+    cell.classList.add("w-5")
     cell.innerHTML = `<ul class="dots-menu">
       <li class="nav-item drop-right">
         <a href="#" class="nav-link">

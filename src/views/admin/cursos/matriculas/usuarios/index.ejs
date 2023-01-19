@@ -42,13 +42,12 @@
                                 <line x1="21" y1="21" x2="15" y2="15"></line>
                               </svg>
                             </span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarTurnoBox"
-                              onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en turnos">
+                            <input type="text" class="form-control d-inline-block me-3" id="buscarMatriculaBox"
+                              onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en matrículas">
                           </div>
                           <a href="/admin/cursos/matriculas/usuarios/add/<%- datos.curso.IDCURS %>/<%- datos.matricula.IDMATR %>"
                             class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24"
-                              viewBox="0 0 24 24">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                               <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                             </svg>
                             Nuevo Usuario
@@ -63,7 +62,7 @@
                             <th class="w-4"></th>
                             <th>Nombre</th>
                             <th>Oficina</th>
-                            <th class="w-4"></th>
+                            <th class="w-5"></th>
                           </tr>
                         </thead>
                         <tbody id="table-body">

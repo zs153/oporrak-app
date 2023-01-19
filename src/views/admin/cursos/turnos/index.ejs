@@ -56,10 +56,11 @@
                       <tr class="header">
                         <th class="w-4"></th>
                         <th>Descripción</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Localización</th>
-                        <th class="w-4"></th>
+                        <th class="w-7">Desde Fecha</th>
+                        <th class="w-7">Hasta Fecha</th>
+                        <th class="w-8">Hora</th>
+                        <th class="w-20">Localización</th>
+                        <th class="w-5"></th>
                       </tr>
                     </thead>
                     <tbody id="table-body">
@@ -127,7 +128,6 @@
       'querySet': orgList,
       'page': 1,
       'rows': 8,
-      'window': 3,
     }
 
     buildTable(state)
