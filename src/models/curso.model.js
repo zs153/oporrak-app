@@ -40,13 +40,13 @@ const cambioSql = `BEGIN OPORRAK_PKG.CAMBIOESTADOCURSO(
 `
 // turnos
 const turnoSql = `SELECT 
-  tt.idturn,
-  tt.destur,
+  tt.idturn, tt.destur, tt.loctur,
+  TO_CHAR(tt.initur, 'YYYY-MM-DD') "INITUR",
+  TO_CHAR(tt.fintur, 'YYYY-MM-DD') "FINTUR",
   TO_CHAR(tt.initur, 'DD/MM/YYYY') "STRINI",
   TO_CHAR(tt.fintur, 'DD/MM/YYYY') "STRFIN",
   LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS "INIHOR",
-  LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS "FINHOR",
-  tt.loctur
+  LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS "FINHOR"
 FROM turnos tt
 INNER JOIN turnoscurso tc ON tc.idturn = tt.idturn
 `
@@ -169,20 +169,15 @@ INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 WHERE ut.idturn = :idturn
 `
 const usuariosTurnoPendientesSql = `SELECT 
-  uu.idusua, 
-  uu.nomusu, 
-  oo.idofic,
-  oo.desofi
-FROM usuarios uu
+  uu.idusua, uu.nomusu, oo.desofi
+FROM matriculascurso mc
+INNER JOIN usuariosmatricula um ON um.idmatr = mc.idmatr
+LEFT JOIN usuarioscurso uc ON uc.idusua = um.idusua AND
+  mc.idcurs= uc.idcurs
+INNER JOIN usuarios uu ON uu.idusua = um.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-INNER JOIN (
-SELECT uc.idusua FROM usuarioscurso uc
-WHERE uc.idcurs = :idcurs
-MINUS
-SELECT ut.idusua FROM usuariosturno ut 
-INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn
-WHERE tc.idcurs = :idcurs
-) p1 ON p1.idusua = uu.idusua
+WHERE mc.idcurs = :idcurs
+ORDER BY oo.idofic
 `
 const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
   :idturn,
@@ -302,6 +297,9 @@ export const turno = async (context) => {
   if (context.IDCURS) {
     binds.idcurs = context.IDCURS
     query += `WHERE tc.idcurs = :idcurs`
+  } else if (context.IDTURN) {
+    binds.idturn = context.IDTURN
+    query += `WHERE tc.idturn = :idturn`
   }
 
   const result = await simpleExecute(query, binds)

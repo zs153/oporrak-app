@@ -184,15 +184,13 @@ const deleteUsuarioFromRec = (req) => {
 }
 // usuarios turno
 const insertUsuarioTurnoFromRec = (req) => {
-  const curso = {
-    IDCURS: req.body.curso.IDCURS,
-  }
   const turno = {
     IDTURN: req.body.turno.IDTURN,
   }
   const usuarios = {
-    ARRUSU: {
-      type: "USRTYPE",
+    arrusu: {
+      type: 'USRTYPE',
+      //dir: oracledb.BIND_IN,
       val: req.body.usuarios.ARRUSU,
     }
   }
@@ -200,7 +198,7 @@ const insertUsuarioTurnoFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(curso, turno, usuarios, movimiento)
+  return Object.assign(turno, usuarios, movimiento)
 }
 const deleteUsuarioTurnoFromRec = (req) => {
   const curso = {
