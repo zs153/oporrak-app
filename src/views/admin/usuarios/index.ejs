@@ -7,33 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Usuarios</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap-icons.css">
-  <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
-  <link rel="stylesheet" href="/css/navbar.css">
-  <style>
-    .sortable th {
-      cursor: pointer;
-    }
-
-    .sortable .th-sort-asc::after {
-      content: "\25b4";
-    }
-
-    .sortable .th-sort-desc::after {
-      content: "\25be";
-    }
-
-    .sortable .th-sort-asc::after,
-    .sortable .th-sort-desc::after {
-      margin-left: 5px;
-    }
-
-    .pagination {
-      float: right;
-    }
-  </style>
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body class="antialiased">
@@ -336,7 +311,9 @@
         cell.innerHTML = `<ul class="dots-menu">
             <li class="nav-item drop-right">
               <a href="#" class="nav-link">
-                <i class="bi bi-three-dots-vertical"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke-width="1" fill="none" d="M12 18.7q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.687.288-.288.688-.288.4 0 .688.288.287.287.287.687 0 .4-.287.688-.288.287-.688.287Zm0-5.725q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.688.288-.287.688-.287.4 0 .688.287.287.288.287.688 0 .4-.287.688-.288.287-.688.287Zm0-5.725q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.687Q11.6 5.3 12 5.3q.4 0 .688.288.287.287.287.687 0 .4-.287.688-.288.287-.688.287Z"/>
+                </svg>
               </a>
               <ul>
                 <li class="nav-item">

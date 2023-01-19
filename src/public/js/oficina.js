@@ -1,6 +1,3 @@
-// inicializa vertodo
-localStorage.setItem('vertodo', 'n')
-
 // inicializa sort
 document.querySelectorAll(".sortable th").forEach(headerCell => {
   headerCell.addEventListener("click", () => {
@@ -99,7 +96,7 @@ const buildTable = (state) => {
         </div>
       </div>
       <div class="text-muted">
-        <small class="text-reset">Código: ${element.CODOFI}</small>
+        <small class="text-reset">Teléfono: ${element.CODOFI}</small>
     </div>`
     row.appendChild(cell)
     // col3
