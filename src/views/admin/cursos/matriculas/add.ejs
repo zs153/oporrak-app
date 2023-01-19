@@ -24,10 +24,12 @@
                 <form action="/admin/cursos/matriculas/insert" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <div class="card-header">
-                    <h3 class="card-title">Matrícula</h3>
+                    <div>
+                      <h3 class="card-title">Matrícula</h3>
                       <span class="text-muted">
                         <small>Curso: <%- datos.curso.DESCUR %></small>
                       </span>
+                    </div>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -80,7 +82,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/matriculas" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/cursos/matriculas/<%- datos.curso.IDCURS %>" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear matrícula</button>
                     </div>
                   </div>

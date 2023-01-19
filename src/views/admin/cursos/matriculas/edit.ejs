@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
@@ -25,7 +25,12 @@
                   <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
                   <input type="hidden" name="idmatr" id="idmatr" value="<%- datos.matricula.IDMATR %>">
                   <div class="card-header">
-                    <h3 class="card-title">Matrícula</h3>
+                    <div>
+                      <h3 class="card-title">Matrícula</h3>
+                      <span class="text-muted">
+                        <small>Curso: <%- datos.curso.DESCUR %></small>
+                      </span>
+                    </div>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -44,7 +49,7 @@
                         <div class="mb-1">                          
                           <div class="input-control">
                             <label class="form-label">Fecha inicio</label>
-                            <input type="date" name="inimat" id="inimat" class="form-control" value="<%- datos.matricula.STRINI %>" />
+                            <input type="date" name="inimat" id="inimat" class="form-control" value="<%- datos.matricula.INIMAT %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -53,7 +58,7 @@
                         <div class="mb-1">
                           <div class="input-control">
                             <label class="form-label">Fecha fin</label>
-                            <input type="date" name="finmat" id="finmat" class="form-control" value="<%- datos.matricula.STRFIN %>" />
+                            <input type="date" name="finmat" id="finmat" class="form-control" value="<%- datos.matricula.FINMAT %>" />
                             <div class="invalid-feedback"></div>
                           </div>
                         </div>
@@ -74,7 +79,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/matriculas" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/cursos/matriculas/<%- datos.curso.IDCURS %>" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">Actualizar matrícula</button>
                     </div>
                   </div>

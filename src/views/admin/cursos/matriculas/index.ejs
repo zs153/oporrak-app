@@ -22,7 +22,12 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Matrículas</h3>
+                  <div>
+                    <h3 class="card-title">Matrículas</h3>
+                    <span class="text-muted">
+                      <small>Curso: <%- datos.curso.DESCUR %></small>
+                    </span>
+                  </div>
                   <div class="col-auto ms-auto">
                     <div class="d-flex">
                       <div class="input-icon me-3">
@@ -97,7 +102,7 @@
               <div class="col">
                 <form action="/admin/cursos/matriculas/delete" method="POST">
                   <input type="hidden" id="idmatr" name="idmatr" value="">
-                  <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %> ">
+                  <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnDelete">Borrar matrícula</button>
                 </form>
               </div>
