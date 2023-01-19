@@ -85,9 +85,11 @@ const removeTurnoSql = `BEGIN OPORRAK_PKG.DELETETURNOCURSO(
 `
 // matricula
 const matriculaSql = `SELECT 
-  mm.*,
-  TO_CHAR(mm.inimat, 'YYYY-MM-DD') "STRINI",
-  TO_CHAR(mm.finmat, 'YYYY-MM-DD') "STRFIN"
+  mm.idmatr, mm.desmat, mm.stamat,
+  TO_CHAR(mm.inimat, 'YYYY-MM-DD') "INIMAT",
+  TO_CHAR(mm.finmat, 'YYYY-MM-DD') "FINMAT",
+  TO_CHAR(mm.inimat, 'DD/MM/YYYY') "STRINI",
+  TO_CHAR(mm.finmat, 'DD/MM/YYYY') "STRFIN"
 FROM matriculas mm
 INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
 `
@@ -356,6 +358,9 @@ export const matricula = async (context) => {
   if (context.IDCURS) {
     binds.idcurs = context.IDCURS
     query += `WHERE mc.idcurs = :idcurs`
+  } else if (context.IDMATR) {
+    binds.idmatr = context.IDMATR
+    query += `WHERE mc.idmatr = :idmatr`
   }
 
   const result = await simpleExecute(query, binds)
@@ -440,7 +445,7 @@ export const insertUsuario = async (bind) => {
     result = null
   }
 
-  return bind
+  return result
 }
 export const removeUsuario = async (bind) => {
   let result
@@ -491,7 +496,7 @@ export const insertUsuarioTurno = async (bind) => {
     result = null
   }
 
-  return bind
+  return result
 }
 export const removeUsuarioTurno = async (bind) => {
   let result
@@ -509,15 +514,14 @@ export const removeUsuarioTurno = async (bind) => {
 
 // usuarios matricula
 export const usuariosMatricula = async (context) => {
-  let result
   let query = usuariosMatriculaSql
+  let binds = {}
 
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
+  if (context.IDMATR) {
+    binds.idmatr = context.IDMATR
   }
 
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insertUsuarioMatricula = async (bind) => {
@@ -531,7 +535,7 @@ export const insertUsuarioMatricula = async (bind) => {
     result = null
   }
 
-  return bind
+  return result
 }
 export const removeUsuarioMatricula = async (bind) => {
   let result

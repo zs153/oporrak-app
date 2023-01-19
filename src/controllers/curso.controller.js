@@ -145,7 +145,7 @@ const deleteMatriculaFromRec = (req) => {
     idcurs: req.body.curso.IDCURS,
   }
   const matricula = {
-    idmatr: req.body.matricula.IDTURN,
+    idmatr: req.body.matricula.IDMATR,
   }
   const movimiento = {
     usumov: req.body.movimiento.USUMOV,
@@ -221,42 +221,36 @@ const deleteUsuarioTurnoFromRec = (req) => {
 }
 // usuarios matricula
 const insertUsuarioMatriculaFromRec = (req) => {
-  const curso = {
-    IDCURS: req.body.curso.IDCURS,
-  }
   const matricula = {
-    IDMATR: req.body.matricula.IDMATR,
+    idmatr: req.body.matricula.IDMATR,
   }
   const usuarios = {
-    ARRUSU: {
-      type: "USRTYPE",
+    arrusu: {
+      // type: oracledb.NUMBER,
+      // dir: oracledb.BIND_IN,
       val: req.body.usuarios.ARRUSU,
     }
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(curso, matricula, usuarios, movimiento)
+  return Object.assign(matricula, usuarios, movimiento)
 }
 const deleteUsuarioMatriculaFromRec = (req) => {
-  const curso = {
-    IDCURS: req.body.curso.IDCURS,
-  }
   const matricula = {
-    IDMATR: req.body.matricula.IDMATR,
+    idmatr: req.body.matricula.IDMATR,
   }
   const usuario = {
-    IDUSUA: req.body.usuario.IDUSUA,
+    idusua: req.body.usuario.IDUSUA,
   }
   const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(curso, matricula, usuario, movimiento)
+  return Object.assign(matricula, usuario, movimiento)
 }
-
 
 // cursos
 export const curso = async (req, res) => {
@@ -603,11 +597,7 @@ export const usuariosMatricula = async (req, res) => {
   try {
     const result = await DAL.usuariosMatricula(context)
 
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).end()
   }
@@ -622,6 +612,7 @@ export const crearUsuarioMatricula = async (req, res) => {
       res.status(404).end()
     }
   } catch (err) {
+    console.log(err)
     res.status(500).end()
   }
 }
