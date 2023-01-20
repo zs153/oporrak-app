@@ -190,20 +190,19 @@ const insertUsuarioTurnoFromRec = (req) => {
   const usuarios = {
     arrusu: {
       type: 'USRTYPE',
-      //dir: oracledb.BIND_IN,
       val: req.body.usuarios.ARRUSU,
     }
+  }
+  const tipo = {
+    tipest: req.body.tipo.TIPEST,
   }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(turno, usuarios, movimiento)
+  return Object.assign(turno, tipo, usuarios, movimiento)
 }
 const deleteUsuarioTurnoFromRec = (req) => {
-  const curso = {
-    IDCURS: req.body.curso.IDCURS,
-  }
   const turno = {
     IDTURN: req.body.turno.IDTURN,
   }
@@ -215,7 +214,7 @@ const deleteUsuarioTurnoFromRec = (req) => {
     TIPMOV: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(curso, turno, usuario, movimiento)
+  return Object.assign(turno, usuario, movimiento)
 }
 // usuarios matricula
 const insertUsuarioMatriculaFromRec = (req) => {
@@ -478,21 +477,6 @@ export const usuarios = async (req, res) => {
 
   try {
     const result = await DAL.usuarios(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const usuariosPendientes = async (req, res) => {
-  const context = req.body.curso
-
-  try {
-    const result = await DAL.usuariosPendientes(context)
 
     if (result !== null) {
       res.status(200).json(result)

@@ -11,7 +11,6 @@ import {
   modificarTurno,
   borrarTurno,
   usuarios,
-  usuariosPendientes,
   crearUsuario,
   borrarUsuario,
   usuariosTurno,
@@ -53,7 +52,6 @@ apiCursoRouter.post('/cursos/matriculas/delete', borrarMatricula)
 
 // usuarios curso
 apiCursoRouter.post('/cursos/usuarios', usuarios)
-apiCursoRouter.post('/cursos/usuarios/pendientes', usuariosPendientes)
 apiCursoRouter.post('/cursos/usuarios/insert', crearUsuario)
 apiCursoRouter.post('/cursos/usuarios/delete', borrarUsuario)
 

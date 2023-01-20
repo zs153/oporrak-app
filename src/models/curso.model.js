@@ -133,16 +133,6 @@ INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 WHERE uc.idcurs = :idcurs
 ORDER BY uu.nomusu
 `
-const usuariosPendientesSql = `SELECT 
-  uu.idusua, uu.nomusu, oo.desofi 
-FROM usuariosmatricula um
-LEFT JOIN usuarioscurso uc ON uc.idusua = um.idusua AND
-  uc.idcurs= :idcurs
-INNER JOIN usuarios uu ON uu.idusua = um.idusua
-INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE um.idmatr = :idmatr
-ORDER BY oo.idofic
-`
 const insertUsuarioSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOCURSO(
   :idcurs,
   :arrusu,
@@ -169,18 +159,18 @@ INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 WHERE ut.idturn = :idturn
 `
 const usuariosTurnoPendientesSql = `SELECT 
-  uu.idusua, uu.nomusu, oo.desofi
+  uu.idusua, uu.nomusu, oo.idofic, oo.desofi
 FROM matriculascurso mc
 INNER JOIN usuariosmatricula um ON um.idmatr = mc.idmatr
-LEFT JOIN usuarioscurso uc ON uc.idusua = um.idusua AND
-  mc.idcurs= uc.idcurs
+LEFT JOIN usuariosturno ut ON ut.idusua = um.idusua
 INNER JOIN usuarios uu ON uu.idusua = um.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE mc.idcurs = :idcurs
+WHERE mc.idcurs = :idcurs AND idturn IS NULL
 ORDER BY oo.idofic
 `
 const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
   :idturn,
+  :tipest,
   :arrusu,
   :usumov,
   :tipmov
@@ -358,7 +348,7 @@ export const matricula = async (context) => {
     query += `WHERE mc.idcurs = :idcurs`
   } else if (context.IDMATR) {
     binds.idmatr = context.IDMATR
-    query += `WHERE mc.idmatr = :idmatr`
+    query += `WHERE mm.idmatr = :idmatr`
   }
 
   const result = await simpleExecute(query, binds)
