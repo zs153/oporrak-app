@@ -24,7 +24,12 @@
                 <form action="/admin/cursos/turnos/insert" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <div class="card-header">
-                    <h3 class="card-title">Turno</h3>
+                    <div>
+                      <h3 class="card-title">Turno</h3>
+                      <span class="text-muted">
+                        <small>Curso: <%- datos.curso.DESCUR %></small>
+                      </span>
+                    </div>
                   </div>
                   <div class="card-body">
                     <div class="row">
@@ -42,7 +47,7 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Fecha inicio</label>
+                            <label class="form-label">Fecha inicio</label>
                             <input type="date" name="initur" id="initur" class="form-control" value="<%- datos.turno.INITUR %>" />
                             <div class="invalid-feedback"></div>
                           </div>
@@ -51,7 +56,7 @@
                       <div class="col-4">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Fecha fin</label>
+                            <label class="form-label">Fecha fin</label>
                             <input type="date" name="fintur" id="fintur" class="form-control" value="<%- datos.turno.FINTUR %>" />
                             <div class="invalid-feedback"></div>
                           </div>
@@ -60,7 +65,7 @@
                       <div class="col-2">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Hora inicio</label>
+                            <label class="form-label">Hora inicio</label>
                             <input type="time" name="inihor" id="inihor" class="form-control" value="<%- datos.turno.INIHOR %>" />
                             <div class="invalid-feedback"></div>
                           </div>
@@ -69,7 +74,7 @@
                       <div class="col-2">
                         <div class="mb-1">
                           <div class="input-control">
-                            <label class="form-label required">Hora fin</label>
+                            <label class="form-label">Hora fin</label>
                             <input type="time" name="finhor" id="finhor" class="form-control" value="<%- datos.turno.FINHOR %>" />
                             <div class="invalid-feedback"></div>
                           </div>

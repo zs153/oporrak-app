@@ -65,8 +65,7 @@
                   </div>
                   <div class="card-footer">
                     <div class="col-12 d-flex">
-                      <a href="/admin/cursos/turnos/usuarios/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>"
-                        class="btn btn-link">Salir</a>
+                      <a href="/admin/cursos/turnos/usuarios/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>" class="btn btn-link">Volver</a>
                       <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
                       <input type="hidden" name="idturn" id="idturn" value="<%- datos.turno.IDTURN %>">
                       <input type="hidden" name="arrusu" id="arrusu" value="">
@@ -84,7 +83,7 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/selectUsuarios.js"></script>
+  <script src="/js/selectUsuariosOficina.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
       let state = {

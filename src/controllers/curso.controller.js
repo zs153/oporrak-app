@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { serverAPI } from '../config/settings'
-import { tiposRol, arrEstadosCurso, arrEstadosMatricula, tiposMovimiento } from '../public/js/enumeraciones'
+import { arrEstadosCurso, arrEstadosMatricula, tiposMovimiento, tiposEstado } from '../public/js/enumeraciones'
 
 // page cursos
 export const mainPage = async (req, res) => {
@@ -108,8 +108,11 @@ export const addTurnoPage = async (req, res) => {
   }
 
   try {
-    const datos = {
+    const retCurso = await axios.post(`http://${serverAPI}:8200/api/curso`, {
       curso,
+    });
+    const datos = {
+      curso: retCurso.data,
       turno,
     };
 
@@ -161,15 +164,15 @@ export const matriculasPage = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/curso`, {
+    const retCurso = await axios.post(`http://${serverAPI}:8200/api/curso`, {
       curso,
     });
-    const matriculas = await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas`, {
+    const retMatriculas = await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas`, {
       curso,
     });
     const datos = {
-      curso: result.data,
-      matriculas: matriculas.data,
+      curso: retCurso.data,
+      matriculas: retMatriculas.data,
       arrEstadosMatricula,
     };
 
@@ -214,27 +217,28 @@ export const addMatriculaPage = async (req, res) => {
 }
 export const editMatriculaPage = async (req, res) => {
   const user = req.user;
-  let matricula = {
-    IDMATR: req.params.idmatr,
-  };
-  let curso = {
+  const curso = {
     IDCURS: req.params.idcurs,
+  };
+  const matricula = {
+    IDMATR: req.params.idmatr,
   };
 
   try {
-    matricula = await axios.post(`http://${serverAPI}:8200/api/cursos/matricula`, {
-      matricula,
-    });
-    curso = await axios.post(`http://${serverAPI}:8200/api/curso`, {
+    const retCurso = await axios.post(`http://${serverAPI}:8200/api/curso`, {
       curso,
+    });
+    const retMatricula = await axios.post(`http://${serverAPI}:8200/api/cursos/matricula`, {
+      matricula,
     });
 
     const datos = {
-      matricula: matricula.data,
-      curso: curso.data,
+      curso: retCurso.data,
+      matricula: retMatricula.data,
       arrEstadosMatricula,
     };
 
+    console.log(datos)
     res.render("admin/cursos/matriculas/edit", { user, datos });
   } catch (error) {
     const msg = "No se han podido cargar los datos.";
@@ -273,38 +277,6 @@ export const usuariosPage = async (req, res) => {
     });
   }
 }
-export const usuariosAddPage = async (req, res) => {
-  const user = req.user;
-  const curso = {
-    IDCURS: req.params.id,
-  };
-  const matricula = {
-    IDMATR: req.params.idmatr
-  }
-
-  try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/curso`, {
-      curso,
-    });
-    const usuarios = await axios.post(`http://${serverAPI}:8200/api/cursos/usuarios/pendientes`, {
-      curso,
-    });
-    const datos = {
-      curso: result.data,
-      usuarios: usuarios.data,
-      tiposRol,
-    };
-
-    console.log(usuarios)
-    res.render("admin/cursos/usuarios/add", { user, datos });
-  } catch (error) {
-    const msg = "No se ha podido acceder a los turnos del curso seleccionado.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
-  }
-}
 
 // pages usuarios turno
 export const usuariosTurnoPage = async (req, res) => {
@@ -327,7 +299,6 @@ export const usuariosTurnoPage = async (req, res) => {
       curso,
       turno: result.data,
       usuarios: usuarios.data,
-      tiposRol,
     }
 
     res.render('admin/cursos/turnos/usuarios', { user, datos })
@@ -359,7 +330,6 @@ export const usuariosTurnoAddPage = async (req, res) => {
       curso,
       turno: result.data,
       usuarios: usuarios.data,
-      tiposRol,
     };
 
     res.render("admin/cursos/turnos/usuarios/add", { user, datos });
@@ -721,7 +691,7 @@ export const deleteMatricula = async (req, res) => {
   }
 }
 
-// proc usuarios
+// proc usuarios curso
 export const insertUsuario = async (req, res) => {
   const user = req.user;
   const curso = {
@@ -785,8 +755,14 @@ export const deleteUsuario = async (req, res) => {
 // proc usuarios turno
 export const insertUsuarioTurno = async (req, res) => {
   const user = req.user;
+  const curso = {
+    IDCURS: req.body.idcurs,
+  }
   const turno = {
     IDTURN: req.body.idturn,
+  }
+  const tipo = {
+    TIPEST: tiposEstado.formacion.ID,
   }
   const usuarios = {
     ARRUSU: JSON.parse(req.body.arrusu)
@@ -795,10 +771,11 @@ export const insertUsuarioTurno = async (req, res) => {
     USUMOV: user.id,
     TIPMOV: tiposMovimiento.insertarUsuarioTurno,
   }
-  console.log(usuarios)
+
   try {
     await axios.post(`http://${serverAPI}:8200/api/cursos/turnos/usuarios/insert`, {
       turno,
+      tipo,
       usuarios,
       movimiento,
     });

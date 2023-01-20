@@ -8,7 +8,6 @@ import {
   addTurnoPage,
   editTurnoPage,
   usuariosPage,
-  usuariosAddPage,
   usuariosTurnoPage,
   usuariosTurnoAddPage,
   insert,
@@ -48,11 +47,10 @@ cursoRouter.get("/cursos/turnos/edit/:idcurs/:idturn", authRoutes, editTurnoPage
 // paginas matriculas
 cursoRouter.get("/cursos/matriculas/:id", authRoutes, matriculasPage);
 cursoRouter.get("/cursos/matriculas/add/:id", authRoutes, addMatriculaPage);
-cursoRouter.get("/cursos/matriculas/edit/:idcurs/:idturn", authRoutes, editMatriculaPage);
+cursoRouter.get("/cursos/matriculas/edit/:idcurs/:idmatr", authRoutes, editMatriculaPage);
 
 // paginas usuarios
 cursoRouter.get("/cursos/usuarios/:id", authRoutes, usuariosPage);
-cursoRouter.get("/cursos/usuarios/add/:id", authRoutes, usuariosAddPage);
 
 // paginas usuarios turno
 cursoRouter.get("/cursos/turnos/usuarios/:idcurs/:idturn", authRoutes, usuariosTurnoPage);

@@ -15,6 +15,7 @@ import matriculaRouter from "./routes/matricula.router";
 import oficinaRouter from "./routes/oficina.router";
 import traspasoRouter from "./routes/traspaso.router";
 import usuarioRouter from "./routes/usuario.router";
+import formacionRouter from "./routes/formacion.route";
 
 const app = express();
 
@@ -41,5 +42,6 @@ app.use("/admin", matriculaRouter);
 app.use("/admin", oficinaRouter);
 app.use("/admin", traspasoRouter);
 app.use("/admin", usuarioRouter);
+app.use("/admin", formacionRouter);
 
 export default app;
