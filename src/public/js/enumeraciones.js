@@ -44,6 +44,7 @@ export const tiposMovimiento = {
   borrarEstado: 43,
   insertarUsuarioTurno: 44,
   borrarUsuarioTurno: 45,
+  insertarUsuarioMatricula: 46,
   crearTipoEvento: 47,
   modificarTipoEvento: 48,
   borrarTipoEvento: 49,
@@ -62,6 +63,7 @@ export const tiposMovimiento = {
   restablecerPassword: 62,
   registroUsuario: 63,
   activarUsuario: 64,
+  matricularse: 65,
 }
 export const tiposPerfil = {
   general: 1,

@@ -238,7 +238,6 @@ export const editMatriculaPage = async (req, res) => {
       arrEstadosMatricula,
     };
 
-    console.log(datos)
     res.render("admin/cursos/matriculas/edit", { user, datos });
   } catch (error) {
     const msg = "No se han podido cargar los datos.";
@@ -367,7 +366,6 @@ export const usuariosMatriculaPage = async (req, res) => {
 
     res.render('admin/cursos/matriculas/usuarios', { user, datos })
   } catch (error) {
-    console.log(error)
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
     res.render('admin/error400', {
@@ -836,7 +834,7 @@ export const insertUsuarioMatricula = async (req, res) => {
   }
   const movimiento = {
     USUMOV: user.id,
-    TIPMOV: tiposMovimiento.insertarUsuarioTurno,
+    TIPMOV: tiposMovimiento.insertarUsuarioMatricula,
   }
 
   try {
