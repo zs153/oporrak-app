@@ -136,13 +136,16 @@ export const editTurnoPage = async (req, res) => {
   };
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/cursos/turno`, {
+    const retCurso = await axios.post(`http://${serverAPI}:8200/api/curso`, {
+      curso,
+    });
+    const retTurno = await axios.post(`http://${serverAPI}:8200/api/cursos/turno`, {
       turno,
     });
 
     const datos = {
-      curso,
-      turno: result.data,
+      curso: retCurso.data,
+      turno: retTurno.data,
     };
 
     res.render("admin/cursos/turnos/edit", { user, datos });
@@ -276,6 +279,36 @@ export const usuariosPage = async (req, res) => {
     });
   }
 }
+export const usuariosAddPage = async (req, res) => {
+  const user = req.user;
+  const curso = {
+    IDCURS: req.params.idcurs,
+  }
+  const turno = {
+    IDTURN: req.params.idturn,
+  }
+
+  try {
+    const result = await axios.post(`http://${serverAPI}:8200/api/curso`, {
+      curso,
+    })
+    const usuarios = await axios.post(`http://${serverAPI}:8200/api/cursos/usuarios/pendientes`, {
+      curso,
+    });
+    const datos = {
+      curso,
+      usuarios: usuarios.data,
+    };
+
+    res.render("admin/cursos/usuarios/add", { user, datos });
+  } catch (error) {
+    const msg = "No se ha podido acceder a los turnos del curso seleccionado.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
 
 // pages usuarios turno
 export const usuariosTurnoPage = async (req, res) => {
@@ -319,7 +352,7 @@ export const usuariosTurnoAddPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/cursos/turno`, {
+    const retTurno = await axios.post(`http://${serverAPI}:8200/api/cursos/turno`, {
       turno,
     })
     const usuarios = await axios.post(`http://${serverAPI}:8200/api/cursos/turnos/usuarios/pendientes`, {
@@ -327,7 +360,7 @@ export const usuariosTurnoAddPage = async (req, res) => {
     });
     const datos = {
       curso,
-      turno: result.data,
+      turno: retTurno.data,
       usuarios: usuarios.data,
     };
 

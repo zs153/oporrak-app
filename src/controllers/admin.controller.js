@@ -64,7 +64,7 @@ export const perfilPage = async (req, res) => {
     userid: user.userID,
   }
   try {
-    const result = await axios.post(`http://${serverAPI}:8000/api/usuario`, {
+    const result = await axios.post(`http://${serverAPI}:8200/api/usuario`, {
       usuario,
     })
 
@@ -77,6 +77,7 @@ export const perfilPage = async (req, res) => {
 
     res.render('admin/perfil', { user, datos })
   } catch (error) {
+    console.log(error)
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
     res.render('admin/error400', {

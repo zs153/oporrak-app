@@ -8,7 +8,6 @@ import {
   estadosUsuario,
   tiposMovimiento,
   tiposRol,
-  tiposPerfil,
 } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -20,7 +19,7 @@ export const mainPage = async (req, res) => {
       usuario
     })
     const datos = {
-      usuarios: JSON.stringify(result.data),
+      usuarios: result.data,
       estadosUsuario,
     }
 

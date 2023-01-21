@@ -14,7 +14,7 @@ export const mainPage = async (req, res) => {
       usuario
     })
     const datos = {
-      usuarios: JSON.stringify(result.data),
+      historicos: result.data,
       tiposRol,
     }
 

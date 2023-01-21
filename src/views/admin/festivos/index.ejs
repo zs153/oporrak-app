@@ -7,12 +7,14 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Calendario Festivos</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap-icons.css">
-  <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
-  <link rel="stylesheet" href="/css/navbar.css">
-  <link rel='stylesheet' href='/css/js-year-calendar.css'>
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel='stylesheet' href='/css/js-year-calendar.min.css'>
+  <style>
+    .calendar-header {
+      border: none !important;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -25,14 +27,6 @@
           <div class="row">
             <div class="col-12">
               <div class="card mt-1">
-                <% if(typeof alerts !='undefined' ) { %>
-                <% alerts.map(function (alert){ %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <%- alert.msg %>
-                </div>
-                <% }) %>
-                <% } %>
-                <form action="/admin/calendarios/calendario" method="POST">
                   <input type="hidden" name="idusua" id="idusua" value="">
                   <input type="hidden" name="tipest" id="tipest" value="">
                   <div class="card-header">
@@ -69,9 +63,8 @@
                         </div>
                       </div>
                     </div>
-                    <div id="calendar"></div>
+                    <div id="calendar" class="form-control"></div>
                   </div>
-                </form>
               </div>
             </div>
           </div>
@@ -96,22 +89,12 @@
             } else {
               const result = JSON.parse(xhr.response)
 
-              // insert en el calendario
-              let dataSource = calendario.getDataSource()
-              const estado = {
-                idfest: result.idfest,
-                id: result.idfest,
-                startDate: new Date(evento.FECFES),
-                endDate: new Date(evento.FECFES),
-                color: "#FF0000",
-              }
-
-              dataSource.push(estado)
+              resolve(result)
             }
           }
         }
 
-        xhr.open('POST', 'http://localhost:8200/api/festivos/insert', true);
+        xhr.open('POST', `http://${serverAPI}:8200/api/festivos/insert`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -125,15 +108,12 @@
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
-              // update el calendario
-              let dataSource = calendario.getDataSource()
-
-              dataSource = dataSource.filter(itm => itm.idfest !== evento.festivo.IDFEST)
+              resolve(evento)
             }
           }
         }
 
-        xhr.open('POST', 'http://localhost:8200/api/festivos/delete', true);
+        xhr.open('POST', `http://${serverAPI}:8200/api/festivos/delete`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -152,7 +132,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8200/api/festivos/locales', true);
+        xhr.open('POST', `http://${serverAPI}:8200/api/festivos/locales`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
         xhr.send(JSON.stringify(prms))
       })
@@ -183,6 +163,8 @@
     }
   </script>
   <script>
+    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
+    
     let estados = null
     let calendario = null
     let currentYear = new Date().getFullYear()    
@@ -234,7 +216,7 @@
       fecha = dateISOToUTCString(e.date.toISOString())
 
       if (e.events.length) {
-        if (e.events[0].id > 0) {
+        if (e.events[0].id !== 0) {
           const evento = {
             festivo: {
               IDFEST: e.events[0].idfest,
@@ -246,7 +228,10 @@
             }
           }
 
-          await deleteEvento(evento)
+          await deleteEvento(evento).then(ret => {
+            let dataSource = calendario.getDataSource()
+            dataSource = dataSource.filter(itm => itm.idfest !== evento.festivo.IDFEST)
+          })
         }
       } else {
         const evento = {
@@ -260,7 +245,18 @@
           }
         }
 
-        await insertEvento(evento)
+        await insertEvento(evento).then(ret => {
+          // insert en el calendario
+          let dataSource = calendario.getDataSource()
+          const estado = {
+            idfest: ret.idfest,
+            id: ret.idfest,
+            startDate: new Date(evento.FECFES),
+            endDate: new Date(evento.FECFES),
+            color: "#FF0000",
+          }
+          dataSource.push(estado)
+        })
       }
     })
 

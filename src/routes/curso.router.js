@@ -30,6 +30,7 @@ import {
   usuariosMatriculaAddPage,
   insertUsuarioMatricula,
   deleteUsuarioMatricula,
+  usuariosAddPage,
 } from "../controllers/curso.controller";
 
 const cursoRouter = express.Router();
@@ -51,6 +52,7 @@ cursoRouter.get("/cursos/matriculas/edit/:idcurs/:idmatr", authRoutes, editMatri
 
 // paginas usuarios
 cursoRouter.get("/cursos/usuarios/:id", authRoutes, usuariosPage);
+cursoRouter.get("/cursos/usuarios/add/:idcurs", authRoutes, usuariosAddPage);
 
 // paginas usuarios turno
 cursoRouter.get("/cursos/turnos/usuarios/:idcurs/:idturn", authRoutes, usuariosTurnoPage);

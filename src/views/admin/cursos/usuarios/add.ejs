@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Matriculados</title>
+  <title>Certificaciones</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
@@ -24,7 +24,7 @@
                 <div class="card">
                   <div class="card-header">
                     <div>
-                      <h3 class="card-title">Matriculados</h3>
+                      <h3 class="card-title">Certificaciones</h3>
                         <span class="text-muted">
                           <small><%- datos.curso.DESCUR %></small>
                         </span>
@@ -50,26 +50,24 @@
                       <thead>
                         <tr class="header">
                           <th class="w-4"></th>
-                          <th>Oficina</th>
                           <th>Nombre</th>
                         </tr>
                       </thead>
                       <tbody id="table-body">
                       </tbody>
                     </table>
-                  </div>
-                  <div class="card-footer">
                     <div id="pagination-wrapper" class="py-1"></div>
-                    <div class="col-12 d-flex">
-                      <a href="/admin/cursos/usuarios/<%- datos.curso.IDCURS %>" class="btn btn-link">Volver</a>
-                      <input type="hidden" name="arrusu" id="arrusu" value="">
-                      <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
-                      <button type="submit" class="btn btn-link ms-auto" id="btnAdd">Añadir usuarios</button>
-                    </div>
                   </div>
+                    <div class="card-footer">
+                      <div class="col-12 d-flex">
+                        <a href="/admin/cursos/usuarios/<%- datos.curso.IDCURS %>" class="btn btn-link">Volver</a>
+                        <input type="hidden" name="arrusu" id="arrusu" value="">
+                        <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
+                        <button type="submit" class="btn btn-link ms-auto" id="btnAdd">Certificar usuarios</button>
+                      </div>
+                    </div>
                 </div>
               </div>
-
             </form>
           </div>
         </div>
@@ -79,7 +77,7 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/selectUsuarios.js"></script>
+  <script src="/js/certificarUsuarios.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     let state = {

@@ -11,6 +11,7 @@ export const mainPage = async (req, res) => {
       oficinas: oficinas.data,
       tiposRol,
       tiposMovimiento,
+      serverAPI,
     }
 
     res.render('admin/festivos', { user, datos })

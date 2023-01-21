@@ -82,43 +82,25 @@ const buildTable = (state) => {
     const row = document.createElement('tr')
     let cell = document.createElement('td')
     cell.classList.add("w-4")
-    cell.innerHTML = `<div class="align-items-center py-1">
-      <span class="avatar avatar-rounded bg-green-lt">
-        <h6>${element.USERID}</h6>
-      </span>
-    </div>`
+    cell.innerHTML = `<input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select invoice">`
     row.appendChild(cell)
+
     // col2
     cell = document.createElement('td')
     cell.innerHTML = `<div class="d-flex py-1 align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${element.NOMUSU}</div>
       </div>
+    </div>
+    <div class="text-muted">
+      <small class="text-reset">Curso: ${element.DESCUR}</small>
     </div>`
     row.appendChild(cell)
-    // col2
+
+    // col3
     cell = document.createElement('td')
-    cell.classList.add("w-4")
-    cell.innerHTML = `<ul class="dots-menu">
-      <li class="nav-item drop-right">
-        <a href="#" class="nav-link">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke-width="1" fill="none" d="M12 18.7q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.687.288-.288.688-.288.4 0 .688.288.287.287.287.687 0 .4-.287.688-.288.287-.688.287Zm0-5.725q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.688.288-.287.688-.287.4 0 .688.287.287.288.287.688 0 .4-.287.688-.288.287-.688.287Zm0-5.725q-.4 0-.688-.287-.287-.288-.287-.688 0-.4.287-.687Q11.6 5.3 12 5.3q.4 0 .688.288.287.287.287.687 0 .4-.287.688-.288.287-.688.287Z"/>
-          </svg>
-        </a>
-        <ul>
-          <li class="nav-item">
-            <a href="#" class="nav-link" onclick="{document.getElementById('idusua').value ='${element.IDUSUA}', document.getElementById('msgbor').innerHTML ='<p>${element.NOMUSU}</p>'}" data-bs-toggle="modal" data-bs-target="#modal-borrar">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke-width=".4" fill="none" d="M7.85 19.575q-.6 0-1.025-.425-.425-.425-.425-1.025v-12.1h-.975V5.4h3.6v-.675H15V5.4h3.6v.625h-.975V18.15q0 .6-.425 1.013-.425.412-1.025.412Zm9.125-13.55H7.05v12.1q0 .35.225.575.225.225.575.225h8.325q.3 0 .55-.25.25-.25.25-.55Zm-6.85 10.925h.625V8h-.625Zm3.15 0h.625V8h-.625ZM7.05 6.025V18.925 18.125Z"/>
-              </svg>
-              Borrar
-            </a>
-          </li>
-          <li></li>
-        </ul>
-      </li>
-    </ul>`
+    cell.style.display = 'none'
+    cell.value = element.IDUSUA
     row.appendChild(cell)
 
     table.appendChild(row)
@@ -194,7 +176,7 @@ const addUsuarios = () => {
 
   document.querySelectorAll('input[type=checkbox]').forEach(e => {
     if (e.checked) {
-      arrUsuarios.push(e.parentNode.parentNode.cells[3].value)
+      arrUsuarios.push(e.parentNode.parentNode.cells[2].value)
     }
   })
   document.getElementById('arrusu').value = JSON.stringify(arrUsuarios)

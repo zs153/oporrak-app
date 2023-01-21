@@ -28,13 +28,13 @@ export const matriculasPage = async (req, res) => {
 }
 export const cursosPage = async (req, res) => {
   const user = req.user
-  const curso = {
-    IDUSUA: req.body.id
+  const usuario = {
+    IDUSUA: req.user.id
   }
 
   try {
     const result = await axios.post(`http://${serverAPI}:8200/api/formacion/cursos`, {
-      curso,
+      usuario,
     })
 
     const datos = {
