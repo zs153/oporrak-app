@@ -25,6 +25,7 @@ import {
   usuariosMatricula,
   crearUsuarioMatricula,
   borrarUsuarioMatricula,
+  usuariosPendientes,
 } from "../controllers/curso.controller";
 
 const apiCursoRouter = express.Router();
@@ -52,6 +53,7 @@ apiCursoRouter.post('/cursos/matriculas/delete', borrarMatricula)
 
 // usuarios curso
 apiCursoRouter.post('/cursos/usuarios', usuarios)
+apiCursoRouter.post('/cursos/usuarios/pendientes', usuariosPendientes)
 apiCursoRouter.post('/cursos/usuarios/insert', crearUsuario)
 apiCursoRouter.post('/cursos/usuarios/delete', borrarUsuario)
 

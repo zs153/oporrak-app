@@ -487,6 +487,21 @@ export const usuarios = async (req, res) => {
     res.status(500).end()
   }
 }
+export const usuariosPendientes = async (req, res) => {
+  const context = req.body.curso
+
+  try {
+    const result = await DAL.usuariosPendientes(context)
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(400).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
 export const crearUsuario = async (req, res) => {
   try {
     const result = await DAL.insertUsuario(insertUsuarioFromRec(req))
@@ -531,7 +546,9 @@ export const usuariosTurno = async (req, res) => {
   }
 }
 export const usuariosTurnoPendientes = async (req, res) => {
-  const context = req.body.curso
+  const context = {
+    idcurs: req.body.curso.IDCURS,
+  }
 
   try {
     const result = await DAL.usuariosTurnoPendientes(context)

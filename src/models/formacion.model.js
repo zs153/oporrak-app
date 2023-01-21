@@ -12,6 +12,7 @@ LEFT JOIN (
 ) pp ON pp.idmatr = mm.idmatr
 INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
 WHERE pp.idusua IS NULL
+  AND sysdate BETWEEN mm.inimat AND mm.finmat
 `
 const baseCursosQuery = `SELECT 
   cc.descur
@@ -40,7 +41,7 @@ export const cursos = async (context) => {
 
   if (context.IDUSUA) {
     binds.idusua = context.IDUSUA
-    query += `WHERE cc.idusua = :idusua`
+    query += `WHERE uc.idusua = :idusua`
   }
 
   const result = await simpleExecute(query, binds)

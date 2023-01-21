@@ -11,8 +11,10 @@ const baseQuery = `SELECT
     perusu,
     telusu,
     pwdusu,
-    stausu
+    stausu,
+    oo.desofi
   FROM usuarios
+  INNER JOIN oficinas oo ON oo.idofic = ofiusu
 `;
 const largeQuery = `SELECT 
     uu.idusua,
@@ -107,12 +109,10 @@ export const find = async (context) => {
   if (context.idusua) {
     binds.idusua = context.idusua;
     query += "WHERE idusua = :idusua";
-  }
-  if (context.userid) {
+  } else if (context.userid) {
     binds.userid = context.userid;
     query += "WHERE userid = :userid";
-  }
-  if (context.emausu) {
+  } else if (context.emausu) {
     binds.emausu = context.emausu;
     query += "WHERE emausu = :emausu";
   }
@@ -120,14 +120,6 @@ export const find = async (context) => {
   const result = await simpleExecute(query, binds);
   return result.rows;
 };
-export const findAll = async () => {
-  let query = largeQuery;
-  let binds = {}
-
-  const result = await simpleExecute(query, binds);
-  return result.rows;
-};
-
 export const insert = async (bind) => {
   bind.idusua = {
     dir: oracledb.BIND_OUT,

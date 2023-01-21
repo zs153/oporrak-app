@@ -133,6 +133,15 @@ INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 WHERE uc.idcurs = :idcurs
 ORDER BY uu.nomusu
 `
+const usuariosPendientesSql = `SELECT
+  uu.idusua, uu.nomusu
+FROM turnoscurso tc
+INNER JOIN usuariosturno ut ON ut.idturn = tc.idturn
+LEFT JOIN usuarioscurso uc ON uc.idusua = ut.idusua AND uc.idcurs = :idcurs
+INNER JOIN usuarios uu ON uu.idusua = ut.idusua
+WHERE tc.idcurs = :idcurs
+  AND uc.idusua IS NULL
+`
 const insertUsuarioSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOCURSO(
   :idcurs,
   :arrusu,
@@ -162,11 +171,17 @@ const usuariosTurnoPendientesSql = `SELECT
   uu.idusua, uu.nomusu, oo.idofic, oo.desofi
 FROM matriculascurso mc
 INNER JOIN usuariosmatricula um ON um.idmatr = mc.idmatr
-LEFT JOIN usuariosturno ut ON ut.idusua = um.idusua
+LEFT JOIN (
+  SELECT 
+    ut.idusua
+  FROM turnoscurso tc
+  INNER JOIN usuariosturno ut ON ut.idturn = tc.idturn
+  WHERE tc.idcurs = :idcurs
+) pp ON pp.idusua = um.idusua
 INNER JOIN usuarios uu ON uu.idusua = um.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE mc.idcurs = :idcurs AND idturn IS NULL
-ORDER BY oo.idofic
+WHERE mc.idcurs = :idcurs 
+  AND pp.idusua IS NULL
 `
 const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
   :idturn,
@@ -464,6 +479,7 @@ export const usuariosTurnoPendientes = async (context) => {
   let result
   let query = usuariosTurnoPendientesSql
 
+  console.log(query, context)
   try {
     result = await simpleExecute(query, context)
   } catch (error) {

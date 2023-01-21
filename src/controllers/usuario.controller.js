@@ -40,11 +40,11 @@ const updateFromRec = (req) => {
 }
 const deleteFromRec = (req) => {
   const usuario = {
-    idusua: req.body.usuario.idusua,
+    idusua: req.body.usuario.IDUSUA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(usuario, movimiento)
@@ -128,7 +128,7 @@ export const usuarios = async (req, res) => {
   const context = req.body.usuario
 
   try {
-    const rows = await DAL.findAll(context)
+    const rows = await DAL.find(context)
 
     res.status(200).json(rows)
   } catch (err) {

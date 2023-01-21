@@ -49,7 +49,7 @@ export const curso = async (req, res) => {
   }
 }
 export const cursos = async (req, res) => {
-  const context = req.body.curso
+  const context = req.body.usuario
 
   try {
     const result = await DAL.cursos(context)
