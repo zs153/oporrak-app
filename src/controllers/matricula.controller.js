@@ -105,7 +105,6 @@ export const matriculas = async (req, res) => {
 
     res.status(200).json(result)
   } catch (err) {
-    console.log(err)
     res.status(400).end()
   }
 }

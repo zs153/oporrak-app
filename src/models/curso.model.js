@@ -228,7 +228,6 @@ export const insert = async (bind) => {
     type: oracledb.NUMBER,
   }
 
-  console.log(insertSql, bind)
   try {
     const result = await simpleExecute(insertSql, bind)
 

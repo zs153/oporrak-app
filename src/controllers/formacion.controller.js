@@ -5,7 +5,7 @@ export const matricula = async (req, res) => {
   const context = req.body.matricula
 
   try {
-    const result = await DAL.findMatriculas(context)
+    const result = await DAL.matriculas(context)
 
     if (result.length === 1) {
       return res.status(200).json(result[0])
@@ -20,7 +20,7 @@ export const matriculas = async (req, res) => {
   const context = req.body.matricula
 
   try {
-    const result = await DAL.findMatriculas(context)
+    const result = await DAL.matriculas(context)
 
     if (result !== null) {
       res.status(200).json(result)
@@ -37,7 +37,7 @@ export const curso = async (req, res) => {
   const context = req.body.curso
 
   try {
-    const result = await DAL.findCursos(context)
+    const result = await DAL.cursos(context)
 
     if (result.length === 1) {
       return res.status(200).json(result[0])
@@ -49,10 +49,10 @@ export const curso = async (req, res) => {
   }
 }
 export const cursos = async (req, res) => {
-  const context = req.body.matricula
+  const context = req.body.curso
 
   try {
-    const result = await DAL.findCursos(context)
+    const result = await DAL.cursos(context)
 
     if (result !== null) {
       res.status(200).json(result)
