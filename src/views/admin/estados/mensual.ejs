@@ -7,11 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Estados</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap-icons.css">
-  <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
-  <link rel="stylesheet" href="/css/navbar.css">
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
   <style>
     table {
       font-size: 11px;
@@ -236,6 +233,14 @@
             <span>Oficina: <%- datos.descripcionOficina %></span>
             <span class="ms-3">Perfil: <%- datos.descripcionPerfil %></span>
             <span class="ms-3">Periodo: <%- datos.strDesde %> al <%- datos.strHasta %></span>
+            <a href="#" class="ms-auto" data-bs-toggle="modal" data-bs-target="#modal-config">
+              <span class="nav-link-icon d-md-none d-lg-inline-block">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24">
+                  <path
+                    d="m10.475 20.575-.35-2.775q-.4-.1-1.05-.45t-1.225-.8l-2.525 1.075-1.525-2.7 2.2-1.65q-.075-.3-.1-.613-.025-.312-.025-.637 0-.275.037-.587L6 10.7 3.8 9.05 5.325 6.4 7.85 7.475q.5-.425 1.088-.762.587-.338 1.162-.538l.375-2.775h3.075l.35 2.8q.65.225 1.138.513.487.287 1.012.762L18.7 6.4l1.525 2.65L17.9 10.8q.075.35.1.625.025.275.025.575 0 .25-.025.537-.025.288-.1.713l2.275 1.675-1.55 2.7L16.05 16.5q-.5.45-1.012.762-.513.313-1.138.513l-.35 2.8Zm1.45-6.45q.9 0 1.525-.613.625-.612.625-1.512t-.625-1.525q-.625-.625-1.525-.625-.9 0-1.512.625Q9.8 11.1 9.8 12q0 .9.613 1.512.612.613 1.512.613Zm0-.625q-.625 0-1.062-.438-.438-.437-.438-1.062t.438-1.062q.437-.438 1.062-.438t1.063.438q.437.437.437 1.062t-.437 1.062q-.438.438-1.063.438ZM12 11.975Zm-1 7.95h1.95l.375-2.725q.75-.2 1.313-.525.562-.325 1.212-.95l2.5 1.075 1-1.675-2.225-1.65q.125-.45.163-.8.037-.35.037-.675 0-.375-.037-.688-.038-.312-.163-.737L19.4 8.85l-.975-1.675-2.6 1.075q-.4-.45-1.162-.9-.763-.45-1.363-.575L13 4.05h-2l-.275 2.725q-.775.15-1.375.475-.6.325-1.25.975l-2.5-1.05-1 1.675 2.175 1.625q-.125.325-.175.725-.05.4-.05.8 0 .375.05.738.05.362.15.737l-2.15 1.65 1 1.675 2.475-1.05q.6.625 1.213.962.612.338 1.387.513Z" />
+                </svg>
+              </span>
+            </a>
           </div>
           <div class="row">
             <div class="col-12">
@@ -262,14 +267,131 @@
     <%- include('../../partials/footer') %>
   </div>
 
+  <div class="modal modal-blur fade" id="modal-config" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mt-0">Estados</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/admin/estados/estados" method="POST" onsubmit="return validate();">
+          <input type="hidden" id="desofi" name="desofi" value="<%- datos.descripcionOficina %>">
+          <input type="hidden" id="desper" name="desper" value="<%- datos.descripcionPerfil %>">
+          <input type="hidden" id="desde" name="desde" value="<%- datos.periodo.desde %>">
+          <input type="hidden" id="hasta" name="hasta" value="<%- datos.periodo.hasta %>">
+          <div class="modal-body">
+            <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Oficina</div>
+                      <select class="form-select" id="cboofi" name="ofiest" value="">
+                        <% if (datos.oficinas.length > 1) { %>
+                        <option value="0">
+                          DESCENTRALIZADAS
+                        </option>
+                        <% } %>
+                        <% datos.oficinas.map(element=> { %>
+                        <option value="<%- element.IDOFIC %>">
+                          <%- element.DESOFI %>
+                        </option>
+                        <% }) %>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Perfil</div>
+                      <select class="form-select" id="cboper" name="perusu" value="">
+                        <% datos.arrTiposPerfil.map(element=> { %>
+                        <option value="<%= element.id %>"<%- element.des === "INFORMADOR" ? " selected":"" %>>
+                          <%= element.des %>
+                        </option>
+                        <% }) %>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="input-control">
+                        <label class="form-label required">Fecha inicio</label>
+                        <input type="date" name="desfec" id="desfec" class="form-control" value="<%- new Date().toISOString().slice(0,10) %>" />
+                        <div class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Formato</div>
+                      <select class="form-select" id="cbofor" name="format" value="">
+                        <option value="1">MENSUAL</option>
+                        <option value="2">SEMANAL</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+            <button type="submit" class="btn btn-success ms-auto">Generar estadística</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/ayuda.min.js"></script>
   <script>
     const periodo = {
       desde: '<%- datos.periodo.desde %>',
       hasta: '<%- datos.periodo.hasta %>',
     }
+    const desfec = document.getElementById('desfec')
 
-    function estadosGantt() {
+    // proc
+    const validate = () => {
+      const desfecValue = desfec.value.trim()
+
+      if (isNaN(Date.parse(desfecValue))) {
+        setError(desfec, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(desfec)
+        }, 3000)
+        return false
+      }
+
+      return true
+    }
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+    const yearMonthDayToUTCString = (year, month, day) => {
+      const yearCDM = ('000' + year).slice(-4)
+      const monthCDM = ('0' + month).slice(-2)
+      const dayCDM = ('0' + day).slice(-2)
+
+      const fecha = new Date(`${yearCDM}-${monthCDM}-${dayCDM}T00:00:00`)
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
+    }
+    const estadosGantt = () => {
       const estados = <%- JSON.stringify(datos.estados) %>
       const festivos = <%- JSON.stringify(datos.festivos) %>
       const diasPeriodo = <%- datos.diasPeriodo %>
@@ -575,6 +697,88 @@
       })
     }
 
+    // eventos form
+    document.getElementById('desfec').addEventListener('change', function (e) {
+      const formato = document.getElementById('cbofor').value
+      const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
+      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth() + 1
+
+      let desde = new Date(yearMonthDayToUTCString(currentYear, currentMonth, 1))
+      let hasta = desde
+
+      if (formato === '1') {
+        const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
+
+        hasta = new Date(yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth))
+      } else {
+        let t = new Date()
+
+        t = new Date(document.querySelector("#desfec").value)
+
+        if (t.getDay() === 0) {
+          t.setDate(t.getDate() + 1)
+
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
+        } else if (t.getDay() === 1) {
+          t = new Date(new Date(document.querySelector("#desfec").value))
+          t.setDate(t.getDate() + 4)
+
+          desde = new Date(new Date(document.querySelector("#desfec").value))
+          hasta = t
+        } else {
+          const primerDiaSemana = t.getDate() - t.getDay()
+
+          t.setDate(desde.getDate() + primerDiaSemana)
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
+        }
+      }
+
+      document.querySelector("#desde").value = desde.toISOString().slice(0, 10)
+      document.querySelector("#hasta").value = hasta.toISOString().slice(0, 10)
+    })
+    document.getElementById('cbofor').addEventListener('change', function (e) {
+      const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
+      const currentMonth = new Date(document.querySelector("#desfec").value).getMonth() + 1
+
+      let desde = new Date(yearMonthDayToUTCString(currentYear, currentMonth, 1))
+      let hasta = desde
+
+      if (e.target.value === '1') {
+        const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
+
+        hasta = new Date(yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth))
+      } else {
+        let t = new Date()
+
+        t = new Date(document.querySelector("#desfec").value)
+
+        if (t.getDay() === 0) {
+          t.setDate(t.getDate() + 1)
+
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
+        } else if (t.getDay() === 1) {
+          t = new Date(new Date(document.querySelector("#desfec").value))
+          t.setDate(t.getDate() + 4)
+
+          desde = new Date(new Date(document.querySelector("#desfec").value))
+          hasta = t
+        } else {
+          const primerDiaSemana = t.getDate() - t.getDay()
+
+          t.setDate(desde.getDate() + primerDiaSemana)
+          desde = new Date(t)
+          hasta = new Date(t.setDate(t.getDate() + 4))
+        }
+      }
+
+      document.querySelector("#desde").value = desde.toISOString().slice(0, 10)
+      document.querySelector("#hasta").value = hasta.toISOString().slice(0, 10)
+    })
+
+    // show
     estadosGantt()
   </script>
 </body>

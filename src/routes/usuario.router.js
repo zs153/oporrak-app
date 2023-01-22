@@ -4,7 +4,6 @@ import {
   mainPage,
   addPage,
   editPage,
-  perfilPage,
   insert,
   update,
   remove,

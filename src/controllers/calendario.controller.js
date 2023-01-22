@@ -4,10 +4,18 @@ import { tiposEstado, tiposRol, tiposMovimiento, arrTiposEstado, arrTiposEstadoU
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const oficina = {
+  }
+  const usuario = {
+  }
 
   try {
-    let oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`)
-    let usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`)
+    let oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+      oficina,
+    })
+    let usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`, {
+      usuario,
+    })
 
     if (req.user.rol === tiposRol.admin) {
       oficinas = oficinas.data

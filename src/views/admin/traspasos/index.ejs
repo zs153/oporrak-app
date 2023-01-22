@@ -7,11 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Traspasos</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap-icons.css">
-  <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.css">
-  <link rel="stylesheet" href="/css/navbar.css">
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
   <link rel='stylesheet' href='/css/js-year-calendar.css'>
 </head>
 
@@ -67,15 +64,18 @@
                       </div>
                       <div class="col-3">
                         <div class="mb-1">
-                          <div class="form-label">Oficina destino</div>
-                          <select class="form-select" id="cbodes" name="ofides" value="">
-                            <option value="0">SELECCIONE DESTINO</option>
-                            <% datos.oficinas.map(element=> { %>
-                            <option value="<%- element.IDOFIC %>">
-                              <%- element.DESOFI %>
-                            </option>
-                            <% }) %>
-                          </select>
+                          <div class="input-control">
+                            <div class="form-label">Oficina destino</div>
+                            <select class="form-select form-control" id="cbodes" name="ofides" value="">
+                              <option value="0">SELECCIONE DESTINO</option>
+                              <% datos.oficinas.map(element=> { %>
+                              <option value="<%- element.IDOFIC %>">
+                                <%- element.DESOFI %>
+                              </option>
+                              <% }) %>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -235,6 +235,31 @@
       })
       calendario.setDataSource(data)
     }
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = '';
+      inputControl.classList.add('is-valid');
+      element.classList.remove('is-invalid');
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement;
+      const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+      errorDisplay.innerText = message;
+      element.classList.add('is-invalid');
+      inputControl.classList.remove('is-valid');
+    }
+    const validate = (ele, msg) => {
+      if (ele.value === '0') {
+        setError(ele, msg)
+        setTimeout(function () {
+          setSuccess(ele)
+        }, 3000)
+        return false
+      }
+    }
   </script>
   <script>
     const usuarios = <%- JSON.stringify(datos.usuarios) %>
@@ -312,9 +337,10 @@
       // bloquear si no existe destino
       if (e.events.length === 0 &&
         (params.destino === 0 || params.oficina === params.destino)) {
-        return
+          validate(document.getElementById('cbodes'), 'Destino requerido')
+          return
       }
-
+      
       params.fecha = dateISOToUTCString(e.date.toISOString())
 
       if (e.events.length) {

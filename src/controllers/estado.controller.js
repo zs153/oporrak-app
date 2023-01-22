@@ -10,9 +10,12 @@ export const mainPage = async (req, res) => {
   const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
   const desde = yearMonthDayToUTCString(currentYear, currentMonth, 1)
   const hasta = yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth)
+  const oficina = {}
 
   try {
-    let oficinas = await axios.post('http://${serverAPI}:8200/api/oficinas')
+    let oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+      oficina,
+    })
 
     if (req.user.rol === tiposRol.admin) {
       oficinas = oficinas.data
@@ -30,6 +33,7 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/estados', { user, datos })
   } catch (error) {
+    console.log(error)
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
     res.render('admin/error400', {
@@ -41,6 +45,7 @@ export const mainPage = async (req, res) => {
 // proc
 export const estadosPage = async (req, res) => {
   const user = req.user
+  const oficina = {}
   const periodo = {
     desde: req.body.desde,
     hasta: req.body.hasta,
@@ -56,6 +61,9 @@ export const estadosPage = async (req, res) => {
   const diasPeriodo = Math.ceil(Date.parse(periodo.hasta) - Date.parse(periodo.desde)) / (1000 * 60 * 60 * 24) + 1
 
   try {
+    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+      oficina,
+    })
     const festivos = await axios.post(`http://${serverAPI}:8200/api/festivos/oficinas`, {
       desde: periodo.desde,
       hasta: periodo.hasta,
@@ -66,6 +74,7 @@ export const estadosPage = async (req, res) => {
     })
 
     const datos = {
+      oficinas: oficinas.data,
       estados: estados.data,
       festivos: festivos.data,
       tiposEstado,

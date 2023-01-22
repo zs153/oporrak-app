@@ -4,10 +4,16 @@ import { tiposRol, tiposEstado, tiposMovimiento, arrColoresEstado } from '../pub
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const oficina = {}
+  const usuario = {}
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`)
-    const usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`)
+    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+      oficina,
+    })
+    const usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`, {
+      usuario,
+    })
     const datos = {
       oficinas: oficinas.data,
       usuarios: usuarios.data,

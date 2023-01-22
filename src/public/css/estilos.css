@@ -2216,6 +2216,16 @@ ul ol {
   color: #232e3c;
   background-color: #f0f2f6;
 }
+.list-group-header {
+  background: rgb(241, 241, 241);
+  padding: 0.5rem 1.5rem;
+  font-size: .75rem;
+  font-weight: var(--tblr-font-weight-medium);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--tblr-muted);
+  border-bottom: var(--tblr-border-width) var(--tblr-border-style) var(--tblr-border-color);
+}
 
 /* card-body */
 .card-body {

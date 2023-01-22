@@ -9,72 +9,6 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
-  <style>
-    .table-container {
-      height: 45em;
-    }
-
-    table {
-      display: flex;
-      flex-flow: column;
-      height: 100%;
-      width: 100%;
-      font-size: 11px;
-    }
-
-    table thead {
-      flex: 0 0 auto;
-      width: calc(100% - 0.9em);
-    }
-
-    table tbody {
-      /* body takes all the remaining available space */
-      flex: 1 1 auto;
-      display: block;
-      overflow-y: scroll;
-    }
-
-    table tbody tr {
-      width: 100%;
-    }
-
-    table thead,
-    table tbody tr {
-      display: table;
-      table-layout: fixed;
-    }
-
-    /* decorations */
-    .table-container {
-      border: 1px solid black;
-      padding: 0.3em;
-    }
-
-    table {
-      border: 1px solid lightgrey;
-    }
-
-    table td,
-    table th {
-      /* border: 1px solid lightgrey; */
-      padding-left: 1em;
-    }
-
-    table th {
-      border: 1px solid grey;
-    }
-
-    .list-group-header {
-      background: rgb(241, 241, 241);
-      padding: 0.5rem 1.5rem;
-      font-size: .75rem;
-      font-weight: var(--tblr-font-weight-medium);
-      line-height: 1;
-      text-transform: uppercase;
-      color: var(--tblr-muted);
-      border-bottom: var(--tblr-border-width) var(--tblr-border-style) var(--tblr-border-color);
-    }
-  </style>
 </head>
 
 <body class="antialiased">
@@ -333,7 +267,68 @@
     <%- include('../partials/footer') %>
   </div>
 
+  <div class="modal modal-blur fade" id="modal-matricula" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h1 class="text-center">Matriculaciones de Curso Disponibles</h1>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col">
+                  <a href="#" class="btn btn-white w-100" onclick="closeModal()" data-bs-dismiss="modal">No estoy interesado</a>
+                </div>
+                <div class="col">
+                  <a href="/admin/formacion/matriculas" class="btn btn-white w-100">Ir a matriculaciones</a>
+                </div>
+              </div>
+              <div>
+                <p>
+                  <label class="form-check">
+                    <input class="form-check-input" id="checkShow" type="checkbox">
+                    <span class="form-check-label">No mostrar más este mensaje</span>
+                  </label>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
   <script src="/js/ayuda.min.js"></script>
+  <script>
+    const openModal = () => {
+      const modal = document.getElementById('modal-matricula')
+
+      modal.style.display = 'block'
+      modal.setAttribute('aria-hidden', 'false', 'show')
+      modal.classList.add('show')
+    }
+    const closeModal = () => {
+      const modal = document.getElementById('modal-matricula')
+
+      modal.setAttribute('aria-hidden', 'true');
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+
+      localStorage.clear()
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const noMostrar = localStorage.getItem('noMostrar')
+
+      if (noMostrar === null || noMostrar === 'n') {
+        openModal()
+      }
+    })
+    document.getElementById('checkShow').addEventListener('change', (itm) => {
+      if (itm.target.checked) {
+        localStorage.setItem('noMostrar', 's')
+      }
+    })
+  </script>
 </body>
 
 </html>

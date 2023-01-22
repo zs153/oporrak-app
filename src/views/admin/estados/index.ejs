@@ -7,11 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Estados</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap-icons.css">
-  <!-- custom -->
-  <link rel="stylesheet" href="/css/estilos.min.css">
-  <link rel="stylesheet" href="/css/navbar.css">
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body class="antialiased">
@@ -23,13 +20,6 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <% if(typeof alerts !='undefined' ) { %>
-              <% alerts.map(function (alert){ %>
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <%- alert.msg %>
-              </div>
-              <% }) %>
-              <% } %>
               <form action="/admin/estados/estados" method="POST" onsubmit="return validate();">
                 <input type="hidden" id="desofi" name="desofi">
                 <input type="hidden" id="desper" name="desper">
@@ -50,8 +40,8 @@
                           </option>
                           <% } %>
                           <% datos.oficinas.map(element=> { %>
-                          <option value="<%= element.IDOFIC %>">
-                            <%= element.DESOFI %>
+                          <option value="<%- element.IDOFIC %>">
+                            <%- element.DESOFI %>
                           </option>
                           <% }) %>
                         </select>
@@ -62,8 +52,8 @@
                         <div class="form-label">Perfil</div>
                         <select class="form-select" id="cboper" name="perusu" value="">
                           <% datos.arrTiposPerfil.map(element=> { %>
-                          <option value="<%= element.id %>">
-                            <%= element.des %>
+                          <option value="<%- element.id %>"<%- element.des === "INFORMADOR" ? " selected":"" %>>
+                            <%- element.des %>
                           </option>
                           <% }) %>
                         </select>
@@ -124,20 +114,6 @@
   <script>
     const desfec = document.getElementById('desfec')
 
-    const validate = () => {
-      const desfecValue = desfec.value.trim()
-
-      if (isNaN(Date.parse(desfecValue))) {
-        setError(desfec, 'Fecha requerida')
-        setTimeout(function() {
-          setSuccess(desfec)
-        }, 3000)
-        return false
-      }
-
-      return true
-    }
-
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
@@ -154,8 +130,19 @@
       element.classList.add('is-invalid');
       inputControl.classList.remove('is-valid');
     }
-  </script>
-  <script>
+    const validate = () => {
+      const desfecValue = desfec.value.trim()
+
+      if (isNaN(Date.parse(desfecValue))) {
+        setError(desfec, 'Fecha requerida')
+        setTimeout(function () {
+          setSuccess(desfec)
+        }, 3000)
+        return false
+      }
+
+      return true
+    }
     const yearMonthDayToUTCString = (year, month, day) => {
       const yearCDM = ('000' + year).slice(-4)
       const monthCDM = ('0' + month).slice(-2)
@@ -166,6 +153,7 @@
 
       return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
     }
+
     document.getElementById('desfec').addEventListener('change', function(e) {
       const formato = document.getElementById('cbofor').value
       const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()

@@ -14,7 +14,7 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION'}) %>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -27,20 +27,22 @@
                     <div class="d-flex">
                       <div class="input-icon me-3">
                         <span class="input-icon-addon">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="10" cy="10" r="7"></circle>
                             <line x1="21" y1="21" x2="15" y2="15"></line>
                           </svg>
                         </span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en usuarios">
+                        <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox"
+                          onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en usuarios">
                       </div>
-                      <a href="/admin/usuarios/add" class="btn btn-primary">
+                      <a href="/admin/usuarios/add" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                           <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                         </svg>
-                        Nuevo
+                        Nuevo Usuario
                       </a>
                     </div>
                   </div>
@@ -49,7 +51,7 @@
                   <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
                     <thead>
                       <tr class="header">
-                        <th class="w-5"></th>
+                        <th class="w-4"></th>
                         <th>Nombre</th>
                         <th>Oficina</th>
                         <th class="w-5"></th>
@@ -75,12 +77,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="modal-status bg-danger"></div>
         <div class="modal-body text-center py-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
+            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+            stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M12 9v2m0 4v.01"></path>
             <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path>
           </svg>
-          <h3>¿Desea borrar a este usuario?</h3>
+          <h3>¿Desea borrar este usuario?</h3>
           <div id="msgbor"></div>
           <div class="text-muted">Lo que vas a hacer no puede ser recuperado.</div>
         </div>
@@ -93,7 +97,7 @@
               <div class="col">
                 <form action="/admin/usuarios/delete" method="POST">
                   <input type="hidden" id="idusua" name="idusua" value="">
-                  <button type="submit" class="btn btn-danger w-100" id="btnDelete">Borrar usuario</button>
+                  <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar usuario</button>
                 </form>
               </div>
             </div>
@@ -109,11 +113,11 @@
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const estadosUsuario = <%- JSON.stringify(datos.estadosUsuario) %>
 
-    let state = {
-      'querySet': orgList,
-      'page': 1,
-      'rows': 9,
-    }
+      let state = {
+        'querySet': orgList,
+        'page': 1,
+        'rows': 9,
+      }
 
     buildTable(state)
   </script>

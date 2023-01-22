@@ -479,12 +479,7 @@
         }
       }
 
-      if (haySolape) {
-        // setError(element, `Solape de eventos el día ${estado.DESDE} ${deshor}`)
-        // setTimeout(function () {
-        //   setSuccess(element)
-        // }, 3000)
-      } else {
+      if (!haySolape) {
         // insert rango
         await insertRangoEvento(evento)
       }

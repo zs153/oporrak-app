@@ -1,6 +1,5 @@
 import axios from 'axios'
 import bcrypt from 'bcrypt'
-import { serverAPI } from '../config/settings'
 import {
   arrTiposRol,
   arrTiposPerfil,
@@ -9,6 +8,7 @@ import {
   tiposMovimiento,
   tiposRol,
 } from '../public/js/enumeraciones'
+import { serverAPI } from '../config/settings'
 
 export const mainPage = async (req, res) => {
   const user = req.user
@@ -16,11 +16,11 @@ export const mainPage = async (req, res) => {
 
   try {
     const result = await axios.post(`http://${serverAPI}:8200/api/usuarios`, {
-      usuario
+      usuario,
     })
     const datos = {
       usuarios: result.data,
-      estadosUsuario,
+      estadosUsuario: estadosUsuario,
     }
 
     res.render('admin/usuarios', { user, datos })
@@ -120,10 +120,6 @@ export const insert = async (req, res) => {
   } catch (error) {
     let msg = 'No se ha podido crear el nuevo usuario.'
 
-    if (error.response.data.errorNum === 20100) {
-      msg = 'El usuario ya está registrado'
-    }
-
     res.render('admin/error400', {
       alerts: [{ msg }],
     })
@@ -156,7 +152,7 @@ export const update = async (req, res) => {
     res.redirect('/admin/usuarios')
   } catch (error) {
     let msg =
-      'No se han podido modificar los datos del usuario.'
+      'No se han podido modificar los datos del usuario. Verifique los datos introducidos'
 
     res.render('admin/error400', {
       alerts: [{ msg }],
