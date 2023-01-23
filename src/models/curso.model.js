@@ -479,7 +479,6 @@ export const usuariosTurnoPendientes = async (context) => {
   let result
   let query = usuariosTurnoPendientesSql
 
-  console.log(query, context)
   try {
     result = await simpleExecute(query, context)
   } catch (error) {
