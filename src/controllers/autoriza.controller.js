@@ -63,6 +63,7 @@ export const autorizar = async (req, res) => {
               httpOnly: true,
             }
             res.cookie('auth', token, options)
+            res.cookie('noVer', '0')
             res.writeHead(302, {
               'Location': `http://${serverWEB}:4600/admin`,
               'Content-Type': 'text/plain',
