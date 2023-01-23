@@ -21,6 +21,7 @@ export const mainPage = async (req, res) => {
       tiposRol,
       arrColoresEstado,
       tiposMovimiento,
+      serverAPI,
     }
 
     res.render('admin/traspasos', { user, datos })

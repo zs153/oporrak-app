@@ -58,7 +58,6 @@ export const mainPage = async (req, res) => {
       noVerPanel: req.cookies.noVer
     }
 
-    console.log(datos.noVerPanel)
     res.render('admin', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'

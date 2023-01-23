@@ -9,7 +9,7 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
-  <link rel='stylesheet' href='/css/js-year-calendar.min.css'>
+  <!-- <link rel='stylesheet' href='/css/js-year-calendar.min.css'> -->
   <style>
     .calendar-header {
       border: none !important;
@@ -300,7 +300,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8200/api/estados/insert', true);
+        xhr.open('POST', `http://${serverAPI}:8200/api/estados/insert`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -328,7 +328,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8200/api/estados/inserts', true);
+        xhr.open('POST', `http://${serverAPI}:8200/api/estados/inserts`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -347,7 +347,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8200/api/estados/delete', true);
+        xhr.open('POST', `http://${serverAPI}:8200/api/estados/delete`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -366,7 +366,7 @@
           }
         }
 
-        xhr.open('POST', 'http://localhost:8200/api/estados/usuarios', true);
+        xhr.open('POST', `http://${serverAPI}:8200/api/estados/usuarios`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
         xhr.send(JSON.stringify(prms))
       })
@@ -587,6 +587,7 @@
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
+    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
 
     let estados = null
     let calendario = null

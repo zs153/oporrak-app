@@ -36,6 +36,7 @@ export const mainPage = async (req, res) => {
       arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
       arrColoresEstado,
       tiposMovimiento,
+      serverAPI,
     }
 
     res.render('admin/calendarios', { user, datos })
