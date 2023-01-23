@@ -2,36 +2,36 @@ import * as DAL from '../models/oficina.model'
 
 const insertFromRec = (req) => {
   const oficina = {
-    desofi: req.body.oficina.desofi,
-    codofi: req.body.oficina.codofi,
+    desofi: req.body.oficina.DESOFI,
+    codofi: req.body.oficina.CODOFI,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(oficina, movimiento)
 }
 const updateFromRec = (req) => {
   const oficina = {
-    idofic: req.body.oficina.idofic,
-    desofi: req.body.oficina.desofi,
-    codofi: req.body.oficina.codofi,
+    idofic: req.body.oficina.IDOFIC,
+    desofi: req.body.oficina.DESOFI,
+    codofi: req.body.oficina.CODOFI,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(oficina, movimiento)
 }
 const deleteFromRec = (req) => {
   const oficina = {
-    idofic: req.body.oficina.idofic,
+    idofic: req.body.oficina.IDOFIC,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(oficina, movimiento)

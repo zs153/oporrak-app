@@ -24,32 +24,26 @@ const updateSql = `BEGIN FRAUDE_PKG.UPDATEOFICINA(
 ); END;
 `
 const deleteSql = `BEGIN FRAUDE_PKG.DELETEOFICINA(
-    :idofic,
-    :usumov,
-    :tipmov 
-  ); END;
+  :idofic,
+  :usumov,
+  :tipmov 
+); END;
 `
 
 export const find = async (context) => {
   let query = baseQuery
   let binds = {}
 
-  if (context.idofic) {
-    binds.idofic = context.idofic
+  if (context.IDOFIC) {
+    binds.idofic = context.IDOFIC
     query += `WHERE idofic = :idofic`
   }
-  if (context.codofi) {
-    binds.codofi = context.codofi
+  if (context.CODOFI) {
+    binds.codofi = context.CODOFI
     query += `WHERE codofi = :codofi`
   }
 
   const result = await simpleExecute(query, binds)
-  return result.rows
-}
-export const findAll = async () => {
-  let query = baseQuery
-
-  const result = await simpleExecute(query)
   return result.rows
 }
 export const insert = async (bind) => {
