@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 
-dotenv.config({ path: '../../.env' })
+dotenv.config({ path: __dirname + '/./../../.env' })
 
 export const dbPool = {
   user: process.env.NODE_ORACLEDB_USER,
