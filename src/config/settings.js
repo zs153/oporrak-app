@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 
-dotenv.config({ path: '../../.env' })
+dotenv.config({ path: __dirname + '/./../../.env' })
 
 export const puerto = process.env.PORT;
 export const publicKey = process.env.PUBLIC_KEY
