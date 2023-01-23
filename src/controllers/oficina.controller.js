@@ -4,9 +4,12 @@ import { tiposRol, tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const oficina = {}
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/oficinas`)
+    const result = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+      oficina,
+    })
     const datos = {
       oficinas: JSON.stringify(result.data),
       tiposRol,
@@ -23,12 +26,9 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const datos = {
-    tiposRol,
-  }
 
   try {
-    res.render('admin/oficinas/add', { user, datos })
+    res.render('admin/oficinas/add', { user })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -40,7 +40,7 @@ export const addPage = async (req, res) => {
 export const editPage = async (req, res) => {
   const user = req.user
   const oficina = {
-    idofic: req.params.id,
+    IDOFIC: req.params.id,
   }
   try {
     const result = await axios.post(`http://${serverAPI}:8200/api/oficina`, {
@@ -63,12 +63,12 @@ export const editPage = async (req, res) => {
 export const insert = async (req, res) => {
   const user = req.user
   const oficina = {
-    desofi: req.body.desofi.toUpperCase(),
-    codofi: req.body.codofi.toUpperCase(),
+    DESOFI: req.body.desofi.toUpperCase(),
+    CODOFI: req.body.codofi.toUpperCase(),
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.crearOficina,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearOficina,
   }
 
   try {
@@ -81,10 +81,6 @@ export const insert = async (req, res) => {
   } catch (error) {
     let msg = 'No se ha podido crear la oficina.'
 
-    if (error.response.data.errorNum === 20100) {
-      msg = 'La oficina ya existe.'
-    }
-
     res.render('admin/error400', {
       alerts: [{ msg }],
     })
@@ -93,13 +89,13 @@ export const insert = async (req, res) => {
 export const update = async (req, res) => {
   const user = req.user
   const oficina = {
-    idofic: req.body.idofic,
-    desofi: req.body.desofi.toUpperCase(),
-    codofi: req.body.codofi.toUpperCase(),
+    IDOFIC: req.body.idofic,
+    DESOFI: req.body.desofi.toUpperCase(),
+    CODOFI: req.body.codofi.toUpperCase(),
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.modificarOficina,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.modificarOficina,
   }
 
   try {
@@ -111,11 +107,7 @@ export const update = async (req, res) => {
     res.redirect('/admin/oficinas')
   } catch (error) {
     let msg =
-      'No se han podido modificar los datos de la oficina. Verifique los datos introducidos'
-
-    if (error.response.data.errorNum === 20100) {
-      msg = 'La oficina ya existe'
-    }
+      'No se han podido modificar los datos de la oficina.'
 
     res.render('admin/error400', {
       alerts: [{ msg }],
@@ -125,11 +117,11 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   const user = req.user
   const oficina = {
-    idofic: req.body.idofic,
+    IDOFIC: req.body.idofic,
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarOficina,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarOficina,
   }
 
   try {
@@ -140,7 +132,7 @@ export const remove = async (req, res) => {
 
     res.redirect('/admin/oficinas')
   } catch (error) {
-    const msg = 'No se ha podido elminar la oficina.'
+    const msg = 'No se ha podido borrar la oficina.'
 
     res.render('admin/error400', {
       alerts: [{ msg }],

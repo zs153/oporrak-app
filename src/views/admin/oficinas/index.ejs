@@ -32,14 +32,12 @@
                               <line x1="21" y1="21" x2="15" y2="15"></line>
                             </svg>
                           </span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarOficinaBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en oficinas">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarOficinaBox" onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en oficinas">
                         </div>
-                        <a href="/admin/oficinas/add" class="btn btn-primary">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
+                        <a href="/admin/oficinas/add" class="btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
+                            <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
+                          </svg>
                           Nueva Oficina
                         </a>
                       </div>
@@ -109,7 +107,7 @@
       let state = {
         'querySet': orgList,
         'page': 1,
-        'rows': 8,
+        'rows': 9,
       }
 
       buildTable(state)

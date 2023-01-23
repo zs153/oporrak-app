@@ -152,7 +152,7 @@ export const update = async (req, res) => {
     res.redirect('/admin/usuarios')
   } catch (error) {
     let msg =
-      'No se han podido modificar los datos del usuario. Verifique los datos introducidos'
+      'No se han podido modificar los datos del usuario.'
 
     res.render('admin/error400', {
       alerts: [{ msg }],
@@ -177,7 +177,7 @@ export const remove = async (req, res) => {
 
     res.redirect('/admin/usuarios')
   } catch (error) {
-    const msg = 'No se ha podido elminar la oficina.'
+    const msg = 'No se ha podido borrar el usuario.'
 
     res.render('admin/error400', {
       alerts: [{ msg }],
