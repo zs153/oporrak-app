@@ -51,12 +51,14 @@ export const mainPage = async (req, res) => {
       }
       data.push(itm)
     })
-
+    
     const datos = {
       estados: data,
-      hayMatricula: matriculas.data ? false : true
+      hayMatricula: matriculas.data ? false : true,
+      noVerPanel: req.cookies.noVer
     }
 
+    console.log(datos.noVerPanel)
     res.render('admin', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'

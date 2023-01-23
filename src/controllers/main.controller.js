@@ -14,6 +14,7 @@ export const logout = async (req, res) => {
 
   res.clearCookie("x-access_token");
   res.cookie("auth", undefined, options);
+  res.cookie("noVer", undefined, options);
 
   res.redirect('/')
 };
