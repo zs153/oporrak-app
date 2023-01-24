@@ -15,7 +15,7 @@
   <div class="page page-center">
     <div class="container-tight py-6">
       <div class="text-center mb-4">
-        <a href="."><img src="/img/logoOporrak.png" height="36" alt="" /></a>
+        <!-- <a href="."><img src="/img/logoOporrak.png" height="36" alt="Gestión de contraseñas" /></a> -->
       </div>
       <% if(typeof alerts !== 'undefined') { %>
       <% alerts.map(function (alert){ %>
@@ -25,6 +25,7 @@
       <% }) %>
       <% } %>
       <form class="card card-md" action="/auth/auth" method="POST">
+        <input type="hidden" name="url" value="<%- datos.url %>">
         <div class="card-body">
           <h2 class="card-title text-center mb-4">Iniciar sesión</h2>
           <div class="mb-3">
@@ -37,7 +38,7 @@
           </div>
           <div class="mb-2">
             <span class="form-label">
-              <a href="/auth/forgot">He olvidado mi contraseña</a>
+              <a href="/auth/forgot/?valid=<%- datos.url %>">He olvidado mi contraseña</a>
             </span>
           </div>
           <div class="form-footer">

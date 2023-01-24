@@ -1,15 +1,19 @@
 import { createPrivateKey } from 'crypto'
 import bcrypt from "bcrypt";
 import { V4 } from 'paseto'
-import { privateKey, secreto, serverWEB } from '../config/settings'
+import { privateKey, secreto } from '../config/settings'
 import * as DAL from "../models/autoriza.model";
 
 // pages
 export const loginPage = async (req, res) => {
-  res.render("sign-in", { datos: {}, alerts: undefined });
+  const url = req.query.valid
+
+  res.render("sign-in", { datos: {url}, alerts: undefined });
 };
 export const olvidoPage = async (req, res) => {
-  res.render("forgot", { datos: {}, alerts: undefined });
+  const url = req.query.valid
+  
+  res.render("forgot", { datos: {url}, alerts: undefined });
 };
 
 // procs
@@ -17,6 +21,7 @@ export const autorizar = async (req, res) => {
   const context = {
     userid: req.body.userid,
   }
+  const url = req.body.url
 
   try {
     const rows = await DAL.find(context);
@@ -38,10 +43,8 @@ export const autorizar = async (req, res) => {
         if (ret) {
           // payload
           const payload = {
-            id: usuario.IDUSUA,
             userid: usuario.USERID,
             rol: usuario.ROLUSU,
-            oficina: usuario.OFIUSU,
           }
           const key = createPrivateKey({
             'key': privateKey,
@@ -65,7 +68,7 @@ export const autorizar = async (req, res) => {
             res.cookie('auth', token, options)
             res.cookie('noVer', '0')
             res.writeHead(302, {
-              'Location': `http://${serverWEB}:4600/admin`,
+              'Location': `http://${url}/admin`,
               'Content-Type': 'text/plain',
             })
             res.end()
@@ -96,41 +99,27 @@ export const olvido = async (req, res) => {
   const randomString = Math.random().toString(36).substring(2, 10);
   const salt = await bcrypt.genSalt(10);
   const passHash = await bcrypt.hash(randomString, salt);
-  const tiposMovimiento = {
-    olvidoPassword: 61,
-  }
-  const usuario = {
-    emausu: req.body.emausu,
-    pwdusu: passHash,
-  };
-  const movimiento = {
-    tipmov: tiposMovimiento.olvidoPassword,
-  };
   const saltus = {
     saltus: randomString,
   }
-  const context = Object.assign(usuario, movimiento, saltus)
+  const activo = {
+    emausu: req.body.emausu,
+    pwdusu: passHash,
+  };
+  const context = Object.assign(activo, saltus)
+  const url = req.body.url
 
   try {
     await DAL.forgot(context);
 
     res.render("okForgot", {
+      url,
       alerts: undefined,
     });
   } catch (error) {
-    let msg
-
-    if (error.errorNum === 20100) {
-      msg = 'El correo electrónico no existe'
-    } else if (error.errorNum === 20101) {
-      msg = 'No se puede enviar el correo electrónico'
-    } else if (error.errorNum === 20102) {
-      msg = 'No se pueden actualizar los datos'
-    }
-
     res.render("sign-in", {
       datos: req.body,
-      alerts: [{ msg }],
+      alerts: [{ msg: 'No se ha podido verificar la identidad del usuario' }]
     });
   }
 };
