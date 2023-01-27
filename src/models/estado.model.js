@@ -287,6 +287,7 @@ export const estadosFechaUsuario = async (context) => {
 export const estadosFechaPerfil = async (context) => {
   let query = estadosFechaPerfilQuery
 
+  console.log(query,context)
   const result = await simpleExecute(query, context)
 
   return result.rows
