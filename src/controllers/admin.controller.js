@@ -1,6 +1,6 @@
 import axios from 'axios'
 import bcrypt from 'bcrypt'
-import { serverAPI } from '../config/settings'
+import { puertoAPI, serverAPI } from '../config/settings'
 import {
   arrTiposRol,
   arrTiposPerfil,
@@ -24,11 +24,11 @@ export const mainPage = async (req, res) => {
   }
 
   try {
-    const perfiles = await axios.post(`http://${serverAPI}:8200/api/estados/usuarios/perfiles`, {
+    const perfiles = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios/perfiles`, {
       fecha,
       tipoExcluido,
     })
-    const matriculas = await axios.post(`http://${serverAPI}:8200/api/formacion/matriculas`, {
+    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
       matricula,
     })
 
