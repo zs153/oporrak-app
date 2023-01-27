@@ -4,9 +4,20 @@ import { tiposRol } from '../public/js/enumeraciones'
 import { publicKey } from '../config/settings'
 
 const authRoutes = async (req, res, next) => {
-  const tokenHeader = req.cookies.auth
+  let tokenHeader = req.cookies.auth
 
-  if (typeof tokenHeader !== 'undefined') {
+  if (typeof tokenHeader === 'undefined') {
+    const token = req.query.valid
+    const options = {
+      path: "/",
+      sameSite: true,
+      maxAge: 1000 * 60 * 60 * 6, // 6 horas
+      httpOnly: true,
+    }
+    res.cookie('auth', token, options)
+    tokenHeader = token
+  }
+
     try {
       // paseto public
       const key = createPublicKey({
@@ -16,7 +27,7 @@ const authRoutes = async (req, res, next) => {
       })
       await V4.verify(tokenHeader, key, {
         audience: 'urn:client:claim',
-        issuer: 'http://localhost:4600',
+        issuer: 'http://localhost:4000',
         clockTolerance: '1 min',
       }).then(r => {
         req.user = {
@@ -35,10 +46,6 @@ const authRoutes = async (req, res, next) => {
       //console.log('Error de clave pública. No se puede crear la clave pública')
       res.redirect('/')
     }
-  } else {
-    //console.log('Error de clave pública: No se ha generado el token de clave pública')
-    res.redirect('/')
-  }
 }
 
 export const verifyTokenAndAdmin = (req, res, next) => {

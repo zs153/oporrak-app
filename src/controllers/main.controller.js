@@ -1,9 +1,9 @@
-import { serverAUTH, serverWEB } from "../config/settings";
+import { puertoAUTH, puertoWEB, serverAUTH, serverWEB } from "../config/settings";
 
 export const mainPage = async (req, res) => {
-  const strUrl = encodeURIComponent(serverWEB);
+  const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
 
-  res.redirect(`http://${serverAUTH}:9000/auth/?valid=${strUrl}`)
+  res.redirect(`http://${serverAUTH}:${puertoAUTH}/log/login/?valid=${strUrl}`)
 };
 
 export const logout = async (req, res) => {
