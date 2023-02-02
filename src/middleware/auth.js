@@ -55,7 +55,7 @@ const authRoutes = async (req, res, next) => {
         }
 
         res.cookie('auth', localToken, options)
-        res.cookie('noVer', '0')
+        //res.cookie('noVer', '0')
 
         tokenHeader = localToken
       }).catch(err => {
