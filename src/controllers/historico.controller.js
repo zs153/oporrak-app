@@ -2,11 +2,13 @@ import * as DAL from '../models/historico.model'
 
 const activarFromRec = (req) => {
   const usuario = {
-    idusua: req.body.usuario.idusua,
+    idusua: req.body.usuario.IDUSUA,
+    ofiusu: req.body.usuario.OFIUSU,
+    stausu: req.body.usuario.STAUSU,
   }
   const movimiento = {
-    usumov: req.body.movimiento.usumov,
-    tipmov: req.body.movimiento.tipmov,
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(usuario, movimiento)

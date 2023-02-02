@@ -83,7 +83,6 @@ export const find = async (context) => {
     query += "WHERE uu.ofiusu = :ofiusu";
   }
 
-  console.log(query,binds)
   const result = await simpleExecute(query, binds);
   return result.rows;
 };

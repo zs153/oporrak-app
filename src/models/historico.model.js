@@ -4,17 +4,16 @@ import { simpleExecute } from "../services/database.js";
 const baseQuery = `SELECT 
     idusua,
     nomusu,
-    ofiusu,
     rolusu,
     userid,
     emausu,
-    perusu,
-    telusu,
-    stausu
+    perusu
   FROM historicos
 `
 const activarSql = `BEGIN OPORRAK_PKG.ACTIVARHISTORICO(
     :idusua,
+    :ofiusu,
+    :stausu,
     :usumov,
     :tipmov
   ); END;
