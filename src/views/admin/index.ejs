@@ -303,9 +303,8 @@
 
     if (typeof name === 'undefined') {
       document.cookie = "noVer=0"
-      // actualizado
     }
-    const noVerPanel = rest.join('=').trim();
+    const noVerPanel = rest.join('=').trim() === 0 ? true:false;
     const openModal = () => {
       const modal = document.getElementById('modal-matricula')
 
@@ -322,7 +321,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      if (noVerPanel === "0") {
+      if (!noVerPanel) {
         openModal()
       }
     })
