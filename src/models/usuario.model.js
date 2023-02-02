@@ -15,7 +15,6 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTUSUARIO(
     :emausu,
     :perusu,
     :telusu,
-    :pwdusu,
     :stausu,
     :usumov,
     :tipmov,
@@ -84,6 +83,7 @@ export const find = async (context) => {
     query += "WHERE uu.ofiusu = :ofiusu";
   }
 
+  console.log(query,binds)
   const result = await simpleExecute(query, binds);
   return result.rows;
 };

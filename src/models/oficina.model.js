@@ -7,7 +7,7 @@ const baseQuery = `SELECT
     codofi
   FROM oficinas
 `
-const insertSql = `BEGIN FRAUDE_PKG.INSERTOFICINA(
+const insertSql = `BEGIN OPORRAK_PKG.INSERTOFICINA(
     :desofi, 
     :codofi,
     :usumov,
@@ -15,7 +15,7 @@ const insertSql = `BEGIN FRAUDE_PKG.INSERTOFICINA(
     :idofic
   ); END;
 `
-const updateSql = `BEGIN FRAUDE_PKG.UPDATEOFICINA(
+const updateSql = `BEGIN OPORRAK_PKG.UPDATEOFICINA(
   :idofic,
   :desofi, 
   :codofi,
@@ -23,7 +23,7 @@ const updateSql = `BEGIN FRAUDE_PKG.UPDATEOFICINA(
   :tipmov
 ); END;
 `
-const deleteSql = `BEGIN FRAUDE_PKG.DELETEOFICINA(
+const deleteSql = `BEGIN OPORRAK_PKG.DELETEOFICINA(
   :idofic,
   :usumov,
   :tipmov 

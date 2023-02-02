@@ -9,7 +9,6 @@ const insertFromRec = (req) => {
     emausu: req.body.usuario.EMAUSU,
     perusu: req.body.usuario.PERUSU,
     telusu: req.body.usuario.TELUSU,
-    pwdusu: req.body.usuario.PWDUSU,
     stausu: req.body.usuario.STAUSU,
   }
   const movimiento = {
