@@ -32,11 +32,13 @@ export const mainPage = async (req, res) => {
 export const activar = async (req, res) => {
   const user = req.user
   const usuario = {
-    idusua: req.body.idusua,
+    IDUSUA: req.body.idusua,
+    OFIUSU: req.body.ofiusu,
+    STAUSU: req.body.stausu,
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.activarUsuario,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.activarUsuario,
   }
 
   try {

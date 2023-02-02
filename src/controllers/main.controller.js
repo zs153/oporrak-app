@@ -6,7 +6,7 @@ export const mainPage = async (req, res) => {
   res.redirect(`http://${serverAUTH}:${puertoAUTH}/log/login/?valid=${strUrl}`)
 };
 
-export const logout = async (req, res) => {
+export const logoutPage = async (req, res) => {
   const options = {
     path: "/",
     sameSite: true,
@@ -16,7 +16,7 @@ export const logout = async (req, res) => {
 
   res.clearCookie("x-access_token");
   res.cookie("auth", undefined, options);
-  res.cookie("noVer", undefined, options);
+  res.cookie("verPan", undefined, options);
 
   res.redirect('/')
 };

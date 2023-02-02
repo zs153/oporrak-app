@@ -267,7 +267,7 @@
     <%- include('../partials/footer') %>
   </div>
 
-  <div class="modal modal-blur fade" id="modal-matricula" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal modal-blur fade hide" id="modal-matricula" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-body">
@@ -299,12 +299,6 @@
   
   <script src="/js/ayuda.min.js"></script>
   <script>
-    const [name, ...rest] = document.cookie.split('=');
-
-    if (typeof name === 'undefined') {
-      document.cookie = "noVer=0"
-    }
-    const noVerPanel = rest.join('=').trim() === 0 ? true:false;
     const openModal = () => {
       const modal = document.getElementById('modal-matricula')
 
@@ -320,19 +314,23 @@
       modal.style.display = 'none';
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      if (!noVerPanel) {
-        openModal()
-      }
-    })
-    document.getElementById('checkShow').addEventListener('change', (itm) => {
+    document.getElementById('checkShow').addEventListener('click', (itm) => {
       if (itm.target.checked) {
-        document.cookie = "noVer=1"
-      } else {
-        //document.cookie = "noVer" + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        document.cookie = "noVer=0"
+        document.cookie = "verPan=0;path=/admin"
       }
     })
+
+    const hayMatricula = <%- datos.hayMatricula %>
+    const [name, ...rest] = document.cookie.split('=');
+
+    if (name === '') {
+      document.cookie = "verPan=1"
+    }
+    const verPanel = rest.join('=').trim() === '1' && hayMatricula ? true : false;
+
+    if (verPanel) {
+      openModal()
+    }
   </script>
 </body>
 

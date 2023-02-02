@@ -45,7 +45,7 @@ const authRoutes = async (req, res, next) => {
           issuer: 'http://localhost:4000',
           expiresIn: '6 hours'
         })
-        
+
         // crear cookie
         const options = {
           path: "/",
@@ -55,11 +55,10 @@ const authRoutes = async (req, res, next) => {
         }
 
         res.cookie('auth', localToken, options)
-        //res.cookie('noVer', '0')
+        res.cookie('verPan', 1, { path: '/admin' })
 
         tokenHeader = localToken
       }).catch(err => {
-        //console.log('Error de clave pública. No se puede verificar la clave pública')
         res.redirect('/')
       })
     }
@@ -79,11 +78,9 @@ const authRoutes = async (req, res, next) => {
 
       next()
     }).catch(err => {
-      //console.log('Error de clave pública. No se puede verificar la clave pública')
       res.redirect('/')
     })
   } catch (error) {
-    //console.log('Error de clave pública. No se puede crear la clave pública')
     res.redirect('/')
   }
 }

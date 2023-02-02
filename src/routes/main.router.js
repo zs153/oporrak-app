@@ -1,10 +1,10 @@
 import express from "express";
-import { logout, mainPage } from "../controllers/main.controller";
+import { logoutPage, mainPage } from "../controllers/main.controller";
 
 const mainRouter = express.Router();
 
 // acciones
 mainRouter.get("/", mainPage);
-mainRouter.get("/logout", logout)
+mainRouter.get("/logout", logoutPage)
 
 export default mainRouter;

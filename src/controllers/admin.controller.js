@@ -51,12 +51,13 @@ export const mainPage = async (req, res) => {
       }
       data.push(itm)
     })
-    
+
     const datos = {
       estados: data,
-      hayMatricula: matriculas.data ? false : true,
+      hayMatricula: matriculas.data.length > 0 ? true : false,
     }
 
+    console.log(datos)
     res.render('admin', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
