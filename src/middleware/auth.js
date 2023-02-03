@@ -2,7 +2,7 @@ import axios from 'axios'
 import { createPublicKey, createSecretKey } from 'crypto'
 import { V4, V3 } from 'paseto'
 import { tiposRol } from '../public/js/enumeraciones'
-import { publicKey, puertoAPI, secreto, serverAPI } from '../config/settings'
+import { publicKey, puertoAPI, puertoWEB, secreto, serverAPI, serverWEB, serverAUTH, puertoAUTH } from '../config/settings'
 
 const authRoutes = async (req, res, next) => {
   let tokenHeader = req.cookies.auth
@@ -55,11 +55,12 @@ const authRoutes = async (req, res, next) => {
         }
 
         res.cookie('auth', localToken, options)
-        res.cookie('verPan', 1, { path: '/admin' })
+        res.cookie('/verPan', 1, { path: '/admin' })
 
         tokenHeader = localToken
+        return res.render('admin/clean', { serverWEB, puertoWEB })
       }).catch(err => {
-        res.redirect('/')
+        return res.render('main', { server: serverAUTH, puerto: puertoAUTH })
       })
     }
 
@@ -78,10 +79,10 @@ const authRoutes = async (req, res, next) => {
 
       next()
     }).catch(err => {
-      res.redirect('/')
+      return res.render('main', { server: serverAUTH, puerto: puertoAUTH })
     })
   } catch (error) {
-    res.redirect('/')
+    return res.render('main', { server: serverAUTH, puerto: puertoAUTH })
   }
 }
 
