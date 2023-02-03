@@ -314,9 +314,11 @@
       modal.style.display = 'none';
     }
 
-    document.getElementById('checkShow').addEventListener('click', (itm) => {
+    document.getElementById('checkShow').addEventListener('change', (itm) => {
       if (itm.target.checked) {
         document.cookie = "verPan=0;path=/admin"
+      } else {
+        document.cookie = "verPan=1;path=/admin"
       }
     })
 
@@ -324,7 +326,7 @@
     const [name, ...rest] = document.cookie.split('=');
 
     if (name === '') {
-      document.cookie = "verPan=1"
+      document.cookie = "verPan=1;path=/admin"
     }
     const verPanel = rest.join('=').trim() === '1' && hayMatricula ? true : false;
 

@@ -23,9 +23,9 @@ const authRoutes = async (req, res, next) => {
         audience: 'urn:client:claim',
         issuer: 'http://localhost:4000',
         clockTolerance: '1 min',
-      }).then(async r => {
+      }).then(async ret => {
         const usuario = {
-          USERID: r.userid,
+          USERID: ret.userid,
         }
 
         const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
@@ -54,13 +54,14 @@ const authRoutes = async (req, res, next) => {
           httpOnly: true,
         }
 
-        res.cookie('auth', localToken, options)
-        res.cookie('/verPan', 1, { path: '/admin' })
-
         tokenHeader = localToken
+
+        res.cookie('auth', localToken, options)
+        res.cookie('verPan', 1, { path: '/admin' })
+
         return res.render('admin/clean', { serverWEB, puertoWEB })
       }).catch(err => {
-        return res.render('main', { server: serverAUTH, puerto: puertoAUTH })
+        return res.redirect('/')
       })
     }
 
@@ -79,10 +80,10 @@ const authRoutes = async (req, res, next) => {
 
       next()
     }).catch(err => {
-      return res.render('main', { server: serverAUTH, puerto: puertoAUTH })
+      return res.redirect('/')
     })
   } catch (error) {
-    return res.render('main', { server: serverAUTH, puerto: puertoAUTH })
+    return res.redirect('/')
   }
 }
 
