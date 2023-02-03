@@ -57,7 +57,6 @@ export const mainPage = async (req, res) => {
       hayMatricula: matriculas.data.length > 0 ? true : false,
     }
 
-    console.log(datos)
     res.render('admin', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
