@@ -4,7 +4,6 @@ import { simpleExecute } from "../services/database.js";
 const baseQuery = `SELECT 
     idusua,
     nomusu,
-    rolusu,
     userid,
     emausu,
     perusu
