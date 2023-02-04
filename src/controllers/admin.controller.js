@@ -1,6 +1,5 @@
 import axios from 'axios'
-import bcrypt from 'bcrypt'
-import { puertoAPI, serverAPI } from '../config/settings'
+import { puertoAPI, serverAPI, serverWEB, puertoWEB, serverAUTH, puertoAUTH } from '../config/settings'
 import {
   arrTiposRol,
   arrTiposPerfil,
@@ -66,6 +65,15 @@ export const mainPage = async (req, res) => {
     })
   }
 }
+export const cleanPage = async (req, res) => {
+  const user = req.user
+  const datos = {
+    serverWEB,
+    puertoWEB,
+  }
+
+  res.render('admin/clean', { user, datos })
+}
 export const perfilPage = async (req, res) => {
   const user = req.user
   const usuario = {
@@ -94,28 +102,19 @@ export const perfilPage = async (req, res) => {
   }
 }
 export const changePassword = async (req, res) => {
-  const user = req.user
-  const salt = await bcrypt.genSalt(10)
-  const passHash = await bcrypt.hash(req.body.pwdusu, salt)
-  const usuario = {
-    IDUSUA: req.body.idusua,
-    PWDUSU: passHash,
-  }
-  const movimiento = {
-    USUMOV: user.id,
-    TIPMOV: tiposMovimiento.cambioPassword,
-  }
+  const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
+  const options = {
+    path: "/",
+    sameSite: true,
+    maxAge: 1,
+    httpOnly: true,
+  };
 
-  try {
-    await axios.post(`http://${serverAPI}:8200/api/usuarios/cambio`, {
-      usuario,
-      movimiento,
-    })
+  res.clearCookie("x-access_token");
+  res.cookie("auth", undefined, options);
+  res.cookie("noVer", undefined, options);
 
-    res.redirect('/')
-  } catch (error) {
-    res.redirect('/admin')
-  }
+  res.redirect(`http://${serverAUTH}:${puertoAUTH}/log/change/?valid=${strUrl}`)
 }
 export const updatePerfil = async (req, res) => {
   const user = req.user
