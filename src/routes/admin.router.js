@@ -14,6 +14,7 @@ const adminRouter = express.Router()
 adminRouter.get('/', authRoutes, mainPage)
 adminRouter.get('/perfil/:userid', authRoutes, perfilPage)
 adminRouter.get('/clean', authRoutes, cleanPage)
+
 // procedures
 adminRouter.post('/cambio', authRoutes, changePassword)
 adminRouter.post('/perfil', authRoutes, updatePerfil)
