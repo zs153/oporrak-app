@@ -116,6 +116,36 @@ export const changePassword = async (req, res) => {
 
   res.redirect(`http://${serverAUTH}:${puertoAUTH}/log/change/?valid=${strUrl}`)
 }
+export const newRecurso = async (req, res) => {
+  const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
+  const options = {
+    path: "/",
+    sameSite: true,
+    maxAge: 1,
+    httpOnly: true,
+  };
+
+  res.clearCookie("x-access_token");
+  res.cookie("auth", undefined, options);
+  res.cookie("noVer", undefined, options);
+
+  res.redirect(`http://${serverAUTH}:${puertoAUTH}/admin/new/?valid=${strUrl}`)
+}
+export const delRecurso = async (req, res) => {
+  const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
+  const options = {
+    path: "/",
+    sameSite: true,
+    maxAge: 1,
+    httpOnly: true,
+  };
+
+  res.clearCookie("x-access_token");
+  res.cookie("auth", undefined, options);
+  res.cookie("noVer", undefined, options);
+
+  res.redirect(`http://${serverAUTH}:${puertoAUTH}/admin/del/?valid=${strUrl}`)
+}
 export const updatePerfil = async (req, res) => {
   const user = req.user
   const usuario = {

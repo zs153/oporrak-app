@@ -6,6 +6,8 @@ import {
   changePassword,
   updatePerfil,
   cleanPage,
+  delRecurso,
+  newRecurso,
 } from '../controllers/admin.controller'
 
 const adminRouter = express.Router()
@@ -14,6 +16,8 @@ const adminRouter = express.Router()
 adminRouter.get('/', authRoutes, mainPage)
 adminRouter.get('/perfil/:userid', authRoutes, perfilPage)
 adminRouter.get('/clean', authRoutes, cleanPage)
+adminRouter.get('/new', authRoutes, newRecurso)
+adminRouter.get('/del', authRoutes, delRecurso)
 
 // procedures
 adminRouter.post('/cambio', authRoutes, changePassword)
