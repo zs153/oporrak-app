@@ -13,24 +13,27 @@ const authRoutes = async (req, res, next) => {
     if (typeof tokenHeader === 'undefined') {
       tokenHeader = ''
       const token = req.query.valid === 'undefined' ? '' : req.query.valid
+
       const key = createPublicKey({
         'key': publicKey,
         'format': 'pem',
         'type': 'spki',
+        'passphrase': secreto
       })
 
+      console.log(token,key)
       await V4.verify(token, key, {
         audience: 'urn:client:claim',
         issuer: 'http://localhost:4000',
         clockTolerance: '1 min',
       }).then(async ret => {
+        console.log(ret)
         const usuario = {
           USERID: ret.userid,
         }
         const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
           usuario,
         })
-
         const payload = {
           id: result.data.IDUSUA,
           userid: result.data.USERID,
