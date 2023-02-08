@@ -11,12 +11,16 @@ const insertFromRec = (req) => {
     telusu: req.body.usuario.TELUSU,
     stausu: req.body.usuario.STAUSU,
   }
+  const recurso = {
+    pwdusu: req.body.recurso.PWDUSU,
+    seed: req.body.recurso.SEED,
+  }
   const movimiento = {
     usumov: req.body.movimiento.USUMOV,
     tipmov: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(usuario, movimiento)
+  return Object.assign(usuario, recurso, movimiento)
 }
 const updateFromRec = (req) => {
   const usuario = {
@@ -24,7 +28,6 @@ const updateFromRec = (req) => {
     nomusu: req.body.usuario.NOMUSU,
     ofiusu: req.body.usuario.OFIUSU,
     rolusu: req.body.usuario.ROLUSU,
-    userid: req.body.usuario.USERID,
     emausu: req.body.usuario.EMAUSU,
     perusu: req.body.usuario.PERUSU,
     telusu: req.body.usuario.TELUSU,

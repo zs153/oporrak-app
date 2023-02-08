@@ -4,14 +4,19 @@ const activarFromRec = (req) => {
   const usuario = {
     idusua: req.body.usuario.IDUSUA,
     ofiusu: req.body.usuario.OFIUSU,
+    rolusu: req.body.usuario.ROLUSU,
     stausu: req.body.usuario.STAUSU,
+  }
+  const recurso = {
+    pwdusu: req.body.recurso.PWDUSU,
+    seed: req.body.recurso.SEED,
   }
   const movimiento = {
     usumov: req.body.movimiento.USUMOV,
     tipmov: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(usuario, movimiento)
+  return Object.assign(usuario, recurso, movimiento)
 }
 
 export const historico = async (req, res) => {

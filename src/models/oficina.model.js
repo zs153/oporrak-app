@@ -2,18 +2,16 @@ import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const baseQuery = `SELECT 
-    idofic,
-    desofi,
-    codofi
-  FROM oficinas
+  oo.*
+FROM oficinas oo
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTOFICINA(
-    :desofi, 
-    :codofi,
-    :usumov,
-    :tipmov,
-    :idofic
-  ); END;
+  :desofi, 
+  :codofi,
+  :usumov,
+  :tipmov,
+  :idofic
+); END;
 `
 const updateSql = `BEGIN OPORRAK_PKG.UPDATEOFICINA(
   :idofic,
@@ -36,11 +34,11 @@ export const find = async (context) => {
 
   if (context.IDOFIC) {
     binds.idofic = context.IDOFIC
-    query += `WHERE idofic = :idofic`
+    query += `WHERE oo.idofic = :idofic`
   }
   if (context.CODOFI) {
     binds.codofi = context.CODOFI
-    query += `WHERE codofi = :codofi`
+    query += `WHERE oo.codofi = :codofi`
   }
 
   const result = await simpleExecute(query, binds)

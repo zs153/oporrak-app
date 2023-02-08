@@ -1,4 +1,3 @@
-import oracledb from "oracledb";
 import { simpleExecute } from "../services/database.js";
 
 const baseQuery = `SELECT 
@@ -12,7 +11,10 @@ const baseQuery = `SELECT
 const activarSql = `BEGIN OPORRAK_PKG.ACTIVARHISTORICO(
     :idusua,
     :ofiusu,
+    :rolusu,
     :stausu,
+    :pwdusu,
+    :seed,
     :usumov,
     :tipmov
   ); END;

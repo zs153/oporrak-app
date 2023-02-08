@@ -16,6 +16,8 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTUSUARIO(
     :perusu,
     :telusu,
     :stausu,
+    :pwdusu,
+    :seed,
     :usumov,
     :tipmov,
     :idusua
@@ -26,7 +28,6 @@ const updateSql = `BEGIN OPORRAK_PKG.UPDATEUSUARIO(
     :nomusu, 
     :ofiusu, 
     :rolusu, 
-    :userid, 
     :emausu, 
     :perusu, 
     :telusu, 
@@ -38,7 +39,7 @@ const updateSql = `BEGIN OPORRAK_PKG.UPDATEUSUARIO(
 const removeSql = `BEGIN OPORRAK_PKG.DELETEUSUARIO(
   :idusua,
   :usumov,
-  :tipmov 
+  :tipmov
 ); END;
 `;
 const cambioSql = `BEGIN OPORRAK_PKG.CHANGEPASSWORD(
