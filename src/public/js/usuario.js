@@ -83,13 +83,13 @@ const buildTable = (state) => {
     let cell = document.createElement('td')
     cell.classList.add("w-4")
     if (element.STAUSU === estadosUsuario.activo) {
-      cell.innerHTML = `<div class="align-items-center py-1">
+      cell.innerHTML = `<div class="align-items-center">
         <span class="avatar avatar-rounded bg-green-lt">
           <h6>${element.USERID.slice(0, 5)}</h6>
         </span>
       </div>`
     } else {
-      cell.innerHTML = `<div class="align-items-center py-1">
+      cell.innerHTML = `<div class="align-items-center">
         <span class="avatar avatar-rounded bg-red-lt">
           <h6>${element.USERID.slice(0, 5)}</h6>
         </span>
@@ -99,7 +99,7 @@ const buildTable = (state) => {
 
     // col2
     cell = document.createElement('td')
-    cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+    cell.innerHTML = `<div class="d-flex align-items-center">
         <div class="flex-fill">
           <div class="font-weight-medium">${element.NOMUSU}</div>
         </div>
@@ -111,7 +111,7 @@ const buildTable = (state) => {
 
     // col3
     cell = document.createElement('td')
-    cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+    cell.innerHTML = `<div class="d-flex align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${element.DESOFI}</div>
       </div>

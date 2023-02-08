@@ -1,17 +1,21 @@
 import axios from 'axios'
-import { serverAPI } from '../config/settings'
+import { puertoAPI, serverAPI } from '../config/settings'
 import { tiposRol, tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`)
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
+      oficina
+    })
     const datos = {
-      oficinas: oficinas.data,
+      oficinas: result.data,
       tiposRol,
       tiposMovimiento,
       serverAPI,
+      puertoAPI,
     }
 
     res.render('admin/festivos', { user, datos })

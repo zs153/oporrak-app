@@ -1,5 +1,5 @@
 import axios from 'axios'
-import bcrypt from 'bcrypt'
+import { scrypt } from 'crypto'
 import {
   arrTiposRol,
   arrTiposPerfil,
@@ -8,14 +8,14 @@ import {
   tiposMovimiento,
   tiposRol,
 } from '../public/js/enumeraciones'
-import { serverAPI } from '../config/settings'
+import { serverAPI, puertoAPI, secreto } from '../config/settings'
 
 export const mainPage = async (req, res) => {
   const user = req.user
   const usuario = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/usuarios`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       usuario,
     })
     const datos = {
@@ -38,7 +38,7 @@ export const addPage = async (req, res) => {
   const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
     const datos = {
@@ -66,10 +66,10 @@ export const editPage = async (req, res) => {
   }
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    const result = await axios.post(`http://${serverAPI}:8200/api/usuario`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       usuario,
     })
     const datos = {
@@ -91,32 +91,39 @@ export const editPage = async (req, res) => {
 }
 export const insert = async (req, res) => {
   const user = req.user
-  const randomString = Math.random().toString(36).substring(2, 10);
-  const salt = await bcrypt.genSalt(10);
-  const passHash = await bcrypt.hash(randomString, salt);
-  const usuario = {
-    NOMUSU: req.body.nomusu.toUpperCase(),
-    OFIUSU: req.body.ofiusu,
-    ROLUSU: req.body.rolusu,
-    USERID: req.body.userid.toLowerCase(),
-    EMAUSU: req.body.emausu,
-    PERUSU: req.body.perusu,
-    TELUSU: req.body.telusu,
-    PWDUSU: passHash,
-    STAUSU: req.body.stausu,
-  }
-  const movimiento = {
-    USUMOV: user.id,
-    TIPMOV: tiposMovimiento.crearUsuario,
-  }
+  const seed = Math.random().toString(36).substring(2, 10);
 
   try {
-    await axios.post(`http://${serverAPI}:8200/api/usuarios/insert`, {
-      usuario,
-      movimiento,
-    })
+    await hash(seed).then(async (pass) => {
+      const usuario = {
+        NOMUSU: req.body.nomusu.toUpperCase(),
+        OFIUSU: req.body.ofiusu,
+        ROLUSU: req.body.rolusu,
+        USERID: req.body.userid.toLowerCase(),
+        EMAUSU: req.body.emausu,
+        PERUSU: req.body.perusu,
+        TELUSU: req.body.telusu,
+        STAUSU: req.body.stausu,
+      }
+      const recurso = {
+        PWDUSU: pass,
+        SEED: seed,
+      }
+      const movimiento = {
+        USUMOV: user.id,
+        TIPMOV: tiposMovimiento.crearUsuario,
+      }
 
-    res.redirect('/admin/usuarios')
+      await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/insert`, {
+        usuario,
+        recurso,
+        movimiento,
+      })
+
+      res.redirect('/admin/usuarios')
+    }).catch(err => {
+      throw err
+    })
   } catch (error) {
     let msg = 'No se ha podido crear el nuevo usuario.'
 
@@ -132,7 +139,6 @@ export const update = async (req, res) => {
     NOMUSU: req.body.nomusu.toUpperCase(),
     OFIUSU: req.body.ofiusu,
     ROLUSU: req.body.rolusu,
-    USERID: req.body.userid.toLowerCase(),
     EMAUSU: req.body.emausu,
     PERUSU: req.body.perusu,
     TELUSU: req.body.telusu,
@@ -144,7 +150,7 @@ export const update = async (req, res) => {
   }
 
   try {
-    await axios.post(`http://${serverAPI}:8200/api/usuarios/update`, {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/update`, {
       usuario,
       movimiento,
     })
@@ -170,7 +176,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post(`http://${serverAPI}:8200/api/usuarios/delete`, {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/delete`, {
       usuario,
       movimiento,
     })
@@ -183,4 +189,14 @@ export const remove = async (req, res) => {
       alerts: [{ msg }],
     })
   }
+}
+
+// helpers
+const hash = async (password) => {
+  return new Promise((resolve, reject) => {
+    scrypt(password, secreto, 64, (err, derivedKey) => {
+      if (err) reject(err);
+      resolve(derivedKey.toString('base64'))
+    });
+  })
 }

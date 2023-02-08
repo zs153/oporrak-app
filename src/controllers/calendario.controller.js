@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { serverAPI } from '../config/settings'
+import { serverAPI, puertoAPI } from '../config/settings'
 import { tiposEstado, tiposRol, tiposMovimiento, arrTiposEstado, arrTiposEstadoUsuario, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -10,10 +10,10 @@ export const mainPage = async (req, res) => {
   }
 
   try {
-    let oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+    let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    let usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`, {
+    let usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       usuario,
     })
 
@@ -37,6 +37,7 @@ export const mainPage = async (req, res) => {
       arrColoresEstado,
       tiposMovimiento,
       serverAPI,
+      puertoAPI,
     }
 
     res.render('admin/calendarios', { user, datos })
@@ -63,7 +64,7 @@ export const insert = async (req, res) => {
   }
 
   try {
-    await axios.post(`http://${serverAPI}:8200/api/calendarios/insert`, {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/calendarios/insert`, {
       calendario,
       movimiento,
     })
@@ -92,7 +93,7 @@ export const remove = async (req, res) => {
   }
 
   try {
-    await axios.post(`http://${serverAPI}:8200/api/calendarios/delete`, {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/calendarios/delete`, {
       calendario,
       movimiento,
     })

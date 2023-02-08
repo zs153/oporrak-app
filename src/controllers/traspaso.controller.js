@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { serverAPI } from "../config/settings";
+import { serverAPI, puertoAPI } from "../config/settings";
 import { tiposRol, tiposEstado, tiposMovimiento, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -8,10 +8,10 @@ export const mainPage = async (req, res) => {
   const usuario = {}
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    const usuarios = await axios.post(`http://${serverAPI}:8200/api/usuarios`, {
+    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       usuario,
     })
     const datos = {
@@ -22,6 +22,7 @@ export const mainPage = async (req, res) => {
       arrColoresEstado,
       tiposMovimiento,
       serverAPI,
+      puertoAPI,
     }
 
     res.render('admin/traspasos', { user, datos })

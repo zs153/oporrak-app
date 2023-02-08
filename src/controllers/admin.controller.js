@@ -81,7 +81,7 @@ export const perfilPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/usuario`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       usuario,
     })
 
@@ -116,36 +116,6 @@ export const changePassword = async (req, res) => {
 
   res.redirect(`http://${serverAUTH}:${puertoAUTH}/log/change/?valid=${strUrl}`)
 }
-export const newRecurso = async (req, res) => {
-  const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
-  const options = {
-    path: "/",
-    sameSite: true,
-    maxAge: 1,
-    httpOnly: true,
-  };
-
-  res.clearCookie("x-access_token");
-  res.cookie("auth", undefined, options);
-  res.cookie("noVer", undefined, options);
-
-  res.redirect(`http://${serverAUTH}:${puertoAUTH}/admin/new/?valid=${strUrl}`)
-}
-export const delRecurso = async (req, res) => {
-  const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
-  const options = {
-    path: "/",
-    sameSite: true,
-    maxAge: 1,
-    httpOnly: true,
-  };
-
-  res.clearCookie("x-access_token");
-  res.cookie("auth", undefined, options);
-  res.cookie("noVer", undefined, options);
-
-  res.redirect(`http://${serverAUTH}:${puertoAUTH}/admin/del/?valid=${strUrl}`)
-}
 export const updatePerfil = async (req, res) => {
   const user = req.user
   const usuario = {
@@ -160,7 +130,7 @@ export const updatePerfil = async (req, res) => {
   }
 
   try {
-    await axios.post(`http://${serverAPI}:8200/api/usuarios/perfil`, {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/perfil`, {
       usuario,
       movimiento,
     })

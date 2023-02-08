@@ -21,13 +21,11 @@ const authRoutes = async (req, res, next) => {
         'passphrase': secreto
       })
 
-      console.log(token,key)
       await V4.verify(token, key, {
         audience: 'urn:client:claim',
         issuer: 'http://localhost:4000',
         clockTolerance: '1 min',
       }).then(async ret => {
-        console.log(ret)
         const usuario = {
           USERID: ret.userid,
         }

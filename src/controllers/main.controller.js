@@ -1,4 +1,4 @@
-import { puertoAUTH, puertoWEB, serverAUTH, serverWEB } from "../config/settings";
+import { puertoAUTH, serverAUTH, puertoWEB, serverWEB } from "../config/settings";
 
 export const mainPage = async (req, res) => {
   const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);

@@ -13,6 +13,7 @@
   <style>
     .calendar-header {
       border: none !important;
+      margin-bottom: 0 !important
     }
   </style>
 </head>
@@ -83,7 +84,7 @@
 
       return new Promise(function(resolve, reject) {
         xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
+          if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
@@ -94,7 +95,7 @@
           }
         }
 
-        xhr.open('POST', `http://${serverAPI}:8200/api/festivos/insert`, true);
+        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/festivos/insert`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -104,7 +105,7 @@
 
       return new Promise(function(resolve, reject) {
         xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
+          if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
@@ -113,7 +114,7 @@
           }
         }
 
-        xhr.open('POST', `http://${serverAPI}:8200/api/festivos/delete`, true);
+        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/festivos/delete`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify(evento))
       })
@@ -123,7 +124,7 @@
 
       return new Promise(function(resolve, reject) {
         xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
+          if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
               reject("Error, status code = " + xhr.status)
             } else {
@@ -132,7 +133,7 @@
           }
         }
 
-        xhr.open('POST', `http://${serverAPI}:8200/api/festivos/locales`, true);
+        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/festivos/locales`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
         xhr.send(JSON.stringify(prms))
       })
@@ -164,7 +165,8 @@
   </script>
   <script>
     const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
-    
+    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
+
     let estados = null
     let calendario = null
     let currentYear = new Date().getFullYear()    

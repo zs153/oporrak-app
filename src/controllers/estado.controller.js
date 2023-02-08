@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { serverAPI } from '../config/settings'
+import { serverAPI, puertoAPI } from '../config/settings'
 import { tiposRol, tiposEstado, arrTiposPerfil } from '../public/js/enumeraciones'
 
 // pages
@@ -13,7 +13,7 @@ export const mainPage = async (req, res) => {
   const oficina = {}
 
   try {
-    let oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+    let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
 
@@ -60,15 +60,15 @@ export const estadosPage = async (req, res) => {
   const diasPeriodo = Math.ceil(Date.parse(periodo.hasta) - Date.parse(periodo.desde)) / (1000 * 60 * 60 * 24) + 1
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:8200/api/oficinas`, {
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    const festivos = await axios.post(`http://${serverAPI}:8200/api/festivos/oficinas`, {
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       desde: periodo.desde,
       hasta: periodo.hasta,
       ofifes: estado.OFIEST
     })
-    const estados = await axios.post(`http://${serverAPI}:8200/api/estados/oficinas/perfiles`, {
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/oficinas/perfiles`, {
       estado,
     })
 

@@ -28,12 +28,12 @@
                         Administración
                       </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body py-1">
                       <div class="row g-3">
                         <% datos.estados.map(itm => { %>
                           <% if (itm.PERROL === 1) { %>
                             <div class="col-6">
-                              <div class="row align-items-center">
+                              <div class="row align-items-center p-1">
                                 <% if(itm.TIPEST === 1) {%>
                                 <span class="avatar avatar-rounded bg-green-lt">
                                   <h6>
@@ -85,12 +85,12 @@
                         Responsables
                       </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body py-1">
                       <div class="row g-3">
                         <% datos.estados.map(itm=> { %>
                         <% if (itm.PERROL === 2) { %>
                         <div class="col-6">
-                          <div class="row align-items-center">
+                          <div class="row align-items-center p-1">
                             <% if(itm.TIPEST === 1) {%>
                               <span class="avatar avatar-rounded bg-green-lt">
                                 <h6>
@@ -142,12 +142,12 @@
                         Liquidadores
                       </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body py-1">
                       <div class="row g-3">
                         <% datos.estados.map(itm=> { %>
                         <% if (itm.PERROL === 8) { %>
                         <div class="col-6">
-                          <div class="row align-items-center">
+                          <div class="row align-items-center p-1">
                             <% if(itm.TIPEST === 1) {%>
                               <span class="avatar avatar-rounded bg-green-lt">
                                 <h6>
@@ -203,7 +203,7 @@
                         Informadores
                       </div>
                     </div>
-                    <div class="list-group list-group-flush overflow-auto" style="max-height: 62.4rem">
+                    <div class="list-group list-group-flush overflow-auto" style="max-height: 67.4rem">
                       <% oficinaActual = '' %>
                       <% datos.estados.map(itm => { %>
                       <% if (itm.PERROL === 3) { %>
@@ -213,7 +213,7 @@
                         <% oficinaActual = itm.DESOFI %>
                       </div>
                       <% } %>
-                      <div class="list-group-item">
+                      <div class="list-group-item py-1">
                         <div class="row">
                           <% if(itm.TIPEST === 1) {%>
                           <span class="avatar avatar-rounded bg-green-lt">

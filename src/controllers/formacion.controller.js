@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { serverAPI } from "../config/settings";
+import { serverAPI, puertoAPI } from "../config/settings";
 import { estadosMatricula, tiposMovimiento } from '../public/js/enumeraciones'
 
 export const matriculasPage = async (req, res) => {
@@ -10,7 +10,7 @@ export const matriculasPage = async (req, res) => {
   }
 
   try {
-    const retMatriculas = await axios.post(`http://${serverAPI}:8200/api/formacion/matriculas`, {
+    const retMatriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
       matricula
     })
     const datos = {
@@ -33,7 +33,7 @@ export const cursosPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:8200/api/formacion/cursos`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/cursos`, {
       usuario,
     })
 
@@ -68,7 +68,7 @@ export const insertUsuarioMatricula = async (req, res) => {
   }
 
   try {
-    await axios.post(`http://${serverAPI}:8200/api/cursos/matriculas/usuarios/insert`, {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/usuarios/insert`, {
       matricula,
       usuarios,
       movimiento,

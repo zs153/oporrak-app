@@ -103,11 +103,11 @@
     <script src="/js/ayuda.min.js"></script>
     <script src="/js/oficina.js"></script>
     <script>
-      const orgList = <%- datos.oficinas %>
+      const orgList = <%- JSON.stringify(datos.oficinas) %>
       let state = {
         'querySet': orgList,
         'page': 1,
-        'rows': 9,
+        'rows': 10,
       }
 
       buildTable(state)

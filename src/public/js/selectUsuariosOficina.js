@@ -87,7 +87,7 @@ const buildTable = (state) => {
 
     // col2
     cell = document.createElement('td')
-    cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+    cell.innerHTML = `<div class="d-flex align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${element.NOMUSU}</div>
       </div>

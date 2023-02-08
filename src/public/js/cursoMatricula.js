@@ -82,7 +82,7 @@ const buildTable = (state) => {
     const row = document.createElement('tr')
     let cell = document.createElement('td')
     cell.classList.add("w-4")
-    cell.innerHTML = `<div class="align-items-center py-1">
+    cell.innerHTML = `<div class="align-items-center">
       <span class="avatar avatar-rounded bg-green-lt">
         <h6>${element.IDCURS}</h6>
       </span>
@@ -90,7 +90,7 @@ const buildTable = (state) => {
     row.appendChild(cell)
     // col2
     cell = document.createElement('td')
-    cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+    cell.innerHTML = `<div class="d-flex align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${element.DESCUR}</div>
       </div>
@@ -99,7 +99,7 @@ const buildTable = (state) => {
     // col3
     cell = document.createElement('td')
     cell.classList.add("w-8")
-    cell.innerHTML = `<div class="d-flex py-1 align-items-center">
+    cell.innerHTML = `<div class="d-flex align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${estados[element.STACUR].des} </div>
       </div>
