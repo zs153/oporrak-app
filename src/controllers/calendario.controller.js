@@ -1,13 +1,11 @@
 import axios from 'axios'
 import { serverAPI, puertoAPI } from '../config/settings'
-import { tiposEstado, tiposRol, tiposMovimiento, arrTiposEstado, arrTiposEstadoUsuario, arrColoresEstado } from '../public/js/enumeraciones'
+import { tiposRol, tiposMovimiento, tiposEstado, arrTiposEstadoUsuario, arrTiposEstado, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = {
-  }
-  const usuario = {
-  }
+  const oficina = user.rol === tiposRol.admin ? {}:{IDOFIC: user.oficina}
+  const usuario = user.rol === tiposRol.admin ? {} : tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: user.oficina }
 
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
@@ -17,27 +15,9 @@ export const mainPage = async (req, res) => {
       usuario,
     })
 
-    if (req.user.rol === tiposRol.admin) {
-      oficinas = oficinas.data
-      usuarios = usuarios.data
-    } else if (req.user.rol === tiposRol.responsable) {
-      oficinas = oficinas.data.filter(itm => itm.IDOFIC === req.user.oficina)
-      usuarios = usuarios.data.filter(itm => itm.OFIUSU === req.user.oficina)
-    } else {
-      oficinas = oficinas.data.filter(itm => itm.IDOFIC === req.user.oficina)
-      usuarios = usuarios.data.filter(itm => itm.IDUSUA === req.user.id)
-    }
-
     const datos = {
-      oficinas,
-      usuarios,
-      tiposEstado,
-      tiposRol,
-      arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
-      arrColoresEstado,
-      tiposMovimiento,
-      serverAPI,
-      puertoAPI,
+      oficinas: oficinas.data,
+      usuarios: usuarios.data,
     }
 
     res.render('admin/calendarios', { user, datos })
@@ -51,6 +31,49 @@ export const mainPage = async (req, res) => {
 }
 
 // proc
+export const calendario = async (req, res) => {
+  const user = req.user
+  let currentYear = new Date().getFullYear()
+  const estado = {
+    idofic: req.body.idofic,
+    usuest: req.body.idusua,
+    tipest: 0,
+    desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+    hasta: dateISOToUTCString(`${currentYear +1}-12-31T00:00:00`),
+  }
+  const usuario = {
+    IDUSUA: req.body.idusua,
+  }
+
+  try {
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
+      estado,
+    })
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+      usuario,
+    })
+
+    const datos = {
+      estados: estados.data,
+      usuario: result.data,
+      tiposEstado,
+      tiposRol,
+      arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
+      arrColoresEstado,
+      tiposMovimiento,
+      serverAPI,
+      puertoAPI,
+    }
+
+    res.render('admin/calendarios/calendario', { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
 export const insert = async (req, res) => {
   const user = req.user
   const calendario = {
@@ -106,4 +129,12 @@ export const remove = async (req, res) => {
       alerts: [{ msg }],
     })
   }
+}
+
+
+// helpers
+const dateISOToUTCString = (dateISO) => {
+  const fecha = new Date(dateISO);
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
+  return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
 }

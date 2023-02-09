@@ -4,6 +4,7 @@ import {
   mainPage,
   insert,
   remove,
+  calendario,
 } from "../controllers/calendario.controller";
 
 const calendarioRouter = express.Router();
@@ -12,6 +13,7 @@ const calendarioRouter = express.Router();
 calendarioRouter.get("/calendarios", authRoutes, mainPage);
 
 // proc 
+calendarioRouter.post("/calendarios/calendario", authRoutes, calendario);
 calendarioRouter.post("/calendarios/insert", authRoutes, insert);
 calendarioRouter.post("/calendarios/delete", authRoutes, remove);
 
