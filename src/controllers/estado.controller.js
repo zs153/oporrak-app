@@ -100,7 +100,7 @@ export const estados = async (req, res) => {
   const context = req.body.estado
 
   try {
-    const result = await DAL.findAll(context)
+    const result = await DAL.find(context)
 
     if (rows !== null) {
       res.status(200).json(result)
@@ -181,8 +181,7 @@ export const borrarTraspaso = async (req, res) => {
 
 // usuarios
 export const estadosUsuario = async (req, res) => {
-  //const context = req.body.estado
-  const context = req.body
+  const context = req.body.estado
 
   try {
     const result = await DAL.estadosUsuario(context)

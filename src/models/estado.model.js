@@ -175,12 +175,6 @@ export const find = async (context) => {
   const result = await simpleExecute(query, binds)
   return result.rows
 }
-export const findAll = async (context) => {
-  let query = baseQuery
-
-  const result = await simpleExecute(query, context)
-  return result.rows
-}
 export const insert = async (bind) => {
   bind.idesta = {
     dir: oracledb.BIND_OUT,
