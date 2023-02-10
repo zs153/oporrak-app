@@ -5,7 +5,7 @@ import { tiposRol, tiposMovimiento, tiposEstado, arrTiposEstadoUsuario, arrTipos
 export const mainPage = async (req, res) => {
   const user = req.user
   const oficina = user.rol === tiposRol.admin ? {}:{IDOFIC: user.oficina}
-  const usuario = user.rol === tiposRol.admin ? {} : tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: user.oficina }
+  const usuario = user.rol === tiposRol.admin ? {} : user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: user.oficina }
 
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {

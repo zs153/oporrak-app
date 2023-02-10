@@ -3943,6 +3943,15 @@ td:hover div.popup {
   z-index: 9999;
 }
 
+.subtitulo {
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  color: #656d77;
+  pointer-events: none;
+  font-size: 0.8em;
+}
+
 /* modal */
 .modal-content .btn-close {
   position: absolute;

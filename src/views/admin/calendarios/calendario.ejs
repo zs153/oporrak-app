@@ -14,6 +14,20 @@
       border: none !important;
       margin-bottom: 0 !important;
     }
+    .subtitulo {
+      margin: 0;
+      align-items: center;
+      justify-content: center;
+      color: #656d77;
+      pointer-events: none;
+      font-size: 0.8em;
+    }
+    .day {
+      border: 1px solid #e6e8e9 !important;
+    }
+    .new, .old {
+      border: none !important;
+    }
   </style>
 </head>
 
@@ -26,16 +40,22 @@
             <div class="container-xl">
               <div class="row">
                 <div class="col-12">
-                  <div class="card mt-1">
+                  <div class="card">
                     <form method="POST">
-                      <div class="card-header">
+                      <div class="card-header d-block">
                         <h3 class="card-title">Calendario</h3>
+                        <div>
+                          <p class="subtitulo">
+                            <span class="text-muted">
+                              <%- datos.usuario.NOMUSU %>
+                            </span>
+                          </p>
+                        </div>
                       </div>
-                      <div class="card-body">
+                      <div class="card-body" style="padding: 0.5rem;">
                         <div class="row">
                           <div class="col-2">
                             <div class="mb-1">
-                              <div class="form-label">Año</div>
                               <select class="form-select" id="cboyea" value="">
                                 <option value="<%- new Date().getFullYear() %>">
                                   <%- new Date().getFullYear() %>
@@ -46,10 +66,9 @@
                               </select>
                             </div>
                           </div>
-                          <div class="col-3">
+                          <div class="col-4">
                             <div class="mb-1">
                               <div class="input-control">
-                                <div class="form-label">Estado</div>
                                 <select class="form-select form-control" id="cboest" value="">
                                   <option value="0">SELECCIONE ESTADO</option>
                                   <% datos.arrTiposEstado.map(element=> { %>
@@ -60,6 +79,11 @@
                                 </select>
                                 <div class="invalid-feedback"></div>
                               </div>
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="d-flex" style="justify-content: flex-end;">
+                              <a href="/admin/calendarios" class="btn btn-link">Volver</a>
                             </div>
                           </div>
                         </div>
@@ -311,10 +335,6 @@
               } else if (evento.estado.TIPEST === <%- datos.tiposEstado.formacion.ID %>) {
                 document.getElementById('modal-forma').style.display = 'none'
               }
-
-              // TODO
-              // añadir evento a estados
-              // hacer con push
             }
           }
         }
@@ -334,10 +354,6 @@
               reject("Error, status code = " + xhr.status)
             } else {
               resolve(evento)
-
-              // quitar evento
-              // TODO
-              // hacer con splice o con filter
             }
           }
         }
@@ -561,6 +577,11 @@
           e.element.setAttribute('title', content)
         }
       },
+      customDayRenderer: function (e, date) {
+        if (date.getDay() === 0) {
+          e.style.color = '#FC0000'
+        }
+      },
     })
     calendario.setYear(currentYear)
     
@@ -684,10 +705,16 @@
 
           // borrar
           await deleteEvento(evento).then(ret => {
-            // actualiza dia calendario
             let dataSource = calendario.getDataSource()
+           
+            // estados
+            let pos = estados.map(e => e.IDESTA).indexOf(ret.estado.IDESTA);
+            estados.splice(pos,1)
 
-            dataSource = dataSource.filter(itm => itm.idesta !== ret.estado.IDESTA)
+            // datasource
+            pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
+            dataSource.splice(pos,1)
+
             calendario.setDataSource(dataSource, {
               preventRendering: false
             })
@@ -752,6 +779,7 @@
             HASHOR: evento.estado.HASHOR,
           })
           dataSource.push(estado)
+
           calendario.setDataSource(dataSource, {
             preventRendering: false
           })
