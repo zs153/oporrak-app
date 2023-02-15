@@ -37,7 +37,6 @@
                     <div class="row">
                       <div class="col-2">
                         <div class="mb-1">
-                          <div class="form-label">Año</div>
                           <select class="form-select" id="cboyea" value="">
                             <option value="<%- new Date().getFullYear() %>">
                               <%- new Date().getFullYear() %>
@@ -50,7 +49,6 @@
                       </div>
                       <div class="col-3">
                         <div class="mb-1">
-                          <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="ofiusu" value="">
                             <option value="0" selected>
                               FESTIVOS COMUNES
@@ -182,6 +180,11 @@
       minDate: new Date(params.desde),
       maxDate: new Date(params.hasta),
       language: "es",
+      customDayRenderer: function (e, date) {
+        if (date.getDay() === 0) {
+          e.style.color = '#FC0000'
+        }
+      },
     })
     calendario.setYear(currentYear)
 

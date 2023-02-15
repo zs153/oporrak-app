@@ -28,6 +28,10 @@
     .new, .old {
       border: none !important;
     }
+    .calendar table.month th.day-header {
+      font-size: 0.75rem;
+      color: #616876;
+    }
   </style>
 </head>
 
@@ -648,7 +652,8 @@
       }
 
       // bloquear si no existe destino
-      if (e.events.length === 0 && params.tipo === 0) {
+      if (e.events.length === 0 &&
+        params.tipo === 0) {
         validate(document.getElementById('cboest'), 'Estado requerido')
         return
       }
@@ -769,6 +774,7 @@
             color: params.color,
           }
 
+          dataSource.push(estado)
           estados.push({
             IDESTA: ret.idesta,
             STRFEC: evento.estado.FECEST,
@@ -778,7 +784,6 @@
             DESHOR: evento.estado.DESHOR,
             HASHOR: evento.estado.HASHOR,
           })
-          dataSource.push(estado)
 
           calendario.setDataSource(dataSource, {
             preventRendering: false

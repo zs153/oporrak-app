@@ -27,7 +27,7 @@
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-12">
+                      <div class="col-4">
                         <div class="mb-1">
                           <div class="form-label">Oficina</div>
                           <select class="form-select" id="cboofi" name="idofic" value="">
@@ -39,9 +39,7 @@
                           </select>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
+                      <div class="col-8">
                         <div class="mb-1">
                           <div class="form-label">Usuario</div>
                           <select class="form-select" id="cbousu" name="idusua" value="">
@@ -72,33 +70,51 @@
 
   <script src="/js/ayuda.min.js"></script>
   <script>
-    const usuariosOficina = (oficina) => {
-      const trimmedData = usuarios.filter(itm => itm.OFIUSU === oficina)
-      const lista = trimmedData
-      const cbo = document.getElementById('cbousu')
-      cbo.innerHTML = "";
-      lista.map(itm => {
-        const option = document.createElement('option')
-        option.value = itm.IDUSUA
-        option.text = itm.NOMUSU
-        if (itm.IDUSUA === <%- user.id %>) {
-          option.selected = true
-        }
-        cbo.appendChild(option)
-      })
-    }
-  </script>
-  <script>
     const oficinas = <%- JSON.stringify(datos.oficinas) %>
     const usuarios = <%- JSON.stringify(datos.usuarios) %>
+    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
+    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
+
+    async function getUsuariosOficina(prms) {
+      const xhr = new XMLHttpRequest();
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject("Error, status code = " + xhr.status)
+            } else {
+              resolve(JSON.parse(xhr.response))
+            }
+          }
+        }
+        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/usuarios`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+        xhr.send(JSON.stringify({usuario: prms}))
+      })
+    }
 
     // eventos form
     document.getElementById('cboofi').addEventListener('change', function() {
       const oficina = parseInt(this.value)
+      const usuario = {
+        OFIUSU: oficina
+      }
+      
+      getUsuariosOficina(usuario).then(lista => {
+        const cbo = document.getElementById('cbousu')
+        cbo.innerHTML = "";
 
-      usuariosOficina(oficina)
-    });
-    document.getElementById('cbousu').addEventListener('change', function() {
+        lista.map(itm => {
+          const option = document.createElement('option')
+
+          option.value = itm.IDUSUA
+          option.text = itm.NOMUSU
+          if (itm.IDUSUA === <%- user.id %>) {
+            option.selected = true
+          }
+          cbo.appendChild(option)
+        })
+      })
     });
   </script>
 </body>

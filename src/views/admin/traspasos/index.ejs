@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
@@ -9,159 +9,76 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
-  <style>
-    .calendar-header {
-      border: none !important;
-      margin-bottom: 0 !important
-    }
-  </style>
 </head>
 
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'TRASPASO' }) %>
-    <div class="page-wrapper">
-      <div class="page-body">
-        <div class="container-xl">
-          <div class="row">
-            <div class="col-12">
-              <div class="card mt-1">
-                <form method="POST">
-                  <input type="hidden" name="idusua" id="idusua" value="">
-                  <input type="hidden" name="tipest" id="tipest" value="">
-                  <div class="card-header">
-                    <h3 class="card-title">Calendario traspasos</h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-2">
-                        <div class="mb-1">
-                          <div class="form-label">Año</div>
-                          <select class="form-select" id="cboyea" value="">
-                            <option value="<%- new Date().getFullYear() %>">
-                              <%- new Date().getFullYear() %>
-                            </option>
-                            <option value="<%- new Date().getFullYear() +1 %>">
-                              <%- new Date().getFullYear() +1 %>
-                            </option>
-                          </select>
-                        </div>
+      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+        <div class="page-wrapper">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card mt-1">
+                    <form action="/admin/traspasos/calendario" method="POST">
+                      <div class="card-header">
+                        <h3 class="card-title">Traspasos</h3>
                       </div>
-                      <div class="col-3">
-                        <div class="mb-1">
-                          <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="ofiest" value="">
-                            <% datos.oficinas.map(element=> { %>
-                            <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? "selected":"" %>>
-                              <%- element.DESOFI %>
-                            </option>
-                            <% }) %>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <div class="form-label">Usuario</div>
-                          <select class="form-select" id="cbousu" value="">
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-3">
-                        <div class="mb-1">
-                          <div class="input-control">
-                            <div class="form-label">Oficina destino</div>
-                            <select class="form-select form-control" id="cbodes" name="ofides" value="">
-                              <option value="0">SELECCIONE DESTINO</option>
-                              <% datos.oficinas.map(element=> { %>
-                              <option value="<%- element.IDOFIC %>">
-                                <%- element.DESOFI %>
-                              </option>
-                              <% }) %>
-                            </select>
-                            <div class="invalid-feedback"></div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-4">
+                            <div class="mb-1">
+                              <div class="form-label">Oficina</div>
+                              <select class="form-select" id="cboofi" name="idofic" value="">
+                                <% datos.oficinas.map(element=> { %>
+                                  <option value="<%- element.IDOFIC %>" <%- element.IDOFIC===user.oficina ? "selected"
+                                    :"" %>>
+                                    <%- element.DESOFI %>
+                                  </option>
+                                  <% }) %>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-8">
+                            <div class="mb-1">
+                              <div class="form-label">Usuario</div>
+                              <select class="form-select" id="cbousu" name="idusua" value="">
+                                <% datos.usuarios.map(element=> { %>
+                                  <option value="<%- element.IDUSUA %>" <%- element.IDUSUA===user.id ? "selected" :"" %>
+                                    >
+                                    <%- element.NOMUSU %>
+                                  </option>
+                                  <% }) %>
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div id="calendar" class="form-control"></div>
+                      <div class="card-footer text-end">
+                        <div class="d-flex">
+                          <button type="submit" class="btn btn-success ms-auto">Ver calendario traspasos</button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <%- include('../../partials/footer') %>
+        <%- include('../../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/js-year-calendar.js"></script>
-  <script src="/js/js-year-calendar.es.js"></script>
   <script>
-    async function insertEvento(evento) {
-      let xhr = new XMLHttpRequest()
+    const oficinas = <%- JSON.stringify(datos.oficinas) %>
+    const usuarios = <%- JSON.stringify(datos.usuarios) %>
+    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
+    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
 
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              const result = JSON.parse(xhr.response)
-
-              resolve(result)
-            }
-          }
-        }
-
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/estados/insert/traspaso`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      })
-    }
-    async function deleteEvento(evento) {
-      const xhr = new XMLHttpRequest()
-
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              resolve(evento)
-            }
-          }
-        }
-
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/estados/delete/traspaso`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      })
-    }
-    async function getEstadosWithPromise(prms) {
-      var xhr = new XMLHttpRequest();
-
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              resolve(JSON.parse(xhr.response))
-            }
-          }
-        }
-
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
-        xhr.send(JSON.stringify(prms))
-      })
-    }
-    async function getFestivosWithPromise(prms) {
-      var xhr = new XMLHttpRequest();
+    async function getUsuariosOficina(prms) {
+      const xhr = new XMLHttpRequest();
       return new Promise(function (resolve, reject) {
         xhr.onreadystatechange = function () {
           if (xhr.readyState == 4) {
@@ -172,285 +89,36 @@
             }
           }
         }
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, true);
+        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/usuarios`, true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
-        xhr.send(JSON.stringify(prms))
+        xhr.send(JSON.stringify({ usuario: prms }))
       })
     }
-    async function estadosUsuario() {
-      const prms = {
-        idofic: params.oficina,
-        usuest: params.usuario,
-        tipest: 0,
-        desde: params.desde,
-        hasta: params.hasta,
-      }
-      estados = await getEstadosWithPromise(prms)
-      getEstadosTipo(params.tipo)
-    }
-    async function festivosOficina() {
-      const prms = {
-        ofifes: params.destino,
-        desde: params.desde,
-        hasta: params.hasta,
-      }
-      festivos = await getFestivosWithPromise(prms)
-    }
-    const dateISOToUTCString = (dateISO) => {
-      const fecha = new Date(dateISO)
-      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
 
-      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
-    }
-    const arrayFilterOficinas = (oficina) => {
-      const trimmedData = usuarios.filter(itm => itm.OFIUSU === parseInt(oficina))
-      const myLista = trimmedData
-      const cbo = document.getElementById('cbousu')
-      cbo.innerHTML = "";
-
-      myLista.map(itm => {
-        const option = document.createElement('option')
-        option.value = itm.IDUSUA
-        option.text = itm.NOMUSU
-
-        if (itm.IDUSUA === <%- user.id %>) {
-          option.selected = true
-        }
-
-        cbo.appendChild(option)
-      })
-      params.usuario = document.getElementById('cbousu').value
-    }
-    const getEstadosTipo = (tipo) => {
-      const estadosTipo = tipo === 0 ? estados : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
-      let data = []
-
-      estadosTipo.map(itm => {
-        const estado = {
-          idesta: itm.IDESTA,
-          usuest: itm.USUEST,
-          tipest: itm.TIPEST,
-          id: itm.IDESTA,
-          startDate: new Date(itm.STRFEC),
-          endDate: new Date(itm.STRFEC),
-          rangoH: `(${itm.DESHOR} a ${itm.HASHOR})`,
-          color: colores[itm.TIPEST].COLOR,
-        }
-        data.push(estado)
-      })
-      calendario.setDataSource(data)
-    }
-    const setSuccess = (element) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = '';
-      inputControl.classList.add('is-valid');
-      element.classList.remove('is-invalid');
-    }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-
-      errorDisplay.innerText = message;
-      element.classList.add('is-invalid');
-      inputControl.classList.remove('is-valid');
-    }
-    const validate = (ele, msg) => {
-      if (ele.value === '0') {
-        setError(ele, msg)
-        setTimeout(function () {
-          setSuccess(ele)
-        }, 3000)
-        return false
-      }
-    }
-  </script>
-  <script>
-    const usuarios = <%- JSON.stringify(datos.usuarios) %>
-    const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
-    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
-    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
-
-    let estados = null
-    let festivos = null
-    let calendario = null
-    let currentYear = new Date().getFullYear()
-    let params = {
-      fecha: new Date().toISOString().slice(0, 10),
-      oficina: <%- user.oficina %>,
-      usuario: <%- user.id %>,
-      destino: 0,
-      tipo: <%- datos.tiposEstado.traspaso.ID %>,
-      color: '<%- datos.tiposEstado.traspaso.COLOR %>',
-      desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-      hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
-    }
-
-    calendario = new Calendar("#calendar", {
-      minDate: new Date(params.desde),
-      maxDate: new Date(params.hasta),
-      language: "es",
-      mouseOnDay: function(e) {
-        let content = '';
-
-        for (let i in e.events) {
-          content += colores[e.events[i].tipest].DES + ' ' + e.events[i].rangoH + '\n'
-        }
-
-        e.element.setAttribute('data-bs-trigger', 'hover')
-        e.element.setAttribute('data-bs-toggle', 'popover')
-        e.element.setAttribute('title', content)
-      },
-    })
-    calendario.setYear(currentYear)
-
-    // calendario
-    document.getElementById('cboyea').addEventListener('change', function() {
-      currentYear = parseInt(document.querySelector("#cboyea").value)
-
-      params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
-      params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
-
-      calendario.setMinDate(new Date(params.desde));
-      calendario.setMaxDate(new Date(params.hasta));
-      calendario.setYear(currentYear)
-
-      estadosUsuario()
-    });
-    document.getElementById('cboofi').addEventListener('change', function() {
-      params.oficina = parseInt(this.value)
-
-      arrayFilterOficinas(params.oficina)
-      estadosUsuario()
-    });
-    document.getElementById('cbodes').addEventListener('change', function() {
-      params.destino = parseInt(this.value)
-
-      festivosOficina()
-    });
-    document.getElementById('cbousu').addEventListener('change', function() {
-      document.getElementById('idusua').value = this.value
-      params.usuario = parseInt(this.value)
-
-      estadosUsuario()
-    });
-    document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
-      // bloquear festivos
-      if (e.element.classList.contains('domingo')) {
-        return
+    // eventos form
+    document.getElementById('cboofi').addEventListener('change', function () {
+      const oficina = parseInt(this.value)
+      const usuario = {
+        OFIUSU: oficina
       }
 
-      // bloquear si no existe destino
-      if (e.events.length === 0 &&
-        (params.destino === 0 || params.oficina === params.destino)) {
-          validate(document.getElementById('cbodes'), 'Destino requerido')
-          return
-      }
-      
-      params.fecha = dateISOToUTCString(e.date.toISOString())
+      getUsuariosOficina(usuario).then(lista => {
+        const cbo = document.getElementById('cbousu')
+        cbo.innerHTML = "";
 
-      if (e.events.length) {
-        if (e.events[0].id !== 0) {
-          const evento = {
-            estado: {
-              IDESTA: e.events[0].idesta,
-            },
-            traspaso: {
-              USUEST: params.usuario,
-              FECEST: params.fecha,
-              TIPEST: <%- datos.tiposEstado.traspasado.ID %>,
-            },
-            movimiento: {
-              USUMOV: <%- user.id %>,
-              TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
-            }
+        lista.map(itm => {
+          const option = document.createElement('option')
+
+          option.value = itm.IDUSUA
+          option.text = itm.NOMUSU
+          if (itm.IDUSUA === <%- user.id %>) {
+            option.selected = true
           }
-
-          // borrar
-          await deleteEvento(evento).then(ret => {
-            // actualiza dia calendario
-            let dataSource = calendario.getDataSource()
-
-            dataSource = dataSource.filter(itm => itm.idesta !== ret.estado.IDESTA)
-            calendario.setDataSource(dataSource, {
-              preventRendering: false
-            })
-
-            // actualizar dia
-            e.element.attributes.removeNamedItem("style")
-          })
-        }
-      } else {
-        // bloquear solapes
-        const result = estados.find(itm => itm.STRFEC === params.fecha)
-        const festivo = festivos.find(itm => itm.FECFES === params.fecha)
-
-        if (result || festivo) {
-          if (festivo) {
-            e.element.setAttribute('data-bs-trigger', 'hover')
-            e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Festivo en destino')
-            return
-          }
-          if (result.TIPEST !== params.tipo) {
-            e.element.setAttribute('data-bs-trigger', 'hover')
-            e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Solape de eventos')
-            return
-          }
-        }
-
-        // evento
-        const evento = {
-          estado: {
-            FECEST: params.fecha,
-            USUEST: params.usuario,
-            TIPEST: params.tipo,
-            OFIEST: params.oficina,
-            DESHOR: '+00 08:30:00',
-            HASHOR: '+00 14:00:00',
-          },
-          traspaso: {
-            TIPTRA: <%- datos.tiposEstado.traspasado.ID %>,
-            OFITRA: params.destino,
-          },
-          movimiento: {
-            USUMOV: <%- user.id %>,
-            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-          }
-        }
-
-        // insertar
-        await insertEvento(evento).then(ret => {
-          // actualiza dia calendario
-          let dataSource = calendario.getDataSource()
-          const estado = {
-            idesta: ret.idesta,
-            usuest: ret.usuest,
-            tipest: ret.tipest,
-            id: ret.idesta,
-            startDate: new Date(ret.fecest),
-            endDate: new Date(ret.fecest),
-            rangoH: `(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
-            color: params.color,
-          }
-          dataSource.push(estado)
-          calendario.setDataSource(dataSource, {
-            preventRendering: false
-          })
-
-          // actualizar dia
-          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+          cbo.appendChild(option)
         })
-      }
-
-    })
-
-    arrayFilterOficinas(params.oficina)
-    estadosUsuario()
+      })
+    });
   </script>
-
 </body>
 
 </html>
