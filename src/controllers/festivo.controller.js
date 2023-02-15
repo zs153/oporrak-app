@@ -5,14 +5,22 @@ import { tiposRol, tiposMovimiento } from '../public/js/enumeraciones'
 export const mainPage = async (req, res) => {
   const user = req.user
   const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
+  const currentYear = new Date().getFullYear()
+  const festivo = {
+    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+    HASTA: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
+  }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
+      festivo
+    })
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina
     })
     const datos = {
-      oficinas: result.data,
-      tiposRol,
+      festivos: festivos.data,
+      oficinas: oficinas.data,
       tiposMovimiento,
       serverAPI,
       puertoAPI,
@@ -26,4 +34,14 @@ export const mainPage = async (req, res) => {
       alerts: [{ msg }],
     })
   }
+}
+
+// helpers
+const dateISOToUTCString = (dateISO) => {
+  const fecha = new Date(dateISO)
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+  return new Date(fecha.getTime() - userTimezoneOffset)
+    .toISOString()
+    .slice(0, 10)
 }

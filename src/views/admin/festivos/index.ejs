@@ -1,35 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Calendario Festivos</title>
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/js-year-calendar.min.css" />
+    <style>
+      .calendar-header {
+        border: none !important;
+        margin-bottom: 0 !important;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Calendario Festivos</title>
-  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  <!-- styles -->
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel='stylesheet' href='/css/js-year-calendar.min.css'>
-  <style>
-    .calendar-header {
-      border: none !important;
-      margin-bottom: 0 !important
-    }
-  </style>
-</head>
-
-<body class="antialiased">
-  <div class="wrapper">
-    <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-    <div class="page-wrapper">
-      <div class="page-body">
-        <div class="container-xl">
-          <div class="row">
-            <div class="col-12">
-              <div class="card mt-1">
-                  <input type="hidden" name="idusua" id="idusua" value="">
-                  <input type="hidden" name="tipest" id="tipest" value="">
+  <body class="antialiased">
+    <div class="wrapper">
+      <%- include('../../partials/header') %> <%-
+      include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+      <div class="page-wrapper">
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <div class="col-12">
+                <div class="card mt-1">
+                  <input type="hidden" name="idusua" id="idusua" value="" />
+                  <input type="hidden" name="tipest" id="tipest" value="" />
                   <div class="card-header">
                     <h3 class="card-title">Calendario Festivos</h3>
                   </div>
@@ -49,10 +51,13 @@
                       </div>
                       <div class="col-3">
                         <div class="mb-1">
-                          <select class="form-select" id="cboofi" name="ofiusu" value="">
-                            <option value="0" selected>
-                              FESTIVOS COMUNES
-                            </option>
+                          <select
+                            class="form-select"
+                            id="cboofi"
+                            name="ofiusu"
+                            value=""
+                          >
+                            <option value="0" selected>FESTIVOS COMUNES</option>
                             <% datos.oficinas.map(element=> { %>
                             <option value="<%- element.IDOFIC %>">
                               <%- element.DESOFI %>
@@ -64,210 +69,206 @@
                     </div>
                     <div id="calendar" class="form-control"></div>
                   </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <%- include('../../partials/footer') %>
     </div>
-    <%- include('../../partials/footer') %>
-  </div>
 
-  <script src="/js/ayuda.min.js"></script>
-  <script src="/js/js-year-calendar.js"></script>
-  <script src="/js/js-year-calendar.es.js"></script>
-  <script>
-    async function insertEvento(evento) {
-      let xhr = new XMLHttpRequest()
+    <script src="/js/ayuda.min.js"></script>
+    <script src="/js/js-year-calendar.js"></script>
+    <script src="/js/js-year-calendar.es.js"></script>
+    <script>
+      async function insertEvento(evento) {
+        let xhr = new XMLHttpRequest()
 
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              const result = JSON.parse(xhr.response)
+        return new Promise(function (resolve, reject) {
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+              if (xhr.status !== 200) {
+                reject('Error, status code = ' + xhr.status)
+              } else {
+                const result = JSON.parse(xhr.response)
 
-              resolve(result)
+                resolve(result)
+              }
             }
           }
-        }
 
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/festivos/insert`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      })
-    }
-    async function deleteEvento(evento) {
-      const xhr = new XMLHttpRequest()
+          xhr.open(
+            'POST',
+            `http://${serverAPI}:${puertoAPI}/api/festivos/insert`,
+            true
+          )
+          xhr.setRequestHeader(
+            'Content-Type',
+            'application/json; charset=utf-8'
+          )
+          xhr.send(JSON.stringify(evento))
+        })
+      }
+      async function deleteEvento(evento) {
+        const xhr = new XMLHttpRequest()
 
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              resolve(evento)
+        return new Promise(function (resolve, reject) {
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+              if (xhr.status !== 200) {
+                reject('Error, status code = ' + xhr.status)
+              } else {
+                resolve(evento)
+              }
             }
           }
-        }
 
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/festivos/delete`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      })
-    }
-    async function getFestivosWithPromise(prms) {
-      var xhr = new XMLHttpRequest();
+          xhr.open(
+            'POST',
+            `http://${serverAPI}:${puertoAPI}/api/festivos/delete`,
+            true
+          )
+          xhr.setRequestHeader(
+            'Content-Type',
+            'application/json; charset=utf-8'
+          )
+          xhr.send(JSON.stringify(evento))
+        })
+      }
 
-      return new Promise(function(resolve, reject) {
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              resolve(JSON.parse(xhr.response))
-            }
+      const festivosOficina = (oficina) => {
+        const data = festivos.filter((itm) => itm.OFIFES === oficina)
+        data.map((itm) => {
+          const estado = {
+            idfest: itm.IDFEST,
+            id: itm.IDFEST,
+            startDate: new Date(itm.FECFES),
+            endDate: new Date(itm.FECFES),
+            color: '#FF0000',
           }
-        }
+          data.push(estado)
+        })
 
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/festivos/locales`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
-        xhr.send(JSON.stringify(prms))
+        calendario.setDataSource(data)
+      }
+      const dateISOToUTCString = (dateISO) => {
+        const fecha = new Date(dateISO)
+        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+        return new Date(fecha.getTime() - userTimezoneOffset)
+          .toISOString()
+          .slice(0, 10)
+      }
+    </script>
+    <script>
+      const festivos = <%- JSON.stringify(datos.festivos) %>
+      const oficinas = <%- JSON.stringify(datos.oficinas) %>
+      const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
+      const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
+
+      let oficina = 0
+      let calendario = null
+      let currentYear = new Date().getFullYear()
+      let fecha = dateISOToUTCString(new Date())
+
+      calendario = new Calendar("#calendar", {
+        language: "es",
+        customDayRenderer: function (e, date) {
+          if (date.getDay() === 0) {
+            e.style.color = '#FC0000'
+          }
+        },
+        dataSource: function () {
+          const data = festivos.filter(itm => itm.OFIFES === 0)
+          return data.map(itm => ({
+            idfest: itm.IDFEST,
+            id: itm.IDFEST,
+            startDate: new Date(itm.FECFES),
+            endDate: new Date(itm.FECFES),
+            color: "#FF0000",
+          }))
+        }
       })
-    }
-    async function getFestivos(prms) {
-      estados = await getFestivosWithPromise(prms)
-
-      let data = []
-
-      estados.map(itm => {
-        const estado = {
-          idfest: itm.IDFEST,
-          id: itm.IDFEST,
-          startDate: new Date(itm.FECFES),
-          endDate: new Date(itm.FECFES),
-          color: '#FF0000',
-        }
-        data.push(estado)
-      })
-
-      calendario.setDataSource(data)
-    }
-    const dateISOToUTCString = (dateISO) => {
-      const fecha = new Date(dateISO)
-      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
-
-      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
-    }
-  </script>
-  <script>
-    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
-    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
-
-    let estados = null
-    let calendario = null
-    let currentYear = new Date().getFullYear()    
-    let fecha = dateISOToUTCString(new Date())
-
-    let params = {
-      ofifes: 0,
-      desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-      hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
-    }
-
-    calendario = new Calendar("#calendar", {
-      minDate: new Date(params.desde),
-      maxDate: new Date(params.hasta),
-      language: "es",
-      customDayRenderer: function (e, date) {
-        if (date.getDay() === 0) {
-          e.style.color = '#FC0000'
-        }
-      },
-    })
-    calendario.setYear(currentYear)
-
-    document.getElementById('cboyea').addEventListener('change', function() {
-      currentYear = parseInt(document.querySelector("#cboyea").value)
-
-      params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
-      params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
-
-      calendario.setMinDate(new Date(params.desde));
-      calendario.setMaxDate(new Date(params.hasta));
       calendario.setYear(currentYear)
+      calendario.setMinDate(new Date(dateISOToUTCString(`${currentYear}-01-01T00:00:00`)))
+      calendario.setMaxDate(new Date(dateISOToUTCString(`${currentYear}-12-31T00:00:00`)))
 
-      getFestivos(params)
-    });
-    document.getElementById('cboofi').addEventListener('change', function() {
-      params.ofifes = parseInt(this.value)
+      document.getElementById('cboyea').addEventListener('change', function() {
+        currentYear = parseInt(document.querySelector("#cboyea").value)
 
-      getFestivos(params)
-    });
-    document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
-      // bloquear festivos
-      if (e.events.length > 0 &&
-        e.element.classList.contains('domingo')) {
-        return
-      }
+        calendario.setMinDate(new Date(dateISOToUTCString(`${currentYear}-01-01T00:00:00`)));
+        calendario.setMaxDate(new Date(dateISOToUTCString(`${currentYear}-12-31T00:00:00`)));
+        calendario.setYear(currentYear)
 
-      if (e.element.style.boxShadow) {
-        e.element.style.boxShadow = null
-      } else {
-        e.element.style.boxShadow = '#FF0000 0px -4px 0px 0px inset'
-      }
+        festivosOficina(oficina)
+      });
+      document.getElementById('cboofi').addEventListener('change', function() {
+        oficina = parseInt(this.value)
 
-      fecha = dateISOToUTCString(e.date.toISOString())
+        festivosOficina(oficina)
+      });
+      document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
+        // bloquear festivos
+        if (e.events.length > 0 &&
+          e.element.classList.contains('domingo')) {
+          return
+        }
 
-      if (e.events.length) {
-        if (e.events[0].id !== 0) {
+        if (e.element.style.boxShadow) {
+          e.element.style.boxShadow = null
+        } else {
+          e.element.style.boxShadow = '#FF0000 0px -4px 0px 0px inset'
+        }
+
+        fecha = dateISOToUTCString(e.date.toISOString())
+
+        if (e.events.length) {
+          if (e.events[0].id !== 0) {
+            const evento = {
+              festivo: {
+                IDFEST: e.events[0].idfest,
+                OFIFES: oficina,
+              },
+              movimiento: {
+                USUMOV: <%- user.id %>,
+                TIPMOV: <%- datos.tiposMovimiento.borrarFestivo %>
+              }
+            }
+
+            await deleteEvento(evento).then(ret => {
+              let dataSource = calendario.getDataSource()
+              dataSource = dataSource.filter(itm => itm.idfest !== evento.festivo.IDFEST)
+            })
+          }
+        } else {
           const evento = {
             festivo: {
-              IDFEST: e.events[0].idfest,
-              OFIFES: params.ofifes,
+              FECFES: fecha,
+              OFIFES: oficina,
             },
             movimiento: {
               USUMOV: <%- user.id %>,
-              TIPMOV: <%- datos.tiposMovimiento.borrarFestivo %>
+              TIPMOV: <%- datos.tiposMovimiento.crearFestivo %>
             }
           }
 
-          await deleteEvento(evento).then(ret => {
+          await insertEvento(evento).then(ret => {
+            // insert en el calendario
             let dataSource = calendario.getDataSource()
-            dataSource = dataSource.filter(itm => itm.idfest !== evento.festivo.IDFEST)
+            const estado = {
+              idfest: ret.idfest,
+              id: ret.idfest,
+              startDate: new Date(ret.FECFES),
+              endDate: new Date(ret.FECFES),
+              color: "#FF0000",
+            }
+            dataSource.push(estado)
           })
         }
-      } else {
-        const evento = {
-          festivo: {
-            FECFES: fecha,
-            OFIFES: params.ofifes,
-          },
-          movimiento: {
-            USUMOV: <%- user.id %>,
-            TIPMOV: <%- datos.tiposMovimiento.crearFestivo %>
-          }
-        }
+      })
 
-        await insertEvento(evento).then(ret => {
-          // insert en el calendario
-          let dataSource = calendario.getDataSource()
-          const estado = {
-            idfest: ret.idfest,
-            id: ret.idfest,
-            startDate: new Date(evento.FECFES),
-            endDate: new Date(evento.FECFES),
-            color: "#FF0000",
-          }
-          dataSource.push(estado)
-        })
-      }
-    })
-
-    getFestivos(params)
-  </script>
-
-</body>
-
+      //getFestivos(params)
+    </script>
+  </body>
 </html>
