@@ -1,22 +1,19 @@
 import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
-const festivoSql = `SELECT 
+const festivosSql = `SELECT 
   idfest,
   TO_CHAR(fecfes, 'YYYY-MM-DD') "FECFES",
-  tipfes,
+  ofifes
 FROM festivos
-WHERE TRUNC(fecfes) = TO_DATE(:fecfes, 'YYYY-MM-DD')
+WHERE fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const festivosOficinaSql = `SELECT 
   ff.idfest,
   TO_CHAR(ff.fecfes, 'YYYY-MM-DD') "FECFES",
-  ff.ofifes,
-  oo.desofi
+  ff.ofifes
 FROM festivos ff
-LEFT JOIN oficinas oo ON oo.idofic = ff.ofifes
-WHERE (ff.ofifes = :ofifes OR
-    ff.ofifes = 0) AND
+WHERE (ff.ofifes = :ofifes OR ff.ofifes = 0) AND
   fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const festivosLocalSql = `SELECT 
@@ -24,7 +21,8 @@ const festivosLocalSql = `SELECT
   TO_CHAR(ff.fecfes, 'YYYY-MM-DD') "FECFES",
   ff.ofifes
 FROM festivos ff
-WHERE ff.fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+WHERE ff.ofifes > 0 AND
+  ff.fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTFESTIVO(
   TO_DATE(:fecfes, 'YYYY-MM-DD'),
@@ -44,16 +42,13 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETEFESTIVO(
 
 // festivos
 export const find = async (context) => {
-  let query = festivoSql
+  const query = festivosSql
+  const binds = {
+    desde: context.DESDE,
+    hasta: context.HASTA,
+  }
 
-  const result = await simpleExecute(query, context)
-  return result.rows
-}
-export const findAll = async (context) => {
-  let query = festivosComunesSql
-
-  const result = await simpleExecute(query, context)
-
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insert = async (bind) => {
@@ -97,17 +92,16 @@ export const festivosOficina = async (context) => {
 export const festivosLocal = async (context) => {
   let query = festivosLocalSql
   const binds = {
-    ofifes: context.festivo.OFIFES,
-    desde: context.festivo.DESDE,
-    hasta: context.festivo.HASTA,
+    desde: context.DESDE,
+    hasta: context.HASTA,
   }
 
-  if (context.festivo.OFIFES === 0) {
-    query += `AND ff.ofifes > :ofifes`
-  } else {
+  if (context.OFIFES !== 0) {
+    binds.ofifes = context.OFIFES
     query += `AND ff.ofifes = :ofifes`
   }
 
+  console.log(query, binds)
   const result = await simpleExecute(query, binds)
 
   return result.rows

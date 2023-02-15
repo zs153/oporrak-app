@@ -44,7 +44,7 @@ export const festivos = async (req, res) => {
   const context = req.body.festivo
 
   try {
-    const result = await DAL.findAll(context)
+    const result = await DAL.find(context)
 
     res.status(200).json(result)
   } catch (err) {
