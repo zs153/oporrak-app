@@ -22,12 +22,9 @@ WHERE (ff.ofifes = :ofifes OR
 const festivosLocalSql = `SELECT 
   ff.idfest,
   TO_CHAR(ff.fecfes, 'YYYY-MM-DD') "FECFES",
-  ff.ofifes,
-  oo.desofi
+  ff.ofifes
 FROM festivos ff
-LEFT JOIN oficinas oo ON oo.idofic = ff.ofifes
-WHERE ff.ofifes = :ofifes AND
-  fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+WHERE ff.fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTFESTIVO(
   TO_DATE(:fecfes, 'YYYY-MM-DD'),
@@ -99,8 +96,19 @@ export const festivosOficina = async (context) => {
 }
 export const festivosLocal = async (context) => {
   let query = festivosLocalSql
+  const binds = {
+    ofifes: context.festivo.OFIFES,
+    desde: context.festivo.DESDE,
+    hasta: context.festivo.HASTA,
+  }
 
-  const result = await simpleExecute(query, context)
+  if (context.festivo.OFIFES === 0) {
+    query += `AND ff.ofifes > :ofifes`
+  } else {
+    query += `AND ff.ofifes = :ofifes`
+  }
+
+  const result = await simpleExecute(query, binds)
 
   return result.rows
 }

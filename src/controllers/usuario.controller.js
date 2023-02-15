@@ -109,6 +109,7 @@ export const usuario = async (req, res) => {
 export const usuarios = async (req, res) => {
   const context = req.body.usuario
 
+console.log(context)
   try {
     const result = await DAL.find(context)
 
@@ -118,7 +119,6 @@ export const usuarios = async (req, res) => {
       res.status(404).end()
     }
   } catch (err) {
-    console.log(err)
     res.status(500).end()
   }
 }

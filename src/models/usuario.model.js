@@ -6,6 +6,7 @@ const baseQuery = `SELECT
     oo.desofi
   FROM usuarios uu
   INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+  WHERE uu.stausu = 1
 `;
 const insertSql = `BEGIN OPORRAK_PKG.INSERTUSUARIO(
     :nomusu,
@@ -72,17 +73,17 @@ export const find = async (context) => {
 
   if (context.IDUSUA) {
     binds.idusua = context.IDUSUA;
-    query += "WHERE uu.idusua = :idusua";
+    query += `AND uu.idusua = :idusua`;
   } else if (context.USERID) {
     binds.userid = context.USERID;
-    query += "WHERE uu.userid = :userid";
+    query += `AND uu.userid = :userid`;
   } else if (context.EMAUSU) {
     binds.emausu = context.EMAUSU;
-    query += "WHERE uu.emausu = :emausu";
+    query += `AND uu.emausu = :emausu`;
   } else if (context.OFIUSU) {
     binds.ofiusu = context.OFIUSU;
-    query += "WHERE uu.ofiusu = :ofiusu";
-  }
+    query += `AND uu.ofiusu = :ofiusu`;
+  } 
 
   const result = await simpleExecute(query, binds);
   return result.rows;

@@ -41,29 +41,31 @@ WHERE usuest = :usuest AND
   fecest = TO_DATE(:fecest, 'YYYY-MM-DD')
 `
 const estadosUsuarioQuery = `SELECT 
+  0 AS "IDESTA", 
+  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') STRFEC,
+  0 AS "USUEST", 
+  0 AS "TIPEST", 
+  0 AS "OFIEST",
+  '' AS "DESOFI",
+  '08:30' AS "DESHOR",
+  '14:00' AS "HASHOR"
+FROM festivos ff
+WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
+  ff.fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
+UNION
+SELECT 
   ee.idesta,
   TO_CHAR(ee.fecest, 'YYYY-MM-DD') STRFEC,
   ee.usuest,
   ee.tipest,
   ee.ofiest,
+  oo.desofi,
   LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(deshor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(deshor))), 2, '0') "DESHOR",
   LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(hashor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(hashor))), 2, '0') "HASHOR"
 FROM estados ee
+INNER JOIN oficinas oo ON oo.idofic = ee.ofiest
 WHERE ee.usuest = :usuest AND
-  ee.ofiest = :idofic AND
   ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
-UNION
-SELECT 
-  0 AS "IDESTA", 
-  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') STRFEC,
-  0 AS "USUEST", 
-  0 AS "TIPEST", 
-  0 AS "OFIEST", 
-  '08:30' AS "DESHOR", 
-  '14:00' AS "HASHOR"
-FROM festivos ff
-WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
-  ff.fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const estadosOficinaPerfilQuery = `SELECT 
   t1.ofiusu, t1.idusua, t1.fecha, t1.tipest, t1.deshor, t1.hashor, 
@@ -261,10 +263,15 @@ export const removeTraspaso = async (bind) => {
 export const estadosUsuario = async (context) => {
   let query = estadosUsuarioQuery
 
-  if (context.tipest === 0) {
-    delete context.tipest
+  if (context.OFIDES === 0) { 
+    delete context.OFIDES
   } else {
-    query += `AND ee.tipest = :tipest`;
+    query += `AND ee.ofiest = :ofides`
+  }
+  if (context.TIPEST === 0) {
+    delete context.TIPEST
+  } else {
+    query += ` AND ee.tipest = :tipest`
   }
 
   const result = await simpleExecute(query, context)
