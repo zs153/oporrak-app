@@ -37,7 +37,7 @@ export const calendario = async (req, res) => {
   const user = req.user
   let currentYear = new Date().getFullYear()
   const estado = {
-    IDOFIC: req.body.idofic,
+    IDOFIC: 0,
     USUEST: req.body.idusua,
     TIPEST: 0,
     OFIDES: 0,
@@ -49,7 +49,6 @@ export const calendario = async (req, res) => {
   }
   const oficina = {}
   const festivo = {
-    OFIFES: estado.OFIDES,
     DESDE: estado.DESDE,
     HASTA: estado.HASTA,
   }
@@ -61,7 +60,7 @@ export const calendario = async (req, res) => {
     })
     const oficinas = ret.data
 
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/locales`, {
+    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
       festivo,
     })
     const festivos = ret.data
@@ -74,14 +73,40 @@ export const calendario = async (req, res) => {
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
       estado,
     })
-    const data = ret.data
+    let dataSource = []
+    ret.data.map(itm => {
+      let desOficina
+      if (itm.TIPEST === tiposEstado.traspaso.ID) {
+        desOficina = ret.data[ret.data.findIndex(el => el.STRFEC === itm.STRFEC && el.TIPEST === tiposEstado.traspasado.ID)].DESOFI
+        const estado = {
+          idesta: itm.IDESTA,
+          usuest: itm.USUEST,
+          tipest: itm.TIPEST,
+          startDate: new Date(itm.STRFEC),
+          endDate: new Date(itm.STRFEC),
+          rangoH: `${desOficina}\n(${itm.DESHOR} a ${itm.HASHOR})`,
+          color: `${tiposEstado.traspaso.COLOR}`
+        }
+        dataSource.push(estado)
+      } else if (itm.TIPEST === 0) {
+        const estado = {
+          idesta: itm.IDESTA,
+          usuest: itm.USUEST,
+          tipest: itm.TIPEST,
+          startDate: new Date(itm.STRFEC),
+          endDate: new Date(itm.STRFEC),
+          rangoH: `Festivo`,
+          color: `${tiposEstado.festivo.COLOR}`,
+        }
+        dataSource.push(estado)
+      }
+    })    
     const datos = {
       oficinas,
       festivos,
       usuario,
-      data,
-      tipoEstado: tiposEstado.traspaso.ID,
-      color: tiposEstado.traspaso.COLOR,
+      dataSource,
+      tiposEstado,
       tiposMovimiento,
       serverAPI,
       puertoAPI,
@@ -89,6 +114,7 @@ export const calendario = async (req, res) => {
 
     res.render('admin/traspasos/calendario', { user, datos })
   } catch (error) {
+    console.log(error)
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
     res.render('admin/error400', {

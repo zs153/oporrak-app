@@ -16,6 +16,16 @@
         border: none !important;
         margin-bottom: 0 !important;
       }
+      .day {
+        border: 1px solid #e6e8e9 !important;
+      }
+      .new, .old {
+        border: none !important;
+      }
+      .calendar table.month th.day-header {
+        font-size: 0.75rem;
+        color: #616876;
+      }
     </style>
   </head>
 
@@ -254,9 +264,7 @@
           .slice(0, 10)
       }
       const festivoOficina = async (oficina) => {
-        let dataSource = calendario.getDataSource()
-        const fecha =
-          festivos[festivos.map((itm) => itm.OFIFES).indexOf(oficina)].FECFES
+        const fecha = festivos[festivos.map(itm => itm.OFIFES).indexOf(oficina)].FECFES
 
         // estados
         if (festivoLocal) {
@@ -264,21 +272,36 @@
           dataSource.splice(pos, 1)
         }
 
-        dataSource.push({
-          idesta: 0,
-          usuest: 0,
-          tipest: 0,
-          id: 0,
-          startDate: fecha,
-          endDate: fecha,
-          rangoH: '(08:30 a 14:00)',
-          color: color,
-        })
-        calendario.setDataSource(dataSource, {
-          preventRendering: false,
-        })
+        if (oficina === 0) {
+          festivoLocal = null
+        } else {
+          dataSource.push({
+            idesta: 0,
+            usuest: 0,
+            tipest: 0,
+            startDate: new Date(fecha),
+            endDate: new Date(fecha),
+            rangoH: 'Festivo',
+            color: '<%- datos.tiposEstado.festivo.COLOR %>',
+          })
 
-        festivoLocal = fecha
+          festivoLocal = fecha
+        }
+
+        let data = []
+        dataSource.map(itm => {
+          const estado = {
+            idesta: itm.idesta,
+            usuest: itm.usuest,
+            tipest: itm.tipest,
+            startDate: new Date(itm.startDate),
+            endDate: new Date(itm.endDate),
+            rangoH: itm.rangoH,
+            color: itm.color,
+          }
+          data.push(estado)
+        })
+        calendario.setDataSource(data)
       }
       const setSuccess = (element) => {
         const inputControl = element.parentElement
@@ -307,9 +330,9 @@
       }
     </script>
     <script>
+      const dataSource = <%- JSON.stringify(datos.dataSource) %>
       const oficinas = <%- JSON.stringify(datos.oficinas) %>
       const festivos = <%- JSON.stringify(datos.festivos) %>
-      const color = <%- JSON.stringify(datos.color) %>
       const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
       const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
 
@@ -321,8 +344,8 @@
         oficina: <%- datos.usuario.OFIUSU %>,
         usuario: <%- datos.usuario.IDUSUA %>,
         destino: 0,
-        tipo: <%- datos.tipoEstado %>,
-        color: '<%- datos.color %>',
+        tipo: <%- datos.tiposEstado.traspaso.ID %>,
+        color: '<%- datos.tiposEstado.traspaso.COLOR %>',
         desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
         hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
       }
@@ -335,7 +358,7 @@
           let content = '';
 
           for (let i in e.events) {
-            content += colores[e.events[i].tipest].DES + ' ' + e.events[i].rangoH + '\n'
+            content += e.events[i].rangoH + '\n'
           }
 
           e.element.setAttribute('data-bs-trigger', 'hover')
@@ -343,47 +366,30 @@
           e.element.setAttribute('title', content)
         },
         customDayRenderer: function (e, date) {
+          if (festivos.map(itm => itm.FECFES).indexOf(new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split("T")[0]) > 0){
+            e.style.color = '#FC0000'
+            e.parentElement.classList.add('festivo')
+            e.style.boxShadow = 'none'
+            return false
+          }
           if (date.getDay() === 0) {
             e.style.color = '#FC0000'
           }
         },
-        dataSource: function (e) {
-          const datos = <%- JSON.stringify(datos.data) %>
-          return datos.map(itm =>  {
-            let desOficina
-            if (itm.TIPEST === tiposEstado.traspaso.ID) {
-              desOficina = ret.data[ret.data.findIndex(el => el.STRFEC === itm.STRFEC && el.TIPEST === 10)].DESOFI
-              const estado = {
-                idesta: itm.IDESTA,
-                usuest: itm.USUEST,
-                tipest: itm.TIPEST,
-                id: itm.IDESTA,
-                startDate: new Date(itm.STRFEC),
-                endDate: new Date(itm.STRFEC),
-                rangoH: `${desOficina}\n(${itm.DESHOR} a ${itm.HASHOR})`,
-                color: tiposEstado.traspaso.COLOR,
-              }
-              data.push(estado)
-            }
-            if (itm.TIPEST === 0) {
-              const estado = {
-                idesta: itm.IDESTA,
-                usuest: itm.USUEST,
-                tipest: itm.TIPEST,
-                id: itm.IDESTA,
-                startDate: new Date(itm.STRFEC),
-                endDate: new Date(itm.STRFEC),
-                rangoH: `Festivo`,
-                color: tiposEstado.festivo.COLOR,
-              }
-              data.push(estado)
-            }
-          })
-        }
+        dataSource: function() {
+          return dataSource.map(itm => ({
+            idesta: itm.idesta,
+            usuest: itm.usuest,
+            tipest: itm.tipest,
+            startDate: new Date(itm.startDate),
+            endDate: new Date(itm.endDate),
+            rangoH: itm.rangoH,
+            color: itm.color,
+          }))
+        },
       })
       calendario.setYear(currentYear)
 
-      calendario.render()
       // calendario
       document.getElementById('cboyea').addEventListener('change', function () {
         currentYear = parseInt(document.querySelector("#cboyea").value)
@@ -403,6 +409,9 @@
       document.querySelector('#calendar').addEventListener('clickDay', async function (e) {
         // bloquear festivos
         if (e.element.classList.contains('domingo')) {
+          return
+        }
+        if (e.element.classList.contains('festivo')) {
           return
         }
 
@@ -430,7 +439,7 @@
               traspaso: {
                 USUEST: params.usuario,
                 FECEST: dateISOToUTCString(e.date),
-                TIPEST: <%- datos.tipoEstado %>,
+                TIPEST: <%- datos.tiposEstado.traspaso.ID %>,
               },
               movimiento: {
                 USUMOV: <%- user.id %>,
@@ -486,7 +495,7 @@
               HASHOR: '+00 14:00:00',
             },
             traspaso: {
-              TIPTRA: <%- datos.tipoEstado %>,
+              TIPTRA: <%- datos.tiposEstado.traspasado.ID %>,
               OFITRA: params.destino,
             },
             movimiento: {
@@ -505,7 +514,6 @@
               idesta: ret.idesta,
               usuest: ret.usuest,
               tipest: ret.tipest,
-              id: ret.idesta,
               startDate: new Date(ret.fecest),
               endDate: new Date(ret.fecest),
               rangoH: `${oficina[oficina.selectedIndex].text}\n(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
