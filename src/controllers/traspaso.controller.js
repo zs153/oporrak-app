@@ -49,6 +49,7 @@ export const calendario = async (req, res) => {
   }
   const oficina = {}
   const festivo = {
+    OFIFES: '0',
     DESDE: estado.DESDE,
     HASTA: estado.HASTA,
   }
@@ -100,7 +101,7 @@ export const calendario = async (req, res) => {
         }
         dataSource.push(estado)
       }
-    })    
+    })
     const datos = {
       oficinas,
       festivos,
@@ -114,7 +115,6 @@ export const calendario = async (req, res) => {
 
     res.render('admin/traspasos/calendario', { user, datos })
   } catch (error) {
-    console.log(error)
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
     res.render('admin/error400', {

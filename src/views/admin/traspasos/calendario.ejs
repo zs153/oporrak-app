@@ -1,536 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Traspasos</title>
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
-    <!-- styles -->
-    <link rel="stylesheet" href="/css/styles.css" />
-    <style>
-      .calendar-header {
-        border: none !important;
-        margin-bottom: 0 !important;
-      }
-      .day {
-        border: 1px solid #e6e8e9 !important;
-      }
-      .new, .old {
-        border: none !important;
-      }
-      .calendar table.month th.day-header {
-        font-size: 0.75rem;
-        color: #616876;
-      }
-    </style>
-  </head>
 
-  <body class="antialiased">
-    <div class="wrapper">
-      <%- include('../../partials/header') %> <%-
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Traspasos</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .calendar-header {
+      border: none !important;
+      margin-bottom: 0 !important;
+    }
+
+    .day {
+      border: 1px solid #e6e8e9 !important;
+    }
+
+    .new,
+    .old {
+      border: none !important;
+    }
+
+    .calendar table.month th.day-header {
+      font-size: 0.75rem;
+      color: #616876;
+    }
+
+    .festivo {
+      box-shadow: none !important;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+  <div class="wrapper">
+    <%- include('../../partials/header') %> <%-
       include('../../partials/navbar', {opcion: 'TRASPASO' }) %>
-      <div class="page-wrapper">
-        <div class="page-body">
-          <div class="container-xl">
-            <div class="row">
-              <div class="col-12">
-                <div class="card mt-1">
-                  <form method="POST">
-                    <input type="hidden" name="idusua" id="idusua" value="" />
-                    <input type="hidden" name="tipest" id="tipest" value="" />
-                    <div class="card-header">
-                      <h3 class="card-title">Calendario traspasos</h3>
-                    </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-2">
-                          <div class="mb-1">
-                            <select class="form-select" id="cboyea" value="">
-                              <option value="<%- new Date().getFullYear() %>">
-                                <%- new Date().getFullYear() %>
-                              </option>
-                              <option
-                                value="<%- new Date().getFullYear() +1 %>"
-                              >
-                                <%- new Date().getFullYear() +1 %>
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-4">
-                          <div class="mb-1">
-                            <div class="input-control">
-                              <select
-                                class="form-select form-control"
-                                id="cbodes"
-                                name="ofides"
-                                value=""
-                              >
-                                <option value="0">
-                                  SELECCIONE OFICINA DE DESTINO
-                                </option>
-                                <% datos.oficinas.map(element=> { %>
-                                <option value="<%- element.IDOFIC %>">
-                                  <%- element.DESOFI %>
-                                </option>
-                                <% }) %>
-                              </select>
-                              <div class="invalid-feedback"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div id="calendar" class="form-control"></div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="modal modal-blur fade"
-        id="modal-trasp"
-        tabindex="-1"
-        role="dialog"
-        aria-hidden="true"
-      >
+    <div class="page-wrapper">
+      <div class="page-body">
         <div class="container-xl">
-          <div
-            class="modal-dialog modal-sm modal-dialog-centered"
-            role="document"
-          >
-            <div class="modal-content">
-              <div class="modal-body p-0">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-6">
-                      <div class="mb-1">
-                        <div class="form-label">Desde</div>
-                        <input
-                          type="date"
-                          id="desfecfor"
-                          name="desfecfor"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="mb-1">
-                        <div class="form-label">Hasta</div>
-                        <input
-                          type="date"
-                          id="hasfecfor"
-                          name="hasfecfor"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="card mt-1">
+                <form method="POST">
+                  <input type="hidden" name="idusua" id="idusua" value="" />
+                  <input type="hidden" name="tipest" id="tipest" value="" />
+                  <div class="card-header">
+                    <h3 class="card-title">Calendario traspasos</h3>
                   </div>
-                  <div class="row">
-                    <div class="col-6">
-                      <div class="mb-1">
-                        <div class="form-label">Desde hora</div>
-                        <input
-                          type="time"
-                          id="deshorfor"
-                          name="deshorfor"
-                          class="form-control"
-                          min="08:00"
-                          max="20:00"
-                        />
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <select class="form-select" id="cboyea" value="">
+                            <option value="<%- new Date().getFullYear() %>">
+                              <%- new Date().getFullYear() %>
+                            </option>
+                            <option value="<%- new Date().getFullYear() +1 %>">
+                              <%- new Date().getFullYear() +1 %>
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <select class="form-select form-control" id="cbodes" name="ofides" value="">
+                              <option value="0">
+                                SELECCIONE OFICINA DE DESTINO
+                              </option>
+                              <% datos.oficinas.map(element=> { %>
+                              <option value="<%- element.IDOFIC %>">
+                                <%- element.DESOFI %>
+                              </option>
+                              <% }) %>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="col-6">
-                      <div class="mb-1">
-                        <div class="form-label">Hasta hora</div>
-                        <input
-                          type="time"
-                          id="hashorfor"
-                          name="hashorfor"
-                          class="form-control"
-                          min="08:00"
-                          max="20:00"
-                        />
-                      </div>
-                    </div>
-                    <div class="input-control">
-                      <input
-                        type="hidden"
-                        id="msgfor"
-                        name="msgfor"
-                        class="form-control"
-                      />
-                      <div class="invalid-feedback"></div>
-                    </div>
+                    <div id="calendar" class="form-control"></div>
                   </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-link"
-                  id="btnFormaCancel"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary ms-auto"
-                  onclick="eventoRango()"
-                >
-                  Aceptar
-                </button>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <%- include('../../partials/footer') %>
+    </div>
+    <div class="modal modal-blur fade" id="modal-trasp" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="container-xl">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde</div>
+                      <input type="date" id="desfecfor" name="desfecfor" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta</div>
+                      <input type="date" id="hasfecfor" name="hasfecfor" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Desde hora</div>
+                      <input type="time" id="deshorfor" name="deshorfor" class="form-control" min="08:00" max="20:00" />
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-1">
+                      <div class="form-label">Hasta hora</div>
+                      <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00" max="20:00" />
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <input type="hidden" id="msgfor" name="msgfor" class="form-control" />
+                    <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal" aria-label="Close">
+                Cancelar
+              </button>
+              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script src="/js/ayuda.min.js"></script>
-    <script src="/js/js-year-calendar.js"></script>
-    <script src="/js/js-year-calendar.es.js"></script>
-    <script>
-      async function insertEvento(evento) {
-        let xhr = new XMLHttpRequest()
+    <%- include('../../partials/footer') %>
+  </div>
 
-        return new Promise(function (resolve, reject) {
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4) {
-              if (xhr.status !== 200) {
-                reject('Error, status code = ' + xhr.status)
-              } else {
-                const result = JSON.parse(xhr.response)
+  <script src="/js/ayuda.min.js"></script>
+  <script src="/js/js-year-calendar.js"></script>
+  <script src="/js/js-year-calendar.es.js"></script>
+  <script>
+    async function insertEvento(evento) {
+      let xhr = new XMLHttpRequest()
 
-                resolve(result)
-              }
-            }
-          }
-
-          xhr.open(
-            'POST',
-            `http://${serverAPI}:${puertoAPI}/api/estados/insert/traspaso`,
-            true
-          )
-          xhr.setRequestHeader(
-            'Content-Type',
-            'application/json; charset=utf-8'
-          )
-          xhr.send(JSON.stringify(evento))
-        })
-      }
-      async function deleteEvento(evento) {
-        const xhr = new XMLHttpRequest()
-
-        return new Promise(function (resolve, reject) {
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4) {
-              if (xhr.status !== 200) {
-                reject('Error, status code = ' + xhr.status)
-              } else {
-                resolve(evento)
-              }
-            }
-          }
-
-          xhr.open(
-            'POST',
-            `http://${serverAPI}:${puertoAPI}/api/estados/delete/traspaso`,
-            true
-          )
-          xhr.setRequestHeader(
-            'Content-Type',
-            'application/json; charset=utf-8'
-          )
-          xhr.send(JSON.stringify(evento))
-        })
-      }
-      const dateISOToUTCString = (dateISO) => {
-        const fecha = new Date(dateISO)
-        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
-
-        return new Date(fecha.getTime() - userTimezoneOffset)
-          .toISOString()
-          .slice(0, 10)
-      }
-      const festivoOficina = async (oficina) => {
-        const fecha = festivos[festivos.map(itm => itm.OFIFES).indexOf(oficina)].FECFES
-
-        // estados
-        if (festivoLocal) {
-          let pos = dataSource.map((e) => e.startDate).indexOf(festivoLocal)
-          dataSource.splice(pos, 1)
-        }
-
-        if (oficina === 0) {
-          festivoLocal = null
-        } else {
-          dataSource.push({
-            idesta: 0,
-            usuest: 0,
-            tipest: 0,
-            startDate: new Date(fecha),
-            endDate: new Date(fecha),
-            rangoH: 'Festivo',
-            color: '<%- datos.tiposEstado.festivo.COLOR %>',
-          })
-
-          festivoLocal = fecha
-        }
-
-        let data = []
-        dataSource.map(itm => {
-          const estado = {
-            idesta: itm.idesta,
-            usuest: itm.usuest,
-            tipest: itm.tipest,
-            startDate: new Date(itm.startDate),
-            endDate: new Date(itm.endDate),
-            rangoH: itm.rangoH,
-            color: itm.color,
-          }
-          data.push(estado)
-        })
-        calendario.setDataSource(data)
-      }
-      const setSuccess = (element) => {
-        const inputControl = element.parentElement
-        const errorDisplay = inputControl.querySelector('.invalid-feedback')
-
-        errorDisplay.innerText = ''
-        inputControl.classList.add('is-valid')
-        element.classList.remove('is-invalid')
-      }
-      const setError = (element, message) => {
-        const inputControl = element.parentElement
-        const errorDisplay = inputControl.querySelector('.invalid-feedback')
-
-        errorDisplay.innerText = message
-        element.classList.add('is-invalid')
-        inputControl.classList.remove('is-valid')
-      }
-      const validate = (ele, msg) => {
-        if (ele.value === '0') {
-          setError(ele, msg)
-          setTimeout(function () {
-            setSuccess(ele)
-          }, 3000)
-          return false
-        }
-      }
-    </script>
-    <script>
-      const dataSource = <%- JSON.stringify(datos.dataSource) %>
-      const oficinas = <%- JSON.stringify(datos.oficinas) %>
-      const festivos = <%- JSON.stringify(datos.festivos) %>
-      const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
-      const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
-
-      let festivoLocal = null
-      let calendario = null
-      let currentYear = new Date().getFullYear()
-      let params = {
-        fecha: new Date().toISOString().slice(0, 10),
-        oficina: <%- datos.usuario.OFIUSU %>,
-        usuario: <%- datos.usuario.IDUSUA %>,
-        destino: 0,
-        tipo: <%- datos.tiposEstado.traspaso.ID %>,
-        color: '<%- datos.tiposEstado.traspaso.COLOR %>',
-        desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-        hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
-      }
-
-      calendario = new Calendar("#calendar", {
-        minDate: new Date(params.desde),
-        maxDate: new Date(params.hasta),
-        language: "es",
-        mouseOnDay: function (e) {
-          let content = '';
-
-          for (let i in e.events) {
-            content += e.events[i].rangoH + '\n'
-          }
-
-          e.element.setAttribute('data-bs-trigger', 'hover')
-          e.element.setAttribute('data-bs-toggle', 'popover')
-          e.element.setAttribute('title', content)
-        },
-        customDayRenderer: function (e, date) {
-          if (festivos.map(itm => itm.FECFES).indexOf(new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split("T")[0]) > 0){
-            e.style.color = '#FC0000'
-            e.parentElement.classList.add('festivo')
-            e.style.boxShadow = 'none'
-            return false
-          }
-          if (date.getDay() === 0) {
-            e.style.color = '#FC0000'
-          }
-        },
-        dataSource: function() {
-          return dataSource.map(itm => ({
-            idesta: itm.idesta,
-            usuest: itm.usuest,
-            tipest: itm.tipest,
-            startDate: new Date(itm.startDate),
-            endDate: new Date(itm.endDate),
-            rangoH: itm.rangoH,
-            color: itm.color,
-          }))
-        },
-      })
-      calendario.setYear(currentYear)
-
-      // calendario
-      document.getElementById('cboyea').addEventListener('change', function () {
-        currentYear = parseInt(document.querySelector("#cboyea").value)
-
-        params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
-        params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
-
-        calendario.setMinDate(new Date(params.desde));
-        calendario.setMaxDate(new Date(params.hasta));
-        calendario.setYear(currentYear)
-      });
-      document.getElementById('cbodes').addEventListener('change', function () {
-        params.destino = parseInt(this.value)
-
-        festivoOficina(params.destino)
-      });
-      document.querySelector('#calendar').addEventListener('clickDay', async function (e) {
-        // bloquear festivos
-        if (e.element.classList.contains('domingo')) {
-          return
-        }
-        if (e.element.classList.contains('festivo')) {
-          return
-        }
-
-        // bloquear si no existe destino
-        if (e.events.length === 0 &&
-          (params.destino === 0 || params.oficina === params.destino)) {
-          validate(document.getElementById('cbodes'), 'Destino requerido')
-          return
-        }
-
-        // evento por rango
-        // TODO
-        // if (e.events.length === 0 &&
-        //   params.tipo === <%- datos.tipoEstado %>) {
-        //   editEvento(e)
-        //   return
-        // }
-
-        if (e.events.length) {
-          if (e.events[0].id !== 0) {
-            const evento = {
-              estado: {
-                IDESTA: e.events[0].idesta,
-              },
-              traspaso: {
-                USUEST: params.usuario,
-                FECEST: dateISOToUTCString(e.date),
-                TIPEST: <%- datos.tiposEstado.traspaso.ID %>,
-              },
-              movimiento: {
-                USUMOV: <%- user.id %>,
-                TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
-              }
-            }
-
-            // borrar
-            await deleteEvento(evento).then(ret => {
-              // actualiza dia calendario
-              let dataSource = calendario.getDataSource()
-
-              // datasource
-              pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
-              dataSource.splice(pos, 1)
-
-              calendario.setDataSource(dataSource, {
-                preventRendering: false
-              })
-
-              // actualizar dia
-              e.element.attributes.removeNamedItem("style")
-            })
-          }
-        } else {
-          params.fecha = dateISOToUTCString(e.date.toISOString())
-          let dataSource = calendario.getDataSource()
-
-          // solapes
-          const result = dataSource.find(itm => itm.STRFEC === params.fecha)
-
-          if (result) {
-            if (result.TIPEST !== params.tipo) {
-              e.element.setAttribute('data-bs-trigger', 'hover')
-              e.element.setAttribute('data-bs-toggle', 'popover')
-              e.element.setAttribute('title', 'Solape de eventos')
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject('Error, status code = ' + xhr.status)
             } else {
-              e.element.setAttribute('data-bs-trigger', 'hover')
-              e.element.setAttribute('data-bs-toggle', 'popover')
-              e.element.setAttribute('title', 'Festivo en destino')
-            }
-            return
-          }
+              const result = JSON.parse(xhr.response)
 
-          // evento
+              resolve(result)
+            }
+          }
+        }
+
+        xhr.open('POST',`http://${serverAPI}:${puertoAPI}/api/estados/insert/traspaso`,true)
+        xhr.setRequestHeader('Content-Type','application/json; charset=utf-8')
+        xhr.send(JSON.stringify(evento))
+      })
+    }
+    async function deleteEvento(evento) {
+      const xhr = new XMLHttpRequest()
+
+      return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status !== 200) {
+              reject('Error, status code = ' + xhr.status)
+            } else {
+              resolve(evento)
+            }
+          }
+        }
+
+        xhr.open('POST',`http://${serverAPI}:${puertoAPI}/api/estados/delete/traspaso`,true)
+        xhr.setRequestHeader('Content-Type','application/json; charset=utf-8')
+        xhr.send(JSON.stringify(evento))
+      })
+    }
+    const dateISOToUTCString = (dateISO) => {
+      const fecha = new Date(dateISO)
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
+    }
+    const festivoOficina = async (oficina) => {
+      // estados
+      if (festivoLocal) {
+        let pos = dataSource.map((e) => e.startDate).indexOf(festivoLocal)
+        dataSource.splice(pos, 1)
+      }
+      
+      if (oficina === 0) {
+        festivoLocal = null
+      } else {
+        const fecha = festivos[festivos.map((itm) => itm.OFIFES).indexOf(oficina)].FECFES
+        dataSource.push({
+          idesta: 0,
+          usuest: 0,
+          tipest: 0,
+          startDate: new Date(fecha),
+          endDate: new Date(fecha),
+          rangoH: 'Festivo',
+          color: '<%- datos.tiposEstado.festivo.COLOR %>',
+        })
+
+        festivoLocal = fecha
+      }
+
+      // let data = []
+      // dataSource.map((itm) => {
+      //   const estado = {
+      //     idesta: itm.idesta,
+      //     usuest: itm.usuest,
+      //     tipest: itm.tipest,
+      //     startDate: new Date(itm.startDate),
+      //     endDate: new Date(itm.endDate),
+      //     rangoH: itm.rangoH,
+      //     color: itm.color,
+      //   }
+      //   data.push(estado)
+      // })
+      //calendario.setDataSource(data)
+      calendario.setDataSource(dataSource, {
+        preventRendering: false
+      })
+    }
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement
+      const errorDisplay = inputControl.querySelector('.invalid-feedback')
+
+      errorDisplay.innerText = ''
+      inputControl.classList.add('is-valid')
+      element.classList.remove('is-invalid')
+    }
+    const setError = (element, message) => {
+      const inputControl = element.parentElement
+      const errorDisplay = inputControl.querySelector('.invalid-feedback')
+
+      errorDisplay.innerText = message
+      element.classList.add('is-invalid')
+      inputControl.classList.remove('is-valid')
+    }
+    const validate = (ele, msg) => {
+      if (ele.value === '0') {
+        setError(ele, msg)
+        setTimeout(function () {
+          setSuccess(ele)
+        }, 3000)
+        return false
+      }
+    }
+  </script>
+  <script>
+    const oficinas = <%- JSON.stringify(datos.oficinas) %>
+    const festivos = <%- JSON.stringify(datos.festivos) %>
+    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
+    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
+    
+    let dataSource = <%- JSON.stringify(datos.dataSource) %>
+    let festivoLocal = null
+    let calendario = null
+    let currentYear = new Date().getFullYear()
+    let params = {
+      fecha: new Date().toISOString().slice(0, 10),
+      oficina: <%- datos.usuario.OFIUSU %>,
+      usuario: <%- datos.usuario.IDUSUA %>,
+      destino: 0,
+      tipo: <%- datos.tiposEstado.traspaso.ID %>,
+      color: '<%- datos.tiposEstado.traspaso.COLOR %>',
+      desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+      hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
+    }
+
+    calendario = new Calendar("#calendar", {
+      minDate: new Date(params.desde),
+      maxDate: new Date(params.hasta),
+      language: "es",
+      mouseOnDay: function (e) {
+        let content = '';
+
+        for (let i in e.events) {
+          content += e.events[i].rangoH + '\n'
+        }
+
+        e.element.setAttribute('data-bs-trigger', 'hover')
+        e.element.setAttribute('data-bs-toggle', 'popover')
+        e.element.setAttribute('title', content)
+      },
+      customDayRenderer: function (e, date) {
+        const fecha = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)
+        if (festivos.map(itm => itm.FECFES).indexOf(fecha) !== -1) {
+          e.style.color = '#FC0000'
+          e.parentElement.classList.add('festivo')
+        }
+        if (date.getDay() === 0) {
+          e.style.color = '#FC0000'
+        }
+      },
+      dataSource: function () {
+        return dataSource.map(itm => ({
+          idesta: itm.idesta,
+          usuest: itm.usuest,
+          tipest: itm.tipest,
+          startDate: new Date(itm.startDate),
+          endDate: new Date(itm.endDate),
+          rangoH: itm.rangoH,
+          color: itm.color,
+        }))
+      },
+    })
+    calendario.setYear(currentYear)
+
+    // calendario
+    document.getElementById('cboyea').addEventListener('change', function () {
+      currentYear = parseInt(document.querySelector("#cboyea").value)
+
+      params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+      params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
+
+      calendario.setMinDate(new Date(params.desde));
+      calendario.setMaxDate(new Date(params.hasta));
+      calendario.setYear(currentYear)
+    });
+    document.getElementById('cbodes').addEventListener('change', function () {
+      params.destino = parseInt(this.value)
+
+      festivoOficina(params.destino)
+    });
+    document.querySelector('#calendar').addEventListener('clickDay', async function (e) {
+      // bloquear festivos
+      if (e.element.classList.contains('domingo') || 
+          e.element.classList.contains('festivo')) {
+        return
+      }
+
+      // bloquear si no existe destino
+      if (e.events.length === 0 &&
+        (params.destino === 0 || params.oficina === params.destino)) {
+        validate(document.getElementById('cbodes'), 'Destino requerido')
+        return
+      }
+
+      // evento por rango
+      // TODO
+      // if (e.events.length === 0 &&
+      //   params.tipo === <%- datos.tipoEstado %>) {
+      //   editEvento(e)
+      //   return
+      // }
+
+      if (e.events.length) {
+        if (e.events[0].id !== 0) {
           const evento = {
             estado: {
-              FECEST: params.fecha,
-              USUEST: params.usuario,
-              TIPEST: params.tipo,
-              OFIEST: params.oficina,
-              DESHOR: '+00 08:30:00',
-              HASHOR: '+00 14:00:00',
+              IDESTA: e.events[0].idesta,
             },
             traspaso: {
-              TIPTRA: <%- datos.tiposEstado.traspasado.ID %>,
-              OFITRA: params.destino,
+              USUEST: params.usuario,
+              FECEST: dateISOToUTCString(e.date),
+              TIPEST: <%- datos.tiposEstado.traspaso.ID %>,
             },
             movimiento: {
               USUMOV: <%- user.id %>,
-              TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-            }
+              TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
+              }
           }
 
-          // insertar
-          await insertEvento(evento).then(ret => {
-            // oficina
-            const oficina = document.getElementById('cbodes')
-
+          // borrar
+          await deleteEvento(evento).then(ret => {
             // actualiza dia calendario
-            const estado = {
-              idesta: ret.idesta,
-              usuest: ret.usuest,
-              tipest: ret.tipest,
-              startDate: new Date(ret.fecest),
-              endDate: new Date(ret.fecest),
-              rangoH: `${oficina[oficina.selectedIndex].text}\n(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
-              color: params.color,
-            }
-            dataSource.push(estado)
+              // datasource
+              pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
+              dataSource.splice(pos, 1)
+  
+              // calendario.setDataSource(dataSource, {
+              //   preventRendering: false
+              // })
 
-            calendario.setDataSource(dataSource, {
-              preventRendering: false
-            })
-
-            // actualizar dia
-            e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+              // actualizar dia
+              e.element.attributes.removeNamedItem("style")
           })
         }
+      } else {
+        params.fecha = dateISOToUTCString(e.date.toISOString())
 
-      })
-    </script>
-  </body>
+        // solapes
+        const result = dataSource.find(itm => itm.STRFEC === params.fecha)
+
+        if (result) {
+          if (result.TIPEST !== params.tipo) {
+            e.element.setAttribute('data-bs-trigger', 'hover')
+            e.element.setAttribute('data-bs-toggle', 'popover')
+            e.element.setAttribute('title', 'Solape de eventos')
+          } else {
+            e.element.setAttribute('data-bs-trigger', 'hover')
+            e.element.setAttribute('data-bs-toggle', 'popover')
+            e.element.setAttribute('title', 'Festivo en destino')
+          }
+          return
+        }
+
+        // evento
+        const evento = {
+          estado: {
+            FECEST: params.fecha,
+            USUEST: params.usuario,
+            TIPEST: params.tipo,
+            OFIEST: params.oficina,
+            DESHOR: '+00 08:30:00',
+            HASHOR: '+00 14:00:00',
+          },
+          traspaso: {
+            TIPTRA: <%- datos.tiposEstado.traspasado.ID %>,
+            OFITRA: params.destino,
+          },
+          movimiento: {
+            USUMOV: <%- user.id %>,
+            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
+            }
+        }
+
+        // insertar
+        await insertEvento(evento).then(ret => {
+          // oficina
+          const oficina = document.getElementById('cbodes')
+
+          // actualiza dia calendario
+          const estado = {
+            idesta: ret.idesta,
+            usuest: ret.usuest,
+            tipest: ret.tipest,
+            startDate: new Date(ret.fecest),
+            endDate: new Date(ret.fecest),
+            rangoH: `${oficina[oficina.selectedIndex].text}\n(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
+            color: params.color,
+          }
+          dataSource.push(estado)
+
+          // let data = []
+          // dataSource.map((itm) => {
+          //   const estado = {
+          //     idesta: itm.idesta,
+          //     usuest: itm.usuest,
+          //     tipest: itm.tipest,
+          //     startDate: new Date(itm.startDate),
+          //     endDate: new Date(itm.endDate),
+          //     rangoH: itm.rangoH,
+          //     color: itm.color,
+          //   }
+          //   data.push(estado)
+          // })
+          // calendario.setDataSource(data, {
+          //   preventRendering: false
+          // })
+
+          // actualizar dia
+          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+        })
+      }
+
+    })
+  </script>
+</body>
+
 </html>
