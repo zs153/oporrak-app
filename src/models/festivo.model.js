@@ -101,7 +101,6 @@ export const festivosLocal = async (context) => {
     query += `AND ff.ofifes = :ofifes`
   }
 
-  console.log(query, binds)
   const result = await simpleExecute(query, binds)
 
   return result.rows
