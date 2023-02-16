@@ -234,6 +234,7 @@ export const insertTraspaso = async (bind) => {
     type: oracledb.NUMBER,
   }
 
+  console.log(insertTraspasoSql, bind)
   try {
     const result = await simpleExecute(insertTraspasoSql, bind)
 
@@ -263,7 +264,7 @@ export const removeTraspaso = async (bind) => {
 export const estadosUsuario = async (context) => {
   let query = estadosUsuarioQuery
 
-  if (context.OFIDES === 0) { 
+  if (context.OFIDES === 0) {
     delete context.OFIDES
   } else {
     query += `AND ee.ofiest = :ofides`

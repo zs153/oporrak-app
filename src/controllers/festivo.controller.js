@@ -43,6 +43,7 @@ export const festivo = async (req, res) => {
 export const festivos = async (req, res) => {
   const context = req.body.festivo
 
+  console.log(context)
   try {
     const result = await DAL.find(context)
 

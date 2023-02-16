@@ -47,6 +47,10 @@ export const find = async (context) => {
     desde: context.DESDE,
     hasta: context.HASTA,
   }
+  if (context.OFIFES) {
+    binds.ofifes = context.OFIFES
+    query += `AND ofifes = :ofifes`
+  }
 
   const result = await simpleExecute(query, binds)
   return result.rows
