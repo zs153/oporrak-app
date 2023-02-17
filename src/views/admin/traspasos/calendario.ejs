@@ -92,62 +92,78 @@
         </div>
       </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-trasp" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="container-xl">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-body p-0">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="mb-1">
-                      <div class="form-label">Desde</div>
-                      <input type="date" id="desfecfor" name="desfecfor" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="mb-1">
-                      <div class="form-label">Hasta</div>
-                      <input type="date" id="hasfecfor" name="hasfecfor" class="form-control" />
-                    </div>
+
+    <%- include('../../partials/footer') %>
+  </div>
+  <div class="modal modal-blur fade" id="modal-trasp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde</div>
+                    <input type="date" id="desfecfor" name="desfecfor" class="form-control" />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="mb-1">
-                      <div class="form-label">Desde hora</div>
-                      <input type="time" id="deshorfor" name="deshorfor" class="form-control" min="08:00" max="20:00" />
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="mb-1">
-                      <div class="form-label">Hasta hora</div>
-                      <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00" max="20:00" />
-                    </div>
-                  </div>
-                  <div class="input-control">
-                    <input type="hidden" id="msgfor" name="msgfor" class="form-control" />
-                    <div class="invalid-feedback"></div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta</div>
+                    <input type="date" id="hasfecfor" name="hasfecfor" class="form-control" />
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde hora</div>
+                    <input type="time" id="deshorfor" name="deshorfor" class="form-control" min="08:00" max="20:00" />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta hora</div>
+                    <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00" max="20:00" />
+                  </div>
+                </div>
+                <div class="input-control">
+                  <input type="hidden" id="msgfor" name="msgfor" class="form-control" />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal" aria-label="Close">
-                Cancelar
-              </button>
-              <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">
-                Aceptar
-              </button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal" aria-label="Close">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">
+              Aceptar
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-    <%- include('../../partials/footer') %>
   </div>
-
+  <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="modal-title">Solape de eventos</div>
+            <div>Hay un evento previo en esta fecha</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnSolapeAcept" data-bs-dismiss="modal"
+              aria-label="Close">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <script src="/js/ayuda.min.js"></script>
   <script src="/js/js-year-calendar.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
@@ -199,46 +215,39 @@
       return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
     }
     const festivoOficina = async (oficina) => {
+      let estadosOficina
+
       // estados
       if (festivoLocal) {
-        let pos = dataSource.map((e) => e.startDate).indexOf(festivoLocal)
-        dataSource.splice(pos, 1)
+        pos = festivos.map((e) => e.FECFES).indexOf(festivoLocal)
+        festivos.splice(pos, 1)
       }
       
       if (oficina === 0) {
+        estadosOficina = dataSource
         festivoLocal = null
       } else {
-        const fecha = festivos[festivos.map((itm) => itm.OFIFES).indexOf(oficina)].FECFES
-        dataSource.push({
-          idesta: 0,
-          usuest: 0,
-          tipest: 0,
-          startDate: new Date(fecha),
-          endDate: new Date(fecha),
-          rangoH: 'Festivo',
-          color: '<%- datos.tiposEstado.festivo.COLOR %>',
-        })
+        const festivo = festivosLocal[festivosLocal.map((itm) => itm.OFIFES).indexOf(oficina)]
+        estadosOficina = dataSource.filter(itm => itm.ofiest === oficina)
 
-        festivoLocal = fecha
+        festivos.push(festivo)
+        festivoLocal = festivo.FECFES
       }
 
-      // let data = []
-      // dataSource.map((itm) => {
-      //   const estado = {
-      //     idesta: itm.idesta,
-      //     usuest: itm.usuest,
-      //     tipest: itm.tipest,
-      //     startDate: new Date(itm.startDate),
-      //     endDate: new Date(itm.endDate),
-      //     rangoH: itm.rangoH,
-      //     color: itm.color,
-      //   }
-      //   data.push(estado)
-      // })
-      //calendario.setDataSource(data)
-      calendario.setDataSource(dataSource, {
-        preventRendering: false
+      let data = []
+      estadosOficina.map((itm) => {
+        const estado = {
+          idesta: itm.idesta,
+          ofiest: itm.ofiest,
+          startDate: new Date(itm.startDate),
+          endDate: new Date(itm.endDate),
+          rangoH: itm.rangoH,
+          color: itm.color,
+        }
+        data.push(estado)
       })
+      calendario.setDataSource(data)
+      calendario.render()
     }
     const setSuccess = (element) => {
       const inputControl = element.parentElement
@@ -268,11 +277,13 @@
   </script>
   <script>
     const oficinas = <%- JSON.stringify(datos.oficinas) %>
-    const festivos = <%- JSON.stringify(datos.festivos) %>
+    const festivosComun = <%- JSON.stringify(datos.festivosComun) %>
+    const festivosLocal = <%- JSON.stringify(datos.festivosLocal) %>
     const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
     const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
     
     let dataSource = <%- JSON.stringify(datos.dataSource) %>
+    let festivos = festivosComun
     let festivoLocal = null
     let calendario = null
     let currentYear = new Date().getFullYear()
@@ -304,6 +315,9 @@
       },
       customDayRenderer: function (e, date) {
         const fecha = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)
+        if (e.parentElement.classList.contains('festivo')) {
+          e.parentElement.classList.remove('festivo')
+        }
         if (festivos.map(itm => itm.FECFES).indexOf(fecha) !== -1) {
           e.style.color = '#FC0000'
           e.parentElement.classList.add('festivo')
@@ -315,8 +329,7 @@
       dataSource: function () {
         return dataSource.map(itm => ({
           idesta: itm.idesta,
-          usuest: itm.usuest,
-          tipest: itm.tipest,
+          ofiest: itm.ofiest,
           startDate: new Date(itm.startDate),
           endDate: new Date(itm.endDate),
           rangoH: itm.rangoH,
@@ -326,6 +339,11 @@
     })
     calendario.setYear(currentYear)
 
+    // eventos modal
+    document.getElementById('btnSolapeAcept').addEventListener('click', function () {
+      document.getElementById('modal-solape').style.display = 'none'
+    })  
+      
     // calendario
     document.getElementById('cboyea').addEventListener('change', function () {
       currentYear = parseInt(document.querySelector("#cboyea").value)
@@ -365,7 +383,7 @@
       // }
 
       if (e.events.length) {
-        if (e.events[0].id !== 0) {
+        if (e.events[0].idesta !== 0) {
           const evento = {
             estado: {
               IDESTA: e.events[0].idesta,
@@ -373,7 +391,7 @@
             traspaso: {
               USUEST: params.usuario,
               FECEST: dateISOToUTCString(e.date),
-              TIPEST: <%- datos.tiposEstado.traspaso.ID %>,
+              TIPEST: <%- datos.tiposEstado.traspasado.ID %>,
             },
             movimiento: {
               USUMOV: <%- user.id %>,
@@ -383,35 +401,27 @@
 
           // borrar
           await deleteEvento(evento).then(ret => {
-            // actualiza dia calendario
-              // datasource
-              pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
-              dataSource.splice(pos, 1)
-  
-              // calendario.setDataSource(dataSource, {
-              //   preventRendering: false
-              // })
+            // datasource
+            pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
+            dataSource.splice(pos, 1)
 
-              // actualizar dia
-              e.element.attributes.removeNamedItem("style")
+            // actualizar dia
+            e.element.attributes.removeNamedItem("style")
           })
         }
       } else {
         params.fecha = dateISOToUTCString(e.date.toISOString())
 
         // solapes
-        const result = dataSource.find(itm => itm.STRFEC === params.fecha)
-
+        const result = dataSource.find(itm => itm.startDate === params.fecha)
         if (result) {
-          if (result.TIPEST !== params.tipo) {
-            e.element.setAttribute('data-bs-trigger', 'hover')
-            e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Solape de eventos')
-          } else {
-            e.element.setAttribute('data-bs-trigger', 'hover')
-            e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Festivo en destino')
-          }
+          const modalSolape = document.getElementById('modal-solape')
+
+          e.element.setAttribute('data-bs-trigger', 'hover')
+          e.element.setAttribute('data-bs-toggle', 'popover')
+          e.element.setAttribute('title', 'Solape de eventos')
+
+          modalSolape.style.display = 'flex'
           return
         }
 
@@ -443,31 +453,29 @@
           // actualiza dia calendario
           const estado = {
             idesta: ret.idesta,
-            usuest: ret.usuest,
-            tipest: ret.tipest,
-            startDate: new Date(ret.fecest),
-            endDate: new Date(ret.fecest),
+            ofiest: parseInt(oficina.value),
+            startDate: ret.fecest,
+            endDate: ret.fecest,
             rangoH: `${oficina[oficina.selectedIndex].text}\n(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
             color: params.color,
           }
           dataSource.push(estado)
 
-          // let data = []
-          // dataSource.map((itm) => {
-          //   const estado = {
-          //     idesta: itm.idesta,
-          //     usuest: itm.usuest,
-          //     tipest: itm.tipest,
-          //     startDate: new Date(itm.startDate),
-          //     endDate: new Date(itm.endDate),
-          //     rangoH: itm.rangoH,
-          //     color: itm.color,
-          //   }
-          //   data.push(estado)
-          // })
-          // calendario.setDataSource(data, {
-          //   preventRendering: false
-          // })
+          let data = []
+          dataSource.map((itm) => {
+            const estado = {
+              idesta: itm.idesta,
+              ofiest: itm.ofiest,
+              startDate: new Date(itm.startDate),
+              endDate: new Date(itm.endDate),
+              rangoH: itm.rangoH,
+              color: itm.color,
+            }
+            data.push(estado)
+          })
+          calendario.setDataSource(data, {
+            preventRendering: false
+          })
 
           // actualizar dia
           e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
