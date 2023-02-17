@@ -43,7 +43,6 @@ export const festivo = async (req, res) => {
 export const festivos = async (req, res) => {
   const context = req.body.festivo
 
-  console.log(context)
   try {
     const result = await DAL.find(context)
 
@@ -93,7 +92,7 @@ export const festivosOficina = async (req, res) => {
 }
 // local
 export const festivosLocal = async (req, res) => {
-  const context = req.body
+  const context = req.body.festivo
 
   try {
     const result = await DAL.festivosLocal(context)

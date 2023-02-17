@@ -41,19 +41,6 @@ WHERE usuest = :usuest AND
   fecest = TO_DATE(:fecest, 'YYYY-MM-DD')
 `
 const estadosUsuarioQuery = `SELECT 
-  0 AS "IDESTA", 
-  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') STRFEC,
-  0 AS "USUEST", 
-  0 AS "TIPEST", 
-  0 AS "OFIEST",
-  '' AS "DESOFI",
-  '08:30' AS "DESHOR",
-  '14:00' AS "HASHOR"
-FROM festivos ff
-WHERE (ff.ofifes = 0 OR ff.ofifes = :idofic) AND
-  ff.fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
-UNION
-SELECT 
   ee.idesta,
   TO_CHAR(ee.fecest, 'YYYY-MM-DD') STRFEC,
   ee.usuest,
@@ -234,7 +221,6 @@ export const insertTraspaso = async (bind) => {
     type: oracledb.NUMBER,
   }
 
-  console.log(insertTraspasoSql, bind)
   try {
     const result = await simpleExecute(insertTraspasoSql, bind)
 

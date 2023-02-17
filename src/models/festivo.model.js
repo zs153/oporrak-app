@@ -42,13 +42,16 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETEFESTIVO(
 
 // festivos
 export const find = async (context) => {
-  const query = festivosSql
-  const binds = {
+  let query = festivosSql
+  let binds = {
+    ofifes: context.OFIFES,
     desde: context.DESDE,
     hasta: context.HASTA,
   }
-  if (context.OFIFES) {
-    binds.ofifes = context.OFIFES
+
+  if (typeof context.OFIFES === 'undefined') {
+    delete binds.ofifes
+  } else {
     query += `AND ofifes = :ofifes`
   }
 
@@ -95,12 +98,12 @@ export const festivosOficina = async (context) => {
 }
 export const festivosLocal = async (context) => {
   let query = festivosLocalSql
-  const binds = {
+  let binds = {
     desde: context.DESDE,
     hasta: context.HASTA,
   }
 
-  if (context.OFIFES !== 0) {
+  if (context.OFIFES) {
     binds.ofifes = context.OFIFES
     query += `AND ff.ofifes = :ofifes`
   }

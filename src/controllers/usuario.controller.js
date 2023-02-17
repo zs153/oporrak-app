@@ -109,7 +109,7 @@ export const usuario = async (req, res) => {
 export const usuarios = async (req, res) => {
   const context = req.body.usuario
 
-console.log(context)
+
   try {
     const result = await DAL.find(context)
 
