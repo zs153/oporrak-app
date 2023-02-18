@@ -257,7 +257,9 @@
         }
         data.push(estado)
       })
-      calendario.setDataSource(data)
+      await calendario.setDataSource(data, {
+        preventRendering: true
+      })
       calendario.render()
     }
     const setSuccess = (element) => {
@@ -414,6 +416,22 @@
             // datasource
             pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
             dataSource.splice(pos, 1)
+
+            let data = []
+            dataSource.map((itm) => {
+              const estado = {
+                idesta: itm.idesta,
+                ofiest: itm.ofiest,
+                startDate: new Date(itm.startDate),
+                endDate: new Date(itm.endDate),
+                rangoH: itm.rangoH,
+                color: itm.color,
+              }
+              data.push(estado)
+            })
+            calendario.setDataSource(data, {
+              preventRendering: false
+            })
 
             // actualizar dia
             e.element.attributes.removeNamedItem("style")
