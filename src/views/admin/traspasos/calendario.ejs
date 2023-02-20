@@ -41,28 +41,29 @@
 
 <body class="antialiased">
   <div class="wrapper">
-    <%- include('../../partials/header') %> <%-
-      include('../../partials/navbar', {opcion: 'TRASPASO' }) %>
+    <%- include('../../partials/header') %> <%- include('../../partials/navbar', {opcion: 'TRASPASO' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
-              <div class="card mt-1">
-                <form method="POST">
-                  <input type="hidden" name="idusua" id="idusua" value="" />
-                  <input type="hidden" name="tipest" id="tipest" value="" />
-                  <div class="card-header d-block">
-                    <h3 class="card-title">Traspasos</h3>
-                    <div>
-                      <p class="subtitulo">
-                        <span class="text-muted">
-                          <%- datos.usuario.NOMUSU %>
-                        </span>
-                      </p>
+              <div class="card">
+                <form action="/admin/traspasos/update" method="POST" onclick="return confirm();">
+                  <input type="hidden" name="usuario" id="usuario" value="" />
+                  <input type="hidden" name="eventos" id="eventos" value="" />
+                  <div class="card-header p-2">
+                    <div class="d-block">
+                      <h3 class="card-title">Traspasos</h3>
+                      <div>
+                        <p class="subtitulo">
+                          <span class="text-muted">
+                            <%- datos.usuario.NOMUSU %>
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body p-2">
                     <div class="row">
                       <div class="col-2">
                         <div class="mb-1">
@@ -96,6 +97,19 @@
                     </div>
                     <div id="calendar" class="form-control"></div>
                   </div>
+                  <div class="card-footer p-2">
+                    <div class="d-flex">
+                      <a href="/admin/traspasos" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor"
+                          fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke-width=".4" fill="none"
+                            d="M11.025 19.575H5.9q-.65 0-1.062-.412-.413-.413-.413-1.038V5.875q0-.65.413-1.063.412-.412.987-.412h4.8q.1-.5.463-.838.362-.337.887-.337t.888.337q.362.338.462.838h4.8q.65 0 1.063.412.412.413.412 1.063V10h-.65V5.85q0-.3-.25-.55-.25-.25-.55-.25h-2.525v1.925H8.4V5.05H5.875q-.3 0-.55.25-.25.25-.25.55v12.275q0 .3.25.55.25.25.55.25h5.15Zm4.45-.675L12.2 15.6l.45-.45 2.825 2.825 5.65-5.65.475.45ZM12 5.3q.325 0 .525-.212.2-.213.2-.513 0-.3-.212-.513-.213-.212-.488-.212-.325 0-.525.212-.2.213-.2.513 0 .3.2.513.2.212.5.212Z" />
+                        </svg>
+                        Actualizar cambios
+                      </button>
+                    </div>
+                  </div>
                 </form>
               </div>
             </div>
@@ -105,58 +119,6 @@
     </div>
 
     <%- include('../../partials/footer') %>
-  </div>
-  <div class="modal modal-blur fade" id="modal-trasp" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="container-xl">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body p-0">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="form-label">Desde</div>
-                    <input type="date" id="desfecfor" name="desfecfor" class="form-control" />
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="form-label">Hasta</div>
-                    <input type="date" id="hasfecfor" name="hasfecfor" class="form-control" />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="form-label">Desde hora</div>
-                    <input type="time" id="deshorfor" name="deshorfor" class="form-control" min="08:00" max="20:00" />
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="mb-1">
-                    <div class="form-label">Hasta hora</div>
-                    <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00" max="20:00" />
-                  </div>
-                </div>
-                <div class="input-control">
-                  <input type="hidden" id="msgfor" name="msgfor" class="form-control" />
-                  <div class="invalid-feedback"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal" aria-label="Close">
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">
-              Aceptar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
   <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="container-xl">
@@ -179,45 +141,30 @@
   <script src="/js/js-year-calendar.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
   <script>
-    async function insertEvento(evento) {
-      let xhr = new XMLHttpRequest()
+    const setSuccess = (element) => {
+      const inputControl = element.parentElement
+      const errorDisplay = inputControl.querySelector('.invalid-feedback')
 
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject('Error, status code = ' + xhr.status)
-            } else {
-              const result = JSON.parse(xhr.response)
-
-              resolve(result)
-            }
-          }
-        }
-
-        xhr.open('POST',`http://${serverAPI}:${puertoAPI}/api/estados/insert/traspaso`,true)
-        xhr.setRequestHeader('Content-Type','application/json; charset=utf-8')
-        xhr.send(JSON.stringify(evento))
-      })
+      errorDisplay.innerText = ''
+      inputControl.classList.add('is-valid')
+      element.classList.remove('is-invalid')
     }
-    async function deleteEvento(evento) {
-      const xhr = new XMLHttpRequest()
+    const setError = (element, message) => {
+      const inputControl = element.parentElement
+      const errorDisplay = inputControl.querySelector('.invalid-feedback')
 
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject('Error, status code = ' + xhr.status)
-            } else {
-              resolve(evento)
-            }
-          }
-        }
-
-        xhr.open('POST',`http://${serverAPI}:${puertoAPI}/api/estados/delete/traspaso`,true)
-        xhr.setRequestHeader('Content-Type','application/json; charset=utf-8')
-        xhr.send(JSON.stringify(evento))
-      })
+      errorDisplay.innerText = message
+      element.classList.add('is-invalid')
+      inputControl.classList.remove('is-valid')
+    }
+    const validate = (ele, msg) => {
+      if (ele.value === '0') {
+        setError(ele, msg)
+        setTimeout(function () {
+          setSuccess(ele)
+        }, 3000)
+        return false
+      }
     }
     const dateISOToUTCString = (dateISO) => {
       const fecha = new Date(dateISO)
@@ -261,51 +208,30 @@
         preventRendering: true
       })
       calendario.render()
-    }
-    const setSuccess = (element) => {
-      const inputControl = element.parentElement
-      const errorDisplay = inputControl.querySelector('.invalid-feedback')
 
-      errorDisplay.innerText = ''
-      inputControl.classList.add('is-valid')
-      element.classList.remove('is-invalid')
+      return
     }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement
-      const errorDisplay = inputControl.querySelector('.invalid-feedback')
-
-      errorDisplay.innerText = message
-      element.classList.add('is-invalid')
-      inputControl.classList.remove('is-valid')
+    const confirm = () => {
+      document.getElementById("eventos").value = JSON.stringify(eventos)
+      document.getElementById("usuario").value = JSON.stringify(usuario)
+      return true
     }
-    const validate = (ele, msg) => {
-      if (ele.value === '0') {
-        setError(ele, msg)
-        setTimeout(function () {
-          setSuccess(ele)
-        }, 3000)
-        return false
-      }
-    }
-  </script>
-  <script>
+    const usuario =  <%- JSON.stringify(datos.usuario) %>
     const oficinas = <%- JSON.stringify(datos.oficinas) %>
     const festivosComun = <%- JSON.stringify(datos.festivosComun) %>
     const festivosLocal = <%- JSON.stringify(datos.festivosLocal) %>
     const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
     const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
-    
+
     let dataSource = <%- JSON.stringify(datos.dataSource) %>
     let festivos = festivosComun
+    let eventos = []
     let festivoLocal = null
     let calendario = null
     let currentYear = new Date().getFullYear()
     let params = {
-      fecha: new Date().toISOString().slice(0, 10),
-      oficina: <%- datos.usuario.OFIUSU %>,
-      usuario: <%- datos.usuario.IDUSUA %>,
       destino: 0,
-      tipo: <%- datos.tiposEstado.traspaso.ID %>,
+      nombre: '',
       color: '<%- datos.tiposEstado.traspaso.COLOR %>',
       desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
       hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
@@ -315,6 +241,7 @@
       minDate: new Date(params.desde),
       maxDate: new Date(params.hasta),
       language: "es",
+      displayHeader: false,
       mouseOnDay: function (e) {
         let content = '';
 
@@ -370,6 +297,7 @@
     });
     document.getElementById('cbodes').addEventListener('change', function () {
       params.destino = parseInt(this.value)
+      params.nombre = this.options[this.selectedIndex].text
 
       festivoOficina(params.destino)
     });
@@ -381,135 +309,98 @@
       }
 
       // bloquear si no existe destino
-      if (e.events.length === 0 &&
-        (params.destino === 0 || params.oficina === params.destino)) {
+      if (e.events.length === 0 && params.destino === 0) {
         validate(document.getElementById('cbodes'), 'Destino requerido')
         return
       }
 
-      // evento por rango
-      // TODO
-      // if (e.events.length === 0 &&
-      //   editEvento(e)
-      //   return
-      // }
+      params.fecha = new Date(e.date.getTime() - (e.date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)
 
       if (e.events.length) {
+        //eventos
+        const epos = eventos.map(itm => itm.fecest).indexOf(params.fecha);
+        if (epos !== -1) {
+          eventos.splice(epos, 1)
+        }
         if (e.events[0].idesta !== 0) {
-          const evento = {
-            estado: {
-              IDESTA: e.events[0].idesta,
-            },
-            traspaso: {
-              USUEST: params.usuario,
-              FECEST: dateISOToUTCString(e.date),
-              TIPEST: <%- datos.tiposEstado.traspasado.ID %>,
-            },
-            movimiento: {
-              USUMOV: <%- user.id %>,
-              TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
-              }
-          }
-
-          // borrar
-          await deleteEvento(evento).then(ret => {
-            // datasource
-            pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
-            dataSource.splice(pos, 1)
-
-            let data = []
-            dataSource.map((itm) => {
-              const estado = {
-                idesta: itm.idesta,
-                ofiest: itm.ofiest,
-                startDate: new Date(itm.startDate),
-                endDate: new Date(itm.endDate),
-                rangoH: itm.rangoH,
-                color: itm.color,
-              }
-              data.push(estado)
-            })
-            calendario.setDataSource(data, {
-              preventRendering: false
-            })
-
-            // actualizar dia
-            e.element.attributes.removeNamedItem("style")
+          eventos.push({
+            idesta: e.events[0].idesta,
+            fecest: params.fecha,
+            ofiest: params.destino,
           })
         }
-      } else {
-        params.fecha = dateISOToUTCString(e.date.toISOString())
 
+        // dataSource
+        const dpos = dataSource.map(itm => itm.idesta).indexOf(e.events[0].idesta);
+        dataSource.splice(dpos, 1)
+
+        let data = []
+        dataSource.map((itm) => {
+          const estado = {
+            idesta: itm.idesta,
+            ofiest: itm.ofiest,
+            startDate: new Date(itm.startDate),
+            endDate: new Date(itm.endDate),
+            rangoH: itm.rangoH,
+            color: itm.color,
+          }
+          data.push(estado)
+        })
+        calendario.setDataSource(data, {
+          preventRendering: false
+        })
+
+        // actualizar dia
+        e.element.attributes.removeNamedItem("style")
+      } else {
         // solapes
         const result = dataSource.find(itm => itm.startDate === params.fecha)
         if (result) {
           const modalSolape = document.getElementById('modal-solape')
-
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
           e.element.setAttribute('title', 'Solape de eventos')
-
           modalSolape.style.display = 'flex'
           return
         }
 
-        // evento
-        const evento = {
-          estado: {
-            FECEST: params.fecha,
-            USUEST: params.usuario,
-            TIPEST: params.tipo,
-            OFIEST: params.oficina,
-            DESHOR: '+00 08:30:00',
-            HASHOR: '+00 14:00:00',
-          },
-          traspaso: {
-            TIPTRA: <%- datos.tiposEstado.traspasado.ID %>,
-            OFITRA: params.destino,
-          },
-          movimiento: {
-            USUMOV: <%- user.id %>,
-            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-            }
-        }
-
-        // insertar
-        await insertEvento(evento).then(ret => {
-          // oficina
-          const oficina = document.getElementById('cbodes')
-
-          // actualiza dia calendario
-          const estado = {
-            idesta: ret.idesta,
-            ofiest: parseInt(oficina.value),
-            startDate: ret.fecest,
-            endDate: ret.fecest,
-            rangoH: `${oficina[oficina.selectedIndex].text}\n(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
-            color: params.color,
-          }
-          dataSource.push(estado)
-
-          let data = []
-          dataSource.map((itm) => {
-            const estado = {
-              idesta: itm.idesta,
-              ofiest: itm.ofiest,
-              startDate: new Date(itm.startDate),
-              endDate: new Date(itm.endDate),
-              rangoH: itm.rangoH,
-              color: itm.color,
-            }
-            data.push(estado)
-          })
-          calendario.setDataSource(data, {
-            preventRendering: false
-          })
-
-          // actualizar dia
-          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+        //eventos
+        eventos.push({
+          idesta: 0,
+          fecest: params.fecha,
+          ofiest: params.destino,
         })
-      }
 
+        // actualiza dia calendario
+        const estado = {
+          idesta: 0,
+          ofiest: params.destino,
+          startDate: params.fecha,
+          endDate: params.fecha,
+          rangoH: `${params.nombre}\n(08:30 a 14:00)`,
+          color: params.color,
+        }
+        dataSource.push(estado)
+
+        let data = []
+        dataSource.map((itm) => {
+          const estado = {
+            idesta: itm.idesta,
+            ofiest: itm.ofiest,
+            startDate: new Date(itm.startDate),
+            endDate: new Date(itm.endDate),
+            rangoH: itm.rangoH,
+            color: itm.color,
+          }
+          data.push(estado)
+        })
+        calendario.setDataSource(data, {
+          preventRendering: false
+        })
+
+        // actualizar dia
+        e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+      }
     })
   </script>
 </body>

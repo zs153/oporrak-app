@@ -69,7 +69,11 @@ export const calendario = async (req, res) => {
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       usuario,
     })
-    usuario = ret.data
+    usuario = {
+      IDUSUA: ret.data.IDUSUA,
+      OFIUSU: ret.data.OFIUSU,
+      NOMUSU: ret.data.NOMUSU,
+    }
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
       estado,
@@ -110,6 +114,44 @@ export const calendario = async (req, res) => {
       alerts: [{ msg }],
     })
   }
+}
+export const update = async (req, res) => {
+  const usuario = JSON.parse(req.body.usuario)
+  const eventos = JSON.parse(req.body.eventos)
+  let estados = []
+
+  eventos.map(itm => {
+    if (itm.idesta === 0) {
+      // traspaso
+      estados.push({
+        idesta: itm.idesta,
+        fecest: itm.fecest,
+        usuest: usuario.IDUSUA,
+        tipest: tiposEstado.traspaso.ID,
+        ofiest: usuario.OFIUSU,
+      })
+      //traspasado
+      estados.push({
+        idesta: itm.idesta,
+        fecest: itm.fecest,
+        usuest: usuario.IDUSUA,
+        tipest: tiposEstado.traspasado.ID,
+        ofiest: itm.ofiest,
+      })
+    } else {
+      // borrado (el idesta borra el traspaso y fecest, usuest y tipest borra el traspasado)
+      estados.push({
+        idesta: itm.idesta,
+        fecest: itm.fecest,
+        usuest: usuario.IDUSUA,
+        tipest: tiposEstado.traspasado.ID,
+        ofiest: 0,
+      })
+    }
+  })
+
+  console.log(estados)
+  mainPage(req, res)
 }
 
 // helpers
