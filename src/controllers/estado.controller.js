@@ -80,6 +80,24 @@ const insertRangoFromRec = (req) => {
 
   return Object.assign(estado, movimiento)
 }
+const actualizaTraspasosFromRec = (req) => {
+  const traspasos = {
+    arrtra: {
+      type: 'OPORRAK_PKG.TRAS_ARRAY',
+      //val: req.body.traspasos.ARRTRA,
+      val:
+        [
+          { idesta: 0, fecest: '2023-04-03', usuest: 2, tipest: 4, ofiest: 1 }
+        ]
+    }
+  }
+  const movimiento = {
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
+    tipmoz: req.body.movimiento.TIPMOZ,
+  }
+  return Object.assign(traspasos, movimiento)
+}
 
 // estado
 export const estado = async (req, res) => {
@@ -175,6 +193,20 @@ export const borrarTraspaso = async (req, res) => {
       res.status(404).end()
     }
   } catch (err) {
+    res.status(500).end()
+  }
+}
+export const actualizaTraspasos = async (req, res) => {
+  try {
+    const result = await DAL.updateTraspasos(actualizaTraspasosFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    console.log(err)
     res.status(500).end()
   }
 }

@@ -150,6 +150,13 @@ const insertRangoSql = `BEGIN OPORRAK_PKG.INSERTESTADORANGO(
   :idesta
 ); END;
 `
+const updateTraspasosSql = `BEGIN OPORRAK_PKG.UPDATETRASPASOS(
+  :arrtra,
+  :usumov,
+  :tipmov,
+  :tipmoz
+); END;
+`
 
 // estados
 export const find = async (context) => {
@@ -237,6 +244,20 @@ export const removeTraspaso = async (bind) => {
 
   try {
     await simpleExecute(removeTraspasoSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+export const updateTraspasos = async (bind) => {
+  let result
+
+  console.log(updateTraspasosSql, bind)
+  try {
+    await simpleExecute(updateTraspasosSql, bind)
 
     result = bind
   } catch (error) {
