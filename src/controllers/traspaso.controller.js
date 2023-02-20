@@ -116,6 +116,7 @@ export const calendario = async (req, res) => {
   }
 }
 export const update = async (req, res) => {
+  const user = req.user
   const usuario = JSON.parse(req.body.usuario)
   const eventos = JSON.parse(req.body.eventos)
   let estados = []
@@ -150,8 +151,29 @@ export const update = async (req, res) => {
     }
   })
 
-  console.log(estados)
-  mainPage(req, res)
+  const traspasos = {
+    ARRTRA: estados
+  }
+  const movimiento = {
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearTraspaso,
+    TIPMOZ: tiposMovimiento.borrarTraspaso,
+  }
+
+  try {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update/traspasos`, {
+      traspasos,
+      movimiento,
+    });
+
+    mainPage(req, res)
+  } catch (error) {
+    const msg = "No se ha podido insertar los datos.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
 }
 
 // helpers

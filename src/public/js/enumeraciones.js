@@ -64,6 +64,8 @@ export const tiposMovimiento = {
   registroUsuario: 63,
   activarUsuario: 64,
   matricularse: 65,
+  crearTraspaso: 66,
+  borrarTraspaso: 67,
 }
 export const tiposPerfil = {
   general: 1,
