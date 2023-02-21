@@ -255,7 +255,6 @@ export const removeTraspaso = async (bind) => {
 export const updateTraspasos = async (bind) => {
   let result
 
-  console.log(updateTraspasosSql, bind)
   try {
     await simpleExecute(updateTraspasosSql, bind)
 

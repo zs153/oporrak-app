@@ -83,12 +83,8 @@ const insertRangoFromRec = (req) => {
 const actualizaTraspasosFromRec = (req) => {
   const traspasos = {
     arrtra: {
-      type: 'OPORRAK_PKG.TRAS_ARRAY',
-      //val: req.body.traspasos.ARRTRA,
-      val:
-        [
-          { idesta: 0, fecest: '2023-04-03', usuest: 2, tipest: 4, ofiest: 1 }
-        ]
+      type: 'TRASPTYPE',
+      val: req.body.traspasos.ARRTRA,
     }
   }
   const movimiento = {
