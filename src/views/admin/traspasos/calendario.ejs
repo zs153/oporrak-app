@@ -41,7 +41,8 @@
 
 <body class="antialiased">
   <div class="wrapper">
-    <%- include('../../partials/header') %> <%- include('../../partials/navbar', {opcion: 'TRASPASO' }) %>
+    <%- include('../../partials/header') %> 
+    <%- include('../../partials/navbar', {opcion: 'TRASPASO' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -49,7 +50,7 @@
             <div class="col-12">
               <div class="card">
                 <form action="/admin/traspasos/update" method="POST" onclick="return confirm();">
-                  <input type="hidden" name="usuario" id="usuario" value="" />
+                  <input type="hidden" name="usuario" id="usuario" value="<%= datos.usuario %>" />
                   <input type="hidden" name="eventos" id="eventos" value="" />
                   <div class="card-header p-2">
                     <div class="d-block">
@@ -213,18 +214,14 @@
     }
     const confirm = () => {
       document.getElementById("eventos").value = JSON.stringify(eventos)
-      document.getElementById("usuario").value = JSON.stringify(usuario)
       return true
     }
-    const usuario =  <%- JSON.stringify(datos.usuario) %>
-    const oficinas = <%- JSON.stringify(datos.oficinas) %>
-    const festivosComun = <%- JSON.stringify(datos.festivosComun) %>
-    const festivosLocal = <%- JSON.stringify(datos.festivosLocal) %>
-    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
-    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
+    const festivosLocal = <%- datos.festivosLocal %>
+    const serverAPI = `<%- datos.serverAPI %>`
+    const puertoAPI = `<%- datos.puertoAPI %>`
 
-    let dataSource = <%- JSON.stringify(datos.dataSource) %>
-    let festivos = festivosComun
+    let dataSource = <%- datos.dataSource %>
+    let festivos = <%- datos.festivosComun %>
     let eventos = []
     let festivoLocal = null
     let calendario = null
@@ -259,11 +256,11 @@
           e.parentElement.classList.remove('festivo')
         }
         if (festivos.map(itm => itm.FECFES).indexOf(fecha) !== -1) {
-          e.style.color = '#FC0000'
+          e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
           e.parentElement.classList.add('festivo')
         }
         if (date.getDay() === 0) {
-          e.style.color = '#FC0000'
+          e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
         }
       },
       dataSource: function () {

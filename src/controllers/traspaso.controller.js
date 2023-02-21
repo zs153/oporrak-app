@@ -96,10 +96,10 @@ export const calendario = async (req, res) => {
     })
     const datos = {
       oficinas,
-      festivosComun,
-      festivosLocal,
-      usuario,
-      dataSource,
+      festivosComun: JSON.stringify(festivosComun),
+      festivosLocal: JSON.stringify(festivosLocal),
+      usuario: JSON.stringify(usuario),
+      dataSource: JSON.stringify(dataSource),
       tiposEstado,
       tiposMovimiento,
       serverAPI,
@@ -125,34 +125,34 @@ export const update = async (req, res) => {
     if (itm.idesta === 0) {
       // traspaso
       estados.push({
-        idesta: itm.idesta,
-        fecest: itm.fecest,
-        usuest: usuario.IDUSUA,
-        tipest: tiposEstado.traspaso.ID,
-        ofiest: usuario.OFIUSU,
+        IDESTA: itm.idesta,
+        FECEST: itm.fecest,
+        USUEST: usuario.IDUSUA,
+        TIPEST: tiposEstado.traspaso.ID,
+        OFIEST: usuario.OFIUSU,
       })
       //traspasado
       estados.push({
-        idesta: itm.idesta,
-        fecest: itm.fecest,
-        usuest: usuario.IDUSUA,
-        tipest: tiposEstado.traspasado.ID,
-        ofiest: itm.ofiest,
+        IDESTA: itm.idesta,
+        FECEST: itm.fecest,
+        USUEST: usuario.IDUSUA,
+        TIPEST: tiposEstado.traspasado.ID,
+        OFIEST: itm.ofiest,
       })
     } else {
       // borrado (el idesta borra el traspaso y fecest, usuest y tipest borra el traspasado)
       estados.push({
-        idesta: itm.idesta,
-        fecest: itm.fecest,
-        usuest: usuario.IDUSUA,
-        tipest: tiposEstado.traspasado.ID,
-        ofiest: 0,
+        IDESTA: itm.idesta,
+        FECEST: itm.fecest,
+        USUEST: usuario.IDUSUA,
+        TIPEST: tiposEstado.traspasado.ID,
+        OFIEST: 0,
       })
     }
   })
 
   const traspasos = {
-    ARRTRA: estados
+    ARRTRA: estados // importante!! los campos del array estados tienen que ir en mayusculas
   }
   const movimiento = {
     USUMOV: user.id,
