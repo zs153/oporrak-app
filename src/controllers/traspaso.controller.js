@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI } from "../config/settings";
+import { serverAPI, puertoAPI, serverWEB, puertoWEB } from "../config/settings";
 import { tiposRol, tiposEstado, tiposMovimiento } from '../public/js/enumeraciones'
 
 // pages
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
-  const usuario = user.rol === user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: user.oficina }
+  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.idofic }
+  const usuario = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.idofic }
 
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
@@ -16,10 +16,11 @@ export const mainPage = async (req, res) => {
       usuario,
     })
     const datos = {
+      oficina: parseInt(req.params.idofic),
       oficinas: oficinas.data,
       usuarios: usuarios.data,
-      serverAPI,
-      puertoAPI,
+      serverWEB,
+      puertoWEB,
     }
 
     res.render('admin/traspasos', { user, datos })
@@ -35,6 +36,7 @@ export const mainPage = async (req, res) => {
 // proc
 export const calendario = async (req, res) => {
   const user = req.user
+  
   let currentYear = new Date().getFullYear()
   const estado = {
     USUEST: req.body.idusua,
@@ -106,7 +108,7 @@ export const calendario = async (req, res) => {
       puertoAPI,
     }
 
-    res.render('admin/traspasos/calendario', { user, datos })
+    res.render(`admin/traspasos/calendario`, { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -161,10 +163,12 @@ export const update = async (req, res) => {
   }
 
   try {
-    await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update/traspasos`, {
-      traspasos,
-      movimiento,
-    });
+    if (traspasos.length !== 0) {
+      await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update/traspasos`, {
+        traspasos,
+        movimiento,
+      });
+    }
 
     mainPage(req, res)
   } catch (error) {

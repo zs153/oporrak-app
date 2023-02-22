@@ -50,7 +50,7 @@
             <div class="col-12">
               <div class="card">
                 <form action="/admin/traspasos/update" method="POST" onclick="return confirm();">
-                  <input type="hidden" name="usuario" id="usuario" value="<%= datos.usuario %>" />
+                  <input type="hidden" name="usuario" id="usuario" value="" />
                   <input type="hidden" name="eventos" id="eventos" value="" />
                   <div class="card-header p-2">
                     <div class="d-block">
@@ -58,7 +58,7 @@
                       <div>
                         <p class="subtitulo">
                           <span class="text-muted">
-                            <%- datos.usuario.NOMUSU %>
+                            <%- JSON.parse(datos.usuario).NOMUSU %>
                           </span>
                         </p>
                       </div>
@@ -100,7 +100,7 @@
                   </div>
                   <div class="card-footer p-2">
                     <div class="d-flex">
-                      <a href="/admin/traspasos" class="btn btn-link">Cancelar</a>
+                      <a href="/admin/traspasos/<%- JSON.parse(datos.usuario).OFIUSU %>" class="btn btn-link">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor"
                           fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -214,11 +214,12 @@
     }
     const confirm = () => {
       document.getElementById("eventos").value = JSON.stringify(eventos)
+      document.getElementById("usuario").value = JSON.stringify(<%- datos.usuario %>)
       return true
     }
     const festivosLocal = <%- datos.festivosLocal %>
     const serverAPI = `<%- datos.serverAPI %>`
-    const puertoAPI = `<%- datos.puertoAPI %>`
+    const puertoAPI = `<%- datos.puertoAPI %>`  
 
     let dataSource = <%- datos.dataSource %>
     let festivos = <%- datos.festivosComun %>

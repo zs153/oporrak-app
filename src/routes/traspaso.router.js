@@ -9,7 +9,7 @@ import {
 const traspasoRouter = express.Router();
 
 // pages
-traspasoRouter.get("/traspasos", authRoutes, mainPage);
+traspasoRouter.get("/traspasos/:idofic", authRoutes, mainPage);
 
 // proc 
 traspasoRouter.post("/traspasos/calendario", authRoutes, calendario);
