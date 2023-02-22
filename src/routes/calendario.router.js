@@ -2,19 +2,17 @@ import express from "express";
 import authRoutes from "../middleware/auth";
 import {
   mainPage,
-  insert,
-  remove,
+  update,
   calendario,
 } from "../controllers/calendario.controller";
 
 const calendarioRouter = express.Router();
 
 // paginas
-calendarioRouter.get("/calendarios", authRoutes, mainPage);
+calendarioRouter.get("/calendarios/:id", authRoutes, mainPage);
 
 // proc 
 calendarioRouter.post("/calendarios/calendario", authRoutes, calendario);
-calendarioRouter.post("/calendarios/insert", authRoutes, insert);
-calendarioRouter.post("/calendarios/delete", authRoutes, remove);
+calendarioRouter.post("/calendarios/update", authRoutes, update);
 
 export default calendarioRouter;

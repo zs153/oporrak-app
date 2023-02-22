@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI } from '../config/settings'
+import { serverAPI, puertoAPI, serverWEB, puertoWEB } from '../config/settings'
 import { tiposRol, tiposMovimiento, tiposEstado, arrTiposEstadoUsuario, arrTiposEstado, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = user.rol === tiposRol.admin ? {}:{IDOFIC: user.oficina}
-  const usuario = user.rol === user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: user.oficina }
+  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.id }
+  const usuario = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.id }
 
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
@@ -14,12 +14,12 @@ export const mainPage = async (req, res) => {
     let usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       usuario,
     })
-
     const datos = {
+      oficina: parseInt(req.params.id),
       oficinas: oficinas.data,
       usuarios: usuarios.data,
-      serverAPI,
-      puertoAPI,
+      serverWEB,
+      puertoWEB,
     }
 
     res.render('admin/calendarios', { user, datos })
@@ -34,37 +34,76 @@ export const mainPage = async (req, res) => {
 
 // proc
 export const calendario = async (req, res) => {
-  const user = req.user
   let currentYear = new Date().getFullYear()
-  const estado = {
-    idofic: req.body.idofic,
-    usuest: req.body.idusua,
-    tipest: 0,
-    desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    hasta: dateISOToUTCString(`${currentYear +1}-12-31T00:00:00`),
-  }
-  const usuario = {
+  let usuario = {
     IDUSUA: req.body.idusua,
   }
 
+  const user = req.user
+  const estado = {
+    USUEST: req.body.idusua,
+    TIPEST: 0,
+    OFIDES: 0,
+    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+    HASTA: dateISOToUTCString(`${currentYear +1}-12-31T00:00:00`),
+  }
+  const oficina = {}
+  const festivo = {
+    OFIFES: undefined,
+    DESDE: estado.DESDE,
+    HASTA: estado.HASTA,
+  }
+
+  let ret
   try {
-    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
+    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
+      oficina,
+    })
+    const oficinas = ret.data
+
+    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
+      festivo,
+    })
+    const festivosComun = ret.data.filter(itm => itm.OFIFES === 0)
+    const festivosLocal = ret.data.filter(itm => itm.OFIFES > 0)
+
+    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+      usuario,
+    })
+    usuario = {
+      IDUSUA: ret.data.IDUSUA,
+      OFIUSU: ret.data.OFIUSU,
+      NOMUSU: ret.data.NOMUSU,
+    }
+
+    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
       estado,
     })
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      usuario,
+
+    let dataSource = []
+    ret.data.map(itm => {
+      if (itm.TIPEST === tiposEstado.traspaso.ID) {
+        const estado = ret.data[ret.data.findIndex(el => el.STRFEC === itm.STRFEC && el.TIPEST === tiposEstado.traspasado.ID)]
+        const rec = {
+          idesta: itm.IDESTA,
+          ofiest: estado.OFIEST,
+          startDate: itm.STRFEC,
+          endDate: itm.STRFEC,
+          rangoH: `${estado.DESOFI}\n(${itm.DESHOR} a ${itm.HASHOR})`,
+          color: `${tiposEstado.traspaso.COLOR}`
+        }
+        dataSource.push(rec)
+      }
     })
 
     const datos = {
-      estados: estados.data,
-      usuario: result.data,
-      tiposEstado,
-      tiposRol,
       arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
-      arrColoresEstado,
-      tiposMovimiento,
-      serverAPI,
-      puertoAPI,
+      tiposEstado,
+      oficinas,
+      festivosComun: JSON.stringify(festivosComun),
+      festivosLocal: JSON.stringify(festivosLocal),
+      usuario: JSON.stringify(usuario),
+      dataSource: JSON.stringify(dataSource),
     }
 
     res.render('admin/calendarios/calendario', { user, datos })
@@ -76,60 +115,58 @@ export const calendario = async (req, res) => {
     })
   }
 }
-export const insert = async (req, res) => {
+export const update = async (req, res) => {
   const user = req.user
-  const calendario = {
-    // TODO
-    desofi: req.body.desofi.toUpperCase(),
-    codofi: req.body.codofi.toUpperCase(),
+  const usuario = JSON.parse(req.body.usuario)
+  const evnt = JSON.parse(req.body.eventos)
+  let estados = []
+
+  evnt.map(itm => {
+    if (itm.idesta === 0) {
+      // insert
+      estados.push({
+        IDESTA: itm.idesta,
+        FECEST: itm.fecest,
+        USUEST: usuario.IDUSUA,
+        TIPEST: itm.tipest,
+        OFIEST: usuario.OFIUSU,
+      })
+    } else {
+      // borrado (el IDESTA borra el traspaso y FECEST, USUEST y TIPOEST borra el traspasado)
+      estados.push({
+        IDESTA: itm.idesta,
+        FECEST: itm.fecest,
+        USUEST: usuario.IDUSUA,
+        TIPEST: itm.tipest,
+        OFIEST: 0,
+      })
+    }
+  })
+
+  const eventos = {
+    ARREVE: estados // importante!! los campos del array estados tienen que ir en mayusculas
   }
   const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.crearOficina,
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearEstado,
+    TIPMOZ: tiposMovimiento.borrarEstado,
   }
 
   try {
-    await axios.post(`http://${serverAPI}:${puertoAPI}/api/calendarios/insert`, {
-      calendario,
-      movimiento,
-    })
-
-    res.redirect('/admin/calendarios')
-  } catch (error) {
-    let msg = 'No se ha podido crear el calendario.'
-
-    if (error.response.data.errorNum === 20100) {
-      msg = 'La oficina ya existe.'
+    if (traspasos.length !== 0) {
+      await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update/traspasos`, {
+        eventos,
+        movimiento,
+      });
     }
 
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
-  }
-}
-export const remove = async (req, res) => {
-  const user = req.user
-  const calendario = {
-    idcale: req.body.idcale,
-  }
-  const movimiento = {
-    usumov: user.id,
-    tipmov: tiposMovimiento.borrarOficina,
-  }
-
-  try {
-    await axios.post(`http://${serverAPI}:${puertoAPI}/api/calendarios/delete`, {
-      calendario,
-      movimiento,
-    })
-
-    res.redirect('/admin/calendarios')
+    mainPage(req, res)
   } catch (error) {
-    const msg = 'No se ha podido elminar el calendario.'
+    const msg = "No se ha podido insertar los datos.";
 
-    res.render('admin/error400', {
+    res.render("admin/error400", {
       alerts: [{ msg }],
-    })
+    });
   }
 }
 

@@ -35,18 +35,18 @@ export const mainPage = async (req, res) => {
 
 // proc
 export const calendario = async (req, res) => {
-  const user = req.user
-  
   let currentYear = new Date().getFullYear()
+  let usuario = {
+    IDUSUA: req.body.idusua,
+  }
+  
+  const user = req.user
   const estado = {
     USUEST: req.body.idusua,
     TIPEST: 0,
     OFIDES: 0,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-  }
-  let usuario = {
-    IDUSUA: req.body.idusua,
   }
   const oficina = {}
   const festivo = {
@@ -96,16 +96,13 @@ export const calendario = async (req, res) => {
         dataSource.push(rec)
       }
     })
+
     const datos = {
       oficinas,
       festivosComun: JSON.stringify(festivosComun),
       festivosLocal: JSON.stringify(festivosLocal),
       usuario: JSON.stringify(usuario),
       dataSource: JSON.stringify(dataSource),
-      tiposEstado,
-      tiposMovimiento,
-      serverAPI,
-      puertoAPI,
     }
 
     res.render(`admin/traspasos/calendario`, { user, datos })
@@ -142,7 +139,7 @@ export const update = async (req, res) => {
         OFIEST: itm.ofiest,
       })
     } else {
-      // borrado (el idesta borra el traspaso y fecest, usuest y tipest borra el traspasado)
+      // borrado (el IDESTA borra el traspaso y FECEST, USUEST y TIPOEST borra el traspasado)
       estados.push({
         IDESTA: itm.idesta,
         FECEST: itm.fecest,
