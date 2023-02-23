@@ -94,6 +94,20 @@ const actualizaTraspasosFromRec = (req) => {
   }
   return Object.assign(traspasos, movimiento)
 }
+const actualizaEstadosFromRec = (req) => {
+  const estados = {
+    arrest: {
+      type: 'STADTYPE',
+      val: req.body.context.ARREST,
+    }
+  }
+  const movimiento = {
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
+    tipmoz: req.body.movimiento.TIPMOZ,
+  }
+  return Object.assign(estados, movimiento)
+}
 
 // estado
 export const estado = async (req, res) => {
@@ -195,6 +209,22 @@ export const borrarTraspaso = async (req, res) => {
 export const actualizaTraspasos = async (req, res) => {
   try {
     const result = await DAL.updateTraspasos(actualizaTraspasosFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).end()
+  }
+}
+
+// tmp
+export const actualizaEstados = async (req, res) => {
+  try {
+    const result = await DAL.updateEstados(actualizaEstadosFromRec(req))
 
     if (result !== null) {
       res.status(200).json(result)

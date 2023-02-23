@@ -157,6 +157,13 @@ const updateTraspasosSql = `BEGIN OPORRAK_PKG.UPDATETRASPASOS(
   :tipmoz
 ); END;
 `
+const updateEstadosSql = `BEGIN OPORRAK_PKG.UPDATEESTADOS(
+  :arrest,
+  :usumov,
+  :tipmov,
+  :tipmoz
+); END;
+`
 
 // estados
 export const find = async (context) => {
@@ -257,6 +264,21 @@ export const updateTraspasos = async (bind) => {
 
   try {
     await simpleExecute(updateTraspasosSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+
+// estados
+export const updateEstados = async (bind) => {
+  let result
+
+  try {
+    await simpleExecute(updateEstadosSql, bind)
 
     result = bind
   } catch (error) {
