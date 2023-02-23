@@ -49,6 +49,7 @@ export const find = async (context) => {
     hasta: context.HASTA,
   }
 
+  console.log(query, binds)
   if (typeof context.OFIFES === 'undefined') {
     delete binds.ofifes
   } else {

@@ -80,8 +80,8 @@ export const borrar = async (req, res) => {
 
 // oficina
 export const festivosOficina = async (req, res) => {
-  const context = req.body
-
+  const context = req.body.festivo
+  
   try {
     const result = await DAL.festivosOficina(context)
 
