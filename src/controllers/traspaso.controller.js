@@ -101,6 +101,7 @@ export const calendario = async (req, res) => {
       oficinas,
       festivosComun: JSON.stringify(festivosComun),
       festivosLocal: JSON.stringify(festivosLocal),
+      tiposEstado,
       usuario: JSON.stringify(usuario),
       dataSource: JSON.stringify(dataSource),
     }

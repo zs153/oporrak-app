@@ -35,37 +35,30 @@ export const mainPage = async (req, res) => {
 // proc
 export const calendario = async (req, res) => {
   let currentYear = new Date().getFullYear()
+  let ret
   let usuario = {
     IDUSUA: req.body.idusua,
   }
 
   const user = req.user
   const estado = {
+    OFIDES: 0,
     USUEST: req.body.idusua,
     TIPEST: 0,
-    OFIDES: 0,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear +1}-12-31T00:00:00`),
   }
-  const oficina = {}
   const festivo = {
-    OFIFES: undefined,
+    OFIFES: req.body.idofic,
     DESDE: estado.DESDE,
     HASTA: estado.HASTA,
   }
 
-  let ret
   try {
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
-    })
-    const oficinas = ret.data
-
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
+    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       festivo,
     })
-    const festivosComun = ret.data.filter(itm => itm.OFIFES === 0)
-    const festivosLocal = ret.data.filter(itm => itm.OFIFES > 0)
+    const festivos = ret.data.map(itm => itm.FECFES)
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       usuario,
@@ -82,27 +75,26 @@ export const calendario = async (req, res) => {
 
     let dataSource = []
     ret.data.map(itm => {
-      if (itm.TIPEST === tiposEstado.traspaso.ID) {
-        const estado = ret.data[ret.data.findIndex(el => el.STRFEC === itm.STRFEC && el.TIPEST === tiposEstado.traspasado.ID)]
+      if (itm.TIPEST !== tiposEstado.traspasado.ID &&
+          itm.TIPEST !== tiposEstado.traspaso.ID) {
         const rec = {
           idesta: itm.IDESTA,
-          ofiest: estado.OFIEST,
+          tipest: itm.TIPEST,
           startDate: itm.STRFEC,
           endDate: itm.STRFEC,
-          rangoH: `${estado.DESOFI}\n(${itm.DESHOR} a ${itm.HASHOR})`,
-          color: `${tiposEstado.traspaso.COLOR}`
+          rangoH: `${arrColoresEstado[itm.TIPEST].DES} (${itm.DESHOR} a ${itm.HASHOR})`,
+          color: `${arrColoresEstado[itm.TIPEST].COLOR}`
         }
         dataSource.push(rec)
       }
     })
 
     const datos = {
-      arrTiposEstado: req.user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
+      arrTiposEstado: user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
+      arrColoresEstado,
       tiposEstado,
-      oficinas,
-      festivosComun: JSON.stringify(festivosComun),
-      festivosLocal: JSON.stringify(festivosLocal),
-      usuario: JSON.stringify(usuario),
+      festivos: JSON.stringify(festivos),
+      usuario,
       dataSource: JSON.stringify(dataSource),
     }
 

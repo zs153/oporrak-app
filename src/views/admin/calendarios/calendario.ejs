@@ -38,335 +38,264 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
-        <div class="page-wrapper">
-          <div class="page-body">
-            <div class="container-xl">
+    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <form method="POST">
+                  <div class="card-header d-block">
+                    <h3 class="card-title">Calendario</h3>
+                    <div>
+                      <p class="subtitulo">
+                        <span class="text-muted">
+                          <%- datos.usuario.NOMUSU %>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="card-body" style="padding: 0.5rem;">
+                    <div class="row">
+                      <div class="col-2">
+                        <div class="mb-1">
+                          <select class="form-select" id="cboyea" value="">
+                            <option value="<%- new Date().getFullYear() %>">
+                              <%- new Date().getFullYear() %>
+                            </option>
+                            <option value="<%- new Date().getFullYear() +1 %>">
+                              <%- new Date().getFullYear() +1 %>
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-1">
+                          <div class="input-control">
+                            <select class="form-select form-control" id="cboest" value="">
+                              <option value="0">SELECCIONE ESTADO</option>
+                              <% datos.arrTiposEstado.map(element=> { %>
+                                <option value="<%- element.ID %>" data-foo="<%- element.COLOR %>">
+                                  <%- element.DES %>
+                                </option>
+                                <% }) %>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="d-flex" style="justify-content: flex-end;">
+                          <a href="/admin/calendarios" class="btn btn-link">Volver</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="calendar" class="form-control"></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/footer') %>
+  </div>
+  <div class="modal modal-blur fade" id="modal-horas" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="card-body">
               <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <form method="POST">
-                      <div class="card-header d-block">
-                        <h3 class="card-title">Calendario</h3>
-                        <div>
-                          <p class="subtitulo">
-                            <span class="text-muted">
-                              <%- datos.usuario.NOMUSU %>
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                      <div class="card-body" style="padding: 0.5rem;">
-                        <div class="row">
-                          <div class="col-2">
-                            <div class="mb-1">
-                              <select class="form-select" id="cboyea" value="">
-                                <option value="<%- new Date().getFullYear() %>">
-                                  <%- new Date().getFullYear() %>
-                                </option>
-                                <option value="<%- new Date().getFullYear() +1 %>">
-                                  <%- new Date().getFullYear() +1 %>
-                                </option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="mb-1">
-                              <div class="input-control">
-                                <select class="form-select form-control" id="cboest" value="">
-                                  <option value="0">SELECCIONE ESTADO</option>
-                                  <% datos.arrTiposEstado.map(element=> { %>
-                                    <option value="<%- element.ID %>" data-foo="<%- element.COLOR %>">
-                                      <%- element.DES %>
-                                    </option>
-                                    <% }) %>
-                                </select>
-                                <div class="invalid-feedback"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-6">
-                            <div class="d-flex" style="justify-content: flex-end;">
-                              <a href="/admin/calendarios" class="btn btn-link">Volver</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div id="calendar" class="form-control"></div>
-                      </div>
-                    </form>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde</div>
+                    <input type="date" id="desfec" name="desfec" class="form-control">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta</div>
+                    <input type="date" id="hasfec" name="hasfec" class="form-control">
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal modal-blur fade" id="modal-horas" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="container-xl">
-            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-body p-0">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Desde</div>
-                          <input type="date" id="desfec" name="desfec" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Hasta</div>
-                          <input type="date" id="hasfec" name="hasfec" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Desde hora</div>
-                          <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="20:00">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Hasta hora</div>
-                          <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="20:00">
-                        </div>
-                      </div>
-                      <div class="input-control">
-                        <input type="hidden" id="msghor" name="msghor" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
-                    </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde hora</div>
+                    <input type="time" id="deshor" name="deshor" class="form-control" min="08:00" max="20:00">
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-link" id="btnHorasCancel" data-bs-dismiss="modal"
-                    aria-label="Close">Cancelar</button>
-                  <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal modal-blur fade" id="modal-tele" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="container-xl">
-            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-body p-0">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Desde</div>
-                          <input type="date" id="desfectel" name="desfectel" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Hasta</div>
-                          <input type="date" id="hasfectel" name="hasfectel" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Desde hora</div>
-                          <input type="time" id="deshortel" name="deshortel" class="form-control" min="08:00"
-                            max="20:00">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Hasta hora</div>
-                          <input type="time" id="hashortel" name="hashortel" class="form-control" min="08:00"
-                            max="20:00">
-                        </div>
-                      </div>
-                      <div class="input-control">
-                        <input type="hidden" id="msgtel" name="msgtel" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
-                    </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta hora</div>
+                    <input type="time" id="hashor" name="hashor" class="form-control" min="08:00" max="20:00">
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-link" id="btnTeleCancel" data-bs-dismiss="modal"
-                    aria-label="Close">Cancelar</button>
-                  <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+                <div class="input-control">
+                  <input type="hidden" id="msghor" name="msghor" class="form-control">
+                  <div class="invalid-feedback"></div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnHorasCancel" data-bs-dismiss="modal"
+              aria-label="Close">Cancelar</button>
+            <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+          </div>
         </div>
-        <div class="modal modal-blur fade" id="modal-forma" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="container-xl">
-            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-body p-0">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Desde</div>
-                          <input type="date" id="desfecfor" name="desfecfor" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Hasta</div>
-                          <input type="date" id="hasfecfor" name="hasfecfor" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Desde hora</div>
-                          <input type="time" id="deshorfor" name="deshorfor" class="form-control" min="08:00"
-                            max="20:00">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-1">
-                          <div class="form-label">Hasta hora</div>
-                          <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00"
-                            max="20:00">
-                        </div>
-                      </div>
-                      <div class="input-control">
-                        <input type="hidden" id="msgfor" name="msgfor" class="form-control">
-                        <div class="invalid-feedback"></div>
-                      </div>
-                    </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal modal-blur fade" id="modal-tele" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde</div>
+                    <input type="date" id="desfectel" name="desfectel" class="form-control">
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal"
-                    aria-label="Close">Cancelar</button>
-                  <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal modal-blur fade" id="modal-evnts" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="container-xl">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-body">
-                  <div class="card-body">
-                    <table class="table table-vcenter table-striped" id="tblEventos">
-                      <thead>
-                        <tr class="header">
-                          <th>Evento</th>
-                          <th class="w-4"></th>
-                        </tr>
-                      </thead>
-                      <tbody id="table-body">
-                      </tbody>
-                    </table>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta</div>
+                    <input type="date" id="hasfectel" name="hasfectel" class="form-control">
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-link" id="btnEventCancel" data-bs-dismiss="modal"
-                    aria-label="Close">Cancelar</button>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde hora</div>
+                    <input type="time" id="deshortel" name="deshortel" class="form-control" min="08:00" max="20:00">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta hora</div>
+                    <input type="time" id="hashortel" name="hashortel" class="form-control" min="08:00" max="20:00">
+                  </div>
+                </div>
+                <div class="input-control">
+                  <input type="hidden" id="msgtel" name="msgtel" class="form-control">
+                  <div class="invalid-feedback"></div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnTeleCancel" data-bs-dismiss="modal"
+              aria-label="Close">Cancelar</button>
+            <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+          </div>
         </div>
-        <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="container-xl">
-            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-body">
-                  <div class="modal-title">Solape de eventos</div>
-                  <div>Hay un evento previo en esta fecha</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal modal-blur fade" id="modal-forma" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde</div>
+                    <input type="date" id="desfecfor" name="desfecfor" class="form-control">
+                  </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-link" id="btnSolapeAcept" data-bs-dismiss="modal"
-                    aria-label="Close">Aceptar</button>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta</div>
+                    <input type="date" id="hasfecfor" name="hasfecfor" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde hora</div>
+                    <input type="time" id="deshorfor" name="deshorfor" class="form-control" min="08:00" max="20:00">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta hora</div>
+                    <input type="time" id="hashorfor" name="hashorfor" class="form-control" min="08:00" max="20:00">
+                  </div>
+                </div>
+                <div class="input-control">
+                  <input type="hidden" id="msgfor" name="msgfor" class="form-control">
+                  <div class="invalid-feedback"></div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnFormaCancel" data-bs-dismiss="modal"
+              aria-label="Close">Cancelar</button>
+            <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+          </div>
         </div>
-
-        <%- include('../../partials/footer') %>
+      </div>
+    </div>
+  </div>
+  <div class="modal modal-blur fade" id="modal-evnts" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="card-body">
+              <table class="table table-vcenter table-striped" id="tblEventos">
+                <thead>
+                  <tr class="header">
+                    <th>Evento</th>
+                    <th class="w-4"></th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnEventCancel" data-bs-dismiss="modal"
+              aria-label="Close">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="modal-title">Solape de eventos</div>
+            <div>Hay un evento previo en esta fecha</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnSolapeAcept" data-bs-dismiss="modal"
+              aria-label="Close">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
   <script src="/js/js-year-calendar.js"></script>
   <script src="/js/js-year-calendar.es.js"></script>
   <script>
-    async function insertEvento(evento) {
-      let xhr = new XMLHttpRequest()
-
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              const result = JSON.parse(xhr.response)
-
-              resolve(result)
-            }
-          }
-        }
-
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/estados/insert`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      })
-    }
-    async function insertRangoEvento(evento) {
-      let xhr = new XMLHttpRequest()
-
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              //resolve(evento)
-              if (evento.estado.TIPEST === <%- datos.tiposEstado.horas.ID %>) {
-                document.getElementById('modal-horas').style.display = 'none'
-              } else if (evento.estado.TIPEST === <%- datos.tiposEstado.telefono.ID %>) {
-                document.getElementById('modal-tele').style.display = 'none'
-              } else if (evento.estado.TIPEST === <%- datos.tiposEstado.formacion.ID %>) {
-                document.getElementById('modal-forma').style.display = 'none'
-              }
-            }
-          }
-        }
-
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/estados/inserts`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      })
-    }
-    async function deleteEvento(evento) {
-      const xhr = new XMLHttpRequest()
-
-      return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState == 4) {
-            if (xhr.status !== 200) {
-              reject("Error, status code = " + xhr.status)
-            } else {
-              resolve(evento)
-            }
-          }
-        }
-
-        xhr.open('POST', `http://${serverAPI}:${puertoAPI}/api/estados/delete`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify(evento))
-      })
-    }
     const dateISOToUTCString = (dateISO) => {
       const fecha = new Date(dateISO);
       const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
@@ -393,15 +322,6 @@
       return (value >= range[0] && value <= range[1])
     }
     const eventoRango = async () => {
-      const estado = {
-        USUEST: params.usuario,
-        TIPEST: params.tipo,
-        OFIEST: params.oficina,
-      }
-      const movimiento = {
-        USUMOV: <%- user.id %>,
-        TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-      }
       let deshor
       let hashor
       let element
@@ -465,20 +385,25 @@
 
       if (!haySolape) {
         // insert rango
-        await insertRangoEvento(evento)
+        //await insertRangoEvento(evento)
+        if (evento.estado.TIPEST === <%- datos.tiposEstado.horas.ID %>) {
+          document.getElementById('modal-horas').style.display = 'none'
+        } else if (evento.estado.TIPEST === <%- datos.tiposEstado.telefono.ID %>) {
+          document.getElementById('modal-tele').style.display = 'none'
+        } else if (evento.estado.TIPEST === <%- datos.tiposEstado.formacion.ID %>) {
+          document.getElementById('modal-forma').style.display = 'none'
+        }        
       }
     }
     const getEstadosTipo = (tipo) => {
       // no mostrar traspasos
-      const estadosTipo = tipo === 0 ? estados.filter(itm => itm.TIPEST !== <%- datos.tiposEstado.traspaso.ID %>) : estados.filter(itm => itm.TIPEST === 0 || itm.TIPEST === parseInt(tipo))
+      const estadosTipo = tipo === 0 ? dataSource : dataSource.filter(itm => itm.TIPEST === parseInt(tipo))
       let data = []
 
       estadosTipo.map(itm => {
         const estado = {
           idesta: itm.IDESTA,
-          usuest: itm.USUEST,
           tipest: itm.TIPEST,
-          id: itm.IDESTA,
           startDate: new Date(itm.STRFEC),
           endDate: new Date(itm.STRFEC),
           rangoH: `(${itm.DESHOR} a ${itm.HASHOR})`,
@@ -487,6 +412,7 @@
         data.push(estado)
       })
       calendario.setDataSource(data)
+      calendario.render()
     }
     const editEvento = (e) => {
       const fecha = dateISOToUTCString(e.date.toISOString())
@@ -517,25 +443,6 @@
         modalForma.style.display = 'flex'
       }
     }
-    const deleteMenuEvent = async (id) => {
-      const evento = {
-        estado: {
-          IDESTA: id,
-        },
-        movimiento: {
-          USUMOV: <%- user.id %>,
-          TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
-        }
-      }
-
-      // borrar
-      await deleteEvento(evento).then(ret => {
-        let dataSource = calendario.getDataSource()
-
-        calendario.setDataSource(dataSource.filter(item => item.id != id));
-        document.getElementById('btnEventCancel').click()
-      })
-    }
     const validate = (ele, msg) => {
       if (ele.value === '0') {
         setError(ele, msg)
@@ -545,13 +452,11 @@
         return false
       }
     }
-  </script>
-  <script>
-    const estados = <%- JSON.stringify(datos.estados) %>
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
-    const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
-    const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
+    const festivos = <%- datos.festivos %>
 
+    let estados = []
+    let dataSource = <%- datos.dataSource %>
     let calendario = null
     let currentYear = new Date().getFullYear()
     let params = {
@@ -568,13 +473,14 @@
       minDate: new Date(params.desde),
       maxDate: new Date(params.hasta),
       language: "es",
+      displayHeader: false,
       mouseOnDay: function (e) {
         if (e.events.length > 0) {
           let content = '';
 
-          for (let i in e.events) {
-            content += colores[e.events[i].tipest].DES + ' ' + e.events[i].rangoH + '\n'
-          }
+          e.events.forEach(element => {
+            content += element.rangoH + '\n'
+          })
 
           e.element.setAttribute('data-bs-trigger', 'hover')
           e.element.setAttribute('data-bs-toggle', 'popover')
@@ -582,9 +488,27 @@
         }
       },
       customDayRenderer: function (e, date) {
-        if (date.getDay() === 0) {
-          e.style.color = '#FC0000'
+        const fecha = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)
+        if (e.parentElement.classList.contains('festivo')) {
+          e.parentElement.classList.remove('festivo')
         }
+        if (festivos.indexOf(fecha) !== -1) {
+          e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
+          e.parentElement.classList.add('festivo')
+        }
+        if (date.getDay() === 0) {
+          e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
+        }
+      },
+      dataSource: function () {
+        return dataSource.map(itm => ({
+          idesta: itm.idesta,
+          tipest: itm.tipest,
+          startDate: new Date(itm.startDate),
+          endDate: new Date(itm.endDate),
+          rangoH: itm.rangoH,
+          color: itm.color,
+        }))
       },
     })
     calendario.setYear(currentYear)
@@ -698,18 +622,7 @@
 
           modalEvent.style.display = 'flex'
         } else if (e.events[0].id !== 0) {
-          const evento = {
-            estado: {
-              IDESTA: e.events[0].idesta,
-            },
-            movimiento: {
-              USUMOV: <%- datos.usuario.IDUSUA %>,
-              TIPMOV: <%- datos.tiposMovimiento.borrarEstado %>
-            }
-          }
-
           // borrar
-          await deleteEvento(evento).then(ret => {
             let dataSource = calendario.getDataSource()
            
             // estados
@@ -726,13 +639,12 @@
 
             // actualizar dia
             e.element.attributes.removeNamedItem("style")
-          })
         }
       } else {
         params.fecha = dateISOToUTCString(e.date.toISOString())
 
         // solapes
-        const result = estados.find(itm => itm.STRFEC === params.fecha)
+        const result = dataSource.find(itm => itm.STRFEC === params.fecha)
         if (result) {
           const modalSolape = document.getElementById('modal-solape')
 
@@ -744,58 +656,40 @@
           return
         }
 
-        const evento = {
-          estado: {
-            FECEST: params.fecha,
-            USUEST: params.usuario,
-            TIPEST: params.tipo,
-            OFIEST: params.oficina,
-            DESHOR: '+00 08:30:00',
-            HASHOR: (params.tipo === <%- datos.tiposEstado.conciliacion.ID %>) ? '+00 09:30:00' : '+00 14:00:00',
-          },
-          movimiento: {
-            USUMOV: <%- datos.usuario.IDUSUA %>,
-            TIPMOV: <%- datos.tiposMovimiento.crearEstado %>
-          }
+        // insertar
+        let dataSource = calendario.getDataSource()
+        const estado = {
+          idesta: ret.idesta,
+          usuest: ret.usuest,
+          tipest: ret.tipest,
+          id: ret.idesta,
+          startDate: new Date(ret.fecest),
+          endDate: new Date(ret.fecest),
+          rangoH: `(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
+          color: params.color,
         }
 
-        // insertar
-        await insertEvento(evento).then(ret => {
-          // actualiza dia calendario
-          let dataSource = calendario.getDataSource()
-          const estado = {
-            idesta: ret.idesta,
-            usuest: ret.usuest,
-            tipest: ret.tipest,
-            id: ret.idesta,
-            startDate: new Date(ret.fecest),
-            endDate: new Date(ret.fecest),
-            rangoH: `(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
-            color: params.color,
-          }
-
-          dataSource.push(estado)
-          estados.push({
-            IDESTA: ret.idesta,
-            STRFEC: evento.estado.FECEST,
-            USUEST: evento.estado.USUEST,
-            TIPEST: evento.estado.TIPEST,
-            OFIEST: evento.estado.OFIEST,
-            DESHOR: evento.estado.DESHOR,
-            HASHOR: evento.estado.HASHOR,
-          })
-
-          calendario.setDataSource(dataSource, {
-            preventRendering: false
-          })
-
-          // actualizar dia
-          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
+        dataSource.push(estado)
+        estados.push({
+          IDESTA: ret.idesta,
+          STRFEC: evento.estado.FECEST,
+          USUEST: evento.estado.USUEST,
+          TIPEST: evento.estado.TIPEST,
+          OFIEST: evento.estado.OFIEST,
+          DESHOR: evento.estado.DESHOR,
+          HASHOR: evento.estado.HASHOR,
         })
+
+        calendario.setDataSource(dataSource, {
+          preventRendering: false
+        })
+
+        // actualizar dia
+        e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
       }
     })
 
-    getEstadosTipo(params.tipo)
+    //getEstadosTipo(params.tipo)
 </script>
 </body>
 
