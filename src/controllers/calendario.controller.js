@@ -4,8 +4,8 @@ import { tiposRol, tiposMovimiento, tiposEstado, arrTiposEstadoUsuario, arrTipos
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.id }
-  const usuario = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.id }
+  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.idofic }
+  const usuario = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.idofic }
 
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
@@ -15,7 +15,7 @@ export const mainPage = async (req, res) => {
       usuario,
     })
     const datos = {
-      oficina: parseInt(req.params.id),
+      oficina: parseInt(req.params.idofic),
       oficinas: oficinas.data,
       usuarios: usuarios.data,
       serverWEB,
@@ -46,7 +46,7 @@ export const calendario = async (req, res) => {
     USUEST: req.body.idusua,
     TIPEST: 0,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    HASTA: dateISOToUTCString(`${currentYear +1}-12-31T00:00:00`),
+    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
   }
   const festivo = {
     OFIFES: req.body.idofic,
@@ -76,7 +76,7 @@ export const calendario = async (req, res) => {
     let dataSource = []
     ret.data.map(itm => {
       if (itm.TIPEST !== tiposEstado.traspasado.ID &&
-          itm.TIPEST !== tiposEstado.traspaso.ID) {
+        itm.TIPEST !== tiposEstado.traspaso.ID) {
         const rec = {
           idesta: itm.IDESTA,
           tipest: itm.TIPEST,
@@ -98,7 +98,7 @@ export const calendario = async (req, res) => {
       dataSource: JSON.stringify(dataSource),
     }
 
-    res.render('admin/calendarios/calendario', { user, datos })
+    res.render(`admin/calendarios/calendario`, { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
@@ -109,11 +109,12 @@ export const calendario = async (req, res) => {
 }
 export const update = async (req, res) => {
   const user = req.user
+  console.log(req.body)
   const usuario = JSON.parse(req.body.usuario)
-  const evnt = JSON.parse(req.body.eventos)
+  const eventos = JSON.parse(req.body.eventos)
   let estados = []
 
-  evnt.map(itm => {
+  eventos.map(itm => {
     if (itm.idesta === 0) {
       // insert
       estados.push({
@@ -135,8 +136,8 @@ export const update = async (req, res) => {
     }
   })
 
-  const eventos = {
-    ARREVE: estados // importante!! los campos del array estados tienen que ir en mayusculas
+  const context = {
+    ARREST: estados // importante!! los campos del array estados tienen que ir en mayusculas
   }
   const movimiento = {
     USUMOV: user.id,
@@ -146,8 +147,8 @@ export const update = async (req, res) => {
 
   try {
     if (traspasos.length !== 0) {
-      await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update/traspasos`, {
-        eventos,
+      await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update`, {
+        context,
         movimiento,
       });
     }

@@ -45,18 +45,21 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form method="POST">
-                  <div class="card-header d-block">
-                    <h3 class="card-title">Calendario</h3>
-                    <div>
-                      <p class="subtitulo">
-                        <span class="text-muted">
-                          <%- datos.usuario.NOMUSU %>
-                        </span>
-                      </p>
+                <form action="/admin/calendarios/update" method="POST" onclick="return confirm();">
+                  <input type="hidden" name="eventos" id="eventos" value="" />
+                  <div class="card-header p-2">
+                    <div class="d-block">
+                      <h3 class="card-title">Calendario</h3>
+                      <div>
+                        <p class="subtitulo">
+                          <span class="text-muted">
+                            <%- datos.usuario.NOMUSU %>
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div class="card-body" style="padding: 0.5rem;">
+                  <div class="card-body p-2">
                     <div class="row">
                       <div class="col-2">
                         <div class="mb-1">
@@ -92,6 +95,19 @@
                       </div>
                     </div>
                     <div id="calendar" class="form-control"></div>
+                  </div>
+                  <div class="card-footer p-2">
+                    <div class="d-flex">
+                      <a href="/admin/calendarios" class="btn btn-link">Cancelar</a>
+                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24"
+                          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke-width=".4" fill="none"
+                            d="M11.025 19.575H5.9q-.65 0-1.062-.412-.413-.413-.413-1.038V5.875q0-.65.413-1.063.412-.412.987-.412h4.8q.1-.5.463-.838.362-.337.887-.337t.888.337q.362.338.462.838h4.8q.65 0 1.063.412.412.413.412 1.063V10h-.65V5.85q0-.3-.25-.55-.25-.25-.55-.25h-2.525v1.925H8.4V5.05H5.875q-.3 0-.55.25-.25.25-.25.55v12.275q0 .3.25.55.25.25.55.25h5.15Zm4.45-.675L12.2 15.6l.45-.45 2.825 2.825 5.65-5.65.475.45ZM12 5.3q.325 0 .525-.212.2-.213.2-.513 0-.3-.212-.513-.213-.212-.488-.212-.325 0-.525.212-.2.213-.2.513 0 .3.2.513.2.212.5.212Z" />
+                        </svg>
+                        Actualizar cambios
+                      </button>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -302,6 +318,10 @@
 
       return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
     }
+    const confirm = () => {
+      document.getElementById("eventos").value = JSON.stringify(eventos)
+      return true
+    }
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
@@ -401,15 +421,14 @@
       let data = []
 
       estadosTipo.map(itm => {
-        const estado = {
+        data.push({
           idesta: itm.IDESTA,
           tipest: itm.TIPEST,
           startDate: new Date(itm.STRFEC),
           endDate: new Date(itm.STRFEC),
           rangoH: `(${itm.DESHOR} a ${itm.HASHOR})`,
           color: colores[itm.TIPEST].COLOR,
-        }
-        data.push(estado)
+        })
       })
       calendario.setDataSource(data)
       calendario.render()
@@ -455,14 +474,13 @@
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
     const festivos = <%- datos.festivos %>
 
-    let estados = []
+    let eventos = []
     let dataSource = <%- datos.dataSource %>
     let calendario = null
     let currentYear = new Date().getFullYear()
     let params = {
       fecha: new Date().toISOString().slice(0, 10),
-      oficina: <%- datos.usuario.OFIUSU %>,
-      usuario: <%- datos.usuario.IDUSUA %>,
+      nombre: '',
       tipo: 0,
       color: '',
       desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
@@ -566,6 +584,7 @@
     document.getElementById('cboest').addEventListener('change', function () {
       params.color = document.getElementById("cboest").options[document.getElementById("cboest").selectedIndex].getAttribute('data-foo')
       params.tipo = parseInt(this.value)
+      params.nombre = this.options[this.selectedIndex].text
 
       getEstadosTipo(params.tipo)
     });
@@ -623,22 +642,20 @@
           modalEvent.style.display = 'flex'
         } else if (e.events[0].id !== 0) {
           // borrar
-            let dataSource = calendario.getDataSource()
-           
-            // estados
-            let pos = estados.map(e => e.IDESTA).indexOf(ret.estado.IDESTA);
-            estados.splice(pos,1)
+          // estados
+          let pos = estados.map(e => e.IDESTA).indexOf(ret.estado.IDESTA);
+          estados.splice(pos,1)
 
-            // datasource
-            pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
-            dataSource.splice(pos,1)
+          // datasource
+          pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
+          dataSource.splice(pos,1)
 
-            calendario.setDataSource(dataSource, {
-              preventRendering: false
-            })
+          calendario.setDataSource(dataSource, {
+            preventRendering: false
+          })
 
-            // actualizar dia
-            e.element.attributes.removeNamedItem("style")
+          // actualizar dia
+          e.element.attributes.removeNamedItem("style")
         }
       } else {
         params.fecha = dateISOToUTCString(e.date.toISOString())
@@ -657,27 +674,18 @@
         }
 
         // insertar
-        let dataSource = calendario.getDataSource()
-        const estado = {
-          idesta: ret.idesta,
-          usuest: ret.usuest,
-          tipest: ret.tipest,
-          id: ret.idesta,
-          startDate: new Date(ret.fecest),
-          endDate: new Date(ret.fecest),
-          rangoH: `(${evento.estado.DESHOR.slice(4, 9)} a ${evento.estado.HASHOR.slice(4, 9)})`,
+        dataSource.push({
+          idesta: 0,
+          tipest: params.tipo,
+          startDate: new Date(params.fecha),
+          endDate: new Date(params.fecha),
+          rangoH: `${params.nombre} (08:30 a 14:00)`,
           color: params.color,
-        }
-
-        dataSource.push(estado)
-        estados.push({
-          IDESTA: ret.idesta,
-          STRFEC: evento.estado.FECEST,
-          USUEST: evento.estado.USUEST,
-          TIPEST: evento.estado.TIPEST,
-          OFIEST: evento.estado.OFIEST,
-          DESHOR: evento.estado.DESHOR,
-          HASHOR: evento.estado.HASHOR,
+        })
+        eventos.push({
+          idesta: 0,
+          fecest: params.fecha,
+          tipest: params.tipo,
         })
 
         calendario.setDataSource(dataSource, {
@@ -688,8 +696,6 @@
         e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
       }
     })
-
-    //getEstadosTipo(params.tipo)
 </script>
 </body>
 
