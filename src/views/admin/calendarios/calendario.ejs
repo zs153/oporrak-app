@@ -421,12 +421,13 @@
               tipest: params.tipo,
               ofiest: usuario.OFIUSU,
               deshor: `+00 ${deshor}:00`,
-              hashot: `+00 ${hashor}:00`,
+              hashor: `+00 ${hashor}:00`,
             })
           }
         }
 
         getEstadosTipo(params.tipo)
+
         if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
           document.getElementById('modal-horas').style.display = 'none'
         } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
@@ -453,7 +454,6 @@
         })
       })
       calendario.setDataSource(data)
-      calendario.render()
     }
     const editEvento = (e) => {
       const fecha = dateISOToUTCString(e.date.toISOString())
@@ -492,6 +492,32 @@
         }, 3000)
         return false
       }
+    }
+    const deleteMenuEvent = async (day, tipo) => {
+      const fecha = dateISOToUTCString(day)
+      let pos = eventos.indexOf(eventos.find(itm => itm.fecest === fecha && itm.tipest === tipo))
+
+      eventos.splice(pos, 1)
+
+      pos = dataSource.indexOf(dataSource.find(itm => itm.startDate === fecha && itm.tipest === tipo))
+      dataSource.splice(pos, 1)
+
+      let data = []
+      dataSource.map(itm => {
+        data.push({
+          idesta: itm.idesta,
+          tipest: itm.tipest,
+          startDate: new Date(itm.startDate),
+          endDate: new Date(itm.endDate),
+          rangoH: itm.rangoH,
+          color: itm.color,
+          deshor: itm.deshor,
+          hashor: itm.hashor,
+        })
+      })
+      calendario.setDataSource(data)
+
+      document.getElementById('btnEventCancel').click()
     }
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
     const festivos = <%- datos.festivos %>
@@ -572,6 +598,8 @@
     document.getElementById('btnSolapeAcept').addEventListener('click', function () {
       document.getElementById('modal-solape').style.display = 'none'
     })
+    
+    // evento keydown
     document.addEventListener('keydown', function (e) {
       const modalHoras = document.getElementById('modal-horas')
       const modalTele = document.getElementById('modal-tele')
@@ -654,7 +682,7 @@
               </td>
               <td class="w-4">
                 <div class="py-1 align-items-center">
-                  <a href="#" class="nav-link" onclick="deleteMenuEvent(${e.events[i].idesta})">
+                  <a href="#" class="nav-link" onclick="deleteMenuEvent('${e.date}', ${e.events[i].tipest})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor" fill="none"><path stroke-width=".4" fill="none" d="M7.85 19.575q-.6 0-1.025-.425-.425-.425-.425-1.025v-12.1h-.975V5.4h3.6v-.675H15V5.4h3.6v.625h-.975V18.15q0 .6-.425 1.013-.425.412-1.025.412Zm9.125-13.55H7.05v12.1q0 .35.225.575.225.225.575.225h8.325q.3 0 .55-.25.25-.25.25-.55Zm-6.85 10.925h.625V8h-.625Zm3.15 0h.625V8h-.625ZM7.05 6.025V18.925 18.125Z"/></svg>
                   </a>
                 </div>
@@ -665,17 +693,30 @@
           tbl.innerHTML += innerT;
 
           modalEvent.style.display = 'flex'
-        } else if (e.events[0].idesta !== 0) {
+        } else {
+          params.fecha = dateISOToUTCString(e.date.toISOString())
+
           // borrar
-          // eventos
-          let pos = eventos.map(itm => itm.idesta).indexOf(ret.estado.IDESTA);
+          let pos = eventos.map(itm => itm.fecest).indexOf(params.fecha);          
           eventos.splice(pos,1)
 
-          // datasource
-          pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
+          pos = dataSource.map(itm => itm.startDate).indexOf(params.fecha);
           dataSource.splice(pos,1)
 
-          calendario.setDataSource(dataSource, {
+          let data = []
+          dataSource.map(itm => {
+            data.push({
+              idesta: itm.idesta,
+              tipest: itm.tipest,
+              startDate: new Date(itm.startDate),
+              endDate: new Date(itm.endDate),
+              rangoH: itm.rangoH,
+              color: itm.color,
+              deshor: itm.deshor,
+              hashor: itm.hashor,
+            })
+          })
+          calendario.setDataSource(data, {
             preventRendering: false
           })
 
@@ -686,7 +727,7 @@
         params.fecha = dateISOToUTCString(e.date.toISOString())
 
         // solapes
-        const result = dataSource.find(itm => itm.STRFEC === params.fecha)
+        const result = dataSource.find(itm => itm.startDate === params.fecha)
         if (result) {
           const modalSolape = document.getElementById('modal-solape')
 
@@ -702,15 +743,17 @@
         dataSource.push({
           idesta: 0,
           tipest: params.tipo,
-          startDate: new Date(params.fecha),
-          endDate: new Date(params.fecha),
+          startDate: params.fecha,
+          endDate: params.fecha,
           rangoH: `${params.nombre} (08:30 a 14:00)`,
           color: params.color,
         })
         eventos.push({
           idesta: 0,
           fecest: params.fecha,
+          usuest: usuario.IDUSUA,
           tipest: params.tipo,
+          ofiest: usuario.OFIUSU,
           deshor: '+00 08:30:00',
           hashor: '+00 14:00:00',
         })
