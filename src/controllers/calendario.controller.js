@@ -4,8 +4,8 @@ import { tiposRol, tiposMovimiento, tiposEstado, arrTiposEstadoUsuario, arrTipos
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.idofic }
-  const usuario = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.idofic }
+  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
+  const usuario = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: user.oficina }
 
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
@@ -15,7 +15,7 @@ export const mainPage = async (req, res) => {
       usuario,
     })
     const datos = {
-      oficina: parseInt(req.params.idofic),
+      oficina: parseInt(user.oficina),
       oficinas: oficinas.data,
       usuarios: usuarios.data,
       serverWEB,
@@ -83,7 +83,9 @@ export const calendario = async (req, res) => {
           startDate: itm.STRFEC,
           endDate: itm.STRFEC,
           rangoH: `${arrColoresEstado[itm.TIPEST].DES} (${itm.DESHOR} a ${itm.HASHOR})`,
-          color: `${arrColoresEstado[itm.TIPEST].COLOR}`
+          color: `${arrColoresEstado[itm.TIPEST].COLOR}`,
+          deshor: itm.DESHOR,
+          hashor: itm.HASHOR,
         }
         dataSource.push(rec)
       }
@@ -94,7 +96,7 @@ export const calendario = async (req, res) => {
       arrColoresEstado,
       tiposEstado,
       festivos: JSON.stringify(festivos),
-      usuario,
+      usuario: JSON.stringify(usuario),
       dataSource: JSON.stringify(dataSource),
     }
 
@@ -109,33 +111,37 @@ export const calendario = async (req, res) => {
 }
 export const update = async (req, res) => {
   const user = req.user
-  console.log(req.body)
   const usuario = JSON.parse(req.body.usuario)
   const eventos = JSON.parse(req.body.eventos)
   let estados = []
 
   eventos.map(itm => {
     if (itm.idesta === 0) {
-      // insert
+      // insertar
       estados.push({
         IDESTA: itm.idesta,
         FECEST: itm.fecest,
         USUEST: usuario.IDUSUA,
         TIPEST: itm.tipest,
         OFIEST: usuario.OFIUSU,
+        DESHOR: itm.deshor,
+        HASHOR: itm.hashor,
       })
     } else {
-      // borrado (el IDESTA borra el traspaso y FECEST, USUEST y TIPOEST borra el traspasado)
+      // borrar
       estados.push({
         IDESTA: itm.idesta,
-        FECEST: itm.fecest,
-        USUEST: usuario.IDUSUA,
-        TIPEST: itm.tipest,
+        FECEST: '',
+        USUEST: 0,
+        TIPEST: 0,
         OFIEST: 0,
+        DESHOR: '',
+        HASHOR: '',
       })
     }
   })
 
+  console.log(estados)
   const context = {
     ARREST: estados // importante!! los campos del array estados tienen que ir en mayusculas
   }
@@ -146,7 +152,7 @@ export const update = async (req, res) => {
   }
 
   try {
-    if (traspasos.length !== 0) {
+    if (estados.length !== 0) {
       await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update`, {
         context,
         movimiento,
@@ -155,6 +161,7 @@ export const update = async (req, res) => {
 
     mainPage(req, res)
   } catch (error) {
+    console.log(error)
     const msg = "No se ha podido insertar los datos.";
 
     res.render("admin/error400", {

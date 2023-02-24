@@ -9,10 +9,10 @@ import {
 const calendarioRouter = express.Router();
 
 // paginas
-calendarioRouter.get("/calendarios/:idofic", authRoutes, mainPage);
+calendarioRouter.get("/calendarios", authRoutes, mainPage);
 
 // proc 
-calendarioRouter.post("/calendarios/calendario/:idofic/:idusua", authRoutes, calendario);
+calendarioRouter.post("/calendarios/calendario", authRoutes, calendario);
 calendarioRouter.post("/calendarios/update", authRoutes, update);
 
 export default calendarioRouter;

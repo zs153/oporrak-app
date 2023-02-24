@@ -47,13 +47,14 @@
               <div class="card">
                 <form action="/admin/calendarios/update" method="POST" onclick="return confirm();">
                   <input type="hidden" name="eventos" id="eventos" value="" />
+                  <input type="hidden" name="usuario" id="usuario" value="" />
                   <div class="card-header p-2">
                     <div class="d-block">
                       <h3 class="card-title">Calendario</h3>
                       <div>
                         <p class="subtitulo">
                           <span class="text-muted">
-                            <%- datos.usuario.NOMUSU %>
+                            <%- JSON.parse(datos.usuario).NOMUSU %>
                           </span>
                         </p>
                       </div>
@@ -86,11 +87,6 @@
                             </select>
                             <div class="invalid-feedback"></div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="d-flex" style="justify-content: flex-end;">
-                          <a href="/admin/calendarios" class="btn btn-link">Volver</a>
                         </div>
                       </div>
                     </div>
@@ -320,6 +316,7 @@
     }
     const confirm = () => {
       document.getElementById("eventos").value = JSON.stringify(eventos)
+      document.getElementById("usuario").value = JSON.stringify(<%- datos.usuario %>)
       return true
     }
     const setSuccess = (element) => {
@@ -342,6 +339,8 @@
       return (value >= range[0] && value <= range[1])
     }
     const eventoRango = async () => {
+      let desde
+      let hasta
       let deshor
       let hashor
       let element
@@ -351,83 +350,106 @@
         hashor = document.getElementById('hashor').value
         element = document.getElementById('msghor')
 
-        estado.DESDE = document.getElementById('desfec').value
-        estado.HASTA = document.getElementById('hasfec').value
+        desde = document.getElementById('desfec').value
+        hasta = document.getElementById('hasfec').value
       } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
         deshor = document.getElementById('deshortel').value
         hashor = document.getElementById('hashortel').value
         element = document.getElementById('msgtel')
 
-        estado.DESDE = document.getElementById('desfectel').value
-        estado.HASTA = document.getElementById('hasfectel').value
+        desde = document.getElementById('desfectel').value
+        hasta = document.getElementById('hasfectel').value
       } else if (params.tipo === <%- datos.tiposEstado.formacion.ID %>) {
         deshor = document.getElementById('deshorfor').value
         hashor = document.getElementById('hashorfor').value
         element = document.getElementById('msgfor')
 
-        estado.DESDE = document.getElementById('desfecfor').value
-        estado.HASTA = document.getElementById('hasfecfor').value
-      }
-      estado.DESHOR = `+00 ${deshor}:00`
-      estado.HASHOR = `+00 ${hashor}:00`
-      const evento = {
-        estado,
-        movimiento,
+        desde = document.getElementById('desfecfor').value
+        hasta = document.getElementById('hasfecfor').value
       }
 
       let haySolape = false
       let arrFechas = []
 
       // solapes
-      for (let d = new Date(estado.DESDE); d <= new Date(estado.HASTA); d.setDate(d.getDate() + 1)) {
-        estados.filter(itm => {
-          if (itm.STRFEC === d.toISOString().slice(0, 10)) {
+      for (let day = new Date(desde); day <= new Date(hasta); day.setDate(day.getDate() + 1)) {
+        dataSource.filter(itm => {
+          if (itm.startDate === day.toISOString().slice(0, 10)) {
             arrFechas.push(itm)
           }
         })
-        if (arrFechas.length > 0) {
-          arrFechas.every(itm => {
-            let rango = [itm.DESHOR, itm.HASHOR]
-            if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
-              haySolape = true
-
-              setError(element, `Solape de eventos el día ${itm.STRFEC.split("-").reverse().join("-")} ${deshor}`)
-              setTimeout(function () {
-                setSuccess(element)
-              }, 3000)
-
-              return false
-            }
-            return true
-          });
-        }
+        if (arrFechas.length > 0) break
       }
+
+      if (arrFechas.length > 0) {
+        arrFechas.every(itm => {
+          let rango = [itm.deshor, itm.hashor]
+          if (isInRange(deshor, rango) || isInRange(hashor, rango)) {
+            haySolape = true
+
+            setError(element, `Solape de eventos el día ${itm.startDate.split("-").reverse().join("-")} ${deshor}`)
+            setTimeout(function () {
+              setSuccess(element)
+            }, 3000)
+
+            return false
+          }
+
+          return true
+        });
+      }
+      
 
       if (!haySolape) {
         // insert rango
-        //await insertRangoEvento(evento)
-        if (evento.estado.TIPEST === <%- datos.tiposEstado.horas.ID %>) {
+        for (let day = new Date(desde); day <= new Date(hasta); day.setDate(day.getDate() + 1)) {
+          if (festivos.indexOf(day.toISOString().slice(0, 10)) < 0 && day.getDay() !== 0 && day.getDay() !== 6) {
+            dataSource.push({
+              idesta: 0,
+              tipest: params.tipo,
+              startDate: dateISOToUTCString(day),
+              endDate: dateISOToUTCString(day),
+              rangoH: `${params.nombre} (${deshor} a ${hashor})`,
+              color: params.color,
+              deshor: deshor,
+              hashor: hashor,
+            })
+            eventos.push({
+              idesta: 0,
+              fecest: dateISOToUTCString(day),
+              usuest: usuario.IDUSUA,
+              tipest: params.tipo,
+              ofiest: usuario.OFIUSU,
+              deshor: `+00 ${deshor}:00`,
+              hashot: `+00 ${hashor}:00`,
+            })
+          }
+        }
+
+        getEstadosTipo(params.tipo)
+        if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
           document.getElementById('modal-horas').style.display = 'none'
-        } else if (evento.estado.TIPEST === <%- datos.tiposEstado.telefono.ID %>) {
+        } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
           document.getElementById('modal-tele').style.display = 'none'
-        } else if (evento.estado.TIPEST === <%- datos.tiposEstado.formacion.ID %>) {
+        } else if (params.tipo === <%- datos.tiposEstado.formacion.ID %>) {
           document.getElementById('modal-forma').style.display = 'none'
         }        
       }
     }
     const getEstadosTipo = (tipo) => {
-      // no mostrar traspasos
-      const estadosTipo = tipo === 0 ? dataSource : dataSource.filter(itm => itm.TIPEST === parseInt(tipo))
+      const estadosTipo = tipo === 0 ? dataSource : dataSource.filter(itm => itm.tipest === tipo)
       let data = []
 
       estadosTipo.map(itm => {
         data.push({
-          idesta: itm.IDESTA,
-          tipest: itm.TIPEST,
-          startDate: new Date(itm.STRFEC),
-          endDate: new Date(itm.STRFEC),
-          rangoH: `(${itm.DESHOR} a ${itm.HASHOR})`,
-          color: colores[itm.TIPEST].COLOR,
+          idesta: itm.idesta,
+          tipest: itm.tipest,
+          startDate: new Date(itm.startDate),
+          endDate: new Date(itm.endDate),
+          rangoH: itm.rangoH,
+          color: itm.color,
+          deshor: itm.deshor,
+          hashor: itm.hashor,          
         })
       })
       calendario.setDataSource(data)
@@ -473,6 +495,7 @@
     }
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
     const festivos = <%- datos.festivos %>
+    const usuario = <%- datos.usuario %>
 
     let eventos = []
     let dataSource = <%- datos.dataSource %>
@@ -526,6 +549,8 @@
           endDate: new Date(itm.endDate),
           rangoH: itm.rangoH,
           color: itm.color,
+          deshor: itm.deshor,
+          hashor: itm.hashor,
         }))
       },
     })
@@ -640,11 +665,11 @@
           tbl.innerHTML += innerT;
 
           modalEvent.style.display = 'flex'
-        } else if (e.events[0].id !== 0) {
+        } else if (e.events[0].idesta !== 0) {
           // borrar
-          // estados
-          let pos = estados.map(e => e.IDESTA).indexOf(ret.estado.IDESTA);
-          estados.splice(pos,1)
+          // eventos
+          let pos = eventos.map(itm => itm.idesta).indexOf(ret.estado.IDESTA);
+          eventos.splice(pos,1)
 
           // datasource
           pos = dataSource.map(e => e.idesta).indexOf(ret.estado.IDESTA);
@@ -686,6 +711,8 @@
           idesta: 0,
           fecest: params.fecha,
           tipest: params.tipo,
+          deshor: '+00 08:30:00',
+          hashor: '+00 14:00:00',
         })
 
         calendario.setDataSource(dataSource, {
