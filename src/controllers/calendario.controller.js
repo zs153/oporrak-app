@@ -116,10 +116,10 @@ export const update = async (req, res) => {
   let estados = []
 
   eventos.map(itm => {
-    if (itm.idesta === 0) {
+    if (itm.idesta < 0) {
       // insertar
       estados.push({
-        IDESTA: itm.idesta,
+        IDESTA: 0,
         FECEST: itm.fecest,
         USUEST: usuario.IDUSUA,
         TIPEST: itm.tipest,
@@ -141,7 +141,6 @@ export const update = async (req, res) => {
     }
   })
 
-  console.log(estados)
   const context = {
     ARREST: estados // importante!! los campos del array estados tienen que ir en mayusculas
   }
@@ -161,7 +160,6 @@ export const update = async (req, res) => {
 
     mainPage(req, res)
   } catch (error) {
-    console.log(error)
     const msg = "No se ha podido insertar los datos.";
 
     res.render("admin/error400", {

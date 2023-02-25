@@ -114,6 +114,55 @@
     </div>
     <%- include('../../partials/footer') %>
   </div>
+  <div class="modal modal-blur fade" id="modal-baja" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde</div>
+                    <input type="date" id="desfecbaj" name="desfecbaj" class="form-control">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta</div>
+                    <input type="date" id="hasfecbaj" name="hasfecbaj" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Desde hora</div>
+                    <input type="time" id="deshorbaj" name="deshorbaj" class="form-control" min="08:00" max="20:00">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-1">
+                    <div class="form-label">Hasta hora</div>
+                    <input type="time" id="hashorbaj" name="hashorbaj" class="form-control" min="08:00" max="20:00">
+                  </div>
+                </div>
+                <div class="input-control">
+                  <input type="hidden" id="msgbaj" name="msgbaj" class="form-control">
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnBajaCancel" data-bs-dismiss="modal"
+              aria-label="Close">Cancelar</button>
+            <button type="button" class="btn btn-primary ms-auto" onclick="eventoRango()">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal modal-blur fade" id="modal-horas" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="container-xl">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -345,7 +394,14 @@
       let hashor
       let element
 
-      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+      if (params.tipo === <%- datos.tiposEstado.baja.ID %>) {
+        deshor = document.getElementById('deshorbaj').value
+        hashor = document.getElementById('hashorbaj').value
+        element = document.getElementById('msgbaj')
+
+        desde = document.getElementById('desfecbaj').value
+        hasta = document.getElementById('hasfecbaj').value
+      } else if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         deshor = document.getElementById('deshor').value
         hashor = document.getElementById('hashor').value
         element = document.getElementById('msghor')
@@ -399,24 +455,27 @@
         });
       }
       
-
       if (!haySolape) {
         // insert rango
         for (let day = new Date(desde); day <= new Date(hasta); day.setDate(day.getDate() + 1)) {
-          if (festivos.indexOf(day.toISOString().slice(0, 10)) < 0 && day.getDay() !== 0 && day.getDay() !== 6) {
+          const dia = dateISOToUTCString(day)
+
+          if (festivos.indexOf(dia) < 0 && day.getDay() !== 0 && day.getDay() !== 6) {
+            const id = -(Date.now())
+
             dataSource.push({
-              idesta: 0,
+              idesta: id,
               tipest: params.tipo,
-              startDate: dateISOToUTCString(day),
-              endDate: dateISOToUTCString(day),
+              startDate: dia,
+              endDate: dia,
               rangoH: `${params.nombre} (${deshor} a ${hashor})`,
               color: params.color,
               deshor: deshor,
               hashor: hashor,
             })
             eventos.push({
-              idesta: 0,
-              fecest: dateISOToUTCString(day),
+              idesta: id,
+              fecest: dia,
               usuest: usuario.IDUSUA,
               tipest: params.tipo,
               ofiest: usuario.OFIUSU,
@@ -428,7 +487,9 @@
 
         getEstadosTipo(params.tipo)
 
-        if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+        if (params.tipo === <%- datos.tiposEstado.baja.ID %>) {
+          document.getElementById('modal-baja').style.display = 'none'
+        } else if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
           document.getElementById('modal-horas').style.display = 'none'
         } else if (params.tipo === <%- datos.tiposEstado.telefono.ID %>) {
           document.getElementById('modal-tele').style.display = 'none'
@@ -456,9 +517,17 @@
       calendario.setDataSource(data)
     }
     const editEvento = (e) => {
-      const fecha = dateISOToUTCString(e.date.toISOString())
+      const fecha = dateISOToUTCString(e.date)
 
-      if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
+      if (params.tipo === <%- datos.tiposEstado.baja.ID %>) {
+        const modalBaja = document.getElementById('modal-baja')
+
+        document.getElementById('desfecbaj').value = fecha
+        document.getElementById('hasfecbaj').value = fecha
+        document.getElementById('deshorbaj').value = "08:30"
+        document.getElementById('hashorbaj').value = "14:00"
+        modalBaja.style.display = 'flex'
+      } else if (params.tipo === <%- datos.tiposEstado.horas.ID %>) {
         const modalHoras = document.getElementById('modal-horas')
 
         document.getElementById('desfec').value = fecha
@@ -483,7 +552,7 @@
         document.getElementById('hashorfor').value = "14:00"
         modalForma.style.display = 'flex'
       }
-    }
+    }    
     const validate = (ele, msg) => {
       if (ele.value === '0') {
         setError(ele, msg)
@@ -493,13 +562,23 @@
         return false
       }
     }
-    const deleteMenuEvent = async (day, tipo) => {
-      const fecha = dateISOToUTCString(day)
-      let pos = eventos.indexOf(eventos.find(itm => itm.fecest === fecha && itm.tipest === tipo))
+    const deleteMenuEvent = async (id) => {
+      if (id < 0) {
+        let pos = eventos.map(itm => itm.idesta).indexOf(id)
+        eventos.splice(pos, 1)
+      } else {
+        eventos.push({
+          idesta: id,
+          fecest: '',
+          usuest: 0,
+          tipest: 0,
+          ofiest: 0,
+          deshor: '',
+          hashor: '',
+        })
+      }
 
-      eventos.splice(pos, 1)
-
-      pos = dataSource.indexOf(dataSource.find(itm => itm.startDate === fecha && itm.tipest === tipo))
+      pos = dataSource.map(itm => itm.idesta).indexOf(id)
       dataSource.splice(pos, 1)
 
       let data = []
@@ -583,6 +662,9 @@
     calendario.setYear(currentYear)
     
     // eventos modal
+    document.getElementById('btnBajaCancel').addEventListener('click', function () {
+      document.getElementById('modal-baja').style.display = 'none'
+    })
     document.getElementById('btnTeleCancel').addEventListener('click', function () {
       document.getElementById('modal-tele').style.display = 'none'
     })
@@ -601,6 +683,7 @@
     
     // evento keydown
     document.addEventListener('keydown', function (e) {
+      const modalBaja = document.getElementById('modal-baja')
       const modalHoras = document.getElementById('modal-horas')
       const modalTele = document.getElementById('modal-tele')
       const modalForma = document.getElementById('modal-forma')
@@ -608,7 +691,9 @@
       const modalSolape = document.getElementById('modal-solape')
       const keyCode = e.keyCode;
 
-      if (keyCode === 27 && modalHoras.style.display === 'flex') {
+      if (keyCode === 27 && modalBaja.style.display === 'flex') {
+        modalBaja.style.display = 'none'
+      } else if (keyCode === 27 && modalHoras.style.display === 'flex') {
         modalHoras.style.display = 'none'
       } else if (keyCode === 27 && modalTele.style.display === 'flex') {
         modalTele.style.display = 'none'
@@ -656,12 +741,15 @@
 
       // evento por rango
       if (e.events.length === 0 &&
-        (params.tipo === <%- datos.tiposEstado.horas.ID %> ||
+        (params.tipo === <%- datos.tiposEstado.baja.ID %> ||
+          params.tipo === <%- datos.tiposEstado.horas.ID %> ||
           params.tipo === <%- datos.tiposEstado.telefono.ID %> ||
           params.tipo === <%- datos.tiposEstado.formacion.ID %>)) {
         editEvento(e)
         return
       }
+
+      params.fecha = dateISOToUTCString(e.date)
 
       if (e.events.length) {
         if (e.events.length > 1) {
@@ -682,7 +770,7 @@
               </td>
               <td class="w-4">
                 <div class="py-1 align-items-center">
-                  <a href="#" class="nav-link" onclick="deleteMenuEvent('${e.date}', ${e.events[i].tipest})">
+                  <a href="#" class="nav-link" onclick="deleteMenuEvent(${e.events[i].idesta})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor" fill="none"><path stroke-width=".4" fill="none" d="M7.85 19.575q-.6 0-1.025-.425-.425-.425-.425-1.025v-12.1h-.975V5.4h3.6v-.675H15V5.4h3.6v.625h-.975V18.15q0 .6-.425 1.013-.425.412-1.025.412Zm9.125-13.55H7.05v12.1q0 .35.225.575.225.225.575.225h8.325q.3 0 .55-.25.25-.25.25-.55Zm-6.85 10.925h.625V8h-.625Zm3.15 0h.625V8h-.625ZM7.05 6.025V18.925 18.125Z"/></svg>
                   </a>
                 </div>
@@ -693,14 +781,24 @@
           tbl.innerHTML += innerT;
 
           modalEvent.style.display = 'flex'
-        } else {
-          params.fecha = dateISOToUTCString(e.date.toISOString())
-
+        } else {          
           // borrar
-          let pos = eventos.map(itm => itm.fecest).indexOf(params.fecha);          
-          eventos.splice(pos,1)
+          if (e.events[0].idesta < 0) {
+            let pos = eventos.map(itm => itm.idesta).indexOf(e.events[0].idesta);
+            eventos.splice(pos,1)
+          } else {
+            eventos.push({
+              idesta: e.events[0].idesta,
+              fecest: '',
+              usuest: 0,
+              tipest: 0,
+              ofiest: 0,
+              deshor: '',
+              hashor: '',
+            })
+          }
 
-          pos = dataSource.map(itm => itm.startDate).indexOf(params.fecha);
+          pos = dataSource.map(itm => itm.idesta).indexOf(e.events[0].idesta);
           dataSource.splice(pos,1)
 
           let data = []
@@ -724,8 +822,6 @@
           e.element.attributes.removeNamedItem("style")
         }
       } else {
-        params.fecha = dateISOToUTCString(e.date.toISOString())
-
         // solapes
         const result = dataSource.find(itm => itm.startDate === params.fecha)
         if (result) {
@@ -739,17 +835,18 @@
           return
         }
 
+        const id = -(Date.now())
         // insertar
         dataSource.push({
-          idesta: 0,
+          idesta: id,
           tipest: params.tipo,
-          startDate: params.fecha,
-          endDate: params.fecha,
+          startDate: new Date(params.fecha),
+          endDate: new Date(params.fecha),
           rangoH: `${params.nombre} (08:30 a 14:00)`,
           color: params.color,
         })
         eventos.push({
-          idesta: 0,
+          idesta: id,
           fecest: params.fecha,
           usuest: usuario.IDUSUA,
           tipest: params.tipo,
