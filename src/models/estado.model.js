@@ -277,7 +277,6 @@ export const updateTraspasos = async (bind) => {
 export const updateEstados = async (bind) => {
   let result
 
-  console.log(updateEstadosSql, bind)
   try {
     await simpleExecute(updateEstadosSql, bind)
 
