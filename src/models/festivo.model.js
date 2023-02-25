@@ -94,7 +94,6 @@ export const festivosOficina = async (context) => {
   let query = festivosOficinaSql
 
   const result = await simpleExecute(query, context)
-
   return result.rows
 }
 export const festivosLocal = async (context) => {
