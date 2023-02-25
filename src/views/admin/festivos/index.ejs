@@ -22,8 +22,8 @@
 
   <body class="antialiased">
     <div class="wrapper">
-      <%- include('../../partials/header') %> <%-
-      include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+      <%- include('../../partials/header') %>
+      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
       <div class="page-wrapper">
         <div class="page-body">
           <div class="container-xl">
@@ -77,80 +77,68 @@
       </div>
       <%- include('../../partials/footer') %>
     </div>
+  <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="container-xl">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="modal-title">Solape de eventos</div>
+            <div>Hay un evento previo en esta fecha</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link" id="btnSolapeAcept" data-bs-dismiss="modal"
+              aria-label="Close">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <script src="/js/ayuda.min.js"></script>
     <script src="/js/js-year-calendar.js"></script>
     <script src="/js/js-year-calendar.es.js"></script>
     <script>
-      async function insertEvento(evento) {
-        let xhr = new XMLHttpRequest()
+      const festivosOficina = async (oficina) => {
+        let festivosOficina
 
-        return new Promise(function (resolve, reject) {
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-              if (xhr.status !== 200) {
-                reject('Error, status code = ' + xhr.status)
-              } else {
-                const result = JSON.parse(xhr.response)
+        // estados
+        if (festivoLocal) {
+          pos = festivos.map((e) => e.FECFES).indexOf(festivoLocal)
+          festivos.splice(pos, 1)
+        }
 
-                resolve(result)
-              }
-            }
-          }
+        if (oficina === 0) {
+          festivosOficina = dataSource
+          festivoLocal = null
+        } else {
+          const festivo = festivosLocal[festivosLocal.map((itm) => itm.OFIFES).indexOf(oficina)]
+          festivosOficina = dataSource.filter(itm => itm.ofiest === oficina)
 
-          xhr.open(
-            'POST',
-            `http://${serverAPI}:${puertoAPI}/api/festivos/insert`,
-            true
-          )
-          xhr.setRequestHeader(
-            'Content-Type',
-            'application/json; charset=utf-8'
-          )
-          xhr.send(JSON.stringify(evento))
-        })
-      }
-      async function deleteEvento(evento) {
-        const xhr = new XMLHttpRequest()
+          festivos.push(festivo)
+          festivoLocal = festivo.FECFES
+        }
 
-        return new Promise(function (resolve, reject) {
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-              if (xhr.status !== 200) {
-                reject('Error, status code = ' + xhr.status)
-              } else {
-                resolve(evento)
-              }
-            }
-          }
-
-          xhr.open(
-            'POST',
-            `http://${serverAPI}:${puertoAPI}/api/festivos/delete`,
-            true
-          )
-          xhr.setRequestHeader(
-            'Content-Type',
-            'application/json; charset=utf-8'
-          )
-          xhr.send(JSON.stringify(evento))
-        })
-      }
-
-      const festivosOficina = (oficina) => {
-        const data = festivos.filter((itm) => itm.OFIFES === oficina)
-        data.map((itm) => {
-          const estado = {
+        let data = []
+        festivos.map((itm) => {
+          data.push({
             idfest: itm.IDFEST,
-            id: itm.IDFEST,
+            ofifes: itm.OFIFES,
             startDate: new Date(itm.FECFES),
             endDate: new Date(itm.FECFES),
-            color: '#FF0000',
-          }
-          data.push(estado)
+            color: params.color,
+          })
         })
+        calendario.setDataSource(data, {
+          preventRendering: false
+        })
+        calendario.render()
 
-        calendario.setDataSource(data)
+        return
+      }
+      const confirm = () => {
+        document.getElementById("eventos").value = JSON.stringify(eventos)
+        document.getElementById("usuario").value = JSON.stringify(<%- datos.usuario %>)
+        return true
       }
       const dateISOToUTCString = (dateISO) => {
         const fecha = new Date(dateISO)
@@ -162,113 +150,152 @@
       }
     </script>
     <script>
-      const festivos = <%- JSON.stringify(datos.festivos) %>
       const oficinas = <%- JSON.stringify(datos.oficinas) %>
-      const serverAPI = <%- JSON.stringify(datos.serverAPI) %>
-      const puertoAPI = <%- JSON.stringify(datos.puertoAPI) %>
+      const festivosLocal = <%- datos.festivosLocal %>
 
-      let oficina = 0
+      let festivos = []
+      let dataSource = <%- datos.dataSource %>
+      let festivoLocal = null
       let calendario = null
       let currentYear = new Date().getFullYear()
-      let fecha = dateISOToUTCString(new Date())
+      let params = {
+        oficina: 0,
+        nombre: '',
+        color: '<%- datos.tiposEstado.festivo.COLOR %>',
+        desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+        hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
+      }
 
       calendario = new Calendar("#calendar", {
+        minDate: new Date(params.desde),
+        maxDate: new Date(params.hasta),
         language: "es",
+        displayHeader: false,
         customDayRenderer: function (e, date) {
           if (date.getDay() === 0) {
-            e.style.color = '#FC0000'
+            e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
           }
         },
         dataSource: function () {
-          const data = festivos.filter(itm => itm.OFIFES === 0)
-          return data.map(itm => ({
-            idfest: itm.IDFEST,
-            id: itm.IDFEST,
-            startDate: new Date(itm.FECFES),
-            endDate: new Date(itm.FECFES),
-            color: "#FF0000",
+          return dataSource.filter(itm => itm.ofifes === 0).map(itm => ({
+            idfest: itm.idfest,
+            ofifes: itm.ofifes,
+            startDate: new Date(itm.startDate),
+            endDate: new Date(itm.endDate),
+            color: itm.color,
           }))
         }
       })
       calendario.setYear(currentYear)
-      calendario.setMinDate(new Date(dateISOToUTCString(`${currentYear}-01-01T00:00:00`)))
-      calendario.setMaxDate(new Date(dateISOToUTCString(`${currentYear}-12-31T00:00:00`)))
+
+      // eventos modal
+      document.getElementById('btnSolapeAcept').addEventListener('click', function () {
+        document.getElementById('modal-solape').style.display = 'none'
+      })
 
       document.getElementById('cboyea').addEventListener('change', function() {
         currentYear = parseInt(document.querySelector("#cboyea").value)
 
-        calendario.setMinDate(new Date(dateISOToUTCString(`${currentYear}-01-01T00:00:00`)));
-        calendario.setMaxDate(new Date(dateISOToUTCString(`${currentYear}-12-31T00:00:00`)));
+        params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+        params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
+
+        calendario.setMinDate(new Date(params.desde));
+        calendario.setMaxDate(new Date(params.hasta));
         calendario.setYear(currentYear)
 
-        festivosOficina(oficina)
+        festivosOficina(params.oficina)
       });
       document.getElementById('cboofi').addEventListener('change', function() {
-        oficina = parseInt(this.value)
+        params.oficina = parseInt(this.value)
+        params.nombre = this.options[this.selectedIndex].text
 
-        festivosOficina(oficina)
+        festivosOficina(params.oficina)
       });
       document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
         // bloquear festivos
-        if (e.events.length > 0 &&
-          e.element.classList.contains('domingo')) {
+        if (e.element.classList.contains('domingo')) {
           return
         }
 
-        if (e.element.style.boxShadow) {
-          e.element.style.boxShadow = null
-        } else {
-          e.element.style.boxShadow = '#FF0000 0px -4px 0px 0px inset'
-        }
+        // if (e.element.style.boxShadow) {
+        //   e.element.style.boxShadow = null
+        // } else {
+        //   e.element.style.boxShadow = '#FF0000 0px -4px 0px 0px inset'
+        // }
 
-        fecha = dateISOToUTCString(e.date.toISOString())
+        fecha = dateISOToUTCString(e.date)
 
         if (e.events.length) {
-          if (e.events[0].id !== 0) {
-            const evento = {
-              festivo: {
-                IDFEST: e.events[0].idfest,
-                OFIFES: oficina,
-              },
-              movimiento: {
-                USUMOV: <%- user.id %>,
-                TIPMOV: <%- datos.tiposMovimiento.borrarFestivo %>
-              }
-            }
-
-            await deleteEvento(evento).then(ret => {
-              let dataSource = calendario.getDataSource()
-              dataSource = dataSource.filter(itm => itm.idfest !== evento.festivo.IDFEST)
+          // borrar
+          if (e.events[0].idesta < 0) {
+            let pos = eventos.map(itm => itm.idesta).indexOf(e.events[0].idesta);
+            festivos.splice(pos, 1)
+          } else {
+            festivos.push({
+              idfest: e.events[0].idfest,
+              fecfes: '',
+              ofifes: 0,
             })
           }
+
+          pos = dataSource.map(itm => itm.idesta).indexOf(e.events[0].idesta);
+          dataSource.splice(pos, 1)
+
+          let data = []
+          dataSource.map(itm => {
+            data.push({
+              idfest: itm.idfest,
+              ofifes: itm.ofifes,
+              startDate: new Date(itm.startDate),
+              endDate: new Date(itm.endDate),
+              color: itm.color,
+            })
+          })
+          calendario.setDataSource(data, {
+            preventRendering: false
+          })
+
+          // actualizar dia
+          e.element.attributes.removeNamedItem("style")
         } else {
-          const evento = {
-            festivo: {
-              FECFES: fecha,
-              OFIFES: oficina,
-            },
-            movimiento: {
-              USUMOV: <%- user.id %>,
-              TIPMOV: <%- datos.tiposMovimiento.crearFestivo %>
-            }
+          // solapes
+          const result = dataSource.find(itm => itm.startDate === params.fecha)
+          if (result) {
+            const modalSolape = document.getElementById('modal-solape')
+
+            e.element.setAttribute('data-bs-trigger', 'hover')
+            e.element.setAttribute('data-bs-toggle', 'popover')
+            e.element.setAttribute('title', 'Solape de eventos')
+
+            modalSolape.style.display = 'flex'
+            return
           }
 
-          await insertEvento(evento).then(ret => {
-            // insert en el calendario
-            let dataSource = calendario.getDataSource()
-            const estado = {
-              idfest: ret.idfest,
-              id: ret.idfest,
-              startDate: new Date(ret.FECFES),
-              endDate: new Date(ret.FECFES),
-              color: "#FF0000",
-            }
-            dataSource.push(estado)
+          params.fecha = dateISOToUTCString(e.date)
+          const id = -(Date.now())
+
+          // insertar
+          dataSource.push({
+            idfest: id,
+            ofifes: params.oficina,
+            startDate: new Date(params.fecha),
+            endDate: new Date(params.fecha),
+            color: params.color,
           })
+          festivos.push({
+            idfest: id,
+            fecfes: params.fecha,
+            ofifes: params.oficina,
+          })
+
+          calendario.setDataSource(dataSource, {
+            preventRendering: false
+          })
+
+          // actualizar dia
+          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
         }
       })
-
-      //getFestivos(params)
     </script>
   </body>
 </html>

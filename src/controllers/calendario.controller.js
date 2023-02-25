@@ -36,6 +36,7 @@ export const mainPage = async (req, res) => {
 export const calendario = async (req, res) => {
   let currentYear = new Date().getFullYear()
   let ret
+  let dataSource = []
   let usuario = {
     IDUSUA: req.body.idusua,
   }
@@ -73,7 +74,6 @@ export const calendario = async (req, res) => {
       estado,
     })
 
-    let dataSource = []
     ret.data.map(itm => {
       if (itm.TIPEST !== tiposEstado.traspasado.ID &&
         itm.TIPEST !== tiposEstado.traspaso.ID) {
@@ -167,7 +167,6 @@ export const update = async (req, res) => {
     });
   }
 }
-
 
 // helpers
 const dateISOToUTCString = (dateISO) => {
