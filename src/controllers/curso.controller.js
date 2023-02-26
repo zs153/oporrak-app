@@ -2,7 +2,6 @@ import * as DAL from '../models/curso.model'
 
 const insertFromRec = (req) => {
   const curso = {
-    DESCUR: req.body.curso.DESCUR,
     descur: req.body.curso.DESCUR,
     durcur: req.body.curso.DURCUR,
     poncur: req.body.curso.PONCUR,
