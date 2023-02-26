@@ -130,8 +130,6 @@ const usuariosSql = `SELECT
 FROM usuarios uu
 INNER JOIN usuarioscurso uc ON uc.idusua = uu.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE uc.idcurs = :idcurs
-ORDER BY uu.nomusu
 `
 const usuariosPendientesSql = `SELECT
   uu.idusua, uu.nomusu
@@ -139,8 +137,6 @@ FROM turnoscurso tc
 INNER JOIN usuariosturno ut ON ut.idturn = tc.idturn
 LEFT JOIN usuarioscurso uc ON uc.idusua = ut.idusua AND uc.idcurs = :idcurs
 INNER JOIN usuarios uu ON uu.idusua = ut.idusua
-WHERE tc.idcurs = :idcurs
-  AND uc.idusua IS NULL
 `
 const insertUsuarioSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOCURSO(
   :idcurs,
@@ -165,7 +161,6 @@ const usuariosTurnoSql = `SELECT
 FROM usuarios uu
 INNER JOIN usuariosturno ut ON ut.idusua = uu.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE ut.idturn = :idturn
 `
 const usuariosTurnoPendientesSql = `SELECT 
   uu.idusua, uu.nomusu, oo.idofic, oo.desofi
@@ -207,7 +202,6 @@ const usuariosMatriculaSql = `SELECT
 FROM usuarios uu
 INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE um.idmatr = :idmatr
 `
 const insertUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOMATRICULA(
   :idmatr,
@@ -230,7 +224,7 @@ export const find = async (context) => {
   let binds = {}
 
   if (context.IDCURS) {
-    binds.idcurs = context.IDCURS
+    binds.IDCURS = context.IDCURS
     query += `WHERE cc.idcurs = :idcurs`
   }
 
@@ -299,10 +293,10 @@ export const turno = async (context) => {
   let binds = {}
 
   if (context.IDCURS) {
-    binds.idcurs = context.IDCURS
+    binds.IDCURS = context.IDCURS
     query += `WHERE tc.idcurs = :idcurs`
   } else if (context.IDTURN) {
-    binds.idturn = context.IDTURN
+    binds.IDTURN = context.IDTURN
     query += `WHERE tc.idturn = :idturn`
   }
 
@@ -358,10 +352,10 @@ export const matricula = async (context) => {
   let binds = {}
 
   if (context.IDCURS) {
-    binds.idcurs = context.IDCURS
+    binds.IDCURS = context.IDCURS
     query += `WHERE mc.idcurs = :idcurs`
   } else if (context.IDMATR) {
-    binds.idmatr = context.IDMATR
+    binds.IDMATR = context.IDMATR
     query += `WHERE mm.idmatr = :idmatr`
   }
 
@@ -413,27 +407,29 @@ export const removeMatricula = async (bind) => {
 
 // usuarios
 export const usuarios = async (context) => {
-  let result
+  let binds = {}
   let query = usuariosSql
 
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
+  if (context.IDCURS) {
+    binds.IDCURS = context.IDCURS
+    query += `WHERE uc.idcurs = :idcurs`
   }
 
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const usuariosPendientes = async (context) => {
-  let result
+  let binds = {}
   let query = usuariosPendientesSql
 
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
+  if (context.IDCURS) {
+    binds.IDCURS = context.IDCURS
+    query += `WHERE tc.idcurs = :idcurs
+      AND uc.idusua IS NULL
+    `
   }
 
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const insertUsuario = async (bind) => {
@@ -464,27 +460,21 @@ export const removeUsuario = async (bind) => {
 
 // usuarios turno
 export const usuariosTurno = async (context) => {
-  let result
+  let binds = {}
   let query = usuariosTurnoSql
 
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
+  if (context.IDTURN) {
+    binds.IDTURN = context.IDTURN
+    query += `WHERE ut.idturn = :idturn`
   }
 
+  const result = await simpleExecute(query, binds)
   return result.rows
 }
 export const usuariosTurnoPendientes = async (context) => {
-  let result
   let query = usuariosTurnoPendientesSql
 
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
-  }
-
+  const result = await simpleExecute(query, context)
   return result.rows
 }
 export const insertUsuarioTurno = async (bind) => {
@@ -516,11 +506,12 @@ export const removeUsuarioTurno = async (bind) => {
 
 // usuarios matricula
 export const usuariosMatricula = async (context) => {
-  let query = usuariosMatriculaSql
   let binds = {}
+  let query = usuariosMatriculaSql
 
   if (context.IDMATR) {
-    binds.idmatr = context.IDMATR
+    binds.IDMATR = context.IDMATR
+    query += `WHERE um.idmatr = :idmatr`
   }
 
   const result = await simpleExecute(query, binds)

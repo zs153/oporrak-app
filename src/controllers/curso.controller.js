@@ -2,29 +2,29 @@ import * as DAL from '../models/curso.model'
 
 const insertFromRec = (req) => {
   const curso = {
-    descur: req.body.curso.DESCUR,
-    durcur: req.body.curso.DURCUR,
-    poncur: req.body.curso.PONCUR,
-    stacur: req.body.curso.STACUR,
+    DESCUR: req.body.curso.DESCUR,
+    DURCUR: req.body.curso.DURCUR,
+    PONCUR: req.body.curso.PONCUR,
+    STACUR: req.body.curso.STACUR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
 }
 const updateFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.IDCURS,
-    descur: req.body.curso.DESCUR,
-    durcur: req.body.curso.DURCUR,
-    poncur: req.body.curso.PONCUR,
-    stacur: req.body.curso.STACUR,
+    IDCURS: req.body.curso.IDCURS,
+    DESCUR: req.body.curso.DESCUR,
+    DURCUR: req.body.curso.DURCUR,
+    PONCUR: req.body.curso.PONCUR,
+    STACUR: req.body.curso.STACUR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, movimiento)
@@ -109,46 +109,46 @@ const deleteTurnoFromRec = (req) => {
 // matriculas
 const insertMatriculaFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.IDCURS,
+    IDCURS: req.body.curso.IDCURS,
   }
   const matricula = {
-    desmat: req.body.matricula.DESMAT,
-    inimat: req.body.matricula.INIMAT,
-    finmat: req.body.matricula.FINMAT,
-    stamat: req.body.matricula.STAMAT,
+    DESMAT: req.body.matricula.DESMAT,
+    INIMAT: req.body.matricula.INIMAT,
+    FINMAT: req.body.matricula.FINMAT,
+    STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, matricula, movimiento)
 }
 const updateMatriculaFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.IDMATR,
-    desmat: req.body.matricula.DESMAT,
-    inimat: req.body.matricula.INIMAT,
-    finmat: req.body.matricula.FINMAT,
-    stamat: req.body.matricula.STAMAT,
+    IDMATR: req.body.matricula.IDMATR,
+    DESMAT: req.body.matricula.DESMAT,
+    INIMAT: req.body.matricula.INIMAT,
+    FINMAT: req.body.matricula.FINMAT,
+    STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(matricula, movimiento)
 }
 const deleteMatriculaFromRec = (req) => {
   const curso = {
-    idcurs: req.body.curso.IDCURS,
+    IDCURS: req.body.curso.IDCURS,
   }
   const matricula = {
-    idmatr: req.body.matricula.IDMATR,
+    IDMATR: req.body.matricula.IDMATR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(curso, matricula, movimiento)
@@ -218,7 +218,7 @@ const deleteUsuarioTurnoFromRec = (req) => {
 // usuarios matricula
 const insertUsuarioMatriculaFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.IDMATR,
+    IDMATR: req.body.matricula.IDMATR,
   }
   const usuarios = {
     arrusu: {
@@ -228,21 +228,21 @@ const insertUsuarioMatriculaFromRec = (req) => {
     }
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
   return Object.assign(matricula, usuarios, movimiento)
 }
 const deleteUsuarioMatriculaFromRec = (req) => {
   const matricula = {
-    idmatr: req.body.matricula.IDMATR,
+    IDMATR: req.body.matricula.IDMATR,
   }
   const usuario = {
-    idusua: req.body.usuario.IDUSUA,
+    IDUSUA: req.body.usuario.IDUSUA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(matricula, usuario, movimiento)
