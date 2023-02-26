@@ -1,46 +1,18 @@
 import axios from 'axios'
 import { puertoAPI, serverAPI } from '../config/settings'
-import { tiposEstado } from '../public/js/enumeraciones'
+import { tiposEstado, tiposMovimiento } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
-  let ret
-  let dataSource = []
-
   const user = req.user
   const oficina = {}
-  const currentYear = new Date().getFullYear()
-  const festivo = {
-    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-  }
 
   try {
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina
-    })
-    const oficinas = ret.data
-
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
-      festivo
-    })
-    const festivosComun = ret.data.filter(itm => itm.OFIFES === 0)
-    const festivosLocal = ret.data.filter(itm => itm.OFIFES > 0)
-
-    ret.data.map(itm => {
-      dataSource.push({
-        idfest: itm.IDFEST,
-        ofifes: itm.OFIFES,
-        startDate: itm.FECFES,
-        endDate: itm.FECFES,
-        color: `${tiposEstado.festivo.COLOR}`,
-      })
     })
 
     const datos = {
-      festivosComun: JSON.stringify(festivosComun),
-      festivosLocal: JSON.stringify(festivosLocal),
-      dataSource: JSON.stringify(dataSource),
-      oficinas,
+      oficinas: oficinas.data,
       tiposEstado,
     }
 
@@ -54,12 +26,113 @@ export const mainPage = async (req, res) => {
   }
 }
 
+// proc
+export const calendario = async (req, res) => {
+  let currentYear = new Date().getFullYear()
+  let ret
+  let dataSource = []
+  let oficina = {
+    IDOFIC: parseInt(req.body.idofic),
+  }
+
+  const user = req.user
+  const festivo = {
+    OFIFES: req.body.idofic,
+    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
+  }
+
+  try {
+    if (oficina.IDOFIC !== 0) {
+      ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+        oficina,
+      })
+      oficina = ret.data
+    } else {
+      oficina.DESOFI = 'COMUNES'
+    }
+
+    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
+      festivo,
+    })
+    dataSource = ret.data.map(itm => ({
+      idfest: itm.IDFEST,
+      fecfes: itm.FECFES,
+      ofifes: itm.OFIFES,
+      startDate: itm.FECFES,
+      endDate: itm.FECFES,
+      color: tiposEstado.festivo.COLOR,
+    }))
+
+    const datos = {
+      tiposEstado,
+      oficina,
+      dataSource: JSON.stringify(dataSource),
+    }
+
+    res.render(`admin/festivos/calendario`, { user, datos })
+  } catch (error) {
+    const msg = 'No se ha podido acceder a los datos de la aplicación.'
+
+    res.render('admin/error400', {
+      alerts: [{ msg }],
+    })
+  }
+}
+export const update = async (req, res) => {
+  const user = req.user
+  const eventos = JSON.parse(req.body.eventos)
+  let festivos = []
+
+  eventos.map(itm => {
+    // importante!! los campos del array festivos tienen que ir en mayusculas
+    if (itm.idfest < 0) {
+      // insertar
+      festivos.push({
+        IDFEST: 0,
+        FECFES: itm.fecfes,
+        OFIFES: itm.ofifes,
+      })
+    } else {
+      // borrar
+      festivos.push({
+        IDFEST: itm.idfest,
+        FECEST: '',
+        OFIEST: 0,
+      })
+    }
+  })
+
+  const context = {
+    ARRFES: festivos
+  }
+  const movimiento = {
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearEstado,
+    TIPMOZ: tiposMovimiento.borrarEstado,
+  }
+
+  try {
+    if (festivos.length !== 0) {
+      await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/update`, {
+        context,
+        movimiento,
+      });
+    }
+
+    mainPage(req, res)
+  } catch (error) {
+    const msg = "No se ha podido insertar los datos.";
+
+    res.render("admin/error400", {
+      alerts: [{ msg }],
+    });
+  }
+}
+
 // helpers
 const dateISOToUTCString = (dateISO) => {
-  const fecha = new Date(dateISO)
-  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
-
-  return new Date(fecha.getTime() - userTimezoneOffset)
-    .toISOString()
-    .slice(0, 10)
+  const fecha = new Date(dateISO);
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
+  return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
 }

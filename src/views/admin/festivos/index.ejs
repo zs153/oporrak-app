@@ -1,65 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Calendario Festivos</title>
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
-    <!-- styles -->
-    <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="/css/js-year-calendar.min.css" />
-    <style>
-      .calendar-header {
-        border: none !important;
-        margin-bottom: 0 !important;
-      }
-    </style>
-  </head>
+<!doctype html>
+<html lang="es">
 
-  <body class="antialiased">
-    <div class="wrapper">
-      <%- include('../../partials/header') %>
-      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-      <div class="page-wrapper">
-        <div class="page-body">
-          <div class="container-xl">
-            <div class="row">
-              <div class="col-12">
-                <div class="card mt-1">
-                  <input type="hidden" name="idusua" id="idusua" value="" />
-                  <input type="hidden" name="tipest" id="tipest" value="" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Festivos</title>
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <!-- styles -->
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="antialiased">
+  <div class="wrapper">
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row">
+            <div class="col-12">
+              <div class="card mt-1">
+                <form action="/admin/festivos/calendario" method="POST">
                   <div class="card-header">
-                    <h3 class="card-title">Calendario Festivos</h3>
+                    <h3 class="card-title">Festivos</h3>
                   </div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-2">
+                      <div class="col-12">
                         <div class="mb-1">
-                          <select class="form-select" id="cboyea" value="">
-                            <option value="<%- new Date().getFullYear() %>">
-                              <%- new Date().getFullYear() %>
-                            </option>
-                            <option value="<%- new Date().getFullYear() +1 %>">
-                              <%- new Date().getFullYear() +1 %>
-                            </option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-3">
-                        <div class="mb-1">
-                          <select
-                            class="form-select"
-                            id="cboofi"
-                            name="ofiusu"
-                            value=""
-                          >
-                            <option value="0" selected>FESTIVOS COMUNES</option>
+                          <div class="form-label">Oficina</div>
+                          <select class="form-select" id="cboofi" name="idofic" value="">
+                            <option value="0">FESTIVOS COMUNES</option>
                             <% datos.oficinas.map(element=> { %>
-                            <option value="<%- element.IDOFIC %>">
+                            <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? "selected":"" %>>
                               <%- element.DESOFI %>
                             </option>
                             <% }) %>
@@ -67,235 +41,23 @@
                         </div>
                       </div>
                     </div>
-                    <div id="calendar" class="form-control"></div>
                   </div>
-                </div>
+                  <div class="card-footer text-end">
+                    <div class="d-flex">
+                      <button type="submit" class="btn btn-success ms-auto">Ver calendario</button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <%- include('../../partials/footer') %>
     </div>
-  <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="container-xl">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="modal-title">Solape de eventos</div>
-            <div>Hay un evento previo en esta fecha</div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link" id="btnSolapeAcept" data-bs-dismiss="modal"
-              aria-label="Close">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%- include('../../partials/footer') %>
   </div>
 
-    <script src="/js/ayuda.min.js"></script>
-    <script src="/js/js-year-calendar.js"></script>
-    <script src="/js/js-year-calendar.es.js"></script>
-    <script>
-      const festivosOficina = async (oficina) => {
-        let festivosOficina
+  <script src="/js/ayuda.min.js"></script>
+</body>
 
-        // estados
-        if (festivoLocal) {
-          pos = festivos.map((e) => e.FECFES).indexOf(festivoLocal)
-          festivos.splice(pos, 1)
-        }
-
-        if (oficina === 0) {
-          festivosOficina = dataSource
-          festivoLocal = null
-        } else {
-          const festivo = festivosLocal[festivosLocal.map((itm) => itm.OFIFES).indexOf(oficina)]
-          festivosOficina = dataSource.filter(itm => itm.ofiest === oficina)
-
-          festivos.push(festivo)
-          festivoLocal = festivo.FECFES
-        }
-
-        let data = []
-        festivos.map((itm) => {
-          data.push({
-            idfest: itm.IDFEST,
-            ofifes: itm.OFIFES,
-            startDate: new Date(itm.FECFES),
-            endDate: new Date(itm.FECFES),
-            color: params.color,
-          })
-        })
-        calendario.setDataSource(data, {
-          preventRendering: false
-        })
-        calendario.render()
-
-        return
-      }
-      const confirm = () => {
-        document.getElementById("eventos").value = JSON.stringify(eventos)
-        document.getElementById("usuario").value = JSON.stringify(<%- datos.usuario %>)
-        return true
-      }
-      const dateISOToUTCString = (dateISO) => {
-        const fecha = new Date(dateISO)
-        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
-
-        return new Date(fecha.getTime() - userTimezoneOffset)
-          .toISOString()
-          .slice(0, 10)
-      }
-    </script>
-    <script>
-      const oficinas = <%- JSON.stringify(datos.oficinas) %>
-      const festivosLocal = <%- datos.festivosLocal %>
-
-      let festivos = []
-      let dataSource = <%- datos.dataSource %>
-      let festivoLocal = null
-      let calendario = null
-      let currentYear = new Date().getFullYear()
-      let params = {
-        oficina: 0,
-        nombre: '',
-        color: '<%- datos.tiposEstado.festivo.COLOR %>',
-        desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-        hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
-      }
-
-      calendario = new Calendar("#calendar", {
-        minDate: new Date(params.desde),
-        maxDate: new Date(params.hasta),
-        language: "es",
-        displayHeader: false,
-        customDayRenderer: function (e, date) {
-          if (date.getDay() === 0) {
-            e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
-          }
-        },
-        dataSource: function () {
-          return dataSource.filter(itm => itm.ofifes === 0).map(itm => ({
-            idfest: itm.idfest,
-            ofifes: itm.ofifes,
-            startDate: new Date(itm.startDate),
-            endDate: new Date(itm.endDate),
-            color: itm.color,
-          }))
-        }
-      })
-      calendario.setYear(currentYear)
-
-      // eventos modal
-      document.getElementById('btnSolapeAcept').addEventListener('click', function () {
-        document.getElementById('modal-solape').style.display = 'none'
-      })
-
-      document.getElementById('cboyea').addEventListener('change', function() {
-        currentYear = parseInt(document.querySelector("#cboyea").value)
-
-        params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
-        params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
-
-        calendario.setMinDate(new Date(params.desde));
-        calendario.setMaxDate(new Date(params.hasta));
-        calendario.setYear(currentYear)
-
-        festivosOficina(params.oficina)
-      });
-      document.getElementById('cboofi').addEventListener('change', function() {
-        params.oficina = parseInt(this.value)
-        params.nombre = this.options[this.selectedIndex].text
-
-        festivosOficina(params.oficina)
-      });
-      document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
-        // bloquear festivos
-        if (e.element.classList.contains('domingo')) {
-          return
-        }
-
-        // if (e.element.style.boxShadow) {
-        //   e.element.style.boxShadow = null
-        // } else {
-        //   e.element.style.boxShadow = '#FF0000 0px -4px 0px 0px inset'
-        // }
-
-        fecha = dateISOToUTCString(e.date)
-
-        if (e.events.length) {
-          // borrar
-          if (e.events[0].idesta < 0) {
-            let pos = eventos.map(itm => itm.idesta).indexOf(e.events[0].idesta);
-            festivos.splice(pos, 1)
-          } else {
-            festivos.push({
-              idfest: e.events[0].idfest,
-              fecfes: '',
-              ofifes: 0,
-            })
-          }
-
-          pos = dataSource.map(itm => itm.idesta).indexOf(e.events[0].idesta);
-          dataSource.splice(pos, 1)
-
-          let data = []
-          dataSource.map(itm => {
-            data.push({
-              idfest: itm.idfest,
-              ofifes: itm.ofifes,
-              startDate: new Date(itm.startDate),
-              endDate: new Date(itm.endDate),
-              color: itm.color,
-            })
-          })
-          calendario.setDataSource(data, {
-            preventRendering: false
-          })
-
-          // actualizar dia
-          e.element.attributes.removeNamedItem("style")
-        } else {
-          // solapes
-          const result = dataSource.find(itm => itm.startDate === params.fecha)
-          if (result) {
-            const modalSolape = document.getElementById('modal-solape')
-
-            e.element.setAttribute('data-bs-trigger', 'hover')
-            e.element.setAttribute('data-bs-toggle', 'popover')
-            e.element.setAttribute('title', 'Solape de eventos')
-
-            modalSolape.style.display = 'flex'
-            return
-          }
-
-          params.fecha = dateISOToUTCString(e.date)
-          const id = -(Date.now())
-
-          // insertar
-          dataSource.push({
-            idfest: id,
-            ofifes: params.oficina,
-            startDate: new Date(params.fecha),
-            endDate: new Date(params.fecha),
-            color: params.color,
-          })
-          festivos.push({
-            idfest: id,
-            fecfes: params.fecha,
-            ofifes: params.oficina,
-          })
-
-          calendario.setDataSource(dataSource, {
-            preventRendering: false
-          })
-
-          // actualizar dia
-          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
-        }
-      })
-    </script>
-  </body>
 </html>
