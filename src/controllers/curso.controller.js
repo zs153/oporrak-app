@@ -296,7 +296,7 @@ export const usuariosAddPage = async (req, res) => {
       curso,
     });
     const datos = {
-      curso,
+      curso: result.data,
       usuarios: usuarios.data,
     };
 

@@ -107,7 +107,7 @@ const buildTable = (state) => {
     row.appendChild(cell)
     // col4
     cell = document.createElement('td')
-    cell.classList.add("w-4")
+    cell.classList.add("w-5")
     cell.innerHTML = `<ul class="dots-menu">
       <li class="nav-item drop-right">
         <a href="#" class="nav-link">
