@@ -216,7 +216,6 @@ export const actualizaTraspasos = async (req, res) => {
       res.status(404).end()
     }
   } catch (err) {
-    console.log(err)
     res.status(500).end()
   }
 }
@@ -232,7 +231,6 @@ export const actualizaEstados = async (req, res) => {
       res.status(404).end()
     }
   } catch (err) {
-    console.log(err)
     res.status(500).end()
   }
 }

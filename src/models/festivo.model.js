@@ -39,6 +39,13 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETEFESTIVO(
   :tipmov
 ); END;
 `
+const updateFestivosSql = `BEGIN OPORRAK_PKG.UPDATEFESTIVOS(
+  :arrfes,
+  :usumov,
+  :tipmov,
+  :tipmoz
+); END;
+`
 
 // festivos
 export const find = async (context) => {
@@ -49,7 +56,6 @@ export const find = async (context) => {
     hasta: context.HASTA,
   }
 
-  console.log(query, binds)
   if (typeof context.OFIFES === 'undefined') {
     delete binds.ofifes
   } else {
@@ -80,6 +86,19 @@ export const remove = async (bind) => {
 
   try {
     await simpleExecute(removeSql, bind)
+
+    result = bind
+  } catch (error) {
+    result = null
+  }
+
+  return result
+}
+export const updateFestivos = async (bind) => {
+  let result
+
+  try {
+    await simpleExecute(updateFestivosSql, bind)
 
     result = bind
   } catch (error) {

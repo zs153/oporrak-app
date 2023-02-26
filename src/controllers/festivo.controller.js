@@ -24,6 +24,20 @@ const deleteFromRec = (req) => {
 
   return Object.assign(festivo, movimiento)
 }
+const actualizaFestivosFromRec = (req) => {
+  const festivos = {
+    arrfes: {
+      type: 'FESTYPE',
+      val: req.body.context.ARRFES,
+    }
+  }
+  const movimiento = {
+    usumov: req.body.movimiento.USUMOV,
+    tipmov: req.body.movimiento.TIPMOV,
+    tipmoz: req.body.movimiento.TIPMOZ,
+  }
+  return Object.assign(festivos, movimiento)
+}
 
 // festivo
 export const festivo = async (req, res) => {
@@ -77,11 +91,24 @@ export const borrar = async (req, res) => {
     res.status(500).end()
   }
 }
+export const actualizaFestivos = async (req, res) => {
+  try {
+    const result = await DAL.updateFestivos(actualizaFestivosFromRec(req))
+
+    if (result !== null) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).end()
+    }
+  } catch (err) {
+    res.status(500).end()
+  }
+}
 
 // oficina
 export const festivosOficina = async (req, res) => {
   const context = req.body.festivo
-  
+
   try {
     const result = await DAL.festivosOficina(context)
 
@@ -102,4 +129,3 @@ export const festivosLocal = async (req, res) => {
     res.status(400).end()
   }
 }
-

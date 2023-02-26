@@ -563,7 +563,6 @@ export const usuariosTurnoPendientes = async (req, res) => {
   }
 }
 export const crearUsuarioTurno = async (req, res) => {
-  console.log(insertUsuarioTurnoFromRec(req))
   try {
     const result = await DAL.insertUsuarioTurno(insertUsuarioTurnoFromRec(req))
 

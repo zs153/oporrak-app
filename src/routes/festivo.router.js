@@ -6,6 +6,7 @@ import {
   borrar,
   festivosOficina,
   festivosLocal,
+  actualizaFestivos,
 } from '../controllers/festivo.controller'
 
 const apiFestivoRouter = express.Router()
@@ -15,6 +16,7 @@ apiFestivoRouter.post('/festivo', festivo)
 apiFestivoRouter.post('/festivos', festivos)
 apiFestivoRouter.post('/festivos/insert', crear)
 apiFestivoRouter.post('/festivos/delete', borrar)
+apiFestivoRouter.post('/festivos/update', actualizaFestivos)
 
 // proc
 apiFestivoRouter.post('/festivos/oficinas', festivosOficina)
