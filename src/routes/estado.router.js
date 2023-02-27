@@ -18,20 +18,18 @@ import {
 const apiEstadoRouter = express.Router()
 
 // estados
-apiEstadoRouter.post('/estados', estado)
+apiEstadoRouter.post('/estado', estado)
 apiEstadoRouter.post('/estados', estados)
 apiEstadoRouter.post('/estados/insert', crear)
 apiEstadoRouter.post('/estados/delete', borrar)
 apiEstadoRouter.post('/estados/inserts', crearRango)
+apiEstadoRouter.post('/estados/update', actualizaEstados)
 
 // usuario
 apiEstadoRouter.post('/estados/usuarios', estadosUsuario)
 apiEstadoRouter.post('/estados/usuarios/fechas', estadosFechaUsuario)
 apiEstadoRouter.post('/estados/usuarios/perfiles', estadosFechaPerfil)
 apiEstadoRouter.post('/estados/oficinas/perfiles', estadosOficinaPerfil)
-
-// estados
-apiEstadoRouter.post('/estados/update', actualizaEstados)
 
 // traspaso
 apiEstadoRouter.post('/estados/insert/traspaso', crearTraspaso)

@@ -175,8 +175,17 @@ export const find = async (context) => {
     query += `WHERE idesta = :idesta`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  try {
+    const result = await simpleExecute(query, binds)
+
+    if (result.rows) {
+      return ({ stat: 1, data: result.rows })
+    } else {
+      return ({ stat: null, msg: 'Error' })
+    }
+  } catch (err) {
+    return ({ stat: null, msg: 'Error' })
+  }
 }
 export const insert = async (bind) => {
   bind.IDESTA = {
@@ -195,12 +204,12 @@ export const insert = async (bind) => {
   // return bind
 
   await simpleExecute(insertSql, bind)
-  .then(ret => {
-    return ret.outBinds.IDESTA
-  })
-  .catch(err => {
-    return null
-  })
+    .then(ret => {
+      return ret.outBinds.IDESTA
+    })
+    .catch(err => {
+      return null
+    })
 }
 export const remove = async (bind) => {
   let result
@@ -282,13 +291,13 @@ export const updateTraspasos = async (bind) => {
 }
 
 // estados
-export const updateEstados = async (bind) => {
+export const updateEstados = async (context) => {
   try {
-    await simpleExecute(updateEstadosSql, bind)
+    await simpleExecute(updateEstadosSql, context)
 
-    return ({stat: 1, msg: 'Datos actualizados'})
+    return ({ stat: 1, msg: 'Datos actualizados' })
   } catch (error) {
-    return ({stat: null, msg: 'No se ha podido actualizar los datos'})
+    return ({ stat: null, msg: 'No se ha podido actualizar los datos' })
   }
 }
 

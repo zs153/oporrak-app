@@ -102,34 +102,21 @@ const actualizaTraspasosFromRec = (req) => {
   }
   return Object.assign(traspasos, movimiento)
 }
-const actualizaEstadosFromRec = (req) => {
-  const estados = {
-    arrest: {
-      type: 'STADTYPE',
-      val: req.body.context.ARREST,
-    }
-  }
-  const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
-    TIPMOZ: req.body.movimiento.TIPMOZ,
-  }
-  return Object.assign(estados, movimiento)
-}
 
 // estado
 export const estado = async (req, res) => {
   const context = req.body.estado
+
   try {
     const result = await DAL.find(context)
 
-    if (result.length === 1) {
-      return res.status(200).json(result[0])
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data[0] })
     } else {
-      res.status(404).end()
+      return res.status(400).json({ stat: null, msg: 'No existen datos' })
     }
   } catch (err) {
-    res.status(500).end()
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
 }
 export const estados = async (req, res) => {
@@ -138,13 +125,13 @@ export const estados = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (rows !== null) {
-      res.status(200).json(result)
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
     } else {
-      res.status(404).end()
+      return res.status(400).json({ stat: null, msg: 'No existen datos' })
     }
   } catch (err) {
-    res.status(400).end()
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
 }
 export const crear = async (req, res) => {
@@ -187,8 +174,21 @@ export const crearRango = async (req, res) => {
   }
 }
 export const actualizaEstados = async (req, res) => {
+  const estados = {
+    ARREST: {
+      type: 'STADTYPE',
+      val: req.body.context.ARREST,
+    }
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+    TIPMOZ: req.body.movimiento.TIPMOZ,
+  }
+  const context = Object.assign(estados, movimiento)
+
   try {
-    const result = await DAL.updateEstados(actualizaEstadosFromRec(req))
+    const result = await DAL.updateEstados(context)
 
     if (result.stat) {
       return res.status(200).json(result)
