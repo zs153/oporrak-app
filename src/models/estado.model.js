@@ -170,8 +170,8 @@ export const find = async (context) => {
   let query = baseQuery
   let binds = {}
 
-  if (context.idesta) {
-    binds.idesta = context.idesta
+  if (context.IDESTA) {
+    binds.IDESTA = context.IDESTA
     query += `WHERE idesta = :idesta`
   }
 
@@ -179,20 +179,28 @@ export const find = async (context) => {
   return result.rows
 }
 export const insert = async (bind) => {
-  bind.idesta = {
+  bind.IDESTA = {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
 
-  try {
-    const result = await simpleExecute(insertSql, bind)
+  // try {
+  //   const result = await simpleExecute(insertSql, bind)
 
-    bind.idesta = await result.outBinds.idesta
-  } catch (error) {
-    bind = null
-  }
+  //   bind.IDESTA = await result.outBinds.IDESTA
+  // } catch (error) {
+  //   bind = null
+  // }
 
-  return bind
+  // return bind
+
+  await simpleExecute(insertSql, bind)
+  .then(ret => {
+    return ret.outBinds.IDESTA
+  })
+  .catch(err => {
+    return null
+  })
 }
 export const remove = async (bind) => {
   let result
@@ -208,7 +216,7 @@ export const remove = async (bind) => {
   return result
 }
 export const insertRango = async (bind) => {
-  bind.idesta = {
+  bind.IDESTA = {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
@@ -216,7 +224,7 @@ export const insertRango = async (bind) => {
   try {
     const result = await simpleExecute(insertRangoSql, bind)
 
-    bind.idesta = await result.outBinds.idesta
+    bind.IDESTA = await result.outBinds.IDESTA
   } catch (error) {
     bind = null
   }
@@ -226,11 +234,11 @@ export const insertRango = async (bind) => {
 
 // traspaso
 export const insertTraspaso = async (bind) => {
-  bind.idesta = {
+  bind.IDESTA = {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
-  bind.idtras = {
+  bind.IDTRAS = {
     dir: oracledb.BIND_OUT,
     type: oracledb.NUMBER,
   }
@@ -238,8 +246,8 @@ export const insertTraspaso = async (bind) => {
   try {
     const result = await simpleExecute(insertTraspasoSql, bind)
 
-    bind.idesta = await result.outBinds.idesta
-    bind.idtras = await result.outBinds.idtras
+    bind.IDESTA = await result.outBinds.IDESTA
+    bind.IDTRAS = await result.outBinds.IDTRAS
   } catch (error) {
     bind = null
   }
@@ -275,17 +283,13 @@ export const updateTraspasos = async (bind) => {
 
 // estados
 export const updateEstados = async (bind) => {
-  let result
-
   try {
     await simpleExecute(updateEstadosSql, bind)
 
-    result = bind
+    return ({stat: 1, msg: 'Datos actualizados'})
   } catch (error) {
-    result = null
+    return ({stat: null, msg: 'No se ha podido actualizar los datos'})
   }
-
-  return result
 }
 
 // usuarios

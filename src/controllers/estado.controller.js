@@ -2,83 +2,91 @@ import * as DAL from '../models/estado.model'
 
 const insertFromRec = (req) => {
   const estado = {
-    fecest: req.body.estado.FECEST,
-    usuest: req.body.estado.USUEST,
-    tipest: req.body.estado.TIPEST,
-    ofiest: req.body.estado.OFIEST,
-    deshor: req.body.estado.DESHOR,
-    hashor: req.body.estado.HASHOR,
+    FECEST: req.body.estado.FECEST,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
+    OFIEST: req.body.estado.OFIEST,
+    DESHOR: req.body.estado.DESHOR,
+    HASHOR: req.body.estado.HASHOR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
 }
 const deleteFromRec = (req) => {
   const estado = {
-    idesta: req.body.estado.IDESTA,
+    IDESTA: req.body.estado.IDESTA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
 }
 const insertTraspasoFromRec = (req) => {
   const estado = {
-    fecest: req.body.estado.FECEST,
-    usuest: req.body.estado.USUEST,
-    tipest: req.body.estado.TIPEST,
-    ofiest: req.body.estado.OFIEST,
-    deshor: req.body.estado.DESHOR,
-    hashor: req.body.estado.HASHOR,
+    FECEST: req.body.estado.FECEST,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
+    OFIEST: req.body.estado.OFIEST,
+    DESHOR: req.body.estado.DESHOR,
+    HASHOR: req.body.estado.HASHOR,
   }
   const traspaso = {
-    tiptra: req.body.traspaso.TIPTRA,
-    ofitra: req.body.traspaso.OFITRA,
+    TIPTRA: req.body.traspaso.TIPTRA,
+    OFITRA: req.body.traspaso.OFITRA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, traspaso, movimiento)
 }
 const deleteTraspasoFromRec = (req) => {
   const estado = {
-    idesta: req.body.estado.IDESTA,
+    IDESTA: req.body.estado.IDESTA,
   }
   const traspaso = {
-    usuest: req.body.traspaso.USUEST,
-    fecest: req.body.traspaso.FECEST,
-    tipest: req.body.traspaso.TIPEST,
+    USUEST: req.body.traspaso.USUEST,
+    FECEST: req.body.traspaso.FECEST,
+    TIPEST: req.body.traspaso.TIPEST,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, traspaso, movimiento)
 }
 const insertRangoFromRec = (req) => {
   const estado = {
-    desde: req.body.estado.DESDE,
-    hasta: req.body.estado.HASTA,
-    usuest: req.body.estado.USUEST,
-    tipest: req.body.estado.TIPEST,
-    ofiest: req.body.estado.OFIEST,
-    deshor: req.body.estado.DESHOR,
-    hashor: req.body.estado.HASHOR,
+    DESDE: req.body.estado.DESDE,
+    HASTA: req.body.estado.HASTA,
+    USUEST: req.body.estado.USUEST,
+    TIPEST: req.body.estado.TIPEST,
+    OFIEST: req.body.estado.OFIEST,
+    DESHOR: req.body.estado.DESHOR,
+    HASHOR: req.body.estado.HASHOR,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
 
   return Object.assign(estado, movimiento)
+}
+const fechaPerfilFromRec = (req) => {
+  const context = {
+    fecest: req.body.fecha.FECEST,
+    tipest: req.body.tipoExcluido.TIPEST,
+  }
+
+  return context
 }
 const actualizaTraspasosFromRec = (req) => {
   const traspasos = {
@@ -88,9 +96,9 @@ const actualizaTraspasosFromRec = (req) => {
     }
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
-    tipmoz: req.body.movimiento.TIPMOZ,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+    TIPMOZ: req.body.movimiento.TIPMOZ,
   }
   return Object.assign(traspasos, movimiento)
 }
@@ -102,9 +110,9 @@ const actualizaEstadosFromRec = (req) => {
     }
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
-    tipmoz: req.body.movimiento.TIPMOZ,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+    TIPMOZ: req.body.movimiento.TIPMOZ,
   }
   return Object.assign(estados, movimiento)
 }
@@ -178,6 +186,19 @@ export const crearRango = async (req, res) => {
     res.status(500).end()
   }
 }
+export const actualizaEstados = async (req, res) => {
+  try {
+    const result = await DAL.updateEstados(actualizaEstadosFromRec(req))
+
+    if (result.stat) {
+      return res.status(200).json(result)
+    } else {
+      return res.status(400).json(result)
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Error de conexión con el servidor' })
+  }
+}
 
 // traspaso
 export const crearTraspaso = async (req, res) => {
@@ -220,21 +241,6 @@ export const actualizaTraspasos = async (req, res) => {
   }
 }
 
-// tmp
-export const actualizaEstados = async (req, res) => {
-  try {
-    const result = await DAL.updateEstados(actualizaEstadosFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
 // usuarios
 export const estadosUsuario = async (req, res) => {
   const context = req.body.estado
@@ -248,13 +254,8 @@ export const estadosUsuario = async (req, res) => {
   }
 }
 export const estadosFechaPerfil = async (req, res) => {
-  const context = {
-    fecest: req.body.fecha.FECEST,
-    tipest: req.body.tipoExcluido.TIPEST,
-  }
-
   try {
-    const result = await DAL.estadosFechaPerfil(context)
+    const result = await DAL.estadosFechaPerfil(fechaPerfilFromRec(req))
 
     res.status(200).json(result)
   } catch (err) {
