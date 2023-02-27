@@ -160,11 +160,15 @@ export const update = async (req, res) => {
 
     mainPage(req, res)
   } catch (error) {
-    const msg = "No se ha podido insertar los datos.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });      
+    }
   }
 }
 
