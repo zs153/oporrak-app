@@ -12,6 +12,7 @@ export const mainPage = async (req, res) => {
   const user = req.user
   const usuario = {}
   const oficina = {}
+
   try {
     const historicos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/historicos`, {
       usuario
@@ -20,18 +21,22 @@ export const mainPage = async (req, res) => {
       oficina
     })
     const datos = {
-      historicos: historicos.data,
-      oficinas: oficinas.data,
+      historicos: historicos.data.data,
+      oficinas: oficinas.data.data,
       tiposRol,
     }
 
     res.render('admin/historicos', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 
@@ -68,11 +73,15 @@ export const activar = async (req, res) => {
       throw err
     })
   } catch (error) {
-    const msg = 'No se ha podido activar al usuario.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 

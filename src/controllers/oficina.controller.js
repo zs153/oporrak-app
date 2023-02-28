@@ -11,17 +11,21 @@ export const mainPage = async (req, res) => {
       oficina,
     })
     const datos = {
-      oficinas: result.data,
+      oficinas: result.data.data,
       tiposRol,
     }
 
     res.render('admin/oficinas', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const addPage = async (req, res) => {
@@ -30,11 +34,15 @@ export const addPage = async (req, res) => {
   try {
     res.render('admin/oficinas/add', { user })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const editPage = async (req, res) => {
@@ -47,17 +55,21 @@ export const editPage = async (req, res) => {
       oficina,
     })
     const datos = {
-      oficina: result.data,
+      oficina: result.data.data,
       tiposRol,
     }
 
     res.render('admin/oficinas/edit', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const insert = async (req, res) => {
@@ -79,11 +91,15 @@ export const insert = async (req, res) => {
 
     res.redirect('/admin/oficinas')
   } catch (error) {
-    let msg = 'No se ha podido crear la oficina.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const update = async (req, res) => {
@@ -106,12 +122,15 @@ export const update = async (req, res) => {
 
     res.redirect('/admin/oficinas')
   } catch (error) {
-    let msg =
-      'No se han podido modificar los datos de la oficina.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const remove = async (req, res) => {
@@ -132,10 +151,14 @@ export const remove = async (req, res) => {
 
     res.redirect('/admin/oficinas')
   } catch (error) {
-    const msg = 'No se ha podido borrar la oficina.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }

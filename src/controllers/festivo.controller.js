@@ -12,17 +12,20 @@ export const mainPage = async (req, res) => {
     })
 
     const datos = {
-      oficinas: oficinas.data,
-      tiposEstado,
+      oficinas: oficinas.data.data,
     }
 
     res.render('admin/festivos', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 
@@ -47,10 +50,12 @@ export const calendario = async (req, res) => {
       ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
         oficina,
       })
-      oficina = ret.data
+      oficina = ret.data.data
     } else {
       oficina.DESOFI = 'COMUNES'
     }
+
+// TODO
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
       festivo,
@@ -72,11 +77,15 @@ export const calendario = async (req, res) => {
 
     res.render(`admin/festivos/calendario`, { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const update = async (req, res) => {
@@ -122,11 +131,15 @@ export const update = async (req, res) => {
 
     mainPage(req, res)
   } catch (error) {
-    const msg = "No se ha podido insertar los datos.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 

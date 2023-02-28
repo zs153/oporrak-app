@@ -17,19 +17,23 @@ export const mainPage = async (req, res) => {
   try {
     const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       usuario,
-    })
+    })    
     const datos = {
-      usuarios: result.data,
-      estadosUsuario: estadosUsuario,
+      usuarios: result.data.data,
+      estadosUsuario,
     }
 
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const addPage = async (req, res) => {
@@ -42,7 +46,7 @@ export const addPage = async (req, res) => {
       oficina,
     })
     const datos = {
-      oficinas: oficinas.data,
+      oficinas: oficinas.data.data,
       filteredRol,
       arrTiposPerfil,
       arrEstadosUsuario,
@@ -50,11 +54,15 @@ export const addPage = async (req, res) => {
 
     res.render('admin/usuarios/add', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const editPage = async (req, res) => {
@@ -63,7 +71,7 @@ export const editPage = async (req, res) => {
   const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
   const usuario = {
     IDUSUA: req.params.id,
-  }
+  } 
 
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
@@ -73,8 +81,8 @@ export const editPage = async (req, res) => {
       usuario,
     })
     const datos = {
-      usuario: result.data,
-      oficinas: oficinas.data,
+      usuario: result.data.data,
+      oficinas: oficinas.data.data,
       filteredRol,
       arrTiposPerfil,
       arrEstadosUsuario,
@@ -82,11 +90,15 @@ export const editPage = async (req, res) => {
 
     res.render('admin/usuarios/edit', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const insert = async (req, res) => {
@@ -125,11 +137,15 @@ export const insert = async (req, res) => {
       throw err
     })
   } catch (error) {
-    let msg = 'No se ha podido crear el nuevo usuario.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.data }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.data }],
+      });
+    }
   }
 }
 export const update = async (req, res) => {
@@ -157,12 +173,15 @@ export const update = async (req, res) => {
 
     res.redirect('/admin/usuarios')
   } catch (error) {
-    let msg =
-      'No se han podido modificar los datos del usuario.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const remove = async (req, res) => {
@@ -183,11 +202,15 @@ export const remove = async (req, res) => {
 
     res.redirect('/admin/usuarios')
   } catch (error) {
-    const msg = 'No se ha podido borrar el usuario.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 

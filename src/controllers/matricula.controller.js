@@ -12,8 +12,7 @@ export const mainPage = async (req, res) => {
       matricula,
     })
     const datos = {
-      matriculas: result.data,
-      estados: arrEstadosMatricula,
+      matriculas: result.data.data,
     }
 
     res.render('admin/matriculas', { user, datos })
@@ -27,30 +26,23 @@ export const mainPage = async (req, res) => {
 }
 export const addPage = async (req, res) => {
   const user = req.user
-  const fecha = new Date().toISOString().slice(0, 10)
-  const matricula = {
-    INIMAT: fecha,
-    FINMAT: fecha,
-  }
-  const curso = {}
   
   try {
-    const cursos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos`, {
-      curso,
-    })
     const datos = {
-      matricula,
-      cursos: cursos.data,
       arrEstadosMatricula,
     }
 
     res.render('admin/matriculas/add', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const editPage = async (req, res) => {
@@ -58,29 +50,28 @@ export const editPage = async (req, res) => {
   const matricula = {
     IDMATR: req.params.id,
   }
-  const curso = {}
 
   try {
     const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/matricula`, {
       matricula,
     })
-    const cursos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos`, {
-      curso,
-    })
 
     const datos = {
-      matricula: result.data,
-      cursos: cursos.data,
+      matricula: result.data.data,
       arrEstadosMatricula,
     }
 
     res.render('admin/matriculas/edit', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 
@@ -99,18 +90,21 @@ export const usuariosPage = async (req, res) => {
       matricula,
     });
     const datos = {
-      matricula: result.data,
-      usuarios: usuarios.data,
-      tiposRol,
+      matricula: result.data.data,
+      usuarios: usuarios.data.data,
     };
 
     res.render("admin/matriculas/usuarios", { user, datos });
   } catch (error) {
-    const msg = "No se ha podido acceder a los usuarios de la matrícula seleccionada.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const usuariosAddPage = async (req, res) => {
@@ -127,17 +121,21 @@ export const usuariosAddPage = async (req, res) => {
       matricula,
     });
     const datos = {
-      matricula: result.data,
-      usuarios: usuarios.data,
+      matricula: result.data.data,
+      usuarios: usuarios.data.data,
     };
 
     res.render("admin/matriculas/usuarios/add", { user, datos });
   } catch (error) {
-    const msg = "No se ha podido acceder a los usuarios de la matrícula seleccionado.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 
@@ -148,7 +146,6 @@ export const insert = async (req, res) => {
     DESMAT: req.body.desmat.toUpperCase(),
     INIMAT: req.body.inimat,
     FINMAT: req.body.finmat,
-    IDCURS: req.body.idcurs,
     STAMAT: req.body.stamat,
   }
   const movimiento = {
@@ -164,15 +161,15 @@ export const insert = async (req, res) => {
 
     res.redirect('/admin/matriculas')
   } catch (error) {
-    let msg = 'No se ha podido crear la matrícula.'
-
-    if (error.response.data.errorNum === 20100) {
-      msg = 'La matrícula ya existe.'
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
     }
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
   }
 }
 export const update = async (req, res) => {
@@ -198,16 +195,15 @@ export const update = async (req, res) => {
 
     res.redirect('/admin/matriculas')
   } catch (error) {
-    let msg =
-      'No se han podido modificar los datos de la matrícula. Verifique los datos introducidos'
-
-    if (error.response.data.errorNum === 20100) {
-      msg = 'La matrícula ya existe'
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
     }
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
   }
 }
 export const remove = async (req, res) => {
@@ -228,11 +224,15 @@ export const remove = async (req, res) => {
 
     res.redirect('/admin/matriculas')
   } catch (error) {
-    const msg = 'No se ha podido elminar la matrícula.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 
@@ -260,11 +260,15 @@ export const insertUsuario = async (req, res) => {
 
     res.redirect(`/admin/matriculas/usuarios/${matricula.IDMATR}`);
   } catch (error) {
-    const msg = "No se ha podido insertar el usuario.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const deleteUsuario = async (req, res) => {
@@ -289,10 +293,21 @@ export const deleteUsuario = async (req, res) => {
 
     res.redirect(`/admin/matriculas/usuarios/${matricula.IDMATR}`);
   } catch (error) {
-    const msg = "No se ha podido borrar el usuario.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
+}
+
+// helpers
+const dateISOToUTCString = (dateISO) => {
+  const fecha = new Date(dateISO);
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
+  return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
 }

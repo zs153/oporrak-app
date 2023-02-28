@@ -10,20 +10,24 @@ export const matriculasPage = async (req, res) => {
   }
 
   try {
-    const retMatriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
+    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
       matricula
     })
     const datos = {
-      matriculas: retMatriculas.data,
+      matriculas: matriculas.data.data,
     }
 
     res.render('admin/formacion/matriculas', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const cursosPage = async (req, res) => {
@@ -38,27 +42,27 @@ export const cursosPage = async (req, res) => {
     })
 
     const datos = {
-      cursos: result.data,
+      cursos: result.data.data,
     }
 
     res.render('admin/formacion/cursos', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
-export const insertUsuarioMatricula = async (req, res) => {
+export const quieroMatricularme = async (req, res) => {
   const user = req.user;
-  const curso = {
-    IDCURS: req.body.idcurs,
-  }
   const matricula = {
     IDMATR: req.body.idmatr,
   }
-
   const usuarios = {
     ARRUSU: [parseInt(req.body.idusua)]
   }
@@ -76,10 +80,14 @@ export const insertUsuarioMatricula = async (req, res) => {
 
     res.redirect(`/admin/formacion/matriculas`);
   } catch (error) {
-    const msg = "No se ha podido insertar los datos.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
