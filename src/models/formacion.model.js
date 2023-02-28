@@ -20,30 +20,40 @@ FROM usuarioscurso uc
 INNER JOIN cursos cc ON cc.idcurs = uc.idcurs
 `
 // matriculas
-export const matriculas = async (context) => {
-  let query = baseMatriculasQuery
-  let binds = {}
+export const findM = async (context) => {
+  // bind
+  let query = baseMatriculasQuery;
+  let bind = {};
 
-  binds.idusua = context.IDUSUA
-  if (context.STAMAT) {
-    binds.stamat = context.STAMAT
-    query += `AND mm.stamat = :stamat`
+  if (context.IDUSUA) {
+    bind.IDUSUA = context.IDUSUA;
+  } else if (context.STAMAT) {
+    bind.STAMAT = context.STAMAT
+    query += `AND mm.stamat = : stamar `
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 
 // cursos
-export const cursos = async (context) => {
-  let query = baseCursosQuery
-  let binds = {}
+export const findC = async (context) => {
+  // bind
+  let query = baseCursosQuery;
+  let bind = context;
 
-  if (context.IDUSUA) {
-    binds.idusua = context.IDUSUA
-    query += `WHERE uc.idusua = :idusua`
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
   }
-
-  const result = await simpleExecute(query, binds)
-  return result.rows
 }

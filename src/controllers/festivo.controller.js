@@ -1,6 +1,42 @@
 import * as DAL from '../models/festivo.model'
 
-const insertFromRec = (req) => {
+// festivo
+export const festivo = async (req, res) => {
+  // context
+  const context = req.body.festivo
+
+  // proc
+  try {
+    const result = await DAL.find(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data[0] })
+    } else {
+      res.status(400).json({ stat: null, data: 'Festivo no encontrado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
+}
+export const festivos = async (req, res) => {
+  // context
+  const context = req.body.festivo
+
+  // proc
+  try {
+    const result = await DAL.find(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
+}
+export const crear = async (req, res) => {
+  //context
   const festivo = {
     FECFES: req.body.festivo.FECFES,
     OFIFES: req.body.festivo.OFIFES,
@@ -9,10 +45,51 @@ const insertFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context =  Object.assign(festivo, movimiento)
 
-  return Object.assign(festivo, movimiento)
+  // proc
+  try {
+    const result = await DAL.insert(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Festivo no insertado' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteFromRec = (req) => {
+export const actualizar = async (req, res) => {
+  // context
+  const festivos = {
+    ARRFES: {
+      type: 'FESTYPE',
+      val: req.body.context.ARRFES,
+    }
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+    TIPMOZ: req.body.movimiento.TIPMOZ,
+  }
+  const context = Object.assign(festivos, movimiento)
+
+  // proc
+  try {
+    const result = await DAL.update(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuario no actualizado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
+}
+export const borrar = async (req, res) => {
   const festivo = {
     IDFEST: req.body.festivo.IDFEST,
     OFIFES: req.body.festivo.OFIFES,
@@ -21,111 +98,55 @@ const deleteFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(festivo, movimiento)
 
-  return Object.assign(festivo, movimiento)
-}
-const actualizaFestivosFromRec = (req) => {
-  const festivos = {
-    arrfes: {
-      type: 'FESTYPE',
-      val: req.body.context.ARRFES,
-    }
-  }
-  const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
-    tipmoz: req.body.movimiento.TIPMOZ,
-  }
-  return Object.assign(festivos, movimiento)
-}
-
-// festivo
-export const festivo = async (req, res) => {
-  const context = req.body.festivo
+  // proc
   try {
-    const result = await DAL.find(context)
+    const result = await DAL.remove(context)
 
-    if (result.length === 1) {
-      return res.status(200).json(result[0])
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
     } else {
-      res.status(404).end()
+      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
     }
   } catch (err) {
-    res.status(500).end()
-  }
-}
-export const festivos = async (req, res) => {
-  const context = req.body.festivo
-
-  try {
-    const result = await DAL.find(context)
-
-    res.status(200).json(result)
-  } catch (err) {
-    res.status(400).end()
-  }
-}
-export const crear = async (req, res) => {
-  try {
-    const result = await DAL.insert(insertFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const borrar = async (req, res) => {
-  try {
-    const result = await DAL.remove(deleteFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const actualizaFestivos = async (req, res) => {
-  try {
-    const result = await DAL.updateFestivos(actualizaFestivosFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }
 
 // oficina
 export const festivosOficina = async (req, res) => {
+  // context
   const context = req.body.festivo
 
+  // proc
   try {
     const result = await DAL.festivosOficina(context)
 
-    res.status(200).json(result)
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: {} })
+    }
   } catch (err) {
-    res.status(400).end()
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }
 // local
 export const festivosLocal = async (req, res) => {
+  // context
   const context = req.body.festivo
 
+  // proc
   try {
     const result = await DAL.festivosLocal(context)
 
-    res.status(200).json(result)
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: {} })
+    }
   } catch (err) {
-    res.status(400).end()
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }

@@ -83,7 +83,7 @@ const removeTurnoSql = `BEGIN OPORRAK_PKG.DELETETURNOCURSO(
   :tipmov
 ); END;
 `
-// matricula
+// matriculas
 const matriculaSql = `SELECT 
   mm.idmatr, mm.desmat, mm.stamat,
   TO_CHAR(mm.inimat, 'YYYY-MM-DD') "INIMAT",

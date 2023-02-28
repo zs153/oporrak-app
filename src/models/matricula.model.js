@@ -1,18 +1,15 @@
-import oracledb from 'oracledb'
+import {BIND_OUT, NUMBER} from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const baseSql = `SELECT 
   mm.idmatr,
   mm.desmat,
-  TO_CHAR(mm.inimat, 'YYYY-MM-DD') AS INIMAT,
-  TO_CHAR(mm.finmat, 'YYYY-MM-DD') AS FINMAT,
   mm.idcurs,
   mm.stamat,
-  cc.descur,
   TO_CHAR(mm.inimat, 'DD/MM/YYYY') AS STRINI,
   TO_CHAR(mm.finmat, 'DD/MM/YYYY') AS STRFIN
 FROM matriculas mm
-INNER JOIN cursos cc ON cc.idcurs = mm.idcurs
+INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTMATRICULA(
   :desmat,
@@ -42,13 +39,6 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETEMATRICULA(
   :tipmov 
 ); END;
 `
-const cambioSql = `BEGIN OPORRAK_PKG.CAMBIOESTADOMATRICULA(
-  :idmatr,
-  :stamat,
-  :usumov,
-  :tipmov 
-); END;
-`
 const usuariosMatriculaSql = `SELECT 
   uu.idusua,
   uu.nomusu,
@@ -57,7 +47,6 @@ const usuariosMatriculaSql = `SELECT
 FROM usuarios uu
 INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE um.idmatr = :idmatr
 `
 const usuariosPendientesSql = `SELECT 
   uu.idusua, uu.nomusu, oo.desofi FROM usuarios uu
@@ -86,119 +75,119 @@ const removeUsuarioSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
 // matriculas
 export const find = async (context) => {
   let query = baseSql
-  let binds = {}
+  let bind = {}
 
   if (context.IDMATR) {
-    binds.idmatr = context.IDMATR
+    bind.IDMATR = context.IDMATR
     query += `WHERE mm.idmatr = :idmatr`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insert = async (bind) => {
+  // bind
   bind.IDMATR = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+    dir: BIND_OUT,
+    type: NUMBER,
   }
 
-  try {
-    const result = await simpleExecute(insertSql, bind)
+  // proc
+  const ret = await simpleExecute(insertSql, bind)
 
-    bind.IDMATR = await result.outBinds.IDMATR
-  } catch (error) {
-    bind = null
+  if (ret) {
+    bind.IDMATR = ret.outBinds.IDMATR
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return bind
 }
 export const update = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(updateSql, bind)
 
-  try {
-    await simpleExecute(updateSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const remove = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeSql, bind)
 
-  try {
-    await simpleExecute(removeSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
-}
-export const change = async (bind) => {
-  let result
-
-  try {
-    await simpleExecute(cambioSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
-  }
-
-  return result
 }
 
 // usuarios
 export const usuariosMatricula = async (context) => {
-  let result
+  // bind
   let query = usuariosMatriculaSql
+  let bind = {}
 
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
+  if (context.IDMATR) {
+    bind.IDMATR = context.IDMATR
   }
 
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const usuariosPendientes = async (context) => {
-  let result
+  // bind
   let query = usuariosPendientesSql
+  let bind = {}
 
-  try {
-    result = await simpleExecute(query, context)
-  } catch (error) {
-    result = null
+  if (context.IDMATR) {
+    bind.IDMATR = context.IDMATR
+    query += `WHERE um.idmatr = :idmatr`
   }
 
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insertUsuario = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(insertUsuarioSql, bind)
 
-  try {
-    await simpleExecute(insertUsuarioSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return bind
 }
 export const removeUsuario = async (bind) => {
-  let result
-  try {
-    await simpleExecute(removeUsuarioSql, bind)
+  // bind
+  // proc
+  const ret = await simpleExecute(removeUsuarioSql, bind)
 
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }

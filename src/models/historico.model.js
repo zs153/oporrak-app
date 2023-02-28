@@ -21,27 +21,32 @@ const activarSql = `BEGIN OPORRAK_PKG.ACTIVARHISTORICO(
 `
 
 export const find = async (context) => {
+  // bind
   let query = baseQuery;
-  let binds = {};
+  let bind = {};
 
-  if (context.idusua) {
-    binds.idusua = context.idusua;
+  if (context.IDUSUA) {
+    bind.IDUSUA = context.IDUSUA;
     query += "WHERE idusua = :idusua";
   }
 
-  const result = await simpleExecute(query, binds);
-  return result.rows;
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 };
 export const activar = async (bind) => {
-  let result;
+  // bind
+  // proc
+  const ret = await simpleExecute(activarSql, bind)
 
-  try {
-    await simpleExecute(activarSql, bind);
-
-    result = bind;
-  } catch (error) {
-    result = null;
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result;
 }

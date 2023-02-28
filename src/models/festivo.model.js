@@ -1,4 +1,4 @@
-import oracledb from 'oracledb'
+import {BIND_OUT, NUMBER} from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const festivosSql = `SELECT 
@@ -39,7 +39,7 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETEFESTIVO(
   :tipmov
 ); END;
 `
-const updateFestivosSql = `BEGIN OPORRAK_PKG.UPDATEFESTIVOS(
+const updateSql = `BEGIN OPORRAK_PKG.UPDATEFESTIVOS(
   :arrfes,
   :usumov,
   :tipmov,
@@ -49,63 +49,65 @@ const updateFestivosSql = `BEGIN OPORRAK_PKG.UPDATEFESTIVOS(
 
 // festivos
 export const find = async (context) => {
+  // bind
   let query = festivosSql
-  let binds = {
-    ofifes: context.OFIFES,
-    desde: context.DESDE,
-    hasta: context.HASTA,
+  let bind = {
+    DESDE: context.DESDE,
+    HASTA: context.HASTA,
   }
 
-  if (typeof context.OFIFES === 'undefined') {
-    delete binds.ofifes
-  } else {
+  if (context.OFIFES) {
+    bind.OFIFES = bind.OFIFES
     query += `AND ofifes = :ofifes`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insert = async (bind) => {
-  bind.idfest = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+  // bind
+  bind.IDFEST = {
+    dir: BIND_OUT,
+    type: NUMBER,
+  };
+
+  // proc
+  const ret = await simpleExecute(insertSql, bind)
+
+  if (ret) {
+    bind.IDFEST = ret.outBinds.IDFEST
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
+}
+export const update = async (bind) => {
+  // bind
+  // proc
+  const ret = await simpleExecute(updateSql, bind)
 
-  try {
-    const result = await simpleExecute(insertSql, bind)
-
-    bind.idfest = await result.outBinds.idfest
-  } catch (error) {
-    bind = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return bind
 }
 export const remove = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeSql, bind)
 
-  try {
-    await simpleExecute(removeSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
-}
-export const updateFestivos = async (bind) => {
-  let result
-
-  try {
-    await simpleExecute(updateFestivosSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
-  }
-
-  return result
 }
 
 // oficinas

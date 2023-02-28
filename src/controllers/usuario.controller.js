@@ -1,57 +1,133 @@
 import * as DAL from '../models/usuario.model'
 
-const insertFromRec = (req) => {
+export const usuario = async (req, res) => {
+  // context
+  const context = req.body.usuario
+
+  // proc
+  try {
+    const result = await DAL.find(context)
+
+    if (result.stat) {
+      res.status(200).json({stat: 1, data: result.data[0]})
+    } else {
+      res.status(400).json({stat: null, data: 'Usuario no encontrado'})
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
+}
+export const usuarios = async (req, res) => {
+  // context
+  const context = req.body.usuario
+
+  // proc
+  try {
+    const result = await DAL.find(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
+}
+
+export const crear = async (req, res) => {
+  // context
   const usuario = {
-    nomusu: req.body.usuario.NOMUSU,
-    ofiusu: req.body.usuario.OFIUSU,
-    rolusu: req.body.usuario.ROLUSU,
-    userid: req.body.usuario.USERID,
-    emausu: req.body.usuario.EMAUSU,
-    perusu: req.body.usuario.PERUSU,
-    telusu: req.body.usuario.TELUSU,
-    stausu: req.body.usuario.STAUSU,
+    NOMUSU: req.body.usuario.NOMUSU,
+    OFIUSU: req.body.usuario.OFIUSU,
+    ROLUSU: req.body.usuario.ROLUSU,
+    USERID: req.body.usuario.USERID,
+    EMAUSU: req.body.usuario.EMAUSU,
+    PERUSU: req.body.usuario.PERUSU,
+    TELUSU: req.body.usuario.TELUSU,
+    STAUSU: req.body.usuario.STAUSU,
   }
   const recurso = {
-    pwdusu: req.body.recurso.PWDUSU,
-    seed: req.body.recurso.SEED,
+    PWDUSU: req.body.recurso.PWDUSU,
+    SEED: req.body.recurso.SEED,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(usuario, recurso, movimiento)
 
-  return Object.assign(usuario, recurso, movimiento)
+  // proc
+  try {
+    const result = await DAL.insert(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuario no insertado' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const updateFromRec = (req) => {
+export const modificiar = async (req, res) => {
+  // context
   const usuario = {
-    idusua: req.body.usuario.IDUSUA,
-    nomusu: req.body.usuario.NOMUSU,
-    ofiusu: req.body.usuario.OFIUSU,
-    rolusu: req.body.usuario.ROLUSU,
-    emausu: req.body.usuario.EMAUSU,
-    perusu: req.body.usuario.PERUSU,
-    telusu: req.body.usuario.TELUSU,
-    stausu: req.body.usuario.STAUSU,
+    IDUSUA: req.body.usuario.IDUSUA,
+    NOMUSU: req.body.usuario.NOMUSU,
+    OFIUSU: req.body.usuario.OFIUSU,
+    ROLUSU: req.body.usuario.ROLUSU,
+    EMAUSU: req.body.usuario.EMAUSU,
+    PERUSU: req.body.usuario.PERUSU,
+    TELUSU: req.body.usuario.TELUSU,
+    STAUSU: req.body.usuario.STAUSU,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(usuario, movimiento)
 
-  return Object.assign(usuario, movimiento)
+  // proc
+  try {
+    const result = await DAL.update(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuario no actualizado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteFromRec = (req) => {
+export const borrar = async (req, res) => {
+  // context
   const usuario = {
-    idusua: req.body.usuario.IDUSUA,
+    IDUSUA: req.body.usuario.IDUSUA,
   }
   const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(usuario, movimiento)
 
-  return Object.assign(usuario, movimiento)
+  // proc
+  try {
+    const result = await DAL.remove(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const cambioFromRec = (req) => {
+export const cambio = async (req, res) => {
+  // context
   const cambio = {
     idusua: req.body.usuario.IDUSUA,
     pwdusu: req.body.usuario.PWDUSU,
@@ -61,9 +137,24 @@ const cambioFromRec = (req) => {
     tipmov: req.body.movimiento.TIPMOV,
   }
 
-  return Object.assign(cambio, movimiento)
+  const context = Object.assign(cambio, movimiento)
+
+  // proc
+  try {
+    const result = await DAL.change(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Contraseña no cambiada' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const olvidoFromRec = (req) => {
+export const olvido = async (req, res) => {
+  // context
   const usuario = {
     emausu: req.body.usuario.EMAUSU,
     pwdusu: req.body.usuario.PWDUSU,
@@ -73,131 +164,48 @@ const olvidoFromRec = (req) => {
     usumov: req.body.movimiento.USUMOV,
     tipmov: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(usuario, movimiento)
 
-  return Object.assign(usuario, movimiento)
-}
-const perfilFromRec = (req) => {
-  const usuario = {
-    idusua: req.body.usuario.IDUSUA,
-    nomusu: req.body.usuario.NOMUSU,
-    emausu: req.body.usuario.EMAUSU,
-    telusu: req.body.usuario.TELUSU,
-  }
-  const movimiento = {
-    usumov: req.body.movimiento.USUMOV,
-    tipmov: req.body.movimiento.TIPMOV,
-  }
-
-  return Object.assign(usuario, movimiento)
-}
-
-export const usuario = async (req, res) => {
-  const context = req.body.usuario
-
+  // proc
   try {
-    const result = await DAL.find(context)
+    const result = await DAL.forgot(context)
 
-    if (result.length === 1) {
-      return res.status(200).json(result[0])
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
     } else {
-      res.status(404).end()
+      res.status(400).json({ stat: null, data: 'Contraseña no reinicializada' })
     }
+
   } catch (err) {
-    res.status(500).end()
-  }
-}
-export const usuarios = async (req, res) => {
-  const context = req.body.usuario
-
-
-  try {
-    const result = await DAL.find(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
-export const insert = async (req, res) => {
-  try {
-    const result = await DAL.insert(insertFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const update = async (req, res) => {
-  try {
-    const result = await DAL.update(updateFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const remove = async (req, res) => {
-  try {
-    const result = await DAL.remove(deleteFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const cambio = async (req, res) => {
-  try {
-    const result = await DAL.change(cambioFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const olvido = async (req, res) => {
-  try {
-    const result = await DAL.forgot(olvidoFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }
 export const perfil = async (req, res) => {
-  try {
-    const result = await DAL.profile(perfilFromRec(req))
+  // context
+  const usuario = {
+    IDUSUA: req.body.usuario.IDUSUA,
+    NOMUSU: req.body.usuario.NOMUSU,
+    EMAUSU: req.body.usuario.EMAUSU,
+    TELUSU: req.body.usuario.TELUSU,
+  }
+  const movimiento = {
+    USUMOV: req.body.movimiento.USUMOV,
+    TIPMOV: req.body.movimiento.TIPMOV,
+  }
 
-    if (result !== null) {
-      res.status(200).json(result)
+  const context = Object.assign(usuario, movimiento)
+
+  // proc
+  try {
+    const result = await DAL.profile(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
     } else {
-      res.status(404).end()
+      res.status(400).json({ stat: null, data: 'Perfil no actualizado' })
     }
+
   } catch (err) {
-    res.status(500).end()
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }

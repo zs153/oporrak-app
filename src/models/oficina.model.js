@@ -1,4 +1,4 @@
-import oracledb from 'oracledb'
+import { BIND_OUT, NUMBER } from "oracledb";
 import { simpleExecute } from '../services/database.js'
 
 const baseQuery = `SELECT 
@@ -21,7 +21,7 @@ const updateSql = `BEGIN OPORRAK_PKG.UPDATEOFICINA(
   :tipmov
 ); END;
 `
-const deleteSql = `BEGIN OPORRAK_PKG.DELETEOFICINA(
+const removeSql = `BEGIN OPORRAK_PKG.DELETEOFICINA(
   :idofic,
   :usumov,
   :tipmov 
@@ -29,60 +29,64 @@ const deleteSql = `BEGIN OPORRAK_PKG.DELETEOFICINA(
 `
 
 export const find = async (context) => {
+  // bind
   let query = baseQuery
-  let binds = {}
+  let bind = {}
 
   if (context.IDOFIC) {
-    binds.idofic = context.IDOFIC
+    bind.IDOFIC = context.IDOFIC
     query += `WHERE oo.idofic = :idofic`
   }
   if (context.CODOFI) {
-    binds.codofi = context.CODOFI
+    bind.CODOFI = context.CODOFI
     query += `WHERE oo.codofi = :codofi`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insert = async (bind) => {
-  bind.idofic = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+  // bind
+  bind.IDOFIC = {
+    dir: BIND_OUT,
+    type: NUMBER,
+  };
+
+  // proc
+  const ret = await simpleExecute(insertSql, bind)
+
+  if (ret) {
+    bind.IDOFIC = ret.outBinds.IDOFIC
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  try {
-    const result = await simpleExecute(insertSql, bind)
-
-    bind.idofic = await result.outBinds.idofic
-  } catch (error) {
-    bind = null
-  }
-
-  return bind
 }
 export const update = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(updateSql, bind)
 
-  try {
-    await simpleExecute(updateSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const remove = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeSql, bind)
 
-  try {
-    await simpleExecute(deleteSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
