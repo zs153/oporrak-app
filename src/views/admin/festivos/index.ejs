@@ -22,6 +22,7 @@
             <div class="col-12">
               <div class="card mt-1">
                 <form action="/admin/festivos/calendario" method="POST">
+                  <input type="hidden" id="desofi" name="desofi" value="">
                   <div class="card-header">
                     <h3 class="card-title">Festivos</h3>
                   </div>
@@ -58,6 +59,11 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
+  <script>
+    document.getElementById('cboofi').addEventListener('change', function () {
+      document.getElementById('desofi').value = this.options[this.selectedIndex].text
+    });
+  </script>
 </body>
 
 </html>

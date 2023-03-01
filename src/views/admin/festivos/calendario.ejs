@@ -174,10 +174,11 @@
           return
         }
 
+        const fecha = dateISOToUTCString(e.date)
         if (e.events.length) {
           // borrar
           if (e.events[0].idfest < 0) {
-            let pos = eventos.map(itm => itm.idfest).indexOf(e.events[0].idfest);
+            let pos = eventos.map(itm => itm.idfest).indexOf(fecha);
             eventos.splice(pos, 1)
           } else {
             eventos.push({
@@ -187,7 +188,7 @@
             })
           }
 
-          pos = dataSource.map(itm => itm.idfest).indexOf(e.events[0].idfest);
+          pos = dataSource.map(itm => itm.fecfes).indexOf(fecha);
           dataSource.splice(pos, 1)
 
           let data = []
@@ -207,15 +208,14 @@
           // actualizar dia
           e.element.attributes.removeNamedItem("style")
         } else {
-          const fecha = dateISOToUTCString(e.date)
           const id = -(Date.now())
 
           // insertar
           dataSource.push({
             idfest: id,
             ofifes: oficina.IDOFIC,
-            startDate: new Date(fecha),
-            endDate: new Date(fecha),
+            startDate: fecha,
+            endDate: fecha,
             color: params.color,
           })
           eventos.push({
@@ -224,7 +224,17 @@
             ofifes: oficina.IDOFIC,
           })
 
-          calendario.setDataSource(dataSource, {
+          let data = []
+          dataSource.map(itm => {
+            data.push({
+              idfest: itm.idfest,
+              ofifes: itm.ofifes,
+              startDate: new Date(itm.startDate),
+              endDate: new Date(itm.endDate),
+              color: itm.color,
+            })
+          })
+          calendario.setDataSource(data, {
             preventRendering: false
           })
 

@@ -5,28 +5,21 @@ import { tiposRol, tiposEstado, arrTiposPerfil } from '../public/js/enumeracione
 // pages
 export const mainPage = async (req, res) => {
   const user = req.user
+  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
   const currentYear = new Date().getFullYear()
   const currentMonth = new Date().getMonth() + 1
   const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
   const desde = yearMonthDayToUTCString(currentYear, currentMonth, 1)
   const hasta = yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth)
-  const oficina = {}
-
+  
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
 
-    if (req.user.rol === tiposRol.admin) {
-      oficinas = oficinas.data
-    } else {
-      oficinas = oficinas.data.filter(itm => itm.IDOFIC === req.user.oficina)
-    }
-
     const datos = {
-      oficinas,
+      oficinas: oficinas.data.data,
       arrTiposPerfil,
-      tiposRol,
       desde,
       hasta,
     }
@@ -46,43 +39,50 @@ export const estadosPage = async (req, res) => {
   const user = req.user
   const oficina = {}
   const periodo = {
-    desde: req.body.desde,
-    hasta: req.body.hasta,
+    DESDE: req.body.desde,
+    HASTA: req.body.hasta,
   }
-  const estado = {
-    OFIEST: parseInt(req.body.ofiest),
-    PERUSU: parseInt(req.body.perusu),
-    DESDE: periodo.desde,
-    HASTA: periodo.hasta,
+  const festivo = {
+    OFIFES: req.body.ofiest,
+    DESDE: periodo.DESDE,
+    HASTA: periodo.HASTA,
   }
   const descripcionOficina = req.body.desofi
   const descripcionPerfil = req.body.desper
-  const diasPeriodo = Math.ceil(Date.parse(periodo.hasta) - Date.parse(periodo.desde)) / (1000 * 60 * 60 * 24) + 1
+  const diasPeriodo = Math.ceil(Date.parse(periodo.HASTA) - Date.parse(periodo.DESDE)) / (1000 * 60 * 60 * 24) + 1
+  const estado = {
+    PERUSU: req.body.perusu,
+    DESDE: periodo.DESDE,
+    HASTA: periodo.HASTA,
+  }
+  
+  if (req.body.ofiest !== '0') {
+    estado.OFIEST = req.body.ofiest
+  }
 
+  console.log(periodo)
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
-      desde: periodo.desde,
-      hasta: periodo.hasta,
-      ofifes: estado.OFIEST
+      festivo,
     })
     const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/oficinas/perfiles`, {
       estado,
     })
 
     const datos = {
-      oficinas: oficinas.data,
-      estados: estados.data,
-      festivos: festivos.data,
+      oficinas: oficinas.data.data,
+      estados: estados.data.data,
+      festivos: festivos.data.data.map(itm => itm.FECFES),
       tiposEstado,
       tiposRol,
       arrTiposPerfil,
       periodo,
       diasPeriodo,
-      strDesde: new Date(periodo.desde).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      strHasta: new Date(periodo.hasta).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      strDesde: new Date(periodo.DESDE).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      strHasta: new Date(periodo.HASTA).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       descripcionOficina,
       descripcionPerfil,
     }
@@ -93,12 +93,23 @@ export const estadosPage = async (req, res) => {
       res.render('admin/estados/semanal', { user, datos })
     }
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
+}
+
+// helpers
+const dateISOToUTCString = (dateISO) => {
+  const fecha = new Date(dateISO);
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
+  return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
 }
 const yearMonthDayToUTCString = (year, month, day) => {
   const yearCDM = ('000' + year).slice(-4)

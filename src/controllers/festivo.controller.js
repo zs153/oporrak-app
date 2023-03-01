@@ -32,10 +32,10 @@ export const mainPage = async (req, res) => {
 // proc
 export const calendario = async (req, res) => {
   let currentYear = new Date().getFullYear()
-  let ret
   let dataSource = []
   let oficina = {
-    IDOFIC: parseInt(req.body.idofic),
+    IDOFIC: req.body.idofic,
+    DESOFI: req.body.desofi,
   }
 
   const user = req.user
@@ -46,21 +46,11 @@ export const calendario = async (req, res) => {
   }
 
   try {
-    if (oficina.IDOFIC !== 0) {
-      ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-        oficina,
-      })
-      oficina = ret.data.data
-    } else {
-      oficina.DESOFI = 'COMUNES'
-    }
-
-// TODO
-
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
       festivo,
     })
-    dataSource = ret.data.map(itm => ({
+    
+    dataSource = festivos.data.data.map(itm => ({
       idfest: itm.IDFEST,
       fecfes: itm.FECFES,
       ofifes: itm.OFIFES,
@@ -70,9 +60,9 @@ export const calendario = async (req, res) => {
     }))
 
     const datos = {
-      tiposEstado,
       oficina,
       dataSource: JSON.stringify(dataSource),
+      tiposEstado,
     }
 
     res.render(`admin/festivos/calendario`, { user, datos })

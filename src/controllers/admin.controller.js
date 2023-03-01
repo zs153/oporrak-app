@@ -11,11 +11,9 @@ import {
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const fecha = {
-    FECEST: new Date().toISOString().slice(0, 10),
-  }
-  const tipoExcluido = {
-    TIPEST: tiposEstado.telefono.ID,
+  const estado = {
+    FECEST: dateISOToUTCString(new Date()),
+    TIPEST: tiposEstado.telefono.ID,  // tipo excluido (no mostrar como ausencia los tipo telefono)
   }
   const matricula = {
     IDUSUA: user.id,
@@ -24,8 +22,7 @@ export const mainPage = async (req, res) => {
 
   try {
     const perfiles = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios/perfiles`, {
-      fecha,
-      tipoExcluido,
+      estado,
     })
     const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
       matricula,
@@ -33,7 +30,7 @@ export const mainPage = async (req, res) => {
 
     let userid = ''
     let data = []
-    perfiles.data.map(itm => {
+    perfiles.data.data.map(itm => {
       if (itm.TIPEST === 2) {
         const hora = new Date().toTimeString().slice(0, 5)
         if (!(hora >= itm.DESHOR && hora <= itm.HASHOR)) {
@@ -53,7 +50,7 @@ export const mainPage = async (req, res) => {
 
     const datos = {
       estados: data,
-      hayMatricula: matriculas.data.length > 0 ? true : false,
+      hayMatricula: matriculas.data.data.length > 0 ? true : false,
     }
 
     res.render('admin', { user, datos })
@@ -139,4 +136,11 @@ export const updatePerfil = async (req, res) => {
   } catch (error) {
     res.redirect('/admin')
   }
+}
+
+// helpers
+const dateISOToUTCString = (dateISO) => {
+  const fecha = new Date(dateISO);
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
+  return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
 }
