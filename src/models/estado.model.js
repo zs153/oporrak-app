@@ -1,4 +1,4 @@
-import oracledb from 'oracledb'
+import {BIND_OUT, NUMBER} from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const baseQuery = `SELECT 
@@ -107,6 +107,13 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTESTADO(
   :idesta
 ); END;
 `
+const updateSql = `BEGIN OPORRAK_PKG.UPDATEESTADOS(
+  :arrest,
+  :usumov,
+  :tipmov,
+  :tipmoz
+); END;
+`
 const removeSql = `BEGIN OPORRAK_PKG.DELETEESTADO(
   :idesta,
   :usumov,
@@ -128,6 +135,13 @@ const insertTraspasoSql = `BEGIN OPORRAK_PKG.INSERTTRASPASO(
   :idtras
 ); END;
 `
+const updateTraspasoSql = `BEGIN OPORRAK_PKG.UPDATETRASPASOS(
+  :arrtra,
+  :usumov,
+  :tipmov,
+  :tipmoz
+); END;
+`
 const removeTraspasoSql = `BEGIN OPORRAK_PKG.DELETETRASPASO(
   :idesta,
   :usuest,
@@ -137,216 +151,191 @@ const removeTraspasoSql = `BEGIN OPORRAK_PKG.DELETETRASPASO(
   :tipmov 
 ); END;
 `
-const insertRangoSql = `BEGIN OPORRAK_PKG.INSERTESTADORANGO(
-  TO_DATE(:desde, 'YYYY-MM-DD'),
-  TO_DATE(:hasta, 'YYYY-MM-DD'),
-  :usuest,
-  :tipest,
-  :ofiest,
-  :deshor,
-  :hashor,
-  :usumov,
-  :tipmov,
-  :idesta
-); END;
-`
-const updateTraspasosSql = `BEGIN OPORRAK_PKG.UPDATETRASPASOS(
-  :arrtra,
-  :usumov,
-  :tipmov,
-  :tipmoz
-); END;
-`
-const updateEstadosSql = `BEGIN OPORRAK_PKG.UPDATEESTADOS(
-  :arrest,
-  :usumov,
-  :tipmov,
-  :tipmoz
-); END;
-`
 
 // estados
 export const find = async (context) => {
+  // bind
   let query = baseQuery
-  let binds = {}
+  let bind = {}
 
   if (context.IDESTA) {
-    binds.IDESTA = context.IDESTA
+    bind.IDESTA = context.IDESTA
     query += `WHERE idesta = :idesta`
   }
 
-  try {
-    const result = await simpleExecute(query, binds)
+  // proc
+  const ret = await simpleExecute(query, bind)
 
-    if (result.rows) {
-      return ({ stat: 1, data: result.rows })
-    } else {
-      return ({ stat: null, msg: 'Error' })
-    }
-  } catch (err) {
-    return ({ stat: null, msg: 'Error' })
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
   }
 }
 export const insert = async (bind) => {
+  // bind
   bind.IDESTA = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+    dir: BIND_OUT,
+    type: NUMBER,
+  };
+
+  // proc
+  const ret = await simpleExecute(insertSql, bind)
+
+  if (ret) {
+    bind.IDESTA = ret.outBinds.IDESTA
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
+}
+export const update = async (bind) => {
+  // bind
+  // proc
+  const ret = await simpleExecute(updateSql, bind)
 
-  // try {
-  //   const result = await simpleExecute(insertSql, bind)
-
-  //   bind.IDESTA = await result.outBinds.IDESTA
-  // } catch (error) {
-  //   bind = null
-  // }
-
-  // return bind
-
-  await simpleExecute(insertSql, bind)
-    .then(ret => {
-      return ret.outBinds.IDESTA
-    })
-    .catch(err => {
-      return null
-    })
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
+  }
 }
 export const remove = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeSql, bind)
 
-  try {
-    await simpleExecute(removeSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
-}
-export const insertRango = async (bind) => {
-  bind.IDESTA = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
-  }
-
-  try {
-    const result = await simpleExecute(insertRangoSql, bind)
-
-    bind.IDESTA = await result.outBinds.IDESTA
-  } catch (error) {
-    bind = null
-  }
-
-  return bind
 }
 
 // traspaso
 export const insertTraspaso = async (bind) => {
+  // bind
   bind.IDESTA = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+    dir: BIND_OUT,
+    type: NUMBER,
   }
   bind.IDTRAS = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+    dir: BIND_OUT,
+    type: NUMBER,
   }
 
-  try {
-    const result = await simpleExecute(insertTraspasoSql, bind)
+  // proc
+  const ret = await simpleExecute(insertTraspasoSql, bind)
 
-    bind.IDESTA = await result.outBinds.IDESTA
+  if (ret) {
+    bind.IDESTA = ret.outBinds.IDESTA
     bind.IDTRAS = await result.outBinds.IDTRAS
-  } catch (error) {
-    bind = null
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
+}
+export const updateTraspaso = async (bind) => {
+  // bind
+  // proc
+  const ret = await simpleExecute(updateTraspasoSql, bind)
 
-  return bind
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
+  }
 }
 export const removeTraspaso = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeTraspasoSql, bind)
 
-  try {
-    await simpleExecute(removeTraspasoSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
-  }
-
-  return result
-}
-export const updateTraspasos = async (bind) => {
-  let result
-
-  try {
-    await simpleExecute(updateTraspasosSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
-  }
-
-  return result
-}
-
-// estados
-export const updateEstados = async (context) => {
-  try {
-    await simpleExecute(updateEstadosSql, context)
-
-    return ({ stat: 1, msg: 'Datos actualizados' })
-  } catch (error) {
-    return ({ stat: null, msg: 'No se ha podido actualizar los datos' })
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
 }
 
 // usuarios
 export const estadosUsuario = async (context) => {
+  // bind
   let query = estadosUsuarioQuery
+  let bind = {}
 
-  if (context.OFIDES === 0) {
-    delete context.OFIDES
-  } else {
+  if (context.OFIDES) {
+    bind.OFIDES = context.OFIDES
     query += `AND ee.ofiest = :ofides`
   }
-  if (context.TIPEST === 0) {
-    delete context.TIPEST
-  } else {
-    query += ` AND ee.tipest = :tipest`
+  if (context.TIPEST) {
+    bind.TIPEST = context.TIPEST
+    query += `AND ee.tipest = :tipest`
   }
 
-  const result = await simpleExecute(query, context)
+  // proc
+  const ret = await simpleExecute(query, bind)
 
-  return result.rows
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const estadosFechaUsuario = async (context) => {
+  // bind
   let query = estadosFechaUsuarioQuery
+  let bind = {
+    USUEST: context.USUEST,
+    FECEST: context.FECEST,
+  }  
 
-  const result = await simpleExecute(query, context)
+  // proc
+  const ret = await simpleExecute(query, bind)
 
-  return result.rows
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
-export const estadosFechaPerfil = async (context) => {
+export const estadosFechaPerfil = async (context) => {  
+  // bind
   let query = estadosFechaPerfilQuery
+  let bind = {
+    TIPEST: context.TIPEST,
+    FECEST: context.FECEST,
+  }
 
-  const result = await simpleExecute(query, context)
+  // proc
+  const ret = await simpleExecute(query, bind)
 
-  return result.rows
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
-export const estadosOficinaPerfil = async (context) => {
+export const estadosOficinaPerfil = async (context) => {  
+  // bind
   let query = estadosOficinaPerfilQuery
-
-  if (context.OFIEST === 0) {
-    delete context.OFIEST
-    query += `WHERE SUBSTR(oo.codofi, 1, 1) = 'D'
+  let bind = context
+  
+  if (context.OFIEST) {
+    bind.OFIEST = context.OFIEST
+    query += `WHERE t1.ofiusu = :ofiest
       ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
   } else {
-    query += `WHERE t1.ofiusu = :ofiest
+    query += `WHERE SUBSTR(oo.codofi, 1, 1) = 'D'
       ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
   }
 
-  const result = await simpleExecute(query, context)
+  // proc
+  const ret = await simpleExecute(query, bind)
 
-  return result.rows
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }

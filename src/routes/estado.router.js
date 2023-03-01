@@ -3,6 +3,7 @@ import {
   estado,
   estados,
   crear,
+  actualizar,
   borrar,
   estadosUsuario,
   estadosFechaUsuario,
@@ -10,9 +11,7 @@ import {
   crearTraspaso,
   borrarTraspaso,
   estadosFechaPerfil,
-  crearRango,
-  actualizaTraspasos,
-  actualizaEstados,
+  actualizarTraspaso,
 } from '../controllers/estado.controller'
 
 const apiEstadoRouter = express.Router()
@@ -22,8 +21,7 @@ apiEstadoRouter.post('/estado', estado)
 apiEstadoRouter.post('/estados', estados)
 apiEstadoRouter.post('/estados/insert', crear)
 apiEstadoRouter.post('/estados/delete', borrar)
-apiEstadoRouter.post('/estados/inserts', crearRango)
-apiEstadoRouter.post('/estados/update', actualizaEstados)
+apiEstadoRouter.post('/estados/update', actualizar)
 
 // usuario
 apiEstadoRouter.post('/estados/usuarios', estadosUsuario)
@@ -34,6 +32,6 @@ apiEstadoRouter.post('/estados/oficinas/perfiles', estadosOficinaPerfil)
 // traspaso
 apiEstadoRouter.post('/estados/insert/traspaso', crearTraspaso)
 apiEstadoRouter.post('/estados/delete/traspaso', borrarTraspaso)
-apiEstadoRouter.post('/estados/update/traspasos', actualizaTraspasos)
+apiEstadoRouter.post('/estados/update/traspasos', actualizarTraspaso)
 
 export default apiEstadoRouter

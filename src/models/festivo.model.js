@@ -57,7 +57,7 @@ export const find = async (context) => {
   }
 
   if (context.OFIFES) {
-    bind.OFIFES = bind.OFIFES
+    bind.OFIFES = context.OFIFES
     query += `AND ofifes = :ofifes`
   }
 
@@ -112,24 +112,42 @@ export const remove = async (bind) => {
 
 // oficinas
 export const festivosOficina = async (context) => {
+  // bind
   let query = festivosOficinaSql
+  let bind = {
+    OFIFES: context.OFIFES,
+    DESDE: context.DESDE,
+    HASTA: context.HASTA,
+  }
 
-  const result = await simpleExecute(query, context)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const festivosLocal = async (context) => {
+  // bind
   let query = festivosLocalSql
-  let binds = {
-    desde: context.DESDE,
-    hasta: context.HASTA,
+  let bind = {
+    DESDE: context.DESDE,
+    HASTA: context.HASTA,
   }
 
   if (context.OFIFES) {
-    binds.ofifes = context.OFIFES
+    bind.OFIFES = context.OFIFES
     query += `AND ff.ofifes = :ofifes`
   }
 
-  const result = await simpleExecute(query, binds)
+  // proc
+  const ret = await simpleExecute(query, bind)
 
-  return result.rows
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
