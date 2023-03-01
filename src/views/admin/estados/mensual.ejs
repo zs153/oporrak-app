@@ -413,7 +413,7 @@
       estados.map(itm => {
         const dia = new Date(itm.FECHA).getDate();
         const diaSemana = new Date(itm.FECHA).getDay()
-        const festivo = festivos.find(q => q.FECFES === itm.FECHA)
+        const festivo = festivos[festivos.indexOf(itm.FECHA)]
 
         if (oficinaActual != itm.OFIUSU || usuarioActual != itm.IDUSUA) {
           if (usuarioActual) {
