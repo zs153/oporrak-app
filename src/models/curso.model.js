@@ -1,4 +1,4 @@
-import oracledb from 'oracledb'
+import {BIND_OUT, NUMBER} from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const cursoSql = `SELECT 
@@ -31,18 +31,9 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETECURSO(
   :tipmov 
 ); END;
 `
-const cambioSql = `BEGIN OPORRAK_PKG.CAMBIOESTADOCURSO(
-  :idcurs,
-  :stacur,
-  :usumov,
-  :tipmov 
-); END;
-`
 // turnos
 const turnoSql = `SELECT 
-  tt.idturn, tt.destur, tt.loctur,
-  TO_CHAR(tt.initur, 'YYYY-MM-DD') "INITUR",
-  TO_CHAR(tt.fintur, 'YYYY-MM-DD') "FINTUR",
+  tt.idturn, tt.destur, tt.loctur, tt.initur, tt.fintur,
   TO_CHAR(tt.initur, 'DD/MM/YYYY') "STRINI",
   TO_CHAR(tt.fintur, 'DD/MM/YYYY') "STRFIN",
   LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS "INIHOR",
@@ -64,7 +55,6 @@ const insertTurnoSql = `BEGIN OPORRAK_PKG.INSERTTURNOCURSO(
 ); END;
 `
 const updateTurnoSql = `BEGIN OPORRAK_PKG.UPDATETURNOCURSO(
-  :idcurs,
   :idturn,
   :destur,
   TO_DATE(:initur,'YYYY-MM-DD'),
@@ -175,8 +165,6 @@ LEFT JOIN (
 ) pp ON pp.idusua = um.idusua
 INNER JOIN usuarios uu ON uu.idusua = um.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE mc.idcurs = :idcurs 
-  AND pp.idusua IS NULL
 `
 const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
   :idturn,
@@ -220,326 +208,356 @@ const removeUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
 
 // cursos
 export const find = async (context) => {
+  // bind
   let query = cursoSql
-  let binds = {}
+  let bind = {}
 
   if (context.IDCURS) {
-    binds.IDCURS = context.IDCURS
+    bind.IDCURS = context.IDCURS
     query += `WHERE cc.idcurs = :idcurs`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insert = async (bind) => {
+  // bind
   bind.IDCURS = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+    dir: BIND_OUT,
+    type: NUMBER,
   }
 
-  try {
-    const result = await simpleExecute(insertSql, bind)
+  // proc
+  const ret = await simpleExecute(insertSql, bind)
 
-    bind.IDCURS = await result.outBinds.IDCURS
-  } catch (error) {
-    bind = null
+  if (ret) {
+    bind.IDCURS = ret.outBinds.IDCURS
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return bind
 }
 export const update = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(updateSql, bind)
 
-  try {
-    await simpleExecute(updateSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const remove = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeSql, bind)
 
-  try {
-    await simpleExecute(removeSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
-}
-export const change = async (bind) => {
-  let result
-
-  try {
-    await simpleExecute(cambioSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
-  }
-
-  return result
 }
 
 // turnos
 export const turno = async (context) => {
+  // bind
   let query = turnoSql
-  let binds = {}
+  let bind = {}
 
   if (context.IDCURS) {
-    binds.IDCURS = context.IDCURS
+    bind.IDCURS = context.IDCURS
     query += `WHERE tc.idcurs = :idcurs`
   } else if (context.IDTURN) {
-    binds.IDTURN = context.IDTURN
+    bind.IDTURN = context.IDTURN
     query += `WHERE tc.idturn = :idturn`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insertTurno = async (bind) => {
+  // bind
   bind.IDTURN = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+    dir: BIND_OUT,
+    type: NUMBER,
   }
 
-  try {
-    const result = await simpleExecute(insertTurnoSql, bind)
+  // proc
+  const ret = await simpleExecute(insertTurnoSql, bind)
 
-    bind.IDTURN = await result.outBinds.IDTURN
-  } catch (error) {
-    bind = null
+  if (ret) {
+    bind.IDTURN = ret.outBinds.IDTURN
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return bind
 }
 export const updateTurno = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(updateTurnoSql, bind)
 
-  try {
-    await simpleExecute(updateTurnoSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const removeTurno = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeTurnoSql, bind)
 
-  try {
-    await simpleExecute(removeTurnoSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 
 // matricula
 export const matricula = async (context) => {
+  // bind
   let query = matriculaSql
-  let binds = {}
+  let bind = {}
 
   if (context.IDCURS) {
-    binds.IDCURS = context.IDCURS
+    bind.IDCURS = context.IDCURS
     query += `WHERE mc.idcurs = :idcurs`
   } else if (context.IDMATR) {
-    binds.IDMATR = context.IDMATR
+    bind.IDMATR = context.IDMATR
     query += `WHERE mm.idmatr = :idmatr`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insertMatricula = async (bind) => {
+  // bind
   bind.IDMATR = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER,
+    dir: BIND_OUT,
+    type: NUMBER,
   }
 
-  try {
-    const result = await simpleExecute(insertMatriculaSql, bind)
+  // proc
+  const ret = await simpleExecute(insertMatriculaSql, bind)
 
-    bind.IDMATR = await result.outBinds.IDMATR
-  } catch (error) {
-    bind = null
+  if (ret) {
+    bind.IDMATR = ret.outBinds.IDMATR
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return bind
 }
 export const updateMatricula = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(updateMatriculaSql, bind)
 
-  try {
-    await simpleExecute(updateMatriculaSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const removeMatricula = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeMatriculaSql, bind)
 
-  try {
-    await simpleExecute(removeMatriculaSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 
 // usuarios
 export const usuarios = async (context) => {
-  let binds = {}
+  // bind
   let query = usuariosSql
+  let bind = {}
 
   if (context.IDCURS) {
-    binds.IDCURS = context.IDCURS
+    bind.IDCURS = context.IDCURS
     query += `WHERE uc.idcurs = :idcurs`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const usuariosPendientes = async (context) => {
-  let binds = {}
+  // bind
   let query = usuariosPendientesSql
+  let bind = {}
 
   if (context.IDCURS) {
-    binds.IDCURS = context.IDCURS
+    bind.IDCURS = context.IDCURS
     query += `WHERE tc.idcurs = :idcurs
       AND uc.idusua IS NULL
     `
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insertUsuario = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(insertUsuarioSql, bind)
 
-  try {
-    await simpleExecute(insertUsuarioSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const removeUsuario = async (bind) => {
-  let result
-  try {
-    await simpleExecute(removeUsuarioSql, bind)
+  // bind
+  // proc
+  const ret = await simpleExecute(removeUsuarioSql, bind)
 
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 
 // usuarios turno
 export const usuariosTurno = async (context) => {
-  let binds = {}
+  // bind
   let query = usuariosTurnoSql
+  let bind = {}
 
   if (context.IDTURN) {
-    binds.IDTURN = context.IDTURN
+    bind.IDTURN = context.IDTURN
     query += `WHERE ut.idturn = :idturn`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const usuariosTurnoPendientes = async (context) => {
+  // bind
   let query = usuariosTurnoPendientesSql
+  let bind = {}
+
+  if (context.IDCURS) {
+    bind.IDCURS = context.IDCURS
+    query += `WHERE mc.idcurs = :idcurs 
+      AND pp.idusua IS NULL`
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 
   const result = await simpleExecute(query, context)
   return result.rows
 }
 export const insertUsuarioTurno = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(insertUsuarioTurnoSql, bind)
 
-  try {
-    await simpleExecute(insertUsuarioTurnoSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const removeUsuarioTurno = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeUsuarioTurnoSql, bind)
 
-  try {
-    await simpleExecute(removeUsuarioTurnoSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 
 // usuarios matricula
 export const usuariosMatricula = async (context) => {
-  let binds = {}
+  // bind
   let query = usuariosMatriculaSql
+  let bind = {}
 
   if (context.IDMATR) {
-    binds.IDMATR = context.IDMATR
+    bind.IDMATR = context.IDMATR
     query += `WHERE um.idmatr = :idmatr`
   }
 
-  const result = await simpleExecute(query, binds)
-  return result.rows
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
 }
 export const insertUsuarioMatricula = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(insertUsuarioMatriculaSql, bind)
 
-  try {
-    await simpleExecute(insertUsuarioMatriculaSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }
 export const removeUsuarioMatricula = async (bind) => {
-  let result
+  // bind
+  // proc
+  const ret = await simpleExecute(removeUsuarioMatriculaSql, bind)
 
-  try {
-    await simpleExecute(removeUsuarioMatriculaSql, bind)
-
-    result = bind
-  } catch (error) {
-    result = null
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
-
-  return result
 }

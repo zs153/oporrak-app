@@ -60,7 +60,6 @@ export const crear = async (req, res) => {
     } else {
       res.status(400).json({ stat: null, data: 'Estado no insertado' })
     }
-
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -216,8 +215,8 @@ export const estadosUsuario = async (req, res) => {
   // context
   const context = {
     USUEST: req.body.estado.USUEST,
-    FECEST: req.body.estado.FECEST,
-    TIPEST: req.body.estado.TIPEST,
+    DESDE: req.body.estado.DESDE,
+    HASTA: req.body.estado.HASTA,
   }
 
   // proc

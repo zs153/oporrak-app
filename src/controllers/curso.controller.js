@@ -1,6 +1,42 @@
 import * as DAL from '../models/curso.model'
 
-const insertFromRec = (req) => {
+// cursos
+export const curso = async (req, res) => {
+  // context
+  const context = req.body.curso
+
+  // proc
+  try {
+    const result = await DAL.find(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data[0] })
+    } else {
+      return res.status(400).json({ stat: null, msg: 'No existen datos' })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const cursos = async (req, res) => {
+  // context
+  const context = req.body.curso
+
+  // proc
+  try {
+    const result = await DAL.find(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const crear = async (req, res) => {
+  // context
   const curso = {
     DESCUR: req.body.curso.DESCUR,
     DURCUR: req.body.curso.DURCUR,
@@ -11,10 +47,24 @@ const insertFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, movimiento)
 
-  return Object.assign(curso, movimiento)
+  // proc
+  try {
+    const result = await DAL.insert(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Curso no insertado' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const updateFromRec = (req) => {
+export const modificar = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
     DESCUR: req.body.curso.DESCUR,
@@ -26,10 +76,23 @@ const updateFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, movimiento)
 
-  return Object.assign(curso, movimiento)
+  // proc
+  try {
+    const result = await DAL.update(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Curso no actualizado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteFromRec = (req) => {
+export const borrar = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
   }
@@ -37,23 +100,59 @@ const deleteFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, movimiento)
 
-  return Object.assign(curso, movimiento)
-}
-const cambioFromRec = (req) => {
-  const curso = {
-    IDCURS: req.body.curso.IDCURS,
-    STACUR: req.body.curso.STACUR,
-  }
-  const movimiento = {
-    USUMOV: req.body.movimiento.USUMOV,
-    TIPMOV: req.body.movimiento.TIPMOV,
-  }
+  // proc
+  try {
+    const result = await DAL.remove(context)
 
-  return Object.assign(curso, movimiento)
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Curso no eliminado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-// turno
-const insertTurnoFromRec = (req) => {
+
+// turnos
+export const turno = async (req, res) => {
+  // context
+  const context = req.body.context
+
+  // proc
+  try {
+    const result = await DAL.turno(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data[0] })
+    } else {
+      return res.status(400).json({ stat: null, msg: 'No existen datos' })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const turnos = async (req, res) => {
+  // context
+  const context = req.body.context
+
+  // proc
+  try {
+    const result = await DAL.turno(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const crearTurno = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
   }
@@ -69,13 +168,24 @@ const insertTurnoFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, turno, movimiento)
 
-  return Object.assign(curso, turno, movimiento)
-}
-const updateTurnoFromRec = (req) => {
-  const curso = {
-    IDCURS: req.body.curso.IDCURS,
+  // proc
+  try {
+    const result = await DAL.insertTurno(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Turno no insertado' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
+}
+export const modificarTurno = async (req, res) => {
+  // context
   const turno = {
     IDTURN: req.body.turno.IDTURN,
     DESTUR: req.body.turno.DESTUR,
@@ -89,10 +199,23 @@ const updateTurnoFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(turno, movimiento)
 
-  return Object.assign(curso, turno, movimiento)
+  // proc
+  try {
+    const result = await DAL.updateTurno(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Turno no actualizado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteTurnoFromRec = (req) => {
+export const borrarTurno = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
   }
@@ -103,11 +226,59 @@ const deleteTurnoFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, turno, movimiento)
 
-  return Object.assign(curso, turno, movimiento)
+  // proc
+  try {
+    const result = await DAL.removeTurno(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Turno no eliminado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
+
 // matriculas
-const insertMatriculaFromRec = (req) => {
+export const matricula = async (req, res) => {
+  // context
+  const context = req.body.context
+
+  // proc
+  try {
+    const result = await DAL.matricula(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data[0] })
+    } else {
+      return res.status(400).json({ stat: null, msg: 'No existen datos' })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const matriculas = async (req, res) => {
+  // context
+  const context = req.body.context
+
+  // proc
+  try {
+    const result = await DAL.matricula(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const crearMatricula = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
   }
@@ -121,10 +292,24 @@ const insertMatriculaFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, matricula, movimiento)
 
-  return Object.assign(curso, matricula, movimiento)
+  // proc
+  try {
+    const result = await DAL.insertMatricula(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Matrícula no insertado' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const updateMatriculaFromRec = (req) => {
+export const modificarMatricula = async (req, res) => {
+  // context
   const matricula = {
     IDMATR: req.body.matricula.IDMATR,
     DESMAT: req.body.matricula.DESMAT,
@@ -136,10 +321,23 @@ const updateMatriculaFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(matricula, movimiento)
 
-  return Object.assign(matricula, movimiento)
+  // proc
+  try {
+    const result = await DAL.updateMatricula(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Matrícula no actualizado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteMatriculaFromRec = (req) => {
+export const borrarMatricula = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
   }
@@ -150,11 +348,59 @@ const deleteMatriculaFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, matricula, movimiento)
 
-  return Object.assign(curso, matricula, movimiento)
+  // proc
+  try {
+    const result = await DAL.removeMatricula(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Matrícula no eliminado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
+
 // usuarios
-const insertUsuarioFromRec = (req) => {
+export const usuarios = async (req, res) => {
+  // context
+  const context = req.body.curso
+
+  // proc
+  try {
+    const result = await DAL.usuarios(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const usuariosPendientes = async (req, res) => {
+  // context
+  const context = req.body.curso
+
+  // proc
+  try {
+    const result = await DAL.usuariosPendientes(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const crearUsuario = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
   }
@@ -165,9 +411,24 @@ const insertUsuarioFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(curso, usuarios, movimiento)
+  const context = Object.assign(curso, usuarios, movimiento)
+
+  // proc
+  try {
+    const result = await DAL.insertUsuario(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuario no insertado' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteUsuarioFromRec = (req) => {
+export const borrarUsuario = async (req, res) => {
+  // context
   const curso = {
     IDCURS: req.body.curso.IDCURS,
   }
@@ -178,30 +439,93 @@ const deleteUsuarioFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(curso, usuario, movimiento)
 
-  return Object.assign(curso, usuario, movimiento)
+  // proc
+  try {
+    const result = await DAL.removeUsuario(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }  
 }
+
 // usuarios turno
-const insertUsuarioTurnoFromRec = (req) => {
+export const usuariosTurno = async (req, res) => {
+  // context
+  const context = req.body.turno
+
+  // proc
+  try {
+    const result = await DAL.usuariosTurno(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const usuariosTurnoPendientes = async (req, res) => {
+  // context
+  const context = req.body.curso
+
+  // proc
+  try {
+    const result = await DAL.usuariosTurnoPendientes(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const crearUsuarioTurno = async (req, res) => {
+  // context
   const turno = {
     IDTURN: req.body.turno.IDTURN,
   }
   const usuarios = {
-    arrusu: {
+    ARRUSU: {
       type: 'USRTYPE',
       val: req.body.usuarios.ARRUSU,
     }
   }
   const tipo = {
-    tipest: req.body.tipo.TIPEST,
+    TIPEST: req.body.tipo.TIPEST,
   }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(turno, tipo, usuarios, movimiento)
+  const context = Object.assign(turno, tipo, usuarios, movimiento)
+
+  // proc
+  try {
+    const result = await DAL.insertUsuarioTurno(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuarios no insertados' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteUsuarioTurnoFromRec = (req) => {
+export const borrarUsuarioTurno = async (req, res) => {
+  // context
   const turno = {
     IDTURN: req.body.turno.IDTURN,
   }
@@ -212,18 +536,47 @@ const deleteUsuarioTurnoFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(turno, usuario, movimiento)
 
-  return Object.assign(turno, usuario, movimiento)
+  // proc
+  try {
+    const result = await DAL.removeUsuarioTurno(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
+    }
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
+
 // usuarios matricula
-const insertUsuarioMatriculaFromRec = (req) => {
+export const usuariosMatricula = async (req, res) => {
+  // context
+  const context = req.body.matricula
+
+  // proc
+  try {
+    const result = await DAL.usuariosMatricula(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
+export const crearUsuarioMatricula = async (req, res) => {
+  // context
   const matricula = {
     IDMATR: req.body.matricula.IDMATR,
   }
   const usuarios = {
-    arrusu: {
-      // type: oracledb.NUMBER,
-      // dir: oracledb.BIND_IN,
+    ARRUSU: {
       val: req.body.usuarios.ARRUSU,
     }
   }
@@ -231,9 +584,24 @@ const insertUsuarioMatriculaFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  return Object.assign(matricula, usuarios, movimiento)
+  const context = Object.assign(matricula, usuarios, movimiento)
+
+  // proc
+  try {
+    const result = await DAL.insertUsuarioMatricula(context)
+
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(400).json({ stat: null, data: 'Usuarios no insertados' })
+    }
+
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
 }
-const deleteUsuarioMatriculaFromRec = (req) => {
+export const borrarUsuarioMatricula = async (req, res) => {
+  // context
   const matricula = {
     IDMATR: req.body.matricula.IDMATR,
   }
@@ -244,385 +612,18 @@ const deleteUsuarioMatriculaFromRec = (req) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
+  const context = Object.assign(matricula, usuario, movimiento)
 
-  return Object.assign(matricula, usuario, movimiento)
-}
-
-// cursos
-export const curso = async (req, res) => {
-  const context = req.body.curso
-
+  // proc
   try {
-    const result = await DAL.find(context)
+    const result = await DAL.removeUsuarioMatricula(context)
 
-    if (result.length === 1) {
-      return res.status(200).json(result[0])
+    if (result.stat) {
+      res.status(200).json({ stat: 1, data: result.data })
     } else {
-      res.status(404).end()
+      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
     }
   } catch (err) {
-    res.status(500).end()
-  }
-}
-export const cursos = async (req, res) => {
-  const context = req.body.curso
-
-  try {
-    const result = await DAL.find(context)
-
-    res.status(200).json(result)
-  } catch (err) {
-    res.status(400).end()
-  }
-}
-export const crear = async (req, res) => {
-  try {
-    const result = await DAL.insert(insertFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const modificar = async (req, res) => {
-  try {
-    const result = await DAL.update(updateFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const borrar = async (req, res) => {
-  try {
-    const result = await DAL.remove(deleteFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const cambioEstado = async (req, res) => {
-  try {
-    const result = await DAL.change(cambioFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
-// turnos
-export const turno = async (req, res) => {
-  const context = req.body.turno
-
-  try {
-    const result = await DAL.turno(context)
-
-    if (result.length === 1) {
-      return res.status(200).json(result[0])
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const turnos = async (req, res) => {
-  const context = req.body.curso
-
-  try {
-    const result = await DAL.turno(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const crearTurno = async (req, res) => {
-  try {
-    const result = await DAL.insertTurno(insertTurnoFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const modificarTurno = async (req, res) => {
-  try {
-    const result = await DAL.updateTurno(updateTurnoFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const borrarTurno = async (req, res) => {
-  try {
-    const result = await DAL.removeTurno(deleteTurnoFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
-// matriculas
-export const matricula = async (req, res) => {
-  const context = req.body.matricula
-
-  try {
-    const result = await DAL.matricula(context)
-
-    if (result.length === 1) {
-      return res.status(200).json(result[0])
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const matriculas = async (req, res) => {
-  const context = req.body.curso
-
-  try {
-    const result = await DAL.matricula(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const crearMatricula = async (req, res) => {
-  try {
-    const result = await DAL.insertMatricula(insertMatriculaFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const modificarMatricula = async (req, res) => {
-  try {
-    const result = await DAL.updateMatricula(updateMatriculaFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const borrarMatricula = async (req, res) => {
-  try {
-    const result = await DAL.removeMatricula(deleteMatriculaFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
-// usuarios
-export const usuarios = async (req, res) => {
-  const context = req.body.curso
-
-  try {
-    const result = await DAL.usuarios(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const usuariosPendientes = async (req, res) => {
-  const context = req.body.curso
-
-  try {
-    const result = await DAL.usuariosPendientes(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const crearUsuario = async (req, res) => {
-  try {
-    const result = await DAL.insertUsuario(insertUsuarioFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const borrarUsuario = async (req, res) => {
-  try {
-    const result = await DAL.removeUsuario(deleteUsuarioFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
-// usuarios turno
-export const usuariosTurno = async (req, res) => {
-  const context = req.body.turno
-
-  try {
-    const result = await DAL.usuariosTurno(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const usuariosTurnoPendientes = async (req, res) => {
-  const context = {
-    idcurs: req.body.curso.IDCURS,
-  }
-
-  try {
-    const result = await DAL.usuariosTurnoPendientes(context)
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(400).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const crearUsuarioTurno = async (req, res) => {
-  try {
-    const result = await DAL.insertUsuarioTurno(insertUsuarioTurnoFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const borrarUsuarioTurno = async (req, res) => {
-  try {
-    const result = await DAL.removeUsuarioTurno(deleteUsuarioTurnoFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-
-// usuarios matricula
-export const usuariosMatricula = async (req, res) => {
-  const context = req.body.matricula
-
-  try {
-    const result = await DAL.usuariosMatricula(context)
-
-    res.status(200).json(result)
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const crearUsuarioMatricula = async (req, res) => {
-  try {
-    const result = await DAL.insertUsuarioMatricula(insertUsuarioMatriculaFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
-  }
-}
-export const borrarUsuarioMatricula = async (req, res) => {
-  try {
-    const result = await DAL.removeUsuarioMatricula(deleteUsuarioMatriculaFromRec(req))
-
-    if (result !== null) {
-      res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  } catch (err) {
-    res.status(500).end()
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }

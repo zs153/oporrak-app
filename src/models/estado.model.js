@@ -262,16 +262,7 @@ export const removeTraspaso = async (bind) => {
 export const estadosUsuario = async (context) => {
   // bind
   let query = estadosUsuarioQuery
-  let bind = {}
-
-  if (context.OFIDES) {
-    bind.OFIDES = context.OFIDES
-    query += `AND ee.ofiest = :ofides`
-  }
-  if (context.TIPEST) {
-    bind.TIPEST = context.TIPEST
-    query += `AND ee.tipest = :tipest`
-  }
+  let bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
