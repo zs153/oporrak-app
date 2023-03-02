@@ -87,8 +87,8 @@ export const estadosUsuario = {
   activo: 1,
 }
 export const estadosCurso = {
-  cerrado: 0,
-  abierto: 1,
+  activo: 0,
+  desactivo: 1,
 }
 export const estadosMatricula = {
   cerrada: 0,
@@ -159,8 +159,8 @@ export const arrEstadosUsuario = [
   { id: 1, des: 'ACTIVO' },
 ]
 export const arrEstadosCurso = [
-  { id: 0, des: 'CERRADO' },
-  { id: 1, des: 'ABIERTO' },
+  { id: 0, des: 'DESACTIVO' },
+  { id: 1, des: 'ACTIVO' },
 ]
 export const arrEstadosMatricula = [
   { id: 0, des: 'CERRADA' },

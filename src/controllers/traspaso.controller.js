@@ -17,19 +17,23 @@ export const mainPage = async (req, res) => {
     })
     const datos = {
       oficina: parseInt(req.params.idofic),
-      oficinas: oficinas.data,
-      usuarios: usuarios.data,
+      oficinas: oficinas.data.data,
+      usuarios: usuarios.data.data,
       serverWEB,
       puertoWEB,
     }
 
     res.render('admin/traspasos', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 
@@ -43,8 +47,8 @@ export const calendario = async (req, res) => {
   const user = req.user
   const estado = {
     USUEST: req.body.idusua,
-    TIPEST: 0,
-    OFIDES: 0,
+    // TIPEST: 0,
+    // OFIDES: 0,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
   }
@@ -60,37 +64,38 @@ export const calendario = async (req, res) => {
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    const oficinas = ret.data
+    const oficinas = ret.data.data
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
       festivo,
     })
-    const festivosComun = ret.data.filter(itm => itm.OFIFES === 0)
-    const festivosLocal = ret.data.filter(itm => itm.OFIFES > 0)
+    const festivosComun = ret.data.data.filter(itm => itm.OFIFES === 0)
+    const festivosLocal = ret.data.data.filter(itm => itm.OFIFES > 0)
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       usuario,
     })
     usuario = {
-      IDUSUA: ret.data.IDUSUA,
-      OFIUSU: ret.data.OFIUSU,
-      NOMUSU: ret.data.NOMUSU,
+      IDUSUA: ret.data.data.IDUSUA,
+      OFIUSU: ret.data.data.OFIUSU,
+      NOMUSU: ret.data.data.NOMUSU,
     }
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
       estado,
     })
-
+    
     let dataSource = []
-    ret.data.map(itm => {
+    ret.data.data.map(itm => {
       if (itm.TIPEST === tiposEstado.traspaso.ID) {
-        const estado = ret.data[ret.data.findIndex(el => el.STRFEC === itm.STRFEC && el.TIPEST === tiposEstado.traspasado.ID)]
+        itm.TIPEST = tiposEstado.traspasado.ID
+        const estado = ret.data.data[ret.data.data.indexOf(itm)]
         const rec = {
           idesta: itm.IDESTA,
           ofiest: estado.OFIEST,
-          startDate: itm.STRFEC,
-          endDate: itm.STRFEC,
-          rangoH: `${estado.DESOFI}\n(${itm.DESHOR} a ${itm.HASHOR})`,
+          startDate: estado.STRFEC,
+          endDate: estado.STRFEC,
+          rangoH: `${estado.DESOFI}\n(${estado.DESHOR} a ${estado.HASHOR})`,
           color: `${tiposEstado.traspaso.COLOR}`
         }
         dataSource.push(rec)
@@ -108,11 +113,16 @@ export const calendario = async (req, res) => {
 
     res.render(`admin/traspasos/calendario`, { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    console.log(error)
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const update = async (req, res) => {
@@ -170,11 +180,15 @@ export const update = async (req, res) => {
 
     mainPage(req, res)
   } catch (error) {
-    const msg = "No se ha podido insertar los datos.";
-
-    res.render("admin/error400", {
-      alerts: [{ msg }],
-    });
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 

@@ -16,19 +16,23 @@ export const mainPage = async (req, res) => {
     })
     const datos = {
       oficina: parseInt(user.oficina),
-      oficinas: oficinas.data,
-      usuarios: usuarios.data,
+      oficinas: oficinas.data.data,
+      usuarios: usuarios.data.data,
       serverWEB,
       puertoWEB,
     }
 
     res.render('admin/calendarios', { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 
@@ -59,22 +63,22 @@ export const calendario = async (req, res) => {
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       festivo,
     })
-    const festivos = ret.data.map(itm => itm.FECFES)
+    const festivos = ret.data.data.map(itm => itm.FECFES)
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       usuario,
     })
     usuario = {
-      IDUSUA: ret.data.IDUSUA,
-      OFIUSU: ret.data.OFIUSU,
-      NOMUSU: ret.data.NOMUSU,
+      IDUSUA: ret.data.data.IDUSUA,
+      OFIUSU: ret.data.data.OFIUSU,
+      NOMUSU: ret.data.data.NOMUSU,
     }
 
     ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
       estado,
     })
 
-    ret.data.map(itm => {
+    ret.data.data.map(itm => {
       if (itm.TIPEST !== tiposEstado.traspasado.ID &&
         itm.TIPEST !== tiposEstado.traspaso.ID) {
         const rec = {
@@ -102,11 +106,15 @@ export const calendario = async (req, res) => {
 
     res.render(`admin/calendarios/calendario`, { user, datos })
   } catch (error) {
-    const msg = 'No se ha podido acceder a los datos de la aplicación.'
-
-    res.render('admin/error400', {
-      alerts: [{ msg }],
-    })
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
   }
 }
 export const update = async (req, res) => {
