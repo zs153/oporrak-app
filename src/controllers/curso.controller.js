@@ -161,15 +161,15 @@ export const editTurnoPage = async (req, res) => {
     const retCurso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       curso,
     });
-    
+
     const retTurno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context,
     });
     let turno = retTurno.data.data
-    
+
     turno.INITUR = dateISOToUTCString(turno.INITUR)
     turno.FINTUR = dateISOToUTCString(turno.FINTUR)
-    
+
     const datos = {
       curso: retCurso.data.data,
       turno,
@@ -342,7 +342,7 @@ export const usuariosAddPage = async (req, res) => {
       curso,
     })
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/usuarios/pendientes`, {
-      turno,
+      curso,
     });
     const datos = {
       curso: result.data.data,
