@@ -5,14 +5,14 @@ import { arrEstadosCurso, arrEstadosMatricula, tiposMovimiento, tiposEstado } fr
 // page cursos
 export const mainPage = async (req, res) => {
   const user = req.user
-  const curso = {}
+  const context = {}
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos`, {
-      curso
+    const cursos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos`, {
+      context
     })
     const datos = {
-      cursos: result.data.data,
+      cursos: cursos.data.data,
       arrEstadosCurso: arrEstadosCurso,
     }
 
@@ -51,16 +51,16 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
-  const curso = {
+  const context = {
     IDCURS: req.params.id,
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context,
     })
     const datos = {
-      curso: result.data.data,
+      curso: curso.data.data,
       arrEstadosCurso,
     }
 
@@ -81,22 +81,19 @@ export const editPage = async (req, res) => {
 // pages turnos
 export const turnosPage = async (req, res) => {
   const user = req.user;
-  const curso = {
-    IDCURS: req.params.id,
-  };
   const context = {
-    IDCURS: curso.IDCURS,
+    IDCURS: req.params.id,
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context,
     });
     const turnos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos`, {
       context,
     });
     const datos = {
-      curso: result.data.data,
+      curso: curso.data.data,
       turnos: turnos.data.data,
     };
 
@@ -116,7 +113,7 @@ export const turnosPage = async (req, res) => {
 export const addTurnoPage = async (req, res) => {
   const user = req.user;
   const fecha = dateISOToUTCString(new Date())
-  const curso = {
+  const context = {
     IDCURS: req.params.id,
   };
   const turno = {
@@ -127,11 +124,11 @@ export const addTurnoPage = async (req, res) => {
   }
 
   try {
-    const retCurso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context,
     });
     const datos = {
-      curso: retCurso.data.data,
+      curso: curso.data.data,
       turno,
     };
 
@@ -150,29 +147,25 @@ export const addTurnoPage = async (req, res) => {
 }
 export const editTurnoPage = async (req, res) => {
   const user = req.user;
-  const curso = {
-    IDCURS: req.params.idcurs,
-  };
   const context = {
-    IDTURN: req.params.idturn,
+    IDCURS: req.params.idcurs,
   };
 
   try {
-    const retCurso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
-    });
-
-    const retTurno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       context,
     });
-    let turno = retTurno.data.data
 
-    turno.INITUR = dateISOToUTCString(turno.INITUR)
-    turno.FINTUR = dateISOToUTCString(turno.FINTUR)
+    const turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
+      context,
+    });
+
+    turno.data.data.INITUR = dateISOToUTCString(turno.data.data.INITUR)
+    turno.data.data.FINTUR = dateISOToUTCString(turno.data.data.FINTUR)
 
     const datos = {
-      curso: retCurso.data.data,
-      turno,
+      curso: curso.data.data,
+      turno: turno.data.data,
     };
 
     res.render("admin/cursos/turnos/edit", { user, datos });
@@ -192,23 +185,20 @@ export const editTurnoPage = async (req, res) => {
 // pages matriculas
 export const matriculasPage = async (req, res) => {
   const user = req.user;
-  const curso = {
-    IDCURS: req.params.id,
-  };
   const context = {
-    IDCURS: curso.IDCURS,
+    IDCURS: req.params.id,
   }
 
   try {
-    const retCurso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context,
     });
-    const retMatriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas`, {
+    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas`, {
       context,
     });
     const datos = {
-      curso: retCurso.data.data,
-      matriculas: retMatriculas.data.data,
+      curso: curso.data.data,
+      matriculas: matriculas.data.data,
       arrEstadosMatricula,
     };
 
@@ -270,7 +260,7 @@ export const editMatriculaPage = async (req, res) => {
 
   try {
     const retCurso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+      context,
     });
     const retMatricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context,
@@ -299,19 +289,19 @@ export const editMatriculaPage = async (req, res) => {
 // pages usuarios curso
 export const usuariosPage = async (req, res) => {
   const user = req.user;
-  const curso = {
+  const context = {
     IDCURS: req.params.id,
   };
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context,
     });
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/usuarios`, {
-      curso,
+      context,
     });
     const datos = {
-      curso: result.data.data,
+      curso: curso.data.data,
       usuarios: usuarios.data.data,
     };
 
@@ -330,22 +320,19 @@ export const usuariosPage = async (req, res) => {
 }
 export const usuariosAddPage = async (req, res) => {
   const user = req.user;
-  const curso = {
+  const context = {
     IDCURS: req.params.idcurs,
-  }
-  const turno = {
-    IDTURN: req.params.idturn,
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context,
     })
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/usuarios/pendientes`, {
-      curso,
+      context,
     });
     const datos = {
-      curso: result.data.data,
+      curso: curso.data.data,
       usuarios: usuarios.data.data,
     };
 
@@ -372,20 +359,17 @@ export const usuariosTurnoPage = async (req, res) => {
   const context = {
     IDTURN: req.params.idturn,
   }
-  const turno = {
-    IDTURN: req.params.idturn,
-  }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
+    const turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context,
     })
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos/usuarios`, {
-      turno,
+      context,
     })
     const datos = {
       curso,
-      turno: result.data.data,
+      turno: turno.data.data,
       usuarios: usuarios.data.data,
     }
 
@@ -407,20 +391,21 @@ export const usuariosTurnoAddPage = async (req, res) => {
   const curso = {
     IDCURS: req.params.idcurs,
   }
-  const context = {
+  let context = {
     IDTURN: req.params.idturn,
   }
 
   try {
-    const retTurno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
+    const turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context,
     })
+    context = curso
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos/usuarios/pendientes`, {
-      curso,
+      context,
     });
     const datos = {
       curso,
-      turno: retTurno.data.data,
+      turno: turno.data.data,
       usuarios: usuarios.data.data,
     };
 
@@ -444,24 +429,21 @@ export const usuariosMatriculaPage = async (req, res) => {
   const curso = {
     IDCURS: req.params.idcurs,
   }
-  const matricula = {
-    IDMATR: req.params.idmatr,
-  }
   const context = {
     IDMATR: req.params.idmatr,
   }
 
   try {
-    const retMatricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
+    const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context,
     })
-    const retUsuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/usuarios`, {
-      matricula,
+    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/usuarios`, {
+      context,
     })
     const datos = {
       curso,
-      matricula: retMatricula.data.data,
-      usuarios: retUsuarios.data.data,
+      matricula: matricula.data.data,
+      usuarios: usuarios.data.data,
     }
 
     res.render('admin/cursos/matriculas/usuarios', { user, datos })
@@ -482,16 +464,13 @@ export const usuariosMatriculaAddPage = async (req, res) => {
   const curso = {
     IDCURS: req.params.idcurs,
   }
-  const matricula = {
-    IDMATR: req.params.idmatr,
-  }
   const context = {
     IDMATR: req.params.idmatr,
   }
   const usuario = {}
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
+    const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context,
     })
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
@@ -499,7 +478,7 @@ export const usuariosMatriculaAddPage = async (req, res) => {
     });
     const datos = {
       curso,
-      matricula: result.data.data,
+      matricula: matricula.data.data,
       usuarios: usuarios.data.data,
     };
 

@@ -15,7 +15,7 @@ export const mainPage = async (req, res) => {
     FECEST: dateISOToUTCString(new Date()),
     TIPEST: tiposEstado.telefono.ID,  // tipo excluido (no mostrar como ausencia los tipo telefono)
   }
-  const matricula = {
+  const context = {
     IDUSUA: user.id,
     STAMAT: estadosMatricula.abierta,
   }
@@ -25,7 +25,7 @@ export const mainPage = async (req, res) => {
       estado,
     })
     const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
-      matricula,
+      context,
     })
 
     let userid = ''
