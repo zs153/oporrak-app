@@ -452,7 +452,7 @@ export const borrarUsuario = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
-  }  
+  }
 }
 
 // usuarios turno

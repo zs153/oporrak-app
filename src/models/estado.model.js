@@ -1,4 +1,4 @@
-import {BIND_OUT, NUMBER} from 'oracledb'
+import { BIND_OUT, NUMBER } from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const baseQuery = `SELECT 
@@ -279,7 +279,7 @@ export const estadosFechaUsuario = async (context) => {
   let bind = {
     USUEST: context.USUEST,
     FECEST: context.FECEST,
-  }  
+  }
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -290,7 +290,7 @@ export const estadosFechaUsuario = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const estadosFechaPerfil = async (context) => {  
+export const estadosFechaPerfil = async (context) => {
   // bind
   let query = estadosFechaPerfilQuery
   let bind = {
@@ -307,11 +307,11 @@ export const estadosFechaPerfil = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const estadosOficinaPerfil = async (context) => {  
+export const estadosOficinaPerfil = async (context) => {
   // bind
   let query = estadosOficinaPerfilQuery
   let bind = context
-  
+
   if (context.OFIEST) {
     bind.OFIEST = context.OFIEST
     query += `WHERE t1.ofiusu = :ofiest

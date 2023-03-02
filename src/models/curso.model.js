@@ -1,4 +1,4 @@
-import {BIND_OUT, NUMBER} from 'oracledb'
+import { BIND_OUT, NUMBER } from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const cursoSql = `SELECT 
@@ -424,6 +424,9 @@ export const usuariosPendientes = async (context) => {
     `
   }
 
+  // proc
+  const ret = await simpleExecute(query, bind)
+
   if (ret) {
     return ({ stat: 1, data: ret.rows })
   } else {
@@ -492,9 +495,6 @@ export const usuariosTurnoPendientes = async (context) => {
   } else {
     return ({ stat: null, data: null })
   }
-
-  const result = await simpleExecute(query, context)
-  return result.rows
 }
 export const insertUsuarioTurno = async (bind) => {
   // bind
