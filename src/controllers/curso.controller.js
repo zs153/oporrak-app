@@ -741,7 +741,6 @@ export const insertMatricula = async (req, res) => {
     TIPMOV: tiposMovimiento.crearMatricula,
   }
 
-  console.log('first')
   try {
     await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/insert`, {
       curso,

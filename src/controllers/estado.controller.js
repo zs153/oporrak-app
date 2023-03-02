@@ -23,7 +23,6 @@ export const mainPage = async (req, res) => {
       desde,
       hasta,
     }
-
     res.render('admin/estados', { user, datos })
   } catch (error) {
     if (error.response.status === 400) {
@@ -64,7 +63,6 @@ export const estadosPage = async (req, res) => {
     estado.OFIEST = req.body.ofiest
   }
 
-  console.log(periodo)
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,

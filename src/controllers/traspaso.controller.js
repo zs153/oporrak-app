@@ -113,7 +113,6 @@ export const calendario = async (req, res) => {
 
     res.render(`admin/traspasos/calendario`, { user, datos })
   } catch (error) {
-    console.log(error)
     if (error.response.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],

@@ -112,6 +112,11 @@
   <script>
     const desfec = document.getElementById('desfec')
 
+    const dateISOToUTCString = (dateISO) => {
+      const fecha = new Date(dateISO);
+      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
+      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
+    }
     const setSuccess = (element) => {
       const inputControl = element.parentElement;
       const errorDisplay = inputControl.querySelector('.invalid-feedback');
@@ -231,11 +236,6 @@
       document.querySelector("#desde").value = desde.toISOString().slice(0, 10)
       document.querySelector("#hasta").value = hasta.toISOString().slice(0, 10)
     })
-    const dateISOToUTCString = (dateISO) => {
-      const fecha = new Date(dateISO);
-      const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
-      return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
-    }
   </script>
 </body>
 
