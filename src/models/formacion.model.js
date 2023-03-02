@@ -2,7 +2,8 @@ import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const baseMatriculasQuery = `SELECT 
-  mm.*, mc.idcurs
+  mm.*
+  , mc.idcurs
 FROM matriculas mm
 LEFT JOIN (
   SELECT uu.idusua, um.idmatr
@@ -23,15 +24,16 @@ INNER JOIN cursos cc ON cc.idcurs = uc.idcurs
 export const findM = async (context) => {
   // bind
   let query = baseMatriculasQuery;
-  let bind = {};
+  let bind = {
+    IDUSUA: context.IDUSUA,
+  };
 
-  if (context.IDUSUA) {
-    bind.IDUSUA = context.IDUSUA;
-  } else if (context.STAMAT) {
+  if (context.STAMAT) {
     bind.STAMAT = context.STAMAT
-    query += `AND mm.stamat = : stamar `
+    query += `AND mm.stamat = :stamat`
   }
 
+  console.log(query, bind)
   // proc
   const ret = await simpleExecute(query, bind)
 
@@ -46,7 +48,12 @@ export const findM = async (context) => {
 export const findC = async (context) => {
   // bind
   let query = baseCursosQuery;
-  let bind = context;
+  let bind = {};
+
+  if (context.IDUSUA) {
+    bind.IDUSUA = context.IDUSUA
+    query += `WHERE uc.idusua = :idusua`
+  }
 
   // proc
   const ret = await simpleExecute(query, bind)

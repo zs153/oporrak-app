@@ -165,6 +165,8 @@ LEFT JOIN (
 ) pp ON pp.idusua = um.idusua
 INNER JOIN usuarios uu ON uu.idusua = um.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+WHERE mc.idcurs = :idcurs
+  AND pp.idusua IS NULL
 `
 const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
   :idturn,
@@ -479,13 +481,7 @@ export const usuariosTurno = async (context) => {
 export const usuariosTurnoPendientes = async (context) => {
   // bind
   let query = usuariosTurnoPendientesSql
-  let bind = {}
-
-  if (context.IDCURS) {
-    bind.IDCURS = context.IDCURS
-    query += `WHERE mc.idcurs = :idcurs 
-      AND pp.idusua IS NULL`
-  }
+  let bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)

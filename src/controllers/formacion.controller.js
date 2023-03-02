@@ -3,7 +3,7 @@ import * as DAL from '../models/formacion.model'
 // matriculas
 export const matricula = async (req, res) => {
   // context
-  const context = req.body.matricula
+  const context = req.body.context
 
   // proc
   try {
@@ -20,7 +20,7 @@ export const matricula = async (req, res) => {
 }
 export const matriculas = async (req, res) => {
   // context
-  const context = req.body.matricula
+  const context = req.body.context
 
   // proc
   try {
@@ -39,7 +39,7 @@ export const matriculas = async (req, res) => {
 // cursos
 export const curso = async (req, res) => {
   // context
-  const context = req.body.curso
+  const context = req.body.context
 
   // proc
   try {
@@ -56,7 +56,7 @@ export const curso = async (req, res) => {
 }
 export const cursos = async (req, res) => {
   // context
-  const context = req.body.curso
+  const context = req.body.context
 
   // proc
   try {

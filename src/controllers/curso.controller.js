@@ -3,7 +3,7 @@ import * as DAL from '../models/curso.model'
 // cursos
 export const curso = async (req, res) => {
   // context
-  const context = req.body.curso
+  const context = req.body.context
 
   // proc
   try {
@@ -20,7 +20,7 @@ export const curso = async (req, res) => {
 }
 export const cursos = async (req, res) => {
   // context
-  const context = req.body.curso
+  const context = req.body.context
 
   // proc
   try {
@@ -367,7 +367,7 @@ export const borrarMatricula = async (req, res) => {
 // usuarios
 export const usuarios = async (req, res) => {
   // context
-  const context = req.body.curso
+  const context = req.body.context
 
   // proc
   try {
@@ -384,7 +384,7 @@ export const usuarios = async (req, res) => {
 }
 export const usuariosPendientes = async (req, res) => {
   // context
-  const context = req.body.curso
+  const context = req.body.context
 
   // proc
   try {
@@ -458,7 +458,7 @@ export const borrarUsuario = async (req, res) => {
 // usuarios turno
 export const usuariosTurno = async (req, res) => {
   // context
-  const context = req.body.turno
+  const context = req.body.context
 
   // proc
   try {
@@ -475,7 +475,7 @@ export const usuariosTurno = async (req, res) => {
 }
 export const usuariosTurnoPendientes = async (req, res) => {
   // context
-  const context = req.body.curso
+  const context = req.body.context
 
   // proc
   try {
@@ -555,7 +555,7 @@ export const borrarUsuarioTurno = async (req, res) => {
 // usuarios matricula
 export const usuariosMatricula = async (req, res) => {
   // context
-  const context = req.body.matricula
+  const context = req.body.context
 
   // proc
   try {
