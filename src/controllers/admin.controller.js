@@ -1,11 +1,8 @@
 import axios from 'axios'
 import { puertoAPI, serverAPI, serverWEB, puertoWEB, serverAUTH, puertoAUTH } from '../config/settings'
 import {
-  arrTiposRol,
-  arrTiposPerfil,
   tiposMovimiento,
   tiposEstado,
-  tiposRol,
   estadosMatricula,
 } from '../public/js/enumeraciones'
 
@@ -73,20 +70,16 @@ export const cleanPage = async (req, res) => {
 }
 export const perfilPage = async (req, res) => {
   const user = req.user
-  const usuario = {
+  const context = {
     USERID: user.userid,
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      usuario,
+    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+      context,
     })
-
     const datos = {
-      usuario: result.data,
-      tiposRol,
-      arrTiposRol,
-      arrTiposPerfil,
+      usuario: usuario.data.data,
     }
 
     res.render('admin/perfil', { user, datos })

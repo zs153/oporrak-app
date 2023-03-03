@@ -125,8 +125,6 @@
     const telusu = document.getElementById('telusu')
     const pwdusu = document.getElementById('pwdusu')
 
-    const togglePassword = document.querySelector('#togglePassword');
-
     togglePassword.addEventListener('click', function (e) {
       const type = pwdusu.getAttribute('type') === 'password' ? 'text' : 'password';
       pwdusu.setAttribute('type', type);

@@ -16,6 +16,7 @@ export const mainPage = async (req, res) => {
       arrEstadosCurso: arrEstadosCurso,
     }
 
+    console.log(datos)
     res.render('admin/cursos', { user, datos })
   } catch (error) {
     if (error.response.status === 400) {
@@ -218,7 +219,7 @@ export const matriculasPage = async (req, res) => {
 export const addMatriculaPage = async (req, res) => {
   const user = req.user;
   const fecha = dateISOToUTCString(new Date())
-  const curso = {
+  const context = {
     IDCURS: req.params.id,
   };
   const matricula = {
@@ -227,11 +228,11 @@ export const addMatriculaPage = async (req, res) => {
   }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      curso,
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context,
     });
     const datos = {
-      curso: result.data.data,
+      curso: curso.data.data,
       matricula,
       arrEstadosMatricula,
     };
@@ -464,17 +465,17 @@ export const usuariosMatriculaAddPage = async (req, res) => {
   const curso = {
     IDCURS: req.params.idcurs,
   }
-  const context = {
+  let context = {
     IDMATR: req.params.idmatr,
   }
-  const usuario = {}
 
   try {
     const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context,
     })
+    context = {}
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
-      usuario,
+      context,
     });
     const datos = {
       curso,
@@ -503,6 +504,7 @@ export const insert = async (req, res) => {
     DESCUR: req.body.descur.toUpperCase(),
     DURCUR: req.body.durcur,
     PONCUR: req.body.poncur,
+    NOTCUR: req.body.notcur,
     STACUR: req.body.stacur,
   }
   const movimiento = {
@@ -536,6 +538,7 @@ export const update = async (req, res) => {
     DESCUR: req.body.descur.toUpperCase(),
     DURCUR: req.body.durcur,
     PONCUR: req.body.poncur,
+    NOTCUR: req.body.notcur,
     STACUR: req.body.stacur,
   }
   const movimiento = {
@@ -713,6 +716,7 @@ export const insertMatricula = async (req, res) => {
     DESMAT: req.body.desmat.toUpperCase(),
     INIMAT: req.body.inimat,
     FINMAT: req.body.finmat,
+    NOTMAT: req.body.notmat,
     STAMAT: req.body.stamat,
   }
   const movimiento = {
@@ -750,6 +754,7 @@ export const updateMatricula = async (req, res) => {
     DESMAT: req.body.desmat.toUpperCase(),
     INIMAT: req.body.inimat,
     FINMAT: req.body.finmat,
+    NOTMAT: req.body.notmat,
     STAMAT: req.body.stamat,
   }
   const movimiento = {

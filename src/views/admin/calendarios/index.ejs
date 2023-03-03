@@ -22,6 +22,7 @@
             <div class="col-12">
               <div class="card mt-1">
                 <form action="/admin/calendarios/calendario" method="POST">
+                  <input type="hidden" name="nomusu" id="nomusu" value="" />
                   <div class="card-header">
                     <h3 class="card-title">Calendario</h3>
                   </div>
@@ -44,9 +45,9 @@
                           <div class="form-label">Usuario</div>
                           <select class="form-select" id="cbousu" name="idusua" value="">
                             <% datos.usuarios.map(element=> { %>
-                            <option value="<%- element.IDUSUA %>" <%- element.IDUSUA===user.id ? "selected" :"" %>>
+                            <option value="<%- element.IDUSUA %>" <%- element.IDUSUA === user.id ? "selected" :"" %>>
                               <%- element.NOMUSU %>
-                            </option>
+                            </option>                            
                             <% }) %>
                           </select>
                         </div>
@@ -55,7 +56,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <button type="submit" class="btn btn-success ms-auto">Ver calendario</button>
+                      <button type="submit" id="btnVer" class="btn btn-success ms-auto">Ver calendario</button>
                     </div>
                   </div>
                 </form>
@@ -76,6 +77,9 @@
 
       window.location.href = `http://<%- datos.serverWEB %>:<%- datos.puertoWEB %>/admin/calendarios/${oficina}`
     });
+    document.getElementById('btnVer').addEventListener('click', () => {
+      document.getElementById('nomusu').value = document.getElementById('cbousu').options[document.getElementById('cbousu').selectedIndex].text
+    })
   </script>
 </body>
 

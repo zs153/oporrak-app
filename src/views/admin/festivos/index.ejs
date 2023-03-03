@@ -34,7 +34,7 @@
                           <select class="form-select" id="cboofi" name="idofic" value="">
                             <option value="0">FESTIVOS COMUNES</option>
                             <% datos.oficinas.map(element=> { %>
-                            <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === user.oficina ? "selected":"" %>>
+                            <option value="<%- element.IDOFIC %>" %>>
                               <%- element.DESOFI %>
                             </option>
                             <% }) %>
@@ -45,7 +45,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <button type="submit" class="btn btn-success ms-auto">Ver calendario</button>
+                      <button type="submit" id="btnVer" class="btn btn-success ms-auto">Ver calendario</button>
                     </div>
                   </div>
                 </form>
@@ -60,9 +60,9 @@
 
   <script src="/js/ayuda.min.js"></script>
   <script>
-    document.getElementById('cboofi').addEventListener('change', function () {
-      document.getElementById('desofi').value = this.options[this.selectedIndex].text
-    });
+    document.getElementById('btnVer').addEventListener('click', () => {
+      document.getElementById('desofi').value = document.getElementById('cboofi').options[document.getElementById('cboofi').selectedIndex].text
+    })
   </script>
 </body>
 

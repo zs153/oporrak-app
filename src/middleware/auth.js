@@ -26,17 +26,17 @@ const authRoutes = async (req, res, next) => {
         issuer: 'http://localhost:4000',
         clockTolerance: '1 min',
       }).then(async ret => {
-        const usuario = {
+        const context = {
           USERID: ret.userid,
         }
-        const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-          usuario,
+        const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+          context,
         })
         const payload = {
-          id: result.data.data.IDUSUA,
-          userid: result.data.data.USERID,
-          rol: result.data.data.ROLUSU,
-          oficina: result.data.data.OFIUSU,
+          id: usuario.data.data.IDUSUA,
+          userid: usuario.data.data.USERID,
+          rol: usuario.data.data.ROLUSU,
+          oficina: usuario.data.data.OFIUSU,
         }
 
         await V3.encrypt(payload, localKey, {

@@ -146,6 +146,7 @@ export const insert = async (req, res) => {
     DESMAT: req.body.desmat.toUpperCase(),
     INIMAT: req.body.inimat,
     FINMAT: req.body.finmat,
+    NOTMAT: req.body.notmat,
     STAMAT: req.body.stamat,
   }
   const movimiento = {
@@ -179,7 +180,7 @@ export const update = async (req, res) => {
     DESMAT: req.body.desmat.toUpperCase(),
     INIMAT: req.body.inimat,
     FINMAT: req.body.finmat,
-    IDCURS: req.body.idcurs,
+    NOTMAT: req.body.notmat,
     STAMAT: req.body.stamat,
   }
   const movimiento = {

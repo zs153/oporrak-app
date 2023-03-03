@@ -4,12 +4,13 @@ import {
   mainPage,
   update,
   calendario,
+  loadCalendario,
 } from "../controllers/calendario.controller";
 
 const calendarioRouter = express.Router();
 
 // paginas
-calendarioRouter.get("/calendarios", authRoutes, mainPage);
+calendarioRouter.get("/calendarios/:id", authRoutes, mainPage);
 
 // proc 
 calendarioRouter.post("/calendarios/calendario", authRoutes, calendario);

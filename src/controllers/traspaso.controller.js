@@ -6,14 +6,14 @@ import { tiposRol, tiposEstado, tiposMovimiento } from '../public/js/enumeracion
 export const mainPage = async (req, res) => {
   const user = req.user
   const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.idofic }
-  const usuario = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.idofic }
+  const context = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.idofic }
 
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
-      usuario,
+      context,
     })
     const datos = {
       oficina: parseInt(req.params.idofic),
@@ -38,17 +38,11 @@ export const mainPage = async (req, res) => {
 }
 
 // proc
-export const calendario = async (req, res) => {
-  let currentYear = new Date().getFullYear()
-  let usuario = {
-    IDUSUA: req.body.idusua,
-  }
-  
+export const calendario = async (req, res) => {  
   const user = req.user
+  const currentYear = new Date().getFullYear()
   const estado = {
     USUEST: req.body.idusua,
-    // TIPEST: 0,
-    // OFIDES: 0,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
   }
@@ -58,38 +52,30 @@ export const calendario = async (req, res) => {
     DESDE: estado.DESDE,
     HASTA: estado.HASTA,
   }
+  const usuario = {
+    IDUSUA: req.body.idusua,    
+    NOMUSU: req.body.nomusu,
+    OFIUSU: req.body.idofic,
+  }
 
-  let ret
   try {
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    const oficinas = ret.data.data
-
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
       festivo,
     })
-    const festivosComun = ret.data.data.filter(itm => itm.OFIFES === 0)
-    const festivosLocal = ret.data.data.filter(itm => itm.OFIFES > 0)
-
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      usuario,
-    })
-    usuario = {
-      IDUSUA: ret.data.data.IDUSUA,
-      OFIUSU: ret.data.data.OFIUSU,
-      NOMUSU: ret.data.data.NOMUSU,
-    }
-
-    ret = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
+    const festivosComun = festivos.data.data.filter(itm => itm.OFIFES === 0)
+    const festivosLocal = festivos.data.data.filter(itm => itm.OFIFES > 0)
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
       estado,
     })
     
     let dataSource = []
-    ret.data.data.map(itm => {
+    estados.data.data.map(itm => {
       if (itm.TIPEST === tiposEstado.traspaso.ID) {
         itm.TIPEST = tiposEstado.traspasado.ID
-        const estado = ret.data.data[ret.data.data.indexOf(itm)]
+        const estado = estados.data.data[estados.data.data.indexOf(itm)]
         const rec = {
           idesta: itm.IDESTA,
           ofiest: estado.OFIEST,
@@ -103,7 +89,7 @@ export const calendario = async (req, res) => {
     })
 
     const datos = {
-      oficinas,
+      oficinas: oficinas.data.data,
       festivosComun: JSON.stringify(festivosComun),
       festivosLocal: JSON.stringify(festivosLocal),
       tiposEstado,

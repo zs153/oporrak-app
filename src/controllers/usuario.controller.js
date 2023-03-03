@@ -12,14 +12,14 @@ import { serverAPI, puertoAPI, secreto } from '../config/settings'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const usuario = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
+  const context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
 
   try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
-      usuario,
+    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
+      context,
     })    
     const datos = {
-      usuarios: result.data.data,
+      usuarios: usuarios.data.data,
       estadosUsuario,
     }
 
@@ -69,7 +69,7 @@ export const editPage = async (req, res) => {
   const user = req.user
   const filteredRol = arrTiposRol.filter(itm => itm.id <= user.rol)
   const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
-  const usuario = {
+  const context = {
     IDUSUA: req.params.id,
   } 
 
@@ -77,11 +77,11 @@ export const editPage = async (req, res) => {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      usuario,
+    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+      context,
     })
     const datos = {
-      usuario: result.data.data,
+      usuario: usuario.data.data,
       oficinas: oficinas.data.data,
       filteredRol,
       arrTiposPerfil,

@@ -10,7 +10,6 @@ export const mainPage = async (req, res) => {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina
     })
-
     const datos = {
       oficinas: oficinas.data.data,
     }
@@ -31,26 +30,25 @@ export const mainPage = async (req, res) => {
 
 // proc
 export const calendario = async (req, res) => {
-  let currentYear = new Date().getFullYear()
-  let dataSource = []
-  let oficina = {
-    IDOFIC: req.body.idofic,
-    DESOFI: req.body.desofi,
-  }
-
   const user = req.user
+  const currentYear = new Date().getFullYear()
   const festivo = {
     OFIFES: req.body.idofic,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
   }
+  const oficina = {
+    IDOFIC: req.body.idofic,
+    DESOFI: req.body.desofi,
+  }
 
+  console.log(oficina)
   try {
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
       festivo,
     })
-    
-    dataSource = festivos.data.data.map(itm => ({
+  
+    const dataSource = festivos.data.data.map(itm => ({
       idfest: itm.IDFEST,
       fecfes: itm.FECFES,
       ofifes: itm.OFIFES,
