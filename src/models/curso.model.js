@@ -9,6 +9,7 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTCURSO(
   :descur,
   :durcur,
   :poncur,
+  :notcur,
   :stacur,
   :usumov,
   :tipmov,
@@ -20,6 +21,7 @@ const updateSql = `BEGIN OPORRAK_PKG.UPDATECURSO(
   :descur,
   :durcur,
   :poncur,
+  :notcur,
   :stacur,
   :usumov,
   :tipmov
@@ -75,7 +77,7 @@ const removeTurnoSql = `BEGIN OPORRAK_PKG.DELETETURNOCURSO(
 `
 // matriculas
 const matriculaSql = `SELECT 
-  mm.idmatr, mm.desmat, mm.stamat,
+  mm.idmatr, mm.desmat, mm.notmat, mm.stamat,
   TO_CHAR(mm.inimat, 'YYYY-MM-DD') "INIMAT",
   TO_CHAR(mm.finmat, 'YYYY-MM-DD') "FINMAT",
   TO_CHAR(mm.inimat, 'DD/MM/YYYY') "STRINI",
@@ -88,6 +90,7 @@ const insertMatriculaSql = `BEGIN OPORRAK_PKG.INSERTMATRICULACURSO(
   :desmat,
   TO_DATE(:inimat,'YYYY-MM-DD'),
   TO_DATE(:finmat,'YYYY-MM-DD'),
+  :notmat,
   :stamat,
   :usumov,
   :tipmov,
@@ -99,6 +102,7 @@ const updateMatriculaSql = `BEGIN OPORRAK_PKG.UPDATEMATRICULA(
   :desmat,
   TO_DATE(:inimat,'YYYY-MM-DD'),
   TO_DATE(:finmat,'YYYY-MM-DD'),
+  :notmat,
   :stamat,
   :usumov,
   :tipmov

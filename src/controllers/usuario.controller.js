@@ -2,7 +2,7 @@ import * as DAL from '../models/usuario.model'
 
 export const usuario = async (req, res) => {
   // context
-  const context = req.body.usuario
+  const context = req.body.context
 
   // proc
   try {
@@ -19,7 +19,7 @@ export const usuario = async (req, res) => {
 }
 export const usuarios = async (req, res) => {
   // context
-  const context = req.body.usuario
+  const context = req.body.context
 
   // proc
   try {
@@ -192,7 +192,6 @@ export const perfil = async (req, res) => {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-
   const context = Object.assign(usuario, movimiento)
 
   // proc
@@ -204,7 +203,6 @@ export const perfil = async (req, res) => {
     } else {
       res.status(400).json({ stat: null, data: 'Perfil no actualizado' })
     }
-
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }

@@ -40,7 +40,7 @@ export const crear = async (req, res) => {
     DESMAT: req.body.matricula.DESMAT,
     INIMAT: req.body.matricula.INIMAT,
     FINMAT: req.body.matricula.FINMAT,
-    IDCURS: req.body.matricula.IDCURS,
+    NOTMAT: req.body.matricula.NOTMAT,
     STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {
@@ -70,7 +70,7 @@ export const modificar = async (req, res) => {
     DESMAT: req.body.matricula.DESMAT,
     INIMAT: req.body.matricula.INIMAT,
     FINMAT: req.body.matricula.FINMAT,
-    IDCURS: req.body.matricula.IDCURS,
+    NOTMAT: req.body.matricula.NOTMAT,
     STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {

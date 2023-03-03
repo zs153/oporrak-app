@@ -15,7 +15,7 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTMATRICULA(
   :desmat,
   TO_DATE(:inimat, 'YYYY-MM-DD'),
   TO_DATE(:finmat, 'YYYY-MM-DD'),
-  :idcurs,
+  :notmat,
   :stamat,
   :usumov,
   :tipmov,
@@ -27,7 +27,7 @@ const updateSql = `BEGIN OPORRAK_PKG.UPDATEMATRICULA(
   :desmat,
   TO_DATE(:inimat, 'YYYY-MM-DD'),
   TO_DATE(:finmat, 'YYYY-MM-DD'),
-  :idcurs,
+  :notmat,
   :stamat,
   :usumov,
   :tipmov

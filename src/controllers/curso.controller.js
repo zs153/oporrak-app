@@ -41,6 +41,7 @@ export const crear = async (req, res) => {
     DESCUR: req.body.curso.DESCUR,
     DURCUR: req.body.curso.DURCUR,
     PONCUR: req.body.curso.PONCUR,
+    NOTCUR: req.body.curso.NOTCUR,
     STACUR: req.body.curso.STACUR,
   }
   const movimiento = {
@@ -70,6 +71,7 @@ export const modificar = async (req, res) => {
     DESCUR: req.body.curso.DESCUR,
     DURCUR: req.body.curso.DURCUR,
     PONCUR: req.body.curso.PONCUR,
+    NOTCUR: req.body.curso.NOTCUR,
     STACUR: req.body.curso.STACUR,
   }
   const movimiento = {
@@ -286,6 +288,7 @@ export const crearMatricula = async (req, res) => {
     DESMAT: req.body.matricula.DESMAT,
     INIMAT: req.body.matricula.INIMAT,
     FINMAT: req.body.matricula.FINMAT,
+    NOTMAT: req.body.matricula.NOTMAT,
     STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {
@@ -315,6 +318,7 @@ export const modificarMatricula = async (req, res) => {
     DESMAT: req.body.matricula.DESMAT,
     INIMAT: req.body.matricula.INIMAT,
     FINMAT: req.body.matricula.FINMAT,
+    NOTMAT: req.body.matricula.NOTMAT,
     STAMAT: req.body.matricula.STAMAT,
   }
   const movimiento = {

@@ -1,4 +1,3 @@
-import oracledb from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
 const baseMatriculasQuery = `SELECT 
@@ -16,7 +15,7 @@ WHERE pp.idusua IS NULL
   AND sysdate BETWEEN mm.inimat AND mm.finmat
 `
 const baseCursosQuery = `SELECT 
-  cc.descur
+  cc.descur, cc.notcur
 FROM usuarioscurso uc
 INNER JOIN cursos cc ON cc.idcurs = uc.idcurs
 `
@@ -33,7 +32,7 @@ export const findM = async (context) => {
     query += `AND mm.stamat = :stamat`
   }
 
-  console.log(query, bind)
+  console.log(query,bind)
   // proc
   const ret = await simpleExecute(query, bind)
 
