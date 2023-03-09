@@ -16,7 +16,6 @@ export const mainPage = async (req, res) => {
       arrEstadosCurso: arrEstadosCurso,
     }
 
-    console.log(datos)
     res.render('admin/cursos', { user, datos })
   } catch (error) {
     if (error.response.status === 400) {

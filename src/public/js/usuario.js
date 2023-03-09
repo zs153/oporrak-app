@@ -60,21 +60,9 @@ const arrayFilter = (value) => {
 
   buildTable(state)
 }
-const pagination = (querySet, page, rows) => {
-  const trimStart = (page - 1) * rows
-  const trimEnd = trimStart + rows
-  const trimmedData = querySet.slice(trimStart, trimEnd)
-  const pages = Math.ceil(querySet.length / rows);
-
-  return {
-    'querySet': trimmedData,
-    'pages': pages,
-  }
-}
 const buildTable = (state) => {
   const table = document.getElementById('table-body')
-  const data = pagination(state.querySet, state.page, state.rows)
-  const myList = data.querySet
+  const myList = state.querySet
   table.innerHTML = ''
 
   myList.map(element => {
@@ -152,7 +140,7 @@ const buildTable = (state) => {
     table.appendChild(row)
   })
 
-  createPagination(data.pages, state.page)
+  createPages()
 }
 const createPagination = (pages, page) => {
   let str = `<ul>`;
@@ -217,8 +205,21 @@ const createPagination = (pages, page) => {
 
   document.getElementById('pagination-wrapper').innerHTML = str;
 }
-const onclickPage = (pages, page) => {
-  createPagination(pages, page)
-  state.page = page
-  buildTable(state)
+const createPages = () => {
+  let str = `<ul>`;
+
+  if (hasPrevUsers) {
+    str += `<li class="page-item previous no">
+      <a href="/admin/usuarios?cursor=${cursor}&dir=prev" class="nav-link">
+        &#9664 Anterior
+      </a>
+    `;
+  }
+
+  if (hasNextUsers) {
+    str += '<li class="page-item next no"><a href="/admin/usuarios?cursor=' + JSON.stringify(cursor) + '&dir=next" class="nav-link">Siguiente &#9654</a>';
+  }
+  str += `</ul>`;
+
+  document.getElementById('pagination-wrapper').innerHTML = str;
 }

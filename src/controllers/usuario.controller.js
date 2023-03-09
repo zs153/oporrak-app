@@ -12,26 +12,79 @@ import { serverAPI, puertoAPI, secreto } from '../config/settings'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
+  //const context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
+
+  let context = ''
+  let hasPrevUsers = false
+  let cursor = req.query.cursor ? req.query.cursor: null
+  const next = req.query.next
+  const prev = req.query.prev
+  const limit = req.query.limit ? req.query.limit : 10
+  const dir = req.query.dir ? req.query.dir : 'next'
+
+  console.log(req.query.cursor)
+  if (cursor) {
+    hasPrevUsers = true
+    context = {
+      LIMIT: limit + 1,
+      DIRECTION: dir,
+      CURSOR: {
+        NEXT: next,
+        PREV: prev,
+      },
+    }
+  } else {
+    hasPrevUsers = false
+    context = {
+      LIMIT: limit + 1,
+      DIRECTION: 'next',
+      CURSOR: {
+        NEXT: 0,
+        PREV: null
+      },
+    }
+  }
 
   try {
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       context,
-    })    
+    })
+
+    const hasPrevUsers = prev ? true:false
+    const hasNextUsers = usuarios.data.data.length === limit +1
+    let nextCursor = 0
+    let prevCursor = null
+
+    if (hasNextUsers) {
+      const nextCursorUser = usuarios.data.data[limit -1]
+      const prevCursorUser = usuarios.data.data[0]
+      nextCursor = nextCursorUser.IDUSUA
+      prevCursor = prevCursorUser.IDUSUA
+      usuarios.data.data.pop()
+    }
+
+    const cursor = {
+      NEXT: nextCursor,
+      PREV: prevCursor,
+    }
     const datos = {
+      limit,
       usuarios: usuarios.data.data,
+      hasNextUsers,
+      hasPrevUsers,
+      cursor,
       estadosUsuario,
     }
 
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -101,6 +154,8 @@ export const editPage = async (req, res) => {
     }
   }
 }
+
+// proc
 export const insert = async (req, res) => {
   const user = req.user
   const seed = Math.random().toString(36).substring(2, 10);

@@ -112,12 +112,15 @@
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const estadosUsuario = <%- JSON.stringify(datos.estadosUsuario) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextUsers = <%- datos.hasNextUsers %>
+    const hasPrevUsers = <%- datos.hasPrevUsers %>
 
-      let state = {
-        'querySet': orgList,
-        'page': 1,
-        'rows': 10,
-      }
+    let state = {
+      'querySet': orgList,
+      'page': 1,
+      'rows': 10,
+    }
 
     buildTable(state)
   </script>

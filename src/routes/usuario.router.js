@@ -7,6 +7,7 @@ import {
   insert,
   update,
   remove,
+  paginacionUsuarios,
 } from '../controllers/usuario.controller'
 
 const usuarioRouter = express.Router()
