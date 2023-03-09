@@ -9,7 +9,11 @@ export const usuario = async (req, res) => {
     const result = await DAL.find(context)
 
     if (result.stat) {
-      res.status(200).json({stat: 1, data: result.data[0]})
+      if (result.data.length === 1) {
+        res.status(200).json({stat: 1, data: result.data[0]})
+      } else {
+        res.status(200).json({ stat: 1, data: result.data })
+      }
     } else {
       res.status(400).json({stat: null, data: 'Usuario no encontrado'})
     }
@@ -23,7 +27,7 @@ export const usuarios = async (req, res) => {
 
   // proc
   try {
-    const result = await DAL.find(context)
+    const result = await DAL.findAll(context)
 
     if (result.stat) {
       res.status(200).json({ stat: 1, data: result.data })

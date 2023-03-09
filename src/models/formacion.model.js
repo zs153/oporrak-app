@@ -32,7 +32,6 @@ export const findM = async (context) => {
     query += `AND mm.stamat = :stamat`
   }
 
-  console.log(query,bind)
   // proc
   const ret = await simpleExecute(query, bind)
 

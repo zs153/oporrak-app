@@ -94,6 +94,41 @@ export const find = async (context) => {
     return ({stat: null, data: null})
   }
 };
+export const findAll = async (context) => {
+  // bind
+  let query = '';
+  let bind = {
+    LIMIT: context.LIMIT
+  };
+
+  if (context.DIRECTION) {
+    bind.IDUSUA = context.CURSOR.NEXT;
+    query = `SELECT * FROM usuarios
+      WHERE idusua > :idusua
+      ORDER BY idusua ASC
+      FETCH NEXT :limit ROWS ONLY
+    `;
+  } else {
+    bind.IDUSUA = context.CURSOR.PREV;
+    query = `WITH datos AS (
+      SELECT * FROM usuarios
+      WHERE idusua < :idusua
+      ORDER BY idusua DESC
+      FETCH NEXT :limit ROWS ONLY
+    )
+    SELECT * FROM datos ORDER BY idusua ASC
+    `;
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
+};
 export const insert = async (bind) => {
   // bind
   bind.IDUSUA = {
