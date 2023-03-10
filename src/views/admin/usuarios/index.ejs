@@ -35,8 +35,10 @@
                             <line x1="21" y1="21" x2="15" y2="15"></line>
                           </svg>
                         </span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox"
-                          onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en usuarios">
+                        <form action="/admin/usuarios">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="txtSearch"
+                            onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en usuarios">
+                        </form>
                       </div>
                       <a href="/admin/usuarios/add" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">

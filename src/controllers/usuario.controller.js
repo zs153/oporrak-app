@@ -40,20 +40,32 @@ export const mainPage = async (req, res) => {
   }
 
   try {
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       context,
     })
-
-    const hasNextUsers = usuarios.data.data.length === limit +1
+    
+    let usuarios = result.data.data
+    let hasNextUsers = usuarios.length === limit +1
     let nextCursor = 0
-    let prevCursor = null
+    let prevCursor = 0
 
     if (hasNextUsers) {
-      const nextCursorUser = usuarios.data.data[limit -1]
-      const prevCursorUser = usuarios.data.data[0]
+      const nextCursorUser = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
+      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
       nextCursor = nextCursorUser.IDUSUA
       prevCursor = prevCursorUser.IDUSUA
-      usuarios.data.data.pop()
+
+      usuarios.pop()
+    } else {
+      const nextCursorUser = dir === 'next' ? usuarios[usuarios.length - 1] : usuarios[0]
+      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
+      nextCursor = nextCursorUser.IDUSUA
+      prevCursor = prevCursorUser.IDUSUA
+
+      if (dir === 'prev') {
+        hasPrevUsers = false
+        hasNextUsers = true
+      }
     }
 
     const cursor = {
@@ -62,14 +74,13 @@ export const mainPage = async (req, res) => {
     }
     const datos = {
       limit,
-      usuarios: usuarios.data.data,
+      usuarios: dir === 'next' ? usuarios : usuarios.sort((a,b) => a.IDUSUA - b.IDUSUA),
       hasNextUsers,
       hasPrevUsers,
       cursor,
       estadosUsuario,
     }
 
-    console.log('cursor', cursor)
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
