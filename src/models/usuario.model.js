@@ -98,18 +98,18 @@ export const findAll = async (context) => {
   // bind
   let query = '';
   let bind = {
-    LIMIT: context.LIMIT
+    limit: context.limit
   };
 
-  if (context.DIRECTION) {
-    bind.IDUSUA = context.CURSOR.NEXT;
+  if (context.direction === 'next') {
+    bind.IDUSUA = context.cursor.next;
     query = `SELECT * FROM usuarios
       WHERE idusua > :idusua
       ORDER BY idusua ASC
       FETCH NEXT :limit ROWS ONLY
     `;
   } else {
-    bind.IDUSUA = context.CURSOR.PREV;
+    bind.IDUSUA = context.cursor.prev;
     query = `WITH datos AS (
       SELECT * FROM usuarios
       WHERE idusua < :idusua
