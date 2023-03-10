@@ -16,31 +16,25 @@ export const mainPage = async (req, res) => {
 
   let context = ''
   let hasPrevUsers = false
-  let cursor = req.query.cursor ? req.query.cursor: null
-  const next = req.query.next
-  const prev = req.query.prev
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
   const limit = req.query.limit ? req.query.limit : 10
   const dir = req.query.dir ? req.query.dir : 'next'
 
-  console.log(req.query.cursor)
   if (cursor) {
     hasPrevUsers = true
     context = {
-      LIMIT: limit + 1,
-      DIRECTION: dir,
-      CURSOR: {
-        NEXT: next,
-        PREV: prev,
-      },
+      limit: limit + 1,
+      direction: dir,
+      cursor,
     }
   } else {
     hasPrevUsers = false
     context = {
-      LIMIT: limit + 1,
-      DIRECTION: 'next',
-      CURSOR: {
-        NEXT: 0,
-        PREV: null
+      limit: limit + 1,
+      direction: 'next',
+      cursor: {
+        next: 0,
+        prev: null
       },
     }
   }
@@ -50,7 +44,6 @@ export const mainPage = async (req, res) => {
       context,
     })
 
-    const hasPrevUsers = prev ? true:false
     const hasNextUsers = usuarios.data.data.length === limit +1
     let nextCursor = 0
     let prevCursor = null
@@ -64,8 +57,8 @@ export const mainPage = async (req, res) => {
     }
 
     const cursor = {
-      NEXT: nextCursor,
-      PREV: prevCursor,
+      next: nextCursor,
+      prev: prevCursor,
     }
     const datos = {
       limit,
@@ -76,6 +69,7 @@ export const mainPage = async (req, res) => {
       estadosUsuario,
     }
 
+    console.log('cursor', cursor)
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {

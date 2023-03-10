@@ -142,84 +142,18 @@ const buildTable = (state) => {
 
   createPages()
 }
-const createPagination = (pages, page) => {
-  let str = `<ul>`;
-  let active;
-  let pageCutLow = page - 1;
-  let pageCutHigh = page + 1;
 
-  if (pages === 1) {
-    str += `<li class="page-item disabled"><a>Pág</a></li>`;
-  }
-
-  if (page > 1) {
-    str += `<li class="page-item previous no"><a onclick="onclickPage(${pages}, ${page - 1})">&#9664</a></li>`;
-  }
-
-  if (pages < 6) {
-    for (let p = 1; p <= pages; p++) {
-      active = page === p ? "active" : "no";
-      str += `<li class="${active}"><a onclick="onclickPage(${pages}, ${p})">${p}</a></li>`;
-    }
-  } else {
-    if (page > 2) {
-      str += `<li class="no page-item"><a onclick="onclickPage(${pages}, 1)">1</a></li>`;
-      if (page > 3) {
-        str += `<li class="out-of-range"><i>...</i></li>`;
-      }
-    }
-
-    if (page === 1) {
-      pageCutHigh += 2;
-    } else if (page === 2) {
-      pageCutHigh += 1;
-    }
-    if (page === pages) {
-      pageCutLow -= 2;
-    } else if (page === pages - 1) {
-      pageCutLow -= 1;
-    }
-    for (let p = pageCutLow; p <= pageCutHigh; p++) {
-      if (p === 0) {
-        p += 1;
-      }
-      if (p > pages) {
-        continue
-      }
-      active = page === p ? "active" : "no";
-      str += `<li class="${active}"><a onclick="onclickPage(${pages}, ${p})">${p}</a></li>`;
-    }
-
-    if (page < pages - 1) {
-      if (page < pages - 2) {
-        str += `<li class="out-of-range"><i>...</i></li>`;
-      }
-      str += `<li class="page-item no"><a onclick="onclickPage(${pages}, ${pages})">${pages}</a></li>`;
-    }
-  }
-
-  if (page < pages) {
-    str += `<li class="page-item next no"><a onclick="onclickPage(${pages}, ${page + 1})">&#9654</a></li>`;
-  }
-  str += `</ul>`;
-
-  document.getElementById('pagination-wrapper').innerHTML = str;
-}
 const createPages = () => {
-  let str = `<ul>`;
+  let str = "<ul>";
 
   if (hasPrevUsers) {
-    str += `<li class="page-item previous no">
-      <a href="/admin/usuarios?cursor=${cursor}&dir=prev" class="nav-link">
-        &#9664 Anterior
-      </a>
-    `;
+    str += "<li class='page-item previous no'><a href='/admin/usuarios?cursor=" + JSON.stringify(cursor) + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
   }
 
   if (hasNextUsers) {
-    str += '<li class="page-item next no"><a href="/admin/usuarios?cursor=' + JSON.stringify(cursor) + '&dir=next" class="nav-link">Siguiente &#9654</a>';
+    str += "<li class='page-item next no'><a href='/admin/usuarios?cursor=" + JSON.stringify(cursor) + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
   }
-  str += `</ul>`;
+  str += "</ul>";
 
   document.getElementById('pagination-wrapper').innerHTML = str;
 }
