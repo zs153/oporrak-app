@@ -7,7 +7,7 @@ import {
   insert,
   update,
   remove,
-  paginacionUsuarios,
+  search,
 } from '../controllers/usuario.controller'
 
 const usuarioRouter = express.Router()
@@ -18,6 +18,7 @@ usuarioRouter.get('/usuarios/add', verifyTokenAndResp, addPage)
 usuarioRouter.get('/usuarios/edit/:id', verifyTokenAndResp, editPage)
 
 // procedures
+usuarioRouter.post('/usuarios/search', verifyTokenAndResp, search)
 usuarioRouter.post('/usuarios/insert', verifyTokenAndResp, insert)
 usuarioRouter.post('/usuarios/update', verifyTokenAndResp, update)
 usuarioRouter.post('/usuarios/delete', verifyTokenAndResp, remove)

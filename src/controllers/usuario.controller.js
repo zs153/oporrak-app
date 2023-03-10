@@ -161,6 +161,35 @@ export const editPage = async (req, res) => {
 }
 
 // proc
+export const search = async (req, res) => {
+  const user = req.user
+  const usuario = {
+    IDUSUA: req.body.idusua,
+  }
+  const movimiento = {
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.borrarUsuario,
+  }
+
+  try {
+    await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/delete`, {
+      usuario,
+      movimiento,
+    })
+
+    res.redirect('/admin/usuarios')
+  } catch (error) {
+    if (error.response.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    }
+  }
+}
 export const insert = async (req, res) => {
   const user = req.user
   const seed = Math.random().toString(36).substring(2, 10);
