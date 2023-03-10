@@ -110,13 +110,10 @@ export const findAll = async (context) => {
     `;
   } else {
     bind.IDUSUA = context.cursor.prev;
-    query = `WITH datos AS (
-      SELECT * FROM usuarios
+    query = `SELECT * FROM usuarios
       WHERE idusua < :idusua
       ORDER BY idusua DESC
       FETCH NEXT :limit ROWS ONLY
-    )
-    SELECT * FROM datos ORDER BY idusua ASC
     `;
   }
 
