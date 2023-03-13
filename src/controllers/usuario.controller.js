@@ -19,6 +19,7 @@ export const mainPage = async (req, res) => {
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
   const limit = req.query.limit ? req.query.limit : 10
   const dir = req.query.dir ? req.query.dir : 'next'
+  const part = req.query.part
 
   if (cursor) {
     hasPrevUsers = true
@@ -26,6 +27,7 @@ export const mainPage = async (req, res) => {
       limit: limit + 1,
       direction: dir,
       cursor,
+      part,
     }
   } else {
     hasPrevUsers = false
@@ -33,9 +35,10 @@ export const mainPage = async (req, res) => {
       limit: limit + 1,
       direction: 'next',
       cursor: {
-        next: 0,
-        prev: null
+        next: '',
+        prev: ''
       },
+      part: null
     }
   }
 
@@ -46,21 +49,21 @@ export const mainPage = async (req, res) => {
     
     let usuarios = result.data.data
     let hasNextUsers = usuarios.length === limit +1
-    let nextCursor = 0
-    let prevCursor = 0
+    let nextCursor = null
+    let prevCursor = null
 
     if (hasNextUsers) {
       const nextCursorUser = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
       const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUser.IDUSUA
-      prevCursor = prevCursorUser.IDUSUA
+      nextCursor = nextCursorUser.NOMUSU
+      prevCursor = prevCursorUser.NOMUSU
 
       usuarios.pop()
     } else {
       const nextCursorUser = dir === 'next' ? usuarios[usuarios.length - 1] : usuarios[0]
       const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUser.IDUSUA
-      prevCursor = prevCursorUser.IDUSUA
+      nextCursor = nextCursorUser.NOMUSU
+      prevCursor = prevCursorUser.NOMUSU
 
       if (dir === 'prev') {
         hasPrevUsers = false
@@ -71,10 +74,11 @@ export const mainPage = async (req, res) => {
     const cursor = {
       next: nextCursor,
       prev: prevCursor,
+      part,
     }
     const datos = {
       limit,
-      usuarios: dir === 'next' ? usuarios : usuarios.sort((a,b) => a.IDUSUA - b.IDUSUA),
+      usuarios: dir === 'next' ? usuarios : usuarios.sort((a,b) => a.NOMUSU > b.NOMUSU ? 1:-1),
       hasNextUsers,
       hasPrevUsers,
       cursor,
@@ -83,6 +87,7 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
+    console.log(error)
     if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
@@ -163,29 +168,85 @@ export const editPage = async (req, res) => {
 // proc
 export const search = async (req, res) => {
   const user = req.user
-  const usuario = {
-    IDUSUA: req.body.idusua,
-  }
-  const movimiento = {
-    USUMOV: user.id,
-    TIPMOV: tiposMovimiento.borrarUsuario,
+
+  let context = ''
+  let hasPrevUsers = false
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  const limit = req.query.limit ? req.query.limit : 10
+  const dir = req.query.dir ? req.query.dir : 'next'
+
+  if (cursor) {
+    hasPrevUsers = true
+    context = {
+      limit: limit + 1,
+      direction: dir,
+      cursor,
+      part: req.body.txtSearch,
+    }
+  } else {
+    hasPrevUsers = false
+    context = {
+      limit: limit + 1,
+      direction: 'next',
+      cursor: {
+        next: '',
+        prev: null
+      },
+      part: req.body.txtSearch
+    }
   }
 
   try {
-    await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/delete`, {
-      usuario,
-      movimiento,
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/search`, {
+      context,
     })
 
-    res.redirect('/admin/usuarios')
+    let usuarios = result.data.data
+    let hasNextUsers = usuarios.length === limit + 1
+    let nextCursor = null
+    let prevCursor = null
+
+    if (hasNextUsers) {
+      const nextCursorUser = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
+      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
+      nextCursor = nextCursorUser.NOMUSU
+      prevCursor = prevCursorUser.NOMUSU
+
+      usuarios.pop()
+    } else {
+      const nextCursorUser = dir === 'next' ? usuarios[usuarios.length - 1] : usuarios[0]
+      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
+      nextCursor = nextCursorUser.NOMUSU
+      prevCursor = prevCursorUser.NOMUSU
+
+      if (dir === 'prev') {
+        hasPrevUsers = false
+        hasNextUsers = true
+      }
+    }
+
+    const cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
+    const datos = {
+      limit,
+      usuarios: dir === 'next' ? usuarios : usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU)),
+      hasNextUsers,
+      hasPrevUsers,
+      cursor,
+      estadosUsuario,
+    }
+
+    res.render('admin/usuarios', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }

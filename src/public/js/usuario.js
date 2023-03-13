@@ -52,14 +52,7 @@ const sortTableByColumn = (table, column, asc = true) => {
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
 }
-const arrayFilter = (value) => {
-  const filtro = value.toUpperCase()
-  const trimmedData = orgList.filter(itm => Object.keys(itm).some(k => JSON.stringify(itm[k]).includes(filtro)))
-  state.querySet = trimmedData
-  state.page = 1
 
-  buildTable(state)
-}
 const buildTable = (state) => {
   const table = document.getElementById('table-body')
   const myList = state.querySet
