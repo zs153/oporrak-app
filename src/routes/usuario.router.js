@@ -8,6 +8,7 @@ import {
   cambio,
   olvido,
   perfil,
+  search,
 } from "../controllers/usuario.controller";
 
 const apiUsuarioRouter = express.Router();
@@ -15,6 +16,7 @@ const apiUsuarioRouter = express.Router();
 // usuarios
 apiUsuarioRouter.post("/usuario", usuario);
 apiUsuarioRouter.post("/usuarios", usuarios);
+apiUsuarioRouter.post("/usuarios/search", search);
 apiUsuarioRouter.post("/usuarios/insert", crear);
 apiUsuarioRouter.post("/usuarios/update", modificiar);
 apiUsuarioRouter.post("/usuarios/delete", borrar);

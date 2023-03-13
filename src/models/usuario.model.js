@@ -98,25 +98,97 @@ export const findAll = async (context) => {
   // bind
   let query = '';
   let bind = {
-    limit: context.limit
+    limit: context.limit,
+    part: context.part,
+  };
+
+  // if (context.direction === 'next') {
+  //   bind.IDUSUA = context.cursor.next;
+  //   query = `SELECT * FROM usuarios
+  //     WHERE idusua > :idusua
+  //     ORDER BY idusua ASC
+  //     FETCH NEXT :limit ROWS ONLY
+  //   `;
+  // } else {
+  //   bind.IDUSUA = context.cursor.prev;
+  //   query = `SELECT * FROM usuarios
+  //     WHERE idusua < :idusua
+  //     ORDER BY idusua DESC
+  //     FETCH NEXT :limit ROWS ONLY
+  //   `;
+  // }
+  if (context.direction === 'next') {
+    bind.NOMUSU = context.cursor.next === '' ? null : context.cursor.next;
+    query = `WITH datos AS (
+      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
+      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+      WHERE
+        uu.nomusu LIKE '%' || :part || '%' OR
+        oo.desofi LIKE '%' || :part || '%' OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE nomusu > :nomusu OR :nomusu IS NULL
+    ORDER BY nomusu ASC
+    FETCH NEXT :limit ROWS ONLY
+    `
+  } else {
+    bind.NOMUSU = context.cursor.prev === '' ? null : context.cursor.prev;
+    query = `WITH datos AS (
+      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
+      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+      WHERE
+        (uu.nomusu LIKE '%' || :part || '%') OR
+        (oo.desofi LIKE '%' || :part || '%') OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE nomusu < :nomusu OR :nomusu IS NULL
+    ORDER BY nomusu DESC
+    FETCH NEXT :limit ROWS ONLY
+    `
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
+};
+export const findPart = async (context) => {
+  // bind
+  let query = '';
+  let bind = {
+    limit: context.limit,
+    part: context.part
   };
 
   if (context.direction === 'next') {
-    bind.IDUSUA = context.cursor.next;
-    query = `SELECT * FROM usuarios
-      WHERE idusua > :idusua
-      ORDER BY idusua ASC
+    bind.NOMUSU = context.cursor.next;
+    query = `SELECT uu.* FROM usuarios uu
+      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+      WHERE (uu.nomusu LIKE '%' || :part || '%') OR
+      (oo.desofi LIKE '%' || :part || '%') AND
+      uu.nomusu > :nomusu
+      ORDER BY nomusu ASC
       FETCH NEXT :limit ROWS ONLY
-    `;
+    `
   } else {
-    bind.IDUSUA = context.cursor.prev;
-    query = `SELECT * FROM usuarios
-      WHERE idusua < :idusua
-      ORDER BY idusua DESC
+    bind.NOMUSU = context.cursor.prev;
+    query = `SELECT uu.* FROM usuarios uu
+      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+      WHERE (uu.nomusu LIKE '%' || :part || '%') OR
+      (oo.desofi LIKE '%' || :part || '%') AND
+      uu.nomusu < :nomusu
+      ORDER BY nomusu DESC
       FETCH NEXT :limit ROWS ONLY
-    `;
+    `
   }
 
+  console.log(query, bind)
   // proc
   const ret = await simpleExecute(query, bind)
 
