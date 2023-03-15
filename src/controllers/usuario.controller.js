@@ -14,12 +14,13 @@ export const mainPage = async (req, res) => {
   const user = req.user
   //const context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
 
-  let context = ''
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
   let hasPrevUsers = false
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
-  const limit = req.query.limit ? req.query.limit : 10
-  const dir = req.query.dir ? req.query.dir : 'next'
-  const part = req.query.part
+  let context = {}
 
   if (cursor) {
     hasPrevUsers = true
@@ -30,15 +31,14 @@ export const mainPage = async (req, res) => {
       part,
     }
   } else {
-    hasPrevUsers = false
     context = {
       limit: limit + 1,
-      direction: 'next',
+      direction: dir,
       cursor: {
         next: '',
-        prev: ''
+        prev: '',
       },
-      part: null
+      part,
     }
   }
 
@@ -46,12 +46,12 @@ export const mainPage = async (req, res) => {
     const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       context,
     })
-    
+
     let usuarios = result.data.data
     let hasNextUsers = usuarios.length === limit +1
     let nextCursor = null
     let prevCursor = null
-
+    
     if (hasNextUsers) {
       const nextCursorUser = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
       const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
@@ -60,34 +60,63 @@ export const mainPage = async (req, res) => {
 
       usuarios.pop()
     } else {
-      const nextCursorUser = dir === 'next' ? usuarios[usuarios.length - 1] : usuarios[0]
-      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUser.NOMUSU
-      prevCursor = prevCursorUser.NOMUSU
-
       if (dir === 'prev') {
+        context = {
+          limit: limit + 1,
+          direction: 'next',
+          cursor: {
+            next: '',
+            prev: ''
+          },
+          part,
+        }
+        
+        const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
+          context,
+        })
+        
+        usuarios = result.data.data
+        hasNextUsers = usuarios.length === limit + 1
+        
+        if (hasNextUsers) {
+          const nextCursorUser = usuarios[limit - 1]
+          const prevCursorUser = usuarios[0]
+          nextCursor = nextCursorUser.NOMUSU
+          prevCursor = prevCursorUser.NOMUSU
+          
+          usuarios.pop()
+        }
+        
         hasPrevUsers = false
-        hasNextUsers = true
+      } else {
+        if (cursor) {
+          const prevCursorUser = usuarios[0]
+          prevCursor = prevCursorUser.NOMUSU
+          nextCursor = ''
+          hasPrevUsers = true
+        } else {
+          hasPrevUsers = false
+        }
+        
+        hasNextUsers = false
       }
     }
 
-    const cursor = {
+    cursor = {
       next: nextCursor,
       prev: prevCursor,
-      part,
     }
     const datos = {
       limit,
       usuarios: dir === 'next' ? usuarios : usuarios.sort((a,b) => a.NOMUSU > b.NOMUSU ? 1:-1),
-      hasNextUsers,
       hasPrevUsers,
+      hasNextUsers,
       cursor,
       estadosUsuario,
     }
 
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
-    console.log(error)
     if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
@@ -166,91 +195,7 @@ export const editPage = async (req, res) => {
 }
 
 // proc
-export const search = async (req, res) => {
-  const user = req.user
 
-  let context = ''
-  let hasPrevUsers = false
-  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
-  const limit = req.query.limit ? req.query.limit : 10
-  const dir = req.query.dir ? req.query.dir : 'next'
-
-  if (cursor) {
-    hasPrevUsers = true
-    context = {
-      limit: limit + 1,
-      direction: dir,
-      cursor,
-      part: req.body.txtSearch,
-    }
-  } else {
-    hasPrevUsers = false
-    context = {
-      limit: limit + 1,
-      direction: 'next',
-      cursor: {
-        next: '',
-        prev: null
-      },
-      part: req.body.txtSearch
-    }
-  }
-
-  try {
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/search`, {
-      context,
-    })
-
-    let usuarios = result.data.data
-    let hasNextUsers = usuarios.length === limit + 1
-    let nextCursor = null
-    let prevCursor = null
-
-    if (hasNextUsers) {
-      const nextCursorUser = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
-      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUser.NOMUSU
-      prevCursor = prevCursorUser.NOMUSU
-
-      usuarios.pop()
-    } else {
-      const nextCursorUser = dir === 'next' ? usuarios[usuarios.length - 1] : usuarios[0]
-      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUser.NOMUSU
-      prevCursor = prevCursorUser.NOMUSU
-
-      if (dir === 'prev') {
-        hasPrevUsers = false
-        hasNextUsers = true
-      }
-    }
-
-    const cursor = {
-      next: nextCursor,
-      prev: prevCursor,
-    }
-    const datos = {
-      limit,
-      usuarios: dir === 'next' ? usuarios : usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU)),
-      hasNextUsers,
-      hasPrevUsers,
-      cursor,
-      estadosUsuario,
-    }
-
-    res.render('admin/usuarios', { user, datos })
-  } catch (error) {
-    if (error.response?.status === 400) {
-      res.render("admin/error400", {
-        alerts: [{ msg: error.response.data.msg }],
-      });
-    } else {
-      res.render("admin/error500", {
-        alerts: [{ msg: error }],
-      });
-    }
-  }
-}
 export const insert = async (req, res) => {
   const user = req.user
   const seed = Math.random().toString(36).substring(2, 10);

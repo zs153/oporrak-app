@@ -140,11 +140,11 @@ const createPages = () => {
   let str = "<ul>";
 
   if (hasPrevUsers) {
-    str += "<li class='page-item previous no'><a href='/admin/usuarios?cursor=" + JSON.stringify(cursor) + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
+    str += "<li class='page-item previous no'><a href='/admin/usuarios?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUserBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
   }
 
   if (hasNextUsers) {
-    str += "<li class='page-item next no'><a href='/admin/usuarios?cursor=" + JSON.stringify(cursor) + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
+    str += "<li class='page-item next no'><a href='/admin/usuarios?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUserBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
   }
   str += "</ul>";
 

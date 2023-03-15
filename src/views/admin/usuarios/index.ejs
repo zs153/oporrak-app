@@ -25,7 +25,7 @@
                   <h3 class="card-title">Usuarios</h3>
                   <div class="col-auto ms-auto">
                     <div class="d-flex">
-                      <form action="/admin/usuarios/search" method="POST">
+                      <form action="/admin/usuarios" method="GET">
                         <div class="input-icon me-3">
                           <span class="input-icon-addon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -36,8 +36,8 @@
                               <line x1="21" y1="21" x2="15" y2="15"></line>
                             </svg>
                           </span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="txtSearch"
-                              onkeyup="this.form.submit();" placeholder="Buscar..." aria-label="Buscar en usuarios">
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part"
+                            placeholder="Buscar..." aria-label="Buscar en usuarios">
                         </div>
                       </form>
                       <a href="/admin/usuarios/add" class="btn">
@@ -124,6 +124,13 @@
       'rows': 10,
     }
 
+    // events
+    const elemBuscar = document.getElementById('buscarUserBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5) // medio dia
+    }
+    elemBuscar.value = getCookie('filtro')
+    
     buildTable(state)
   </script>
 </body>
