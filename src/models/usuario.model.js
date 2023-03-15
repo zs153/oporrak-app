@@ -102,21 +102,6 @@ export const findAll = async (context) => {
     part: context.part,
   };
 
-  // if (context.direction === 'next') {
-  //   bind.IDUSUA = context.cursor.next;
-  //   query = `SELECT * FROM usuarios
-  //     WHERE idusua > :idusua
-  //     ORDER BY idusua ASC
-  //     FETCH NEXT :limit ROWS ONLY
-  //   `;
-  // } else {
-  //   bind.IDUSUA = context.cursor.prev;
-  //   query = `SELECT * FROM usuarios
-  //     WHERE idusua < :idusua
-  //     ORDER BY idusua DESC
-  //     FETCH NEXT :limit ROWS ONLY
-  //   `;
-  // }
   if (context.direction === 'next') {
     bind.NOMUSU = context.cursor.next === '' ? null : context.cursor.next;
     query = `WITH datos AS (
@@ -143,7 +128,7 @@ export const findAll = async (context) => {
         :part IS NULL
     )
     SELECT * FROM datos
-    WHERE nomusu < :nomusu OR :nomusu IS NULL
+    WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL
     ORDER BY nomusu DESC
     FETCH NEXT :limit ROWS ONLY
     `
@@ -167,24 +152,34 @@ export const findPart = async (context) => {
   };
 
   if (context.direction === 'next') {
-    bind.NOMUSU = context.cursor.next;
-    query = `SELECT uu.* FROM usuarios uu
+    bind.NOMUSU = context.cursor.next === '' ? null : context.cursor.next;
+    query = `WITH datos AS (
+      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
       INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-      WHERE (uu.nomusu LIKE '%' || :part || '%') OR
-      (oo.desofi LIKE '%' || :part || '%') AND
-      uu.nomusu > :nomusu
-      ORDER BY nomusu ASC
-      FETCH NEXT :limit ROWS ONLY
+      WHERE
+        uu.nomusu LIKE '%' || :part || '%' OR
+        oo.desofi LIKE '%' || :part || '%' OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE nomusu > :nomusu OR :nomusu IS NULL
+    ORDER BY nomusu ASC
+    FETCH NEXT :limit ROWS ONLY
     `
   } else {
-    bind.NOMUSU = context.cursor.prev;
-    query = `SELECT uu.* FROM usuarios uu
+    bind.NOMUSU = context.cursor.prev === '' ? null : context.cursor.prev;
+    query = `WITH datos AS (
+      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
       INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-      WHERE (uu.nomusu LIKE '%' || :part || '%') OR
-      (oo.desofi LIKE '%' || :part || '%') AND
-      uu.nomusu < :nomusu
-      ORDER BY nomusu DESC
-      FETCH NEXT :limit ROWS ONLY
+      WHERE
+        (uu.nomusu LIKE '%' || :part || '%') OR
+        (oo.desofi LIKE '%' || :part || '%') OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL
+    ORDER BY nomusu DESC
+    FETCH NEXT :limit ROWS ONLY
     `
   }
 
