@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/public")));
 
-// routes
+// admin routes
 app.use("/", mainRouter);
 app.use("/admin", adminRouter);
 app.use("/admin", calendarioRouter);
@@ -43,5 +43,8 @@ app.use("/admin", oficinaRouter);
 app.use("/admin", traspasoRouter);
 app.use("/admin", usuarioRouter);
 app.use("/admin", formacionRouter);
+
+// user routes
+app.use("/user", calendarioRouter);
 
 export default app;

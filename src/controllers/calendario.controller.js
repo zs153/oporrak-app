@@ -11,7 +11,7 @@ export const mainPage = async (req, res) => {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    let usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
+    let usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       context,
     })
     const datos = {

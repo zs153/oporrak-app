@@ -4,7 +4,6 @@ import {
   mainPage,
   update,
   calendario,
-  loadCalendario,
 } from "../controllers/calendario.controller";
 
 const calendarioRouter = express.Router();
