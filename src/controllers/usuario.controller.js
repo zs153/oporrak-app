@@ -114,7 +114,6 @@ export const mainPage = async (req, res) => {
       estadosUsuario,
     }
 
-    console.log(cursor)
     res.render('admin/usuarios', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
