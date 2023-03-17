@@ -24,7 +24,7 @@ apiEstadoRouter.post('/estados/delete', borrar)
 apiEstadoRouter.post('/estados/update', actualizar)
 
 // usuario
-apiEstadoRouter.post('/estados/usuarios', estadosUsuario)
+apiEstadoRouter.post('/estados/usuario', estadosUsuario)
 apiEstadoRouter.post('/estados/usuarios/fechas', estadosFechaUsuario)
 apiEstadoRouter.post('/estados/usuarios/perfiles', estadosFechaPerfil)
 apiEstadoRouter.post('/estados/oficinas/perfiles', estadosOficinaPerfil)
