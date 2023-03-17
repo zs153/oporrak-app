@@ -1,25 +1,108 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI, serverWEB, puertoWEB } from '../config/settings'
-import { tiposRol, tiposMovimiento, tiposEstado, arrTiposEstadoUsuario, arrTiposEstado, arrColoresEstado } from '../public/js/enumeraciones'
+import { serverAPI, puertoAPI } from '../config/settings'
+import { tiposRol, tiposMovimiento, estadosUsuario, tiposEstado, arrTiposEstadoUsuario, arrTiposEstado, arrColoresEstado } from '../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.id }
-  const context = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.id }
+  
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
+  
+  let hasPrevUsers = false
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
+
+  if (cursor) {
+    hasPrevUsers = true
+    context = {
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: '',
+        prev: '',
+      },
+      part,
+    }
+  }
 
   try {
-    let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
-    })
-    let usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       context,
     })
+
+    let usuarios = result.data.data
+    let hasNextUsers = usuarios.length === limit + 1
+    let nextCursor = ''
+    let prevCursor = ''
+
+    if (hasNextUsers) {
+      const nextCursorUser = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
+      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
+      nextCursor = nextCursorUser.NOMUSU
+      prevCursor = prevCursorUser.NOMUSU
+
+      usuarios.pop()
+    } else {
+      if (dir === 'prev') {
+        context = {
+          limit: limit + 1,
+          direction: 'next',
+          cursor: {
+            next: '',
+            prev: ''
+          },
+          part,
+        }
+
+        const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
+          context,
+        })
+
+        usuarios = result.data.data
+        hasNextUsers = usuarios.length === limit + 1
+
+        if (hasNextUsers) {
+          const nextCursorUser = usuarios[limit - 1]
+          const prevCursorUser = usuarios[0]
+          nextCursor = nextCursorUser.NOMUSU
+          prevCursor = prevCursorUser.NOMUSU
+
+          usuarios.pop()
+        }
+
+        hasPrevUsers = false
+      } else {
+        if (cursor) {
+          const prevCursorUser = usuarios[0]
+          prevCursor = prevCursorUser.NOMUSU
+          hasPrevUsers = true
+        } else {
+          hasPrevUsers = false
+        }
+
+        hasNextUsers = false
+      }
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
     const datos = {
-      oficina: parseInt(req.params.id),
-      oficinas: oficinas.data.data,
-      usuarios: usuarios.data.data,
-      serverWEB,
-      puertoWEB,
+      limit,
+      usuarios: dir === 'next' ? usuarios : usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1),
+      hasPrevUsers,
+      hasNextUsers,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
+      estadosUsuario,
     }
 
     res.render('admin/calendarios', { user, datos })
@@ -35,34 +118,31 @@ export const mainPage = async (req, res) => {
     }
   }
 }
-
-// proc
-export const calendario = async (req, res) => {
+export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
+  const context = {
+    IDUSUA: user.id,
+  }
   const estado = {
-    OFIDES: 0,
-    USUEST: req.body.idusua,
-    TIPEST: 0,
+    USUEST: user.id,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
   }
   const festivo = {
-    OFIFES: req.body.idofic,
+    OFIFES: user.oficina,
     DESDE: estado.DESDE,
     HASTA: estado.HASTA,
   }
-  const usuario = {
-    IDUSUA: req.body.idusua,
-    NOMUSU: req.body.nomusu,
-    OFIUSU: req.body.idofic,
-  }
 
   try {
+    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+      context,
+    })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       festivo,
     })
-    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
       estado,
     })
 
@@ -89,7 +169,83 @@ export const calendario = async (req, res) => {
       arrColoresEstado,
       tiposEstado,
       festivos: JSON.stringify(festivos.data.data),
-      usuario: JSON.stringify(usuario),
+      usuario: {
+        IDUSUA: usuario.data.data.IDUSUA,
+        NOMUSU: usuario.data.data.NOMUSU,
+        OFIUSU: usuario.data.data.OFIUSU,
+      },
+      dataSource: JSON.stringify(dataSource),
+    }
+
+    res.render(`user/calendario`, { user, datos })
+  } catch (error) {
+    if (error.response?.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error }],
+      });
+    }
+  }
+}
+export const calendariosPage = async (req, res) => {
+  const user = req.user
+  const currentYear = new Date().getFullYear()
+  const context = {
+    IDUSUA: req.params.id,
+  }
+  const estado = {
+    USUEST: req.params.id,
+    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
+  }
+  const festivo = {
+    OFIFES: user.oficina,
+    DESDE: estado.DESDE,
+    HASTA: estado.HASTA,
+  }
+
+  try {
+    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+      context,
+    })
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
+      festivo,
+    })
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
+      estado,
+    })
+
+    let dataSource = []
+    estados.data.data.map(itm => {
+      if (itm.TIPEST !== tiposEstado.traspasado.ID &&
+        itm.TIPEST !== tiposEstado.traspaso.ID) {
+        const rec = {
+          idesta: itm.IDESTA,
+          tipest: itm.TIPEST,
+          startDate: itm.STRFEC,
+          endDate: itm.STRFEC,
+          rangoH: `${arrColoresEstado[itm.TIPEST].DES} (${itm.DESHOR} a ${itm.HASHOR})`,
+          color: `${arrColoresEstado[itm.TIPEST].COLOR}`,
+          deshor: itm.DESHOR,
+          hashor: itm.HASHOR,
+        }
+        dataSource.push(rec)
+      }
+    })
+
+    const datos = {
+      arrTiposEstado: user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
+      arrColoresEstado,
+      tiposEstado,
+      festivos: JSON.stringify(festivos.data.data),
+      usuario: {
+        IDUSUA: usuario.data.data.IDUSUA,
+        NOMUSU: usuario.data.data.NOMUSU,
+        OFIUSU: usuario.data.data.OFIUSU,
+      },
       dataSource: JSON.stringify(dataSource),
     }
 
@@ -106,6 +262,8 @@ export const calendario = async (req, res) => {
     }
   }
 }
+
+// proc
 export const update = async (req, res) => {
   const user = req.user
   const usuario = JSON.parse(req.body.usuario)
@@ -155,7 +313,7 @@ export const update = async (req, res) => {
       });
     }
 
-    mainPage(req, res)
+    res.redirect("/admin/calendarios")
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -174,4 +332,10 @@ const dateISOToUTCString = (dateISO) => {
   const fecha = new Date(dateISO);
   const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
   return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
+}
+const convertNodeToCursor = (node) => {
+  return new Buffer.from(node, 'binary').toString('base64')
+}
+const convertCursorToNode = (cursor) => {
+  return new Buffer.from(cursor, 'base64').toString('binary')
 }

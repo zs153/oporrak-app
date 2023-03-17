@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Calendario</title>
+  <title>Usuarios</title>
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
@@ -14,72 +14,82 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
-    <div class="page-wrapper">
-      <div class="page-body">
-        <div class="container-xl">
-          <div class="row">
-            <div class="col-12">
-              <div class="card mt-1">
-                <form action="/admin/calendarios/calendario" method="POST">
-                  <input type="hidden" name="nomusu" id="nomusu" value="" />
-                  <div class="card-header">
-                    <h3 class="card-title">Calendario</h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="idofic" value="">
-                            <% datos.oficinas.map(element=> { %>
-                            <option value="<%- element.IDOFIC %>" <%- element.IDOFIC === datos.oficina ? "selected":"" %>>
-                              <%- element.DESOFI %>
-                            </option>
-                            <% }) %>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-8">
-                        <div class="mb-1">
-                          <div class="form-label">Usuario</div>
-                          <select class="form-select" id="cbousu" name="idusua" value="">
-                            <% datos.usuarios.map(element=> { %>
-                            <option value="<%- element.IDUSUA %>" <%- element.IDUSUA === user.id ? "selected" :"" %>>
-                              <%- element.NOMUSU %>
-                            </option>                            
-                            <% }) %>
-                          </select>
+      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+        <div class="page-wrapper">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Usuarios</h3>
+                      <div class="col-auto ms-auto">
+                        <div class="d-flex">
+                          <form action="/admin/calendarios" method="GET">
+                            <div class="input-icon me-3">
+                              <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                  stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <circle cx="10" cy="10" r="7"></circle>
+                                  <line x1="21" y1="21" x2="15" y2="15"></line>
+                                </svg>
+                              </span>
+                              <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part"
+                                placeholder="Buscar..." aria-label="Buscar en usuarios">
+                            </div>
+                          </form>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="card-footer text-end">
-                    <div class="d-flex">
-                      <button type="submit" id="btnVer" class="btn btn-success ms-auto">Ver calendario</button>
+                    <div class="card-body">
+                      <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                        <thead>
+                          <tr class="header">
+                            <th class="w-4"></th>
+                            <th>Nombre</th>
+                            <th>Oficina</th>
+                            <th class="w-5"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                      </table>
+                      <div id="pagination-wrapper" class="py-1"></div>
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <%- include('../../partials/footer') %>
+        <%- include('../../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
+  <script src="/js/usuarioAdmin.js"></script>
   <script>
-    // eventos form
-    document.getElementById('cboofi').addEventListener('change', function() {
-      const oficina = parseInt(this.value)
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
+    const estadosUsuario = <%- JSON.stringify(datos.estadosUsuario) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextUsers = <%- datos.hasNextUsers %>
+    const hasPrevUsers = <%- datos.hasPrevUsers %>
 
-      window.location.href = `http://<%- datos.serverWEB %>:<%- datos.puertoWEB %>/admin/calendarios/${oficina}`
-    });
-    document.getElementById('btnVer').addEventListener('click', () => {
-      document.getElementById('nomusu').value = document.getElementById('cbousu').options[document.getElementById('cbousu').selectedIndex].text
-    })
+      let state = {
+        'querySet': orgList,
+        'page': 1,
+        'rows': 10,
+      }
+
+    // events
+    const elemBuscar = document.getElementById('buscarUserBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5) // medio dia
+    }
+    elemBuscar.value = getCookie('filtro')
+
+    buildTable(state)
   </script>
 </body>
 

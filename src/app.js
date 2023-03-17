@@ -44,7 +44,4 @@ app.use("/admin", traspasoRouter);
 app.use("/admin", usuarioRouter);
 app.use("/admin", formacionRouter);
 
-// user routes
-app.use("/user", calendarioRouter);
-
 export default app;
