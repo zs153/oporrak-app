@@ -2,13 +2,42 @@ import axios from 'axios'
 import { serverAPI, puertoAPI } from '../config/settings'
 import { tiposRol, tiposMovimiento, estadosUsuario, tiposEstado, arrTiposEstadoUsuario, arrTiposEstado, arrColoresEstado } from '../public/js/enumeraciones'
 
-export const mainPage = async (req, res) => {
+export const userPage = async (req, res) => {
   const user = req.user
-  
+  const context = {
+    IDUSUA: user.id,
+  }
+
+  try {
+    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/stats`, {
+      context,
+    })
+
+    const datos = {
+      estadosUsuario,
+      usuario: usuario.data.data[0],
+    }
+
+    res.render(`admin/calendarios/user`, { user, datos })
+  } catch (error) {
+    if (error.response?.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error }],
+      });
+    }
+  }
+}
+export const adminPage = async (req, res) => {
+  const user = req.user
+
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
-  const part = req.query.part ? req.query.part.toUpperCase() : ''
-  
+  const part = req.query.part ? req.query.part.toUpperCase() : null
+
   let hasPrevUsers = false
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
   let context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
@@ -105,7 +134,7 @@ export const mainPage = async (req, res) => {
       estadosUsuario,
     }
 
-    res.render('admin/calendarios', { user, datos })
+    res.render('admin/calendarios/admin', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -121,31 +150,26 @@ export const mainPage = async (req, res) => {
 export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
-  const context = {
-    IDUSUA: user.id,
-  }
+  const usuario = JSON.parse(req.body.usuario)
   const estado = {
-    USUEST: user.id,
+    USUEST: usuario.IDUSUA,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
   }
   const festivo = {
-    OFIFES: user.oficina,
+    OFIFES: usuario.OFIUSU,
     DESDE: estado.DESDE,
     HASTA: estado.HASTA,
   }
 
   try {
-    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      context,
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
+      estado,
     })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       festivo,
     })
-    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
-      estado,
-    })
-
+    
     let dataSource = []
     estados.data.data.map(itm => {
       if (itm.TIPEST !== tiposEstado.traspasado.ID &&
@@ -169,87 +193,11 @@ export const calendarioPage = async (req, res) => {
       arrColoresEstado,
       tiposEstado,
       festivos: JSON.stringify(festivos.data.data),
-      usuario: {
-        IDUSUA: usuario.data.data.IDUSUA,
-        NOMUSU: usuario.data.data.NOMUSU,
-        OFIUSU: usuario.data.data.OFIUSU,
-      },
+      usuario,
       dataSource: JSON.stringify(dataSource),
     }
 
     res.render(`user/calendario`, { user, datos })
-  } catch (error) {
-    if (error.response?.status === 400) {
-      res.render("admin/error400", {
-        alerts: [{ msg: error.response.data.msg }],
-      });
-    } else {
-      res.render("admin/error500", {
-        alerts: [{ msg: error }],
-      });
-    }
-  }
-}
-export const calendariosPage = async (req, res) => {
-  const user = req.user
-  const currentYear = new Date().getFullYear()
-  const context = {
-    IDUSUA: req.params.id,
-  }
-  const estado = {
-    USUEST: req.params.id,
-    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-  }
-  const festivo = {
-    OFIFES: user.oficina,
-    DESDE: estado.DESDE,
-    HASTA: estado.HASTA,
-  }
-
-  try {
-    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      context,
-    })
-    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
-      festivo,
-    })
-    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
-      estado,
-    })
-
-    let dataSource = []
-    estados.data.data.map(itm => {
-      if (itm.TIPEST !== tiposEstado.traspasado.ID &&
-        itm.TIPEST !== tiposEstado.traspaso.ID) {
-        const rec = {
-          idesta: itm.IDESTA,
-          tipest: itm.TIPEST,
-          startDate: itm.STRFEC,
-          endDate: itm.STRFEC,
-          rangoH: `${arrColoresEstado[itm.TIPEST].DES} (${itm.DESHOR} a ${itm.HASHOR})`,
-          color: `${arrColoresEstado[itm.TIPEST].COLOR}`,
-          deshor: itm.DESHOR,
-          hashor: itm.HASHOR,
-        }
-        dataSource.push(rec)
-      }
-    })
-
-    const datos = {
-      arrTiposEstado: user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
-      arrColoresEstado,
-      tiposEstado,
-      festivos: JSON.stringify(festivos.data.data),
-      usuario: {
-        IDUSUA: usuario.data.data.IDUSUA,
-        NOMUSU: usuario.data.data.NOMUSU,
-        OFIUSU: usuario.data.data.OFIUSU,
-      },
-      dataSource: JSON.stringify(dataSource),
-    }
-
-    res.render(`admin/calendarios/calendario`, { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
