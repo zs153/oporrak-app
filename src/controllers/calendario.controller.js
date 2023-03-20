@@ -147,7 +147,7 @@ export const adminPage = async (req, res) => {
     }
   }
 }
-export const calendarioPage = async (req, res) => {
+export const calendarioUser = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
   const usuario = JSON.parse(req.body.usuario)
@@ -197,7 +197,70 @@ export const calendarioPage = async (req, res) => {
       dataSource: JSON.stringify(dataSource),
     }
 
-    res.render(`user/calendario`, { user, datos })
+    res.render(`admin/calendarios/calendarioUser`, { user, datos })
+  } catch (error) {
+    if (error.response?.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error }],
+      });
+    }
+  }
+}
+export const calendarioAdmin = async (req, res) => {
+  const user = req.user
+  const currentYear = new Date().getFullYear()
+  const usuario = JSON.parse(req.body.usuario)
+  const estado = {
+    USUEST: usuario.IDUSUA,
+    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
+  }
+  const festivo = {
+    OFIFES: usuario.OFIUSU,
+    DESDE: estado.DESDE,
+    HASTA: estado.HASTA,
+  }
+
+  try {
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
+      estado,
+    })
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
+      festivo,
+    })
+    
+    let dataSource = []
+    estados.data.data.map(itm => {
+      if (itm.TIPEST !== tiposEstado.traspasado.ID &&
+        itm.TIPEST !== tiposEstado.traspaso.ID) {
+        const rec = {
+          idesta: itm.IDESTA,
+          tipest: itm.TIPEST,
+          startDate: itm.STRFEC,
+          endDate: itm.STRFEC,
+          rangoH: `${arrColoresEstado[itm.TIPEST].DES} (${itm.DESHOR} a ${itm.HASHOR})`,
+          color: `${arrColoresEstado[itm.TIPEST].COLOR}`,
+          deshor: itm.DESHOR,
+          hashor: itm.HASHOR,
+        }
+        dataSource.push(rec)
+      }
+    })
+
+    const datos = {
+      arrTiposEstado: user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
+      arrColoresEstado,
+      tiposEstado,
+      festivos: JSON.stringify(festivos.data.data),
+      usuario,
+      dataSource: JSON.stringify(dataSource),
+    }
+
+    res.render(`admin/calendarios/calendarioAdmin`, { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -212,7 +275,69 @@ export const calendarioPage = async (req, res) => {
 }
 
 // proc
-export const update = async (req, res) => {
+export const updateUser = async (req, res) => {
+  const user = req.user
+  const usuario = JSON.parse(req.body.usuario)
+  const eventos = JSON.parse(req.body.eventos)
+  let estados = []
+
+  eventos.map(itm => {
+    if (itm.idesta < 0) {
+      // insertar
+      estados.push({
+        IDESTA: 0,
+        FECEST: itm.fecest,
+        USUEST: usuario.IDUSUA,
+        TIPEST: itm.tipest,
+        OFIEST: usuario.OFIUSU,
+        DESHOR: itm.deshor,
+        HASHOR: itm.hashor,
+      })
+    } else {
+      // borrar
+      estados.push({
+        IDESTA: itm.idesta,
+        FECEST: '',
+        USUEST: 0,
+        TIPEST: 0,
+        OFIEST: 0,
+        DESHOR: '',
+        HASHOR: '',
+      })
+    }
+  })
+
+  const context = {
+    ARREST: estados // importante!! los campos del array estados tienen que ir en mayusculas
+  }
+  const movimiento = {
+    USUMOV: user.id,
+    TIPMOV: tiposMovimiento.crearEstado,
+    TIPMOZ: tiposMovimiento.borrarEstado,
+  }
+
+  try {
+    if (estados.length !== 0) {
+      await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update`, {
+        context,
+        movimiento,
+      });
+    }
+
+    res.redirect("/admin/calendario")
+  } catch (error) {
+    if (error.response?.status === 400) {
+      res.render("admin/error400", {
+        alerts: [{ msg: error.response.data.msg }],
+      });
+    } else {
+      res.render("admin/error500", {
+        alerts: [{ msg: error }],
+      });      
+    }
+  }
+}
+export const updateAdmin = async (req, res) => {
   const user = req.user
   const usuario = JSON.parse(req.body.usuario)
   const eventos = JSON.parse(req.body.eventos)

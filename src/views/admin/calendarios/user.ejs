@@ -33,11 +33,11 @@
                           <th class="w-4"></th>
                           <th>Nombre</th>
                           <th>Oficina</th>
-                          <th>Vacas</th>
-                          <th>Horas</th>
-                          <th>Forma</th>
-                          <th>Conci</th>
-                          <th>Telef</th>
+                          <th class="w-5 text-end">Vacas</th>
+                          <th class="w-5 text-end">Horas</th>
+                          <th class="w-5 text-end">Forma</th>
+                          <th class="w-5 text-end">Conci</th>
+                          <th class="w-5 text-end">Telef</th>
                         </tr>
                       </thead>
                       <tbody id="table-body">
@@ -63,9 +63,6 @@
                                 <div class="font-weight-medium"><%- datos.usuario.NOMUSU %></div>
                               </div>
                             </div>
-                            <div class="text-muted">
-                              <small class="text-reset">Teléfono: <%- datos.usuario.TELUSU %></small>
-                            </div>
                           </td>
                           <td>
                             <div class="d-flex align-items-center">
@@ -74,38 +71,38 @@
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td class="w-5">
                             <div class="d-flex align-items-center">
                               <div class="flex-fill">
-                                <div class="font-weight-medium"><%- datos.usuario.VACAS %></div>
+                                <div class="font-weight-medium text-end"><%- datos.usuario.VACAS %></div>
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td class="w-5">
                             <div class="d-flex align-items-center">
                               <div class="flex-fill">
-                                <div class="font-weight-medium"><%- datos.usuario.HORAS %></div>
+                                <div class="font-weight-medium text-end"><%- datos.usuario.HORAS %></div>
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td class="w-5">
                             <div class="d-flex align-items-center">
                               <div class="flex-fill">
-                                <div class="font-weight-medium"><%- datos.usuario.FORMA %></div>
+                                <div class="font-weight-medium text-end"><%- datos.usuario.FORMA %></div>
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td class="w-5">
                             <div class="d-flex align-items-center">
                               <div class="flex-fill">
-                                <div class="font-weight-medium"><%- datos.usuario.CONCI %></div>
+                                <div class="font-weight-medium text-end"><%- datos.usuario.CONCI %></div>
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td class="w-5">
                             <div class="d-flex align-items-center">
                               <div class="flex-fill">
-                                <div class="font-weight-medium"><%- datos.usuario.TELEF %></div>
+                                <div class="font-weight-medium text-end"><%- datos.usuario.TELEF %></div>
                               </div>
                             </div>
                           </td>

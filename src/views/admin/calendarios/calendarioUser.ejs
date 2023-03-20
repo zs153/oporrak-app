@@ -37,15 +37,15 @@
 
 <body class="antialiased">
   <div class="wrapper">
-    <%- include('../partials/header') %>
-    <%- include('../partials/navbar', {opcion: 'CALENDARIO' }) %>
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form action="/admin/calendarios/update" method="POST" onclick="return confirm();">
+                <form action="/admin/calendarios/updateUser" method="POST" onclick="return confirm();">
                   <input type="hidden" name="usuario" id="usuario" value="<%= JSON.stringify(datos.usuario) %>" />
                   <input type="hidden" name="eventos" id="eventos" value="" />
                   <div class="card-header p-2">
@@ -94,7 +94,7 @@
                   </div>
                   <div class="card-footer p-2">
                     <div class="d-flex">
-                      <a href="/admin/calendarios" class="btn btn-primary">Cancelar</a>
+                      <a href="/admin/calendarios/calendarioUser" class="btn btn-primary">Cancelar</a>
                       <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24"
                           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -112,7 +112,7 @@
         </div>
       </div>
     </div>
-    <%- include('../partials/footer') %>
+    <%- include('../../partials/footer') %>
   </div>
   <div class="modal modal-blur fade" id="modal-form" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="container-xl">

@@ -3,8 +3,10 @@ import authRoutes from "../middleware/auth";
 import {
   userPage,
   adminPage,
-  update,
-  calendarioPage,
+  calendarioUser,
+  updateUser,
+  calendarioAdmin,
+  updateAdmin,
 } from "../controllers/calendario.controller";
 
 const calendarioRouter = express.Router();
@@ -12,9 +14,11 @@ const calendarioRouter = express.Router();
 // paginas
 calendarioRouter.get("/calendario", authRoutes, userPage);
 calendarioRouter.get("/calendarios", authRoutes, adminPage);
-calendarioRouter.post("/calendarios/calendario", authRoutes, calendarioPage);
+calendarioRouter.post("/calendarios/calendario", authRoutes, calendarioUser);
+calendarioRouter.post("/calendarios/calendarios", authRoutes, calendarioAdmin);
 
 // proc
-calendarioRouter.post("/calendarios/update", authRoutes, update);
+calendarioRouter.post("/calendarios/updateUser", authRoutes, updateUser);
+calendarioRouter.post("/calendarios/updateAdmin", authRoutes, updateAdmin);
 
 export default calendarioRouter;
