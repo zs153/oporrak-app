@@ -10,26 +10,28 @@ const baseQuery = `SELECT
 const estadosSql = `WITH datos AS (
   SELECT uu.idusua,
     SUM(CASE WHEN ee.tipest = 2 THEN 1 ELSE 0 END) "VACAS",
-    SUM(CASE WHEN ee.tipest = 8 THEN 1 ELSE 0 END) "HORAS",
-    SUM(CASE WHEN ee.tipest = 5 THEN 1 ELSE 0 END) "FORMA",
-    SUM(CASE WHEN ee.tipest = 6 THEN 1 ELSE 0 END) "CONCI",
-    SUM(CASE WHEN ee.tipest = 9 THEN 1 ELSE 0 END) "TELEF"
+    SUM(CASE WHEN ee.tipest = 5 THEN EXTRACT(DAY FROM (hashor-deshor)*24*60) ELSE 0 END) "F",
+    SUM(CASE WHEN ee.tipest = 6 THEN EXTRACT(DAY FROM (hashor-deshor)*24*60) ELSE 0 END) "C",
+    SUM(CASE WHEN ee.tipest = 8 THEN EXTRACT(DAY FROM (hashor-deshor)*24*60) ELSE 0 END) "H",
+    SUM(CASE WHEN ee.tipest = 9 THEN EXTRACT(DAY FROM (hashor-deshor)*24*60) ELSE 0 END) "T"
   FROM usuarios uu
   LEFT JOIN estados ee ON ee.usuest = uu.idusua
   WHERE uu.idusua = :idusua
   GROUP BY uu.idusua
 )
 SELECT 
-    uu.idusua,
-    uu.nomusu,
-    uu.userid,
-    uu.telusu,
-    dd.vacas,
-    dd.horas,
-    dd.forma,
-    dd.conci,
-    dd.telef,
-    oo.desofi
+  uu.idusua,
+  uu.nomusu,
+  uu.userid,
+  uu.ofiusu,
+  uu.telusu,
+  uu.stausu,
+  dd.vacas,
+  TO_CHAR(TRUNC(dd.f/60), 'FM00') || ':' || TO_CHAR(mod(dd.f, 60), 'FM00') "FORMA",
+  TO_CHAR(TRUNC(dd.c/60), 'FM00') || ':' || TO_CHAR(mod(dd.c, 60), 'FM00') "CONCI",
+  TO_CHAR(TRUNC(dd.h/60), 'FM00') || ':' || TO_CHAR(mod(dd.h, 60), 'FM00') "HORAS",
+  TO_CHAR(TRUNC(dd.t/60), 'FM00') || ':' || TO_CHAR(mod(dd.t, 60), 'FM00') "TELEF",
+  oo.desofi
 FROM datos dd
 INNER JOIN usuarios uu ON uu.idusua = dd.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
