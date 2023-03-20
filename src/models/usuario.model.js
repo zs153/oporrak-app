@@ -7,6 +7,33 @@ const baseQuery = `SELECT
   FROM usuarios uu
   INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 `;
+const estadosSql = `WITH datos AS (
+  SELECT uu.idusua,
+    SUM(CASE WHEN ee.tipest = 2 THEN 1 ELSE 0 END) "VACAS",
+    SUM(CASE WHEN ee.tipest = 8 THEN 1 ELSE 0 END) "HORAS",
+    SUM(CASE WHEN ee.tipest = 5 THEN 1 ELSE 0 END) "FORMA",
+    SUM(CASE WHEN ee.tipest = 6 THEN 1 ELSE 0 END) "CONCI",
+    SUM(CASE WHEN ee.tipest = 9 THEN 1 ELSE 0 END) "TELEF"
+  FROM usuarios uu
+  LEFT JOIN estados ee ON ee.usuest = uu.idusua
+  WHERE uu.idusua = :idusua
+  GROUP BY uu.idusua
+)
+SELECT 
+    uu.idusua,
+    uu.nomusu,
+    uu.userid,
+    uu.telusu,
+    dd.vacas,
+    dd.horas,
+    dd.forma,
+    dd.conci,
+    dd.telef,
+    oo.desofi
+FROM datos dd
+INNER JOIN usuarios uu ON uu.idusua = dd.idusua
+INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+`
 const insertSql = `BEGIN OPORRAK_PKG.INSERTUSUARIO(
     :nomusu,
     :ofiusu,
@@ -143,47 +170,13 @@ export const findAll = async (context) => {
     return ({ stat: null, data: null })
   }
 };
-export const findPart = async (context) => {
+export const findEstados = async (context) => {
   // bind
-  let query = '';
+  let query = estadosSql
   let bind = {
-    limit: context.limit,
-    part: context.part
+    idusua: context.IDUSUA,
   };
 
-  if (context.direction === 'next') {
-    bind.NOMUSU = context.cursor.next === '' ? null : context.cursor.next;
-    query = `WITH datos AS (
-      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
-      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-      WHERE
-        uu.nomusu LIKE '%' || :part || '%' OR
-        oo.desofi LIKE '%' || :part || '%' OR
-        :part IS NULL
-    )
-    SELECT * FROM datos
-    WHERE nomusu > :nomusu OR :nomusu IS NULL
-    ORDER BY nomusu ASC
-    FETCH NEXT :limit ROWS ONLY
-    `
-  } else {
-    bind.NOMUSU = context.cursor.prev === '' ? null : context.cursor.prev;
-    query = `WITH datos AS (
-      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
-      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-      WHERE
-        (uu.nomusu LIKE '%' || :part || '%') OR
-        (oo.desofi LIKE '%' || :part || '%') OR
-        :part IS NULL
-    )
-    SELECT * FROM datos
-    WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL
-    ORDER BY nomusu DESC
-    FETCH NEXT :limit ROWS ONLY
-    `
-  }
-
-  console.log(query, bind)
   // proc
   const ret = await simpleExecute(query, bind)
 
