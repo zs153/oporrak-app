@@ -213,22 +213,27 @@ export const calendarioUser = async (req, res) => {
 export const calendarioAdmin = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
-  const usuario = JSON.parse(req.body.usuario)
-  const estado = {
-    USUEST: usuario.IDUSUA,
-    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-  }
-  const festivo = {
-    OFIFES: usuario.OFIUSU,
-    DESDE: estado.DESDE,
-    HASTA: estado.HASTA,
+  const context = {
+    IDUSUA: req.query.id,
   }
 
   try {
+    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
+      context,
+    })
+    const estado = {
+      USUEST: usuario.data.data.IDUSUA,
+      DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+      HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
+    }
     const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
       estado,
     })
+    const festivo = {
+      OFIFES: usuario.data.data.OFIUSU,
+      DESDE: estado.DESDE,
+      HASTA: estado.HASTA,
+    }
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       festivo,
     })
@@ -256,7 +261,7 @@ export const calendarioAdmin = async (req, res) => {
       arrColoresEstado,
       tiposEstado,
       festivos: JSON.stringify(festivos.data.data),
-      usuario,
+      usuario: usuario.data.data,
       dataSource: JSON.stringify(dataSource),
     }
 

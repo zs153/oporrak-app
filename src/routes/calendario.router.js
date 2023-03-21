@@ -14,10 +14,10 @@ const calendarioRouter = express.Router();
 // paginas
 calendarioRouter.get("/calendario", authRoutes, userPage);
 calendarioRouter.get("/calendarios", authRoutes, adminPage);
-calendarioRouter.post("/calendarios/calendario", authRoutes, calendarioUser);
-calendarioRouter.post("/calendarios/calendarios", authRoutes, calendarioAdmin);
+calendarioRouter.get("/calendarios/calendarios", authRoutes, calendarioAdmin);
 
 // proc
+calendarioRouter.post("/calendarios/calendario", authRoutes, calendarioUser);
 calendarioRouter.post("/calendarios/updateUser", authRoutes, updateUser);
 calendarioRouter.post("/calendarios/updateAdmin", authRoutes, updateAdmin);
 
