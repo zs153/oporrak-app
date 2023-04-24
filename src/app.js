@@ -5,6 +5,9 @@ import path from 'path'
 
 // import rutas
 import adminRouter from "./routes/admin.router";
+// user
+import userRouter from "./routes/user.router";
+
 import calendarioRouter from "./routes/calendario.router";
 import cursoRouter from "./routes/curso.router";
 import estadoRouter from "./routes/estado.router";
@@ -43,5 +46,8 @@ app.use("/admin", oficinaRouter);
 app.use("/admin", traspasoRouter);
 app.use("/admin", usuarioRouter);
 app.use("/admin", formacionRouter);
+
+// user routes
+app.use("/user", userRouter);
 
 export default app;
