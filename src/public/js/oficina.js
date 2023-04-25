@@ -52,25 +52,6 @@ const sortTableByColumn = (table, column, asc = true) => {
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
 }
-const arrayFilter = (value) => {
-  const filtro = value.toUpperCase()
-  const trimmedData = orgList.filter(itm => Object.keys(itm).some(k => JSON.stringify(itm[k]).includes(filtro)))
-  state.querySet = trimmedData
-  state.page = 1
-
-  buildTable(state)
-}
-const pagination = (querySet, page, rows) => {
-  const trimStart = (page - 1) * rows
-  const trimEnd = trimStart + rows
-  const trimmedData = querySet.slice(trimStart, trimEnd)
-  const pages = Math.ceil(querySet.length / rows);
-
-  return {
-    'querySet': trimmedData,
-    'pages': pages,
-  }
-}
 const buildTable = (state) => {
   const table = document.getElementById('table-body')
   const data = pagination(state.querySet, state.page, state.rows)
@@ -133,73 +114,19 @@ const buildTable = (state) => {
     table.appendChild(row)
   })
 
-  createPagination(data.pages, state.page)
+  createPages()
 }
-const createPagination = (pages, page) => {
-  let str = `<ul>`;
-  let active;
-  let pageCutLow = page - 1;
-  let pageCutHigh = page + 1;
+const createPages = () => {
+  let str = "<ul>";
 
-  if (pages === 1) {
-    str += `<li class="page-item disabled"><a>Pág</a></li>`;
+  if (hasPrevUsers) {
+    str += "<li class='page-item previous no'><a href='/admin/oficinas?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarOficinaBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
   }
 
-  if (page > 1) {
-    str += `<li class="page-item previous no"><a onclick="onclickPage(${pages}, ${page - 1})">&#9664</a></li>`;
+  if (hasNextUsers) {
+    str += "<li class='page-item next no'><a href='/admin/oficinas?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarOficinaBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
   }
-
-  if (pages < 6) {
-    for (let p = 1; p <= pages; p++) {
-      active = page === p ? "active" : "no";
-      str += `<li class="${active}"><a onclick="onclickPage(${pages}, ${p})">${p}</a></li>`;
-    }
-  } else {
-    if (page > 2) {
-      str += `<li class="no page-item"><a onclick="onclickPage(${pages}, 1)">1</a></li>`;
-      if (page > 3) {
-        str += `<li class="out-of-range"><i>...</i></li>`;
-      }
-    }
-
-    if (page === 1) {
-      pageCutHigh += 2;
-    } else if (page === 2) {
-      pageCutHigh += 1;
-    }
-    if (page === pages) {
-      pageCutLow -= 2;
-    } else if (page === pages - 1) {
-      pageCutLow -= 1;
-    }
-    for (let p = pageCutLow; p <= pageCutHigh; p++) {
-      if (p === 0) {
-        p += 1;
-      }
-      if (p > pages) {
-        continue
-      }
-      active = page === p ? "active" : "no";
-      str += `<li class="${active}"><a onclick="onclickPage(${pages}, ${p})">${p}</a></li>`;
-    }
-
-    if (page < pages - 1) {
-      if (page < pages - 2) {
-        str += `<li class="out-of-range"><i>...</i></li>`;
-      }
-      str += `<li class="page-item no"><a onclick="onclickPage(${pages}, ${pages})">${pages}</a></li>`;
-    }
-  }
-
-  if (page < pages) {
-    str += `<li class="page-item next no"><a onclick="onclickPage(${pages}, ${page + 1})">&#9654</a></li>`;
-  }
-  str += `</ul>`;
+  str += "</ul>";
 
   document.getElementById('pagination-wrapper').innerHTML = str;
-}
-const onclickPage = (pages, page) => {
-  createPagination(pages, page)
-  state.page = page
-  buildTable(state)
 }

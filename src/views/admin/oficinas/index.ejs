@@ -104,12 +104,23 @@
     <script src="/js/oficina.js"></script>
     <script>
       const orgList = <%- JSON.stringify(datos.oficinas) %>
+      const cursor = <%- JSON.stringify(datos.cursor) %>
+      const hasNextUsers = <%- datos.hasNextUsers %>
+      const hasPrevUsers = <%- datos.hasPrevUsers %>
+
       let state = {
         'querySet': orgList,
         'page': 1,
         'rows': 10,
       }
 
+      // events
+      const elemBuscar = document.getElementById('buscarOficinaBox');
+      elemBuscar.onchange = (event) => {
+        setCookie('filtro', event.target.value, .5) // medio dia
+      }
+      elemBuscar.value = getCookie('filtro')
+      
       buildTable(state)
     </script>
   </body>

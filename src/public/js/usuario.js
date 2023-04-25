@@ -52,7 +52,6 @@ const sortTableByColumn = (table, column, asc = true) => {
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
 }
-
 const buildTable = (state) => {
   const table = document.getElementById('table-body')
   const myList = state.querySet
