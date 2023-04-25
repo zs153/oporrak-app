@@ -73,7 +73,7 @@ export const calendarioPage = async (req, res) => {
     })
 
     const datos = {
-      arrTiposEstado: user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
+      arrTiposEstado: arrTiposEstadoUsuario,
       arrColoresEstado,
       tiposEstado,
       festivos: JSON.stringify(festivos.data.data),

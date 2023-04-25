@@ -38,7 +38,7 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -401,7 +401,7 @@
       document.getElementById('btnEventCancel').click()
     }
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
-    const festivos = <%- datos.festivos %>
+    const festivos = <%- JSON.stringify(datos.festivos) %>
 
     let eventos = []
     let dataSource = <%- datos.dataSource %>
@@ -435,10 +435,12 @@
         }
       },
       customDayRenderer: function (e, date) {
-        const fecha = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)
+        const fecha = dateISOToUTCString(date)
+
         if (e.parentElement.classList.contains('festivo')) {
           e.parentElement.classList.remove('festivo')
         }
+        
         if (festivos.indexOf(fecha) !== -1) {
           e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
           e.parentElement.classList.add('festivo')

@@ -33,7 +33,7 @@ adminRouter.get("/traspasos/:idofic", verifyTokenAndAdmin, traspaso.mainPage);
 adminRouter.post("/traspasos/calendario", verifyTokenAndAdmin, traspaso.calendarioPage);
 
 // cursos
-// se sacan del admin router y se direccionan aparte
+// se sacan del admin router y se direccionan en curso router
 
 // calendario
 adminRouter.get("/calendarios", verifyTokenAndAdmin, calendario.mainPage);

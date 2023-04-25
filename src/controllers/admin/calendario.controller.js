@@ -105,7 +105,7 @@ export const mainPage = async (req, res) => {
       estadosUsuario,
     }
 
-    res.render('admin/calendarios/admin', { user, datos })
+    res.render('admin/calendarios', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -124,7 +124,7 @@ export const calendarioPage = async (req, res) => {
   const context = {
     IDUSUA: req.query.id,
   }
-
+  
   try {
     const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       context,
@@ -165,16 +165,16 @@ export const calendarioPage = async (req, res) => {
     })
 
     const datos = {
-      arrTiposEstado: user.rol === tiposRol.usuario ? arrTiposEstadoUsuario : arrTiposEstado,
+      arrTiposEstado,
       arrColoresEstado,
-      tiposEstado,  
+      tiposEstado,
       estadosUsuario,
       festivos: JSON.stringify(festivos.data.data),
       usuario: usuario.data.data,
       dataSource: JSON.stringify(dataSource),
     }
 
-    res.render(`admin/calendarios`, { user, datos })
+    res.render(`admin/calendarios/calendario`, { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {

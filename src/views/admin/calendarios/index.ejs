@@ -14,118 +14,81 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-    <div class="page-wrapper">
-      <div class="page-body">
-        <div class="container-xl">
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <form action="/admin/calendarios/calendario" method="POST" onsubmit="return validate();">
-                  <input type="hidden" name="usuario" value="<%= JSON.stringify(datos.usuario) %>">
-                  <div class="card-header">
-                    <h3 class="card-title">Usuarios</h3>
-                  </div>
-                  <div class="card-body">
-                    <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
-                      <thead>
-                        <tr class="header">
-                          <th class="w-4"></th>
-                          <th>Nombre</th>
-                          <th>Oficina</th>
-                          <th class="w-5 text-end">Vacas</th>
-                          <th class="w-5 text-end">Horas</th>
-                          <th class="w-5 text-end">Forma</th>
-                          <th class="w-5 text-end">Conci</th>
-                          <th class="w-5 text-end">Telef</th>
-                        </tr>
-                      </thead>
-                      <tbody id="table-body">
-                        <tr>
-                          <td class="w-4">
-                            <% if (datos.usuario.STAUSU === datos.estadosUsuario.activo) { %>
-                              <div class="align-items-center">
-                                <span class="avatar avatar-rounded bg-green-lt">
-                                  <h6><%- datos.usuario.USERID.slice(0,5) %></h6>
-                                </span>
-                              </div>
-                            <% } else { %>
-                              <div class="align-items-center">
-                                <span class="avatar avatar-rounded bg-red-lt">
-                                  <h6><%- datos.usuario.USERID.slice(0,5) %></h6>
-                                </span>
-                              </div>
-                            <% } %>
-                          </td>
-                          <td>
-                            <div class="d-flex align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- datos.usuario.NOMUSU %></div>
-                              </div>
+      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+        <div class="page-wrapper">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Usuarios</h3>
+                      <div class="col-auto ms-auto">
+                        <div class="d-flex">
+                          <form action="/admin/calendarios" method="GET">
+                            <div class="input-icon me-3">
+                              <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                  stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <circle cx="10" cy="10" r="7"></circle>
+                                  <line x1="21" y1="21" x2="15" y2="15"></line>
+                                </svg>
+                              </span>
+                              <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part"
+                                placeholder="Buscar..." aria-label="Buscar en usuarios">
                             </div>
-                          </td>
-                          <td>
-                            <div class="d-flex align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium"><%- datos.usuario.DESOFI %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-5">
-                            <div class="d-flex align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium text-end"><%- datos.usuario.VACAS %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-5">
-                            <div class="d-flex align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium text-end"><%- datos.usuario.HORAS %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-5">
-                            <div class="d-flex align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium text-end"><%- datos.usuario.FORMA %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-5">
-                            <div class="d-flex align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium text-end"><%- datos.usuario.CONCI %></div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="w-5">
-                            <div class="d-flex align-items-center">
-                              <div class="flex-fill">
-                                <div class="font-weight-medium text-end"><%- datos.usuario.TELEF %></div>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="card-footer text-end">
-                    <div class="d-flex">
-                      <button type="submit" class="btn btn-primary ms-auto">Ver Calendario</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                        <thead>
+                          <tr class="header">
+                            <th class="w-4"></th>
+                            <th>Nombre</th>
+                            <th>Oficina</th>
+                            <th class="w-5"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                      </table>
+                      <div id="pagination-wrapper" class="py-1"></div>
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <%- include('../../partials/footer') %>
+        <%- include('../../partials/footer') %>
   </div>
-      
+
   <script src="/js/ayuda.min.js"></script>
+  <script src="/js/usuarioAdmin.js"></script>
+  <script>
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
+    const estadosUsuario = <%- JSON.stringify(datos.estadosUsuario) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextUsers = <%- datos.hasNextUsers %>
+    const hasPrevUsers = <%- datos.hasPrevUsers %>
+    let state = {
+      'querySet': orgList,
+      'page': 1,
+      'rows': 10,
+    }
+
+    // events
+    const elemBuscar = document.getElementById('buscarUserBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5) // medio dia
+    }
+    elemBuscar.value = getCookie('filtro')
+    buildTable(state)
+  </script>
 </body>
 
 </html>
