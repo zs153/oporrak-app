@@ -7,8 +7,8 @@ import {
   estadosUsuario,
   tiposMovimiento,
   tiposRol,
-} from '../public/js/enumeraciones'
-import { serverAPI, puertoAPI, secreto } from '../config/settings'
+} from '../../public/js/enumeraciones'
+import { serverAPI, puertoAPI, secreto } from '../../config/settings'
 
 export const mainPage = async (req, res) => {
   const user = req.user

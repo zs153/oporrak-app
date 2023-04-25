@@ -1,6 +1,6 @@
 import express from 'express'
-import authRoutes from "../middleware/auth";
-import { matriculasPage, cursosPage, quieroMatricularme } from '../controllers/formacion.controller';
+import authRoutes from "../../middleware/auth";
+import { matriculasPage, cursosPage, quieroMatricularme } from '../../controllers/user/formacion.controller';
 
 const formacionRouter = express.Router()
 

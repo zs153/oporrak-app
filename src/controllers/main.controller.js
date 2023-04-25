@@ -1,4 +1,4 @@
-import { puertoAPI, serverAPI, serverWEB, puertoWEB, serverAUTH, puertoAUTH } from '../config/settings'
+import { serverWEB, puertoWEB, serverAUTH, puertoAUTH } from '../config/settings'
 
 export const mainPage = async (req, res) => {
   const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
@@ -13,18 +13,4 @@ export const cleanPage = async (req, res) => {
   }
 
   res.render('clean', { user, datos })
-}
-export const logoutPage = async (req, res) => {
-  const options = {
-    path: "/",
-    sameSite: true,
-    maxAge: 1,
-    httpOnly: true,
-  };
-
-  res.clearCookie("x-access_token");
-  res.cookie("auth", undefined, options);
-  res.cookie("verPan", undefined, options);
-
-  res.redirect('/')
 }

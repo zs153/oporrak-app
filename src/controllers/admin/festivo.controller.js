@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { puertoAPI, serverAPI } from '../config/settings'
-import { tiposEstado, tiposMovimiento } from '../public/js/enumeraciones'
+import { puertoAPI, serverAPI } from '../../config/settings'
+import { tiposEstado, tiposMovimiento } from '../../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
@@ -27,9 +27,7 @@ export const mainPage = async (req, res) => {
     }
   }
 }
-
-// proc
-export const calendario = async (req, res) => {
+export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
   const festivo = {
@@ -47,7 +45,7 @@ export const calendario = async (req, res) => {
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
       festivo,
     })
-  
+
     const dataSource = festivos.data.data.map(itm => ({
       idfest: itm.IDFEST,
       fecfes: itm.FECFES,
@@ -76,6 +74,8 @@ export const calendario = async (req, res) => {
     }
   }
 }
+
+// proc
 export const update = async (req, res) => {
   const user = req.user
   const eventos = JSON.parse(req.body.eventos)

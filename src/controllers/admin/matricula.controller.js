@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI } from "../config/settings";
-import { tiposRol, arrEstadosMatricula, tiposMovimiento } from '../public/js/enumeraciones'
+import { serverAPI, puertoAPI } from "../../config/settings";
+import { arrEstadosMatricula, tiposMovimiento } from '../../public/js/enumeraciones'
 
 // page matriculas
 export const mainPage = async (req, res) => {

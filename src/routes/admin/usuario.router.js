@@ -1,5 +1,5 @@
 import express from 'express'
-import { verifyTokenAndResp } from "../middleware/auth";
+import { verifyTokenAndResp } from "../../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -7,7 +7,7 @@ import {
   insert,
   update,
   remove,
-} from '../controllers/usuario.controller'
+} from '../../controllers/admin/usuario.controller'
 
 const usuarioRouter = express.Router()
 

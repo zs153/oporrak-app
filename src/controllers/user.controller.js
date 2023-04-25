@@ -56,20 +56,6 @@ export const mainPage = async (req, res) => {
     })
   }
 }
-export const logoutPage = async (req, res) => {
-  const options = {
-    path: "/",
-    sameSite: true,
-    maxAge: 1,
-    httpOnly: true,
-  };
-
-  res.clearCookie("x-access_token");
-  res.cookie("auth", undefined, options);
-  res.cookie("verPan", undefined, options);
-
-  res.redirect('/')
-}
 export const perfilPage = async (req, res) => {
   const user = req.user
   const context = {
@@ -92,6 +78,20 @@ export const perfilPage = async (req, res) => {
       alerts: [{ msg }],
     })
   }
+}
+export const logoutPage = async (req, res) => {
+  const options = {
+    path: "/",
+    sameSite: true,
+    maxAge: 1,
+    httpOnly: true,
+  };
+
+  res.clearCookie("x-access_token");
+  res.cookie("auth", undefined, options);
+  res.cookie("verPan", undefined, options);
+
+  res.redirect('/')
 }
 
 // proc

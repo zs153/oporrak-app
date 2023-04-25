@@ -18,13 +18,13 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/cursos', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }

@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI } from "../config/settings";
-import { estadosMatricula, tiposMovimiento } from '../public/js/enumeraciones'
+import { serverAPI, puertoAPI } from "../../config/settings";
+import { estadosMatricula, tiposMovimiento } from '../../public/js/enumeraciones'
 
 export const matriculasPage = async (req, res) => {
   const user = req.user

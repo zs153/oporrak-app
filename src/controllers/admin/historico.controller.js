@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { scrypt } from 'crypto'
-import { serverAPI, puertoAPI, secreto } from '../config/settings'
+import { serverAPI, puertoAPI, secreto } from '../../config/settings'
 import {
   estadosUsuario,
   tiposMovimiento,
   tiposRol,
-} from '../public/js/enumeraciones'
+} from '../../public/js/enumeraciones'
 
 // pages
 export const mainPage = async (req, res) => {

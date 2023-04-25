@@ -3,7 +3,7 @@
     <div class="container-xl">
       <ul class="navbar-nav">
         <li class="nav-item <%- opcion === 'INICIO' ? 'active':'' %>">
-          <a class="nav-link" href="/admin">
+          <a class="nav-link" href="/user">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" height="24" width="24" viewBox="0 0 24 24">
               <path d="M6.05 18.95H9.9V13.1h4.2v5.85h3.85V10L12 5.5 6.05 10Zm-.625.625v-9.9L12 4.7l6.6 5v9.875h-5.125V13.75H10.55v5.825ZM12 12.225Z" />
             </svg>
@@ -11,7 +11,7 @@
           </a>
         </li>
         <li class="nav-item <%- opcion === 'CALENDARIO' ? 'active':'' %>">
-          <a class="nav-link" href="/admin/calendario">
+          <a class="nav-link" href="/user/calendario">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" height="24" width="24" viewBox="0 0 24 24">
               <path d="M5.85 20.575q-.6 0-1.012-.412-.413-.413-.413-1.013V6.825q0-.6.413-1.013Q5.25 5.4 5.85 5.4h2.075V3.1h.725v2.3h6.8V3.1h.65v2.3h2.05q.6 0 1.025.412.425.413.425 1.013V19.15q0 .6-.425 1.013-.425.412-1.025.412Zm0-.65h12.3q.3 0 .55-.25.25-.25.25-.55v-8.3H5.05v8.3q0 .3.25.55.25.25.55.25Zm-.8-9.75h13.9v-3.35q0-.3-.25-.55-.25-.25-.55-.25H5.85q-.3 0-.55.25-.25.25-.25.55Zm0 0v-4.15 4.15Zm6.95 4q-.275 0-.475-.2-.2-.2-.2-.475 0-.275.2-.488.2-.212.475-.212.275 0 .488.212.212.213.212.488t-.212.475q-.213.2-.488.2Zm-4 0q-.275 0-.475-.2-.2-.2-.2-.475 0-.275.2-.488.2-.212.475-.212.275 0 .488.212.212.213.212.488t-.212.475q-.213.2-.488.2Zm8 0q-.275 0-.475-.2-.2-.2-.2-.475 0-.275.2-.488.2-.212.475-.212.275 0 .488.212.212.213.212.488t-.212.475q-.213.2-.488.2Zm-4 3.8q-.275 0-.475-.2-.2-.2-.2-.475 0-.275.2-.488.2-.212.475-.212.275 0 .488.212.212.213.212.488t-.212.475q-.213.2-.488.2Zm-4 0q-.275 0-.475-.2-.2-.2-.2-.475 0-.275.2-.488.2-.212.475-.212.275 0 .488.212.212.213.212.488t-.212.475q-.213.2-.488.2Zm8 0q-.275 0-.475-.2-.2-.2-.2-.475 0-.275.2-.488.2-.212.475-.212.275 0 .488.212.212.213.212.488t-.212.475q-.213.2-.488.2Z" />
             </svg>
@@ -19,7 +19,7 @@
           </a>
         </li>
         <li class="nav-item <%- opcion === 'ESTADO' ? 'active':'' %>">
-          <a class="nav-link" href="/admin/estados">
+          <a class="nav-link" href="/user/estados">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" height="24" width="24" viewBox="0 0 24 24">
               <path d="m2.45 17.2-.525-.4L6.1 10.15l2.975 3.5 3.95-6.4 1.875 2.825q-.175.05-.325.087-.15.038-.3.088L13.05 8.425l-3.85 6.3L6.175 11.2Zm19.125 4.825-3.5-3.475q-.45.325-.95.5-.5.175-1.05.175-1.325 0-2.237-.913-.913-.912-.913-2.237 0-1.35.913-2.263.912-.912 2.237-.912 1.325 0 2.25.925t.925 2.25q0 .55-.188 1.075-.187.525-.537.95l3.525 3.475Zm-5.5-3.425q1.075 0 1.813-.725.737-.725.737-1.8 0-1.075-.737-1.813-.738-.737-1.813-.737-1.05 0-1.787.737-.738.738-.738 1.813 0 1.05.725 1.788.725.737 1.8.737Zm1.675-8.425q-.175-.05-.325-.075l-.3-.05 4.45-7.1.525.4Z" />
             </svg>
@@ -34,7 +34,7 @@
           <div class="dropdown-menu">
             <div class="dropdown-menu-columns">
               <div class="dropdown-menu-column">
-                <a href="/admin/formacion/matriculas" class="dropdown-item">
+                <a href="/user/formacion/matriculas" class="dropdown-item">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24"
                     stroke="currentColor" fill="none">
                     <path stroke-width=".3"
@@ -42,7 +42,7 @@
                   </svg>
                   Matrículas
                 </a>
-                <a href="/admin/formacion/cursos" class="dropdown-item">
+                <a href="/user/formacion/cursos" class="dropdown-item">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24"
                     stroke="currentColor" fill="none">
                     <path stroke-width=".3"

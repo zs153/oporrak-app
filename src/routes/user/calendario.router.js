@@ -7,7 +7,7 @@ import {
   updateUser,
   calendarioAdmin,
   updateAdmin,
-} from "../controllers/calendario.controller";
+} from "../controllers/user/calendario.controller";
 
 const calendarioRouter = express.Router();
 

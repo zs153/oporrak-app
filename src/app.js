@@ -3,22 +3,12 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import path from 'path'
 
-// import rutas
-import adminRouter from "./routes/admin.router";
-// user
-import userRouter from "./routes/user.router";
-
-import calendarioRouter from "./routes/calendario.router";
-import cursoRouter from "./routes/curso.router";
-import estadoRouter from "./routes/estado.router";
-import festivoRouter from "./routes/festivo.router";
-import historicoRouter from "./routes/historico.router";
+// import rutas main
 import mainRouter from "./routes/main.router";
-import matriculaRouter from "./routes/matricula.router";
-import oficinaRouter from "./routes/oficina.router";
-import traspasoRouter from "./routes/traspaso.router";
-import usuarioRouter from "./routes/usuario.router";
-import formacionRouter from "./routes/formacion.route";
+// import rutas admin
+import adminRouter from "./routes/admin.router";
+// import rutas user
+import userRouter from "./routes/user.router";
 
 const app = express();
 
@@ -33,20 +23,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/public")));
 
-// admin routes
+// main routes
 app.use("/", mainRouter);
+// admin routes
 app.use("/admin", adminRouter);
-app.use("/admin", calendarioRouter);
-app.use("/admin", cursoRouter);
-app.use("/admin", estadoRouter);
-app.use("/admin", festivoRouter);
-app.use("/admin", historicoRouter);
-app.use("/admin", matriculaRouter);
-app.use("/admin", oficinaRouter);
-app.use("/admin", traspasoRouter);
-app.use("/admin", usuarioRouter);
-app.use("/admin", formacionRouter);
-
 // user routes
 app.use("/user", userRouter);
 

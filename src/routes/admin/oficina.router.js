@@ -1,5 +1,5 @@
 import express from 'express'
-import {verifyTokenAndAdmin} from "../middleware/auth";
+import {verifyTokenAndAdmin} from "../../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -7,7 +7,7 @@ import {
   insert,
   update,
   remove,
-} from '../controllers/oficina.controller'
+} from '../../controllers/admin/oficina.controller'
 
 const oficinaRouter = express.Router()
 

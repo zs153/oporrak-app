@@ -1,18 +1,18 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI, serverWEB, puertoWEB } from "../config/settings";
-import { tiposRol, tiposEstado, tiposMovimiento } from '../public/js/enumeraciones'
+import { serverAPI, puertoAPI, serverWEB, puertoWEB } from "../../config/settings";
+import { tiposEstado, tiposMovimiento } from '../../public/js/enumeraciones'
 
 // pages
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: req.params.idofic }
-  const context = user.rol === tiposRol.usuario ? { IDUSUA: user.id } : { OFIUSU: req.params.idofic }
+  const oficina = {}
+  const context = { OFIUSU: req.params.idofic }
 
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
       oficina,
     })
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
+    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       context,
     })
     const datos = {
@@ -36,9 +36,7 @@ export const mainPage = async (req, res) => {
     }
   }
 }
-
-// proc
-export const calendario = async (req, res) => {  
+export const calendarioPage = async (req, res) => {  
   const user = req.user
   const currentYear = new Date().getFullYear()
   const estado = {
@@ -67,7 +65,7 @@ export const calendario = async (req, res) => {
     })
     const festivosComun = festivos.data.data.filter(itm => itm.OFIFES === 0)
     const festivosLocal = festivos.data.data.filter(itm => itm.OFIFES > 0)
-    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios`, {
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
       estado,
     })
     
@@ -110,6 +108,8 @@ export const calendario = async (req, res) => {
     }
   }
 }
+
+// proc
 export const update = async (req, res) => {
   const user = req.user
   const usuario = JSON.parse(req.body.usuario)
@@ -146,7 +146,7 @@ export const update = async (req, res) => {
     }
   })
 
-  const traspasos = {
+  const context = {
     ARRTRA: estados // importante!! los campos del array estados tienen que ir en mayusculas
   }
   const movimiento = {
@@ -156,22 +156,22 @@ export const update = async (req, res) => {
   }
 
   try {
-    if (traspasos.length !== 0) {
+    if (estados.length !== 0) {
       await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/update/traspasos`, {
-        traspasos,
+        context,
         movimiento,
       });
     }
 
     mainPage(req, res)
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }

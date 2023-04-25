@@ -1,10 +1,10 @@
 import express from "express";
-import authRoutes from "../middleware/auth";
+import authRoutes from "../../middleware/auth";
 import {
   mainPage,
   update,
   calendario,
-} from "../controllers/festivo.controller";
+} from "../../controllers/admin/festivo.controller";
 
 const festivoRouter = express.Router();
 

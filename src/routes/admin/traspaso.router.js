@@ -4,7 +4,7 @@ import {
   calendario,
   mainPage,
   update,
-} from "../controllers/traspaso.controller";
+} from "../controllers/admin/traspaso.controller";
 
 const traspasoRouter = express.Router();
 

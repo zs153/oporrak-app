@@ -1,6 +1,6 @@
 import express from "express";
-import authRoutes from "../middleware/auth";
-import { estadosPage, mainPage, } from "../controllers/estado.controller";
+import authRoutes from "../../middleware/auth";
+import { estadosPage, mainPage, } from "../../controllers/user/estado.controller";
 
 const estadoRouter = express.Router();
 

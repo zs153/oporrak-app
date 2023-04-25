@@ -3,7 +3,7 @@ import {verifyTokenAndResp} from "../middleware/auth";
 import {
   mainPage,
   activar,
-} from '../controllers/historico.controller'
+} from '../controllers/admin/historico.controller'
 
 const historicoRouter = express.Router()
 
