@@ -9,9 +9,7 @@ FROM festivos
 WHERE fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
 `
 const festivosOficinaSql = `SELECT 
-  ff.idfest,
-  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') "FECFES",
-  ff.ofifes
+  TO_CHAR(ff.fecfes, 'YYYY-MM-DD') "FECFES"
 FROM festivos ff
 WHERE (ff.ofifes = :ofifes OR ff.ofifes = 0) AND
   fecfes BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
