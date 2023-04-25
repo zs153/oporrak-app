@@ -7,7 +7,6 @@ import * as usuario from '../controllers/admin/usuario.controller'
 import * as historico from '../controllers/admin/historico.controller'
 import * as traspaso from '../controllers/admin/traspaso.controller'
 import * as calendario from '../controllers/admin/calendario.controller'
-import * as curso from '../controllers/admin/curso.controller'
 
 const adminRouter = express.Router()
 
@@ -34,13 +33,11 @@ adminRouter.get("/traspasos/:idofic", verifyTokenAndAdmin, traspaso.mainPage);
 adminRouter.post("/traspasos/calendario", verifyTokenAndAdmin, traspaso.calendarioPage);
 
 // cursos
-adminRouter.get("/cursos", verifyTokenAndAdmin, curso.mainPage);
-adminRouter.get("/cursos/add", verifyTokenAndAdmin, curso.addPage);
-adminRouter.get("/cursos/edit/:id", verifyTokenAndAdmin, curso.editPage);
+// se sacan del admin router y se direccionan aparte
 
 // calendario
 adminRouter.get("/calendarios", verifyTokenAndAdmin, calendario.mainPage);
-adminRouter.get("/calendarios/calendarios", verifyTokenAndAdmin, calendario.calendarioPage);
+adminRouter.get("/calendarios/calendario", verifyTokenAndAdmin, calendario.calendarioPage);
 
 //--------------- procedures
 // festivos
@@ -61,8 +58,6 @@ adminRouter.post('/usuarios/delete', verifyTokenAndResp, usuario.remove)
 
 // traspaso
 adminRouter.post("/traspasos/update", verifyTokenAndAdmin, traspaso.update);
-
-// cursos
 
 // calendario
 adminRouter.post("/calendarios/update", verifyTokenAndAdmin, calendario.update);

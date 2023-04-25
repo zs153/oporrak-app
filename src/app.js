@@ -7,6 +7,7 @@ import path from 'path'
 import mainRouter from "./routes/main.router";
 // import rutas admin
 import adminRouter from "./routes/admin.router";
+import cursoRouter from "./routes/curso.router";
 // import rutas user
 import userRouter from "./routes/user.router";
 
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use("/", mainRouter);
 // admin routes
 app.use("/admin", adminRouter);
+app.use("/admin", cursoRouter);
 // user routes
 app.use("/user", userRouter);
 

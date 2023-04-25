@@ -14,14 +14,14 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+    <%- include('../../partials/navbar', {opcion: 'CALENDARIO' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form action="/admin/calendarios/calendario" method="POST" onsubmit="return validate();">
+                <form action="/user/calendarios/calendario" method="POST" onsubmit="return validate();">
                   <input type="hidden" name="usuario" value="<%= JSON.stringify(datos.usuario) %>">
                   <div class="card-header">
                     <h3 class="card-title">Usuarios</h3>

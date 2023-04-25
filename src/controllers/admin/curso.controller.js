@@ -448,13 +448,13 @@ export const usuariosMatriculaPage = async (req, res) => {
 
     res.render('admin/cursos/matriculas/usuarios', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -473,7 +473,7 @@ export const usuariosMatriculaAddPage = async (req, res) => {
       context,
     })
     context = {}
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
+    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       context,
     });
     const datos = {
@@ -484,13 +484,13 @@ export const usuariosMatriculaAddPage = async (req, res) => {
 
     res.render("admin/cursos/matriculas/usuarios/add", { user, datos });
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }

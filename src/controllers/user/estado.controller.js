@@ -5,12 +5,12 @@ import { tiposRol, tiposEstado, arrTiposPerfil } from '../../public/js/enumeraci
 // pages
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
   const currentYear = new Date().getFullYear()
   const currentMonth = new Date().getMonth() + 1
   const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
   const desde = yearMonthDayToUTCString(currentYear, currentMonth, 1)
   const hasta = yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth)
+  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
   
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
@@ -23,15 +23,16 @@ export const mainPage = async (req, res) => {
       desde,
       hasta,
     }
-    res.render('admin/estados', { user, datos })
+
+    res.render('user/estados', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
-      res.render("admin/error400", {
+    if (error.response?.status === 400) {
+      res.render("user/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
-      res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+      res.render("user/error500", {
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -90,18 +91,18 @@ export const estadosPage = async (req, res) => {
     }
 
     if (req.body.format === '1') {
-      res.render('admin/estados/mensual', { user, datos })
+      res.render('user/estados/mensual', { user, datos })
     } else {
-      res.render('admin/estados/semanal', { user, datos })
+      res.render('user/estados/semanal', { user, datos })
     }
   } catch (error) {
-    if (error.response.status === 400) {
-      res.render("admin/error400", {
+    if (error.response?.status === 400) {
+      res.render("user/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
-      res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+      res.render("user/error500", {
+        alerts: [{ msg: error }],
       });
     }
   }

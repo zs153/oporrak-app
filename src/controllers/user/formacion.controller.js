@@ -17,15 +17,15 @@ export const matriculasPage = async (req, res) => {
       matriculas: matriculas.data.data,
     }
 
-    res.render('admin/formacion/matriculas', { user, datos })
+    res.render('user/formacion/matriculas', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
-      res.render("admin/error400", {
+    if (error.response?.status === 400) {
+      res.render("user/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
-      res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+      res.render("user/error500", {
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -45,14 +45,14 @@ export const cursosPage = async (req, res) => {
       cursos: cursos.data.data,
     }
 
-    res.render('admin/formacion/cursos', { user, datos })
+    res.render('user/formacion/cursos', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
-      res.render("admin/error400", {
+    if (error.response?.status === 400) {
+      res.render("user/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
-      res.render("admin/error500", {
+      res.render("user/error500", {
         alerts: [{ msg: error.response.data.msg }],
       });
     }
@@ -78,15 +78,15 @@ export const quieroMatricularme = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/formacion/matriculas`);
+    res.redirect(`/user/formacion/matriculas`);
   } catch (error) {
-    if (error.response.status === 400) {
-      res.render("admin/error400", {
+    if (error.response?.status === 400) {
+      res.render("user/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
-      res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+      res.render("user/error500", {
+        alerts: [{ msg: error }],
       });
     }
   }

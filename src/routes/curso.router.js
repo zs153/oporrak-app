@@ -31,7 +31,7 @@ import {
   insertUsuarioMatricula,
   deleteUsuarioMatricula,
   usuariosAddPage,
-} from "../controllers/curso.controller";
+} from "../controllers/admin/curso.controller";
 
 const cursoRouter = express.Router();
 
