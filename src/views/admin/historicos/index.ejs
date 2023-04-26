@@ -23,17 +23,20 @@
                     <h3 class="card-title">Históricos</h3>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
-                        <div class="input-icon me-3">
-                          <span class="input-icon-addon">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <circle cx="10" cy="10" r="7"></circle>
-                            <line x1="21" y1="21" x2="15" y2="15"></line>
-                          </svg>
-                          </span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en históricos">
-                        </div>
+                        <form action="/admin/historicos" method="GET">
+                          <div class="input-icon me-3">
+                            <span class="input-icon-addon">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="10" cy="10" r="7"></circle>
+                                <line x1="21" y1="21" x2="15" y2="15"></line>
+                              </svg>
+                            </span>
+                            <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part" placeholder="Buscar..."
+                              aria-label="Buscar en Históricos">
+                          </div>
+                        </form>
                       </div>
                     </div>                    
                   </div>
@@ -65,7 +68,7 @@
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="modal-status bg-success"></div>
-          <form action="/admin/historicos/activar" method="POST" onclick="return validate();">
+          <form action="/admin/historicos/activar" method="POST" onsubmit="return validate();">
             <input type="hidden" id="idusua" name="idusua" value="">
             <div class="modal-body text-center py-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24"
@@ -82,15 +85,8 @@
                   <div class="col-12">
                     <div class="mb-1">
                       <div class="input-control">
-                        <div class="form-label">Oficina</div>
-                        <select class="form-select form-control" id="cboofi" name="ofiusu" value="">
-                          <option value="0">SELECCIONE OFICINA</option>
-                          <% datos.oficinas.map(element=> { %>
-                            <option value="<%- element.IDOFIC %>">
-                              <%- element.DESOFI %>
-                            </option>
-                            <% }) %>
-                        </select>
+                        <label class="form-label required">Código Oficina</label>
+                        <input type="text" name="codofi" id="codofi" class="form-control" value=""  />
                         <div class="invalid-feedback"></div>
                       </div>
                     </div>
@@ -118,7 +114,10 @@
     <script src="/js/ayuda.min.js"></script>
     <script src="/js/historico.js"></script>
     <script>
-      const orgList = <%- JSON.stringify(datos.historicos) %>
+      const orgList = <%- JSON.stringify(datos.usuarios) %>
+      const cursor = <%- JSON.stringify(datos.cursor) %>
+      const hasNextUsers = <%- datos.hasNextUsers %>
+      const hasPrevUsers = <%- datos.hasPrevUsers %>
 
       let state = {
         'querySet': orgList,
@@ -126,39 +125,47 @@
         'rows': 10,
       }
 
+      // events
+      const elemBuscar = document.getElementById('buscarUserBox');
+      elemBuscar.onchange = (event) => {
+        setCookie('hist', event.target.value, .5) // medio dia
+      }
+      elemBuscar.value = getCookie('hist')
+        
       buildTable(state)
     </script>
-  <script>
-    const cboofi = document.getElementById('cboofi')
+    <script>
+      const codofi = document.getElementById('codofi')
 
-    const validate = () => {
-      const cboofiValue = cboofi.value
+      const validate = () => {
+        const codofiValue = codofi.value
 
-      if (cboofiValue === '0') {
-        setError(cboofi, 'Oficina requerida')
-        setTimeout(function () {
-          setSuccess(cboofi)
-        }, 3000)
-        return false
+        if (codofiValue === '') {
+          setError(codofi, 'Código requerido')
+          setTimeout(function () {
+            setSuccess(codofi)
+          }, 3000)
+          return false
+        }
+
+        deleteCookie()
+        return true
       }
 
-      return true
-    }
-
-    const setSuccess = (element) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-      errorDisplay.innerText = '';
-      inputControl.classList.add('is-valid');
-      element.classList.remove('is-invalid');
-    }
-    const setError = (element, message) => {
-      const inputControl = element.parentElement;
-      const errorDisplay = inputControl.querySelector('.invalid-feedback');
-      errorDisplay.innerText = message;
-      element.classList.add('is-invalid');
-      inputControl.classList.remove('is-valid');
-    }
-  </script>
+      const setSuccess = (element) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.invalid-feedback');
+        errorDisplay.innerText = '';
+        inputControl.classList.add('is-valid');
+        element.classList.remove('is-invalid');
+      }
+      const setError = (element, message) => {
+        const inputControl = element.parentElement;
+        const errorDisplay = inputControl.querySelector('.invalid-feedback');
+        errorDisplay.innerText = message;
+        element.classList.add('is-invalid');
+        inputControl.classList.remove('is-valid');
+      }
+    </script>
   </body>
 </html>

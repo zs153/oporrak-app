@@ -12,7 +12,6 @@ import { serverAPI, puertoAPI, secreto } from '../../config/settings'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  //const context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
 
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
@@ -130,11 +129,11 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user
   const filteredRol = arrTiposRol.filter(itm => itm.id <= user.rol)
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
+  const context = {}
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context,
     })
     const datos = {
       oficinas: oficinas.data.data,
@@ -145,13 +144,13 @@ export const addPage = async (req, res) => {
 
     res.render('admin/usuarios/add', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -159,14 +158,13 @@ export const addPage = async (req, res) => {
 export const editPage = async (req, res) => {
   const user = req.user
   const filteredRol = arrTiposRol.filter(itm => itm.id <= user.rol)
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
   const context = {
     IDUSUA: req.params.id,
   } 
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context: {}
     })
     const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
       context,

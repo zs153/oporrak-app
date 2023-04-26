@@ -10,11 +10,11 @@ export const mainPage = async (req, res) => {
   const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
   const desde = yearMonthDayToUTCString(currentYear, currentMonth, 1)
   const hasta = yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth)
-  const oficina = user.rol === tiposRol.admin ? {} : { IDOFIC: user.oficina }
+  const context = {}
   
   try {
-    let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
+    let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context,
     })
 
     const datos = {
@@ -41,7 +41,6 @@ export const mainPage = async (req, res) => {
 // proc
 export const estadosPage = async (req, res) => {
   const user = req.user
-  const oficina = {}
   const periodo = {
     DESDE: req.body.desde,
     HASTA: req.body.hasta,
@@ -65,8 +64,8 @@ export const estadosPage = async (req, res) => {
   }
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context: {},
     })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       festivo,

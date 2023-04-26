@@ -26,8 +26,8 @@ export const mainPage = async (req, res) => {
       limit: limit + 1,
       direction: dir,
       cursor: {
-        next: '',
-        prev: '',
+        next: 0,
+        prev: 0,
       },
       part,
     }
@@ -40,24 +40,24 @@ export const mainPage = async (req, res) => {
 
     let oficinas = result.data.data
     let hasNextOficinas = oficinas.length === limit +1
-    let nextCursor = ''
-    let prevCursor = ''
+    let nextCursor = 0
+    let prevCursor = 0
 
     if (hasNextOficinas) {
       const nextCursorOficinas = dir === 'next' ? oficinas[limit - 1] : oficinas[0]
       const prevCursorOficinas = dir === 'next' ? oficinas[0] : oficinas[limit - 1]
-      nextCursor = nextCursorOficinas.NOMUSU
-      prevCursor = prevCursorOficinas.NOMUSU
+      nextCursor = nextCursorOficinas.IDOFIC
+      prevCursor = prevCursorOficinas.IDOFIC
 
-      usuarios.pop()
+      oficinas.pop()
     } else {
       if (dir === 'prev') {
         context = {
           limit: limit + 1,
           direction: 'next',
           cursor: {
-            next: '',
-            prev: ''
+            next: 0,
+            prev: 0
           },
           part,
         }
@@ -72,8 +72,8 @@ export const mainPage = async (req, res) => {
         if (hasNextOficinas) {
           const nextCursorOficinas = oficinas[limit - 1]
           const prevCursorOficinas = oficinas[0]
-          nextCursor = nextCursorOficinas.NOMUSU
-          prevCursor = prevCursorOficinas.NOMUSU
+          nextCursor = nextCursorOficinas.IDOFIC
+          prevCursor = prevCursorOficinas.IDOFIC
           
           oficinas.pop()
         }
@@ -82,7 +82,7 @@ export const mainPage = async (req, res) => {
       } else {
         if (cursor) {
           const prevCursorOficinas = oficinas[0]
-          prevCursor = prevCursorOficinas.NOMUSU
+          prevCursor = prevCursorOficinas.IDOFIC
           hasPrevOficinas = true
         } else {
           hasPrevOficinas = false
@@ -98,7 +98,7 @@ export const mainPage = async (req, res) => {
     }
     const datos = {
       limit,
-      oficinas: dir === 'next' ? oficinas : oficinas.sort((a,b) => a.DESOFI > b.DESOFI ? 1:-1),
+      oficinas,
       hasPrevOficinas,
       hasNextOficinas,
       cursor: convertNodeToCursor(JSON.stringify(cursor)),
@@ -136,12 +136,12 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
-  const oficina = {
+  const context = {
     IDOFIC: req.params.id,
   }
   try {
     const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-      oficina,
+      context,
     })
     const datos = {
       oficina: result.data.data,
@@ -250,4 +250,12 @@ export const remove = async (req, res) => {
       });
     }
   }
+}
+
+// helpers
+const convertNodeToCursor = (node) => {
+  return new Buffer.from(node, 'binary').toString('base64')
+}
+const convertCursorToNode = (cursor) => {
+  return new Buffer.from(cursor, 'base64').toString('binary')
 }

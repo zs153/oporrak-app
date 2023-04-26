@@ -21,6 +21,7 @@ const authRoutes = async (req, res, next) => {
         'passphrase': secreto
       })
 
+
       await V4.verify(token, key, {
         audience: 'urn:client:claim',
         issuer: 'http://localhost:4000',
@@ -29,6 +30,7 @@ const authRoutes = async (req, res, next) => {
         const context = {
           USERID: ret.userid,
         }
+
         const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
           context,
         })

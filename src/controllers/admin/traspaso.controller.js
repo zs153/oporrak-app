@@ -5,15 +5,13 @@ import { tiposEstado, tiposMovimiento } from '../../public/js/enumeraciones'
 // pages
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = {}
-  const context = { OFIUSU: req.params.idofic }
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context: {},
     })
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      context,
+      context: { OFIUSU: req.params.idofic },
     })
     const datos = {
       oficina: parseInt(req.params.idofic),
@@ -25,13 +23,13 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/traspasos', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -39,35 +37,33 @@ export const mainPage = async (req, res) => {
 export const calendarioPage = async (req, res) => {  
   const user = req.user
   const currentYear = new Date().getFullYear()
-  const estado = {
-    USUEST: req.body.idusua,
-    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-  }
-  const oficina = {}
-  const festivo = {
-    OFIFES: undefined,
-    DESDE: estado.DESDE,
-    HASTA: estado.HASTA,
-  }
   const usuario = {
     IDUSUA: req.body.idusua,    
     NOMUSU: req.body.nomusu,
     OFIUSU: req.body.idofic,
+    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
   }
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina,
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context: {},
     })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
-      festivo,
+      context: {
+        DESDE: usuario.DESDE,
+        HASTA: usuario.HASTA,
+      }
+    })
+    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
+      context: {
+        USUEST: usuario.IDUSUA,
+        DESDE: usuario.DESDE,
+        HASTA: usuario.HASTA,
+      },
     })
     const festivosComun = festivos.data.data.filter(itm => itm.OFIFES === 0)
     const festivosLocal = festivos.data.data.filter(itm => itm.OFIFES > 0)
-    const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
-      estado,
-    })
     
     let dataSource = []
     estados.data.data.map(itm => {
@@ -97,13 +93,13 @@ export const calendarioPage = async (req, res) => {
 
     res.render(`admin/traspasos/calendario`, { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }

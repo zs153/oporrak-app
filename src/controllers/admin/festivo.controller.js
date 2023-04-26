@@ -4,11 +4,11 @@ import { tiposEstado, tiposMovimiento } from '../../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const oficina = {}
+  const context = {}
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-      oficina
+    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context
     })
     const datos = {
       oficinas: oficinas.data.data,
@@ -16,13 +16,13 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/festivos', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -30,7 +30,7 @@ export const mainPage = async (req, res) => {
 export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
-  const festivo = {
+  const context = {
     OFIFES: req.body.idofic,
     DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
     HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
@@ -40,20 +40,22 @@ export const calendarioPage = async (req, res) => {
     DESOFI: req.body.desofi,
   }
 
-  console.log(oficina)
   try {
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
-      festivo,
+      context,
     })
 
-    const dataSource = festivos.data.data.map(itm => ({
-      idfest: itm.IDFEST,
-      fecfes: itm.FECFES,
-      ofifes: itm.OFIFES,
-      startDate: itm.FECFES,
-      endDate: itm.FECFES,
-      color: tiposEstado.festivo.COLOR,
-    }))
+    let dataSource = []
+    if (festivos.data.stat) {
+      dataSource = festivos.data.data.map(itm => ({
+        idfest: itm.IDFEST,
+        fecfes: itm.FECFES,
+        ofifes: itm.OFIFES,
+        startDate: itm.FECFES,
+        endDate: itm.FECFES,
+        color: tiposEstado.festivo.COLOR,
+      }))
+    }
 
     const datos = {
       oficina,
@@ -63,13 +65,13 @@ export const calendarioPage = async (req, res) => {
 
     res.render(`admin/festivos/calendario`, { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }
@@ -117,15 +119,15 @@ export const update = async (req, res) => {
       });
     }
 
-    mainPage(req, res)
+    res.redirect('/admin/festivos')
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }

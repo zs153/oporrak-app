@@ -54,8 +54,7 @@ const sortTableByColumn = (table, column, asc = true) => {
 }
 const buildTable = (state) => {
   const table = document.getElementById('table-body')
-  const data = pagination(state.querySet, state.page, state.rows)
-  const myList = data.querySet
+  const myList = state.querySet
   table.innerHTML = ''
 
   myList.map(element => {
@@ -119,11 +118,11 @@ const buildTable = (state) => {
 const createPages = () => {
   let str = "<ul>";
 
-  if (hasPrevUsers) {
+  if (hasPrevOficinas) {
     str += "<li class='page-item previous no'><a href='/admin/oficinas?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarOficinaBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
   }
 
-  if (hasNextUsers) {
+  if (hasNextOficinas) {
     str += "<li class='page-item next no'><a href='/admin/oficinas?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarOficinaBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
   }
   str += "</ul>";
