@@ -3,7 +3,7 @@ import * as DAL from '../models/estado.model'
 // estado
 export const estado = async (req, res) => {
   // context
-  const context = req.body.estado
+  const context = req.body.context
 
   // proc
   try {
@@ -20,7 +20,7 @@ export const estado = async (req, res) => {
 }
 export const estados = async (req, res) => {
   // context
-  const context = req.body.estado
+  const context = req.body.context
 
   // proc
   try {
@@ -270,7 +270,7 @@ export const estadosFechaUsuario = async (req, res) => {
 }
 export const estadosOficinaPerfil = async (req, res) => {
   // context
-  const context = req.body.estado
+  const context = req.body.context
 
   // proc
   try {

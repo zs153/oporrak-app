@@ -24,12 +24,12 @@ export const cursos = async (req, res) => {
 
   // proc
   try {
-    const result = await DAL.find(context)
+    const result = await DAL.findAll(context)
 
     if (result.stat) {
       return res.status(200).json({ stat: 1, data: result.data })
     } else {
-      res.status(200).json({ stat: null, data: {} })
+      res.status(400).json({ stat: null, data: {} })
     }
   } catch (err) {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })

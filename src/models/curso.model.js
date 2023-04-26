@@ -215,8 +215,8 @@ const removeUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
 // cursos
 export const find = async (context) => {
   // bind
-  let query = cursoSql
   let bind = {}
+  let query = cursoSql
 
   if (context.IDCURS) {
     bind.IDCURS = context.IDCURS
@@ -232,8 +232,50 @@ export const find = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insert = async (bind) => {
+export const findAll = async (context) => {
   // bind
+  let bind = {
+    limit: context.limit,
+    part: context.part,
+  }
+  let query = ''
+
+  if (context.direction === 'next') {
+    bind.IDCURS = context.cursor.next
+    query += `WITH datos AS (
+      SELECT idcurs, descur, stacur FROM cursos
+      WHERE descur LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE idcurs > :idcurs
+    ORDER BY idcurs ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.IDCURS = context.cursor.prev
+    query += `WITH datos AS (
+      SELECT idcurs, descur, stacur FROM cursos
+      WHERE descur LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE idcurs < :idcurs
+    ORDER BY idcurs DESC
+    FETCH NEXT :limit ROWS ONLY`
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
+}
+export const insert = async (context) => {
+  // bind
+  let bind = context
   bind.IDCURS = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -249,8 +291,9 @@ export const insert = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const update = async (bind) => {
+export const update = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateSql, bind)
 
@@ -260,8 +303,9 @@ export const update = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const remove = async (bind) => {
+export const remove = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeSql, bind)
 
@@ -275,8 +319,8 @@ export const remove = async (bind) => {
 // turnos
 export const turno = async (context) => {
   // bind
-  let query = turnoSql
   let bind = {}
+  let query = turnoSql
 
   if (context.IDCURS) {
     bind.IDCURS = context.IDCURS
@@ -295,8 +339,9 @@ export const turno = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insertTurno = async (bind) => {
+export const insertTurno = async (context) => {
   // bind
+  let bind = context
   bind.IDTURN = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -312,8 +357,9 @@ export const insertTurno = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const updateTurno = async (bind) => {
+export const updateTurno = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateTurnoSql, bind)
 
@@ -323,8 +369,9 @@ export const updateTurno = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const removeTurno = async (bind) => {
+export const removeTurno = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeTurnoSql, bind)
 
@@ -338,8 +385,8 @@ export const removeTurno = async (bind) => {
 // matricula
 export const matricula = async (context) => {
   // bind
-  let query = matriculaSql
   let bind = {}
+  let query = matriculaSql
 
   if (context.IDCURS) {
     bind.IDCURS = context.IDCURS
@@ -358,8 +405,9 @@ export const matricula = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insertMatricula = async (bind) => {
+export const insertMatricula = async (context) => {
   // bind
+  let bind = context
   bind.IDMATR = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -375,8 +423,9 @@ export const insertMatricula = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const updateMatricula = async (bind) => {
+export const updateMatricula = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateMatriculaSql, bind)
 
@@ -386,8 +435,9 @@ export const updateMatricula = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const removeMatricula = async (bind) => {
+export const removeMatricula = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeMatriculaSql, bind)
 
@@ -401,8 +451,8 @@ export const removeMatricula = async (bind) => {
 // usuarios
 export const usuarios = async (context) => {
   // bind
-  let query = usuariosSql
   let bind = {}
+  let query = usuariosSql
 
   if (context.IDCURS) {
     bind.IDCURS = context.IDCURS
@@ -420,8 +470,8 @@ export const usuarios = async (context) => {
 }
 export const usuariosPendientes = async (context) => {
   // bind
-  let query = usuariosPendientesSql
   let bind = {}
+  let query = usuariosPendientesSql
 
   if (context.IDCURS) {
     bind.IDCURS = context.IDCURS
@@ -439,8 +489,9 @@ export const usuariosPendientes = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insertUsuario = async (bind) => {
+export const insertUsuario = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(insertUsuarioSql, bind)
 
@@ -450,8 +501,9 @@ export const insertUsuario = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const removeUsuario = async (bind) => {
+export const removeUsuario = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeUsuarioSql, bind)
 
@@ -465,8 +517,8 @@ export const removeUsuario = async (bind) => {
 // usuarios turno
 export const usuariosTurno = async (context) => {
   // bind
-  let query = usuariosTurnoSql
   let bind = {}
+  let query = usuariosTurnoSql
 
   if (context.IDTURN) {
     bind.IDTURN = context.IDTURN
@@ -484,8 +536,8 @@ export const usuariosTurno = async (context) => {
 }
 export const usuariosTurnoPendientes = async (context) => {
   // bind
-  let query = usuariosTurnoPendientesSql
-  let bind = context
+  const bind = context
+  const query = usuariosTurnoPendientesSql
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -496,8 +548,9 @@ export const usuariosTurnoPendientes = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insertUsuarioTurno = async (bind) => {
+export const insertUsuarioTurno = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(insertUsuarioTurnoSql, bind)
 
@@ -507,8 +560,9 @@ export const insertUsuarioTurno = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const removeUsuarioTurno = async (bind) => {
+export const removeUsuarioTurno = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeUsuarioTurnoSql, bind)
 
@@ -539,8 +593,9 @@ export const usuariosMatricula = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insertUsuarioMatricula = async (bind) => {
+export const insertUsuarioMatricula = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(insertUsuarioMatriculaSql, bind)
 
@@ -550,8 +605,9 @@ export const insertUsuarioMatricula = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const removeUsuarioMatricula = async (bind) => {
+export const removeUsuarioMatricula = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeUsuarioMatriculaSql, bind)
 
