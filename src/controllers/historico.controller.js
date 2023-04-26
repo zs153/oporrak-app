@@ -1,12 +1,8 @@
 import * as DAL from '../models/historico.model'
 
-const activarFromRec = (req) => {
-
-}
-
 export const historico = async (req, res) => {
   // context
-  const context = req.body.usuario
+  const context = req.body.context
 
   // proc
   try {
@@ -15,7 +11,7 @@ export const historico = async (req, res) => {
     if (result.stat) {
       res.status(200).json({ stat: 1, data: result.data[0] })
     } else {
-      res.status(400).json({ stat: null, data: 'Usuario no encontrado' })
+      res.status(400).json({ stat: null, data: 'Histórico no encontrado' })
     }
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
@@ -23,11 +19,11 @@ export const historico = async (req, res) => {
 }
 export const historicos = async (req, res) => {
   // context
-  const context = req.body.usuario
+  const context = req.body.context
 
   // proc
   try {
-    const result = await DAL.find(context)
+    const result = await DAL.findAll(context)
 
     if (result.stat) {
       res.status(200).json({ stat: 1, data: result.data })
@@ -46,15 +42,11 @@ export const activar = async (req, res) => {
     ROLUSU: req.body.usuario.ROLUSU,
     STAUSU: req.body.usuario.STAUSU,
   }
-  const recurso = {
-    PWDUSU: req.body.recurso.PWDUSU,
-    SEED: req.body.recurso.SEED,
-  }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  const context = Object.assign(usuario, recurso, movimiento)
+  const context = Object.assign(usuario, movimiento)
 
   // proc
   try {
@@ -63,7 +55,7 @@ export const activar = async (req, res) => {
     if (result.stat) {
       res.status(200).json({ stat: 1, data: result.data })
     } else {
-      res.status(400).json({ stat: null, data: 'Usuario no activado' })
+      res.status(400).json({ stat: null, data: 'Histórico no activado' })
     }
 
   } catch (err) {

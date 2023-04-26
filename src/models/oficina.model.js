@@ -41,6 +41,50 @@ export const find = async (context) => {
     bind.CODOFI = context.CODOFI
     query += `WHERE oo.codofi = :codofi`
   }
+  
+  // proc
+  const ret = await simpleExecute(query, bind)
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
+}
+export const findAll = async (context) => {
+  // bind
+  let query = '';
+  let bind = {
+    limit: context.limit,
+    part: context.part,
+  };
+
+  if (context.direction === 'next') {
+    bind.IDOFIC = context.cursor.next;
+    query = `WITH datos AS (
+      SELECT * FROM oficinas
+      WHERE
+        desofi LIKE '%' || :part || '%' OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE idofic > :idofic
+    ORDER BY idofic ASC
+    FETCH NEXT :limit ROWS ONLY
+    `
+  } else {
+    bind.IDOFIC = context.cursor.prev;
+    query = `WITH datos AS (
+      SELECT * FROM oficinas
+      WHERE
+        desofi LIKE '%' || :part || '%' OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE idofic < :idofic
+    ORDER BY idofic DESC
+    FETCH NEXT :limit ROWS ONLY
+    `
+  }
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -50,7 +94,7 @@ export const find = async (context) => {
   } else {
     return ({ stat: null, data: null })
   }
-}
+};
 export const insert = async (bind) => {
   // bind
   bind.IDOFIC = {

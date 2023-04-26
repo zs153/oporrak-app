@@ -13,8 +13,6 @@ const activarSql = `BEGIN OPORRAK_PKG.ACTIVARHISTORICO(
     :ofiusu,
     :rolusu,
     :stausu,
-    :pwdusu,
-    :seed,
     :usumov,
     :tipmov
   ); END;
@@ -28,6 +26,51 @@ export const find = async (context) => {
   if (context.IDUSUA) {
     bind.IDUSUA = context.IDUSUA;
     query += "WHERE idusua = :idusua";
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
+};
+export const findAll = async (context) => {
+  // bind
+  let query = '';
+  let bind = {
+    limit: context.limit,
+    part: context.part,
+  };
+
+  if (context.direction === 'next') {
+    bind.NOMUSU = context.cursor.next === '' ? null : context.cursor.next;
+    query = `WITH datos AS (
+      SELECT idusua, nomusu, userid FROM historicos
+      WHERE
+        nomusu LIKE '%' || :part || '%' OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE nomusu > :nomusu OR :nomusu IS NULL
+    ORDER BY nomusu ASC
+    FETCH NEXT :limit ROWS ONLY
+    `
+  } else {
+    bind.NOMUSU = context.cursor.prev === '' ? null : context.cursor.prev;
+    query = `WITH datos AS (
+      SELECT idusua, nomusu, userid FROM historicos
+      WHERE
+        nomusu LIKE '%' || :part || '%' OR
+        :part IS NULL
+    )
+    SELECT * FROM datos
+    WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL
+    ORDER BY nomusu DESC
+    FETCH NEXT :limit ROWS ONLY
+    `
   }
 
   // proc

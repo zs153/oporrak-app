@@ -213,11 +213,7 @@ export const borrarTraspaso = async (req, res) => {
 // usuarios
 export const estadosUsuario = async (req, res) => {
   // context
-  const context = {
-    USUEST: req.body.estado.USUEST,
-    DESDE: req.body.estado.DESDE,
-    HASTA: req.body.estado.HASTA,
-  }
+  const context = req.body.context
 
   // proc
   try {

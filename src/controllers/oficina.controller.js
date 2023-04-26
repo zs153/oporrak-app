@@ -2,14 +2,18 @@ import * as DAL from '../models/oficina.model'
 
 export const oficina = async (req, res) => {
   // context
-  const context = req.body.oficina
+  const context = req.body.context
 
   // proc
   try {
     const result = await DAL.find(context)
 
     if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data[0] })
+      if (result.data.length === 1) {
+        res.status(200).json({ stat: 1, data: result.data[0] })
+      } else {
+        res.status(200).json({ stat: 1, data: result.data })
+      }
     } else {
       res.status(400).json({ stat: null, data: 'Oficina no encontrada' })
     }
@@ -19,11 +23,11 @@ export const oficina = async (req, res) => {
 }
 export const oficinas = async (req, res) => {
   // context
-  const context = req.body.oficina
+  const context = req.body.context
 
   // proc
   try {
-    const result = await DAL.find(context)
+    const result = await DAL.findAll(context)
 
     if (result.stat) {
       res.status(200).json({ stat: 1, data: result.data })

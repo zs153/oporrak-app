@@ -3,7 +3,7 @@ import * as DAL from '../models/festivo.model'
 // festivo
 export const festivo = async (req, res) => {
   // context
-  const context = req.body.festivo
+  const context = req.body.context
 
   // proc
   try {
@@ -20,7 +20,7 @@ export const festivo = async (req, res) => {
 }
 export const festivos = async (req, res) => {
   // context
-  const context = req.body.festivo
+  const context = req.body.context
 
   // proc
   try {
@@ -117,7 +117,7 @@ export const borrar = async (req, res) => {
 // oficina
 export const festivosOficina = async (req, res) => {
   // context
-  const context = req.body.festivo
+  const context = req.body.context
 
   // proc
   try {
