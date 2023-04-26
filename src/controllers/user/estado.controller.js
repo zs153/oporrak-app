@@ -10,11 +10,10 @@ export const mainPage = async (req, res) => {
   const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
   const desde = yearMonthDayToUTCString(currentYear, currentMonth, 1)
   const hasta = yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth)
-  const context = {}
   
   try {
     let oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-      context,
+      context: {},
     })
 
     const datos = {
@@ -45,22 +44,17 @@ export const estadosPage = async (req, res) => {
     DESDE: req.body.desde,
     HASTA: req.body.hasta,
   }
-  const festivo = {
-    OFIFES: req.body.ofiest,
-    DESDE: periodo.DESDE,
-    HASTA: periodo.HASTA,
-  }
   const descripcionOficina = req.body.desofi
   const descripcionPerfil = req.body.desper
   const diasPeriodo = Math.ceil(Date.parse(periodo.HASTA) - Date.parse(periodo.DESDE)) / (1000 * 60 * 60 * 24) + 1
-  const estado = {
+  const context = {
     PERUSU: req.body.perusu,
     DESDE: periodo.DESDE,
     HASTA: periodo.HASTA,
   }
   
   if (req.body.ofiest !== '0') {
-    estado.OFIEST = req.body.ofiest
+    context.OFIEST = req.body.ofiest
   }
 
   try {
@@ -68,10 +62,14 @@ export const estadosPage = async (req, res) => {
       context: {},
     })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
-      festivo,
+      context: {
+        OFIFES: req.body.ofiest,
+        DESDE: periodo.DESDE,
+        HASTA: periodo.HASTA,
+      },
     })
     const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/oficinas/perfiles`, {
-      estado,
+      context,
     })
 
     const datos = {

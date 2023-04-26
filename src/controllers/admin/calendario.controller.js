@@ -121,29 +121,28 @@ export const mainPage = async (req, res) => {
 export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
-  const context = {
-    IDUSUA: req.query.id,
-  }
-  
+  const desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+  const hasta = dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`)
+
   try {
     const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      context,
+      context: {
+        IDUSUA: req.query.id,
+      },
     })
-    const estado = {
-      USUEST: usuario.data.data.IDUSUA,
-      DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-      HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-    }
     const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
-      estado,
+      context: {
+        USUEST: usuario.data.data.IDUSUA,
+        DESDE: desde,
+        HASTA: hasta,
+      },
     })
-    const festivo = {
-      OFIFES: usuario.data.data.OFIUSU,
-      DESDE: estado.DESDE,
-      HASTA: estado.HASTA,
-    }
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
-      festivo,
+      context: {
+        OFIFES: usuario.data.data.OFIUSU,
+        DESDE: desde,
+        HASTA: hasta,  
+      },
     })
     
     let dataSource = []

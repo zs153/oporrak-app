@@ -4,13 +4,12 @@ import { tiposMovimiento, estadosUsuario, tiposEstado, arrTiposEstadoUsuario, ar
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const context = {
-    IDUSUA: user.id,
-  }
 
   try {
     const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/stats`, {
-      context,
+      context: {
+        IDUSUA: user.id,
+      },
     })
 
     const datos = {
@@ -35,23 +34,23 @@ export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
   const usuario = JSON.parse(req.body.usuario)
-  const estado = {
-    USUEST: usuario.IDUSUA,
-    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-  }
-  const festivo = {
-    OFIFES: usuario.OFIUSU,
-    DESDE: estado.DESDE,
-    HASTA: estado.HASTA,
-  }
+  const desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+  const hasta = dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`)
 
   try {
     const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
-      estado,
+      context: {
+        USUEST: usuario.IDUSUA,
+        DESDE: desde,
+        HASTA: hasta,
+      },
     })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
-      festivo,
+      context: {
+        OFIFES: usuario.OFIUSU,
+        DESDE: desde,
+        HASTA: hasta,
+      },
     })
     
     let dataSource = []

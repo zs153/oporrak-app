@@ -63,7 +63,7 @@ const arrayFilter = (value) => {
 const pagination = (querySet, page, rows) => {
   const trimStart = (page - 1) * rows
   const trimEnd = trimStart + rows
-  const trimmedData = querySet.slice(trimStart, trimEnd)
+  const trimmedData = querySet // querySet.slice(trimStart, trimEnd)
   const pages = Math.ceil(querySet.length / rows);
 
   return {
@@ -72,6 +72,7 @@ const pagination = (querySet, page, rows) => {
   }
 }
 const buildTable = (state) => {
+  console.log(state);
   const table = document.getElementById('table-body')
   const data = pagination(state.querySet, state.page, state.rows)
   const myList = data.querySet

@@ -91,6 +91,8 @@ export const logoutPage = async (req, res) => {
   res.cookie("auth", undefined, options);
   res.cookie("verPan", undefined, options);
   res.cookie("hist", undefined, options);
+  res.cookie("curs", undefined, options);
+  res.cookie("ofic", undefined, options);
   res.cookie("filtro", undefined, options);
 
   res.redirect('/')

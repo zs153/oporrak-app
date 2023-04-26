@@ -25,17 +25,21 @@
                   <h3 class="card-title">Cursos</h3>
                   <div class="col-auto ms-auto">
                     <div class="d-flex">
-                      <div class="input-icon me-3">
-                        <span class="input-icon-addon">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <circle cx="10" cy="10" r="7"></circle>
-                            <line x1="21" y1="21" x2="15" y2="15"></line>
-                          </svg>
-                        </span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarCursoBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en cursos">
-                      </div>
+                      <form action="/admin/cursos" method="GET">
+                        <div class="input-icon me-3">
+                          <span class="input-icon-addon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                              stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <circle cx="10" cy="10" r="7"></circle>
+                              <line x1="21" y1="21" x2="15" y2="15"></line>
+                            </svg>
+                          </span>
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarCursoBox" name="part"
+                            placeholder="Buscar..." aria-label="Buscar en cursos">
+                        </div>
+                      </form>
                       <a href="/admin/cursos/add" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                           <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
@@ -110,12 +114,23 @@
   <script src="/js/curso.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.cursos) %>
-    const estados = <%- JSON.stringify(datos.arrEstadosCurso) %>    
+    const estados = <%- JSON.stringify(datos.arrEstadosCurso) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextCursos = <%- datos.hasNextCursos %>
+    const hasPrevCursos = <%- datos.hasPrevCursos %>
+
     let state = {
       'querySet': orgList,
       'page': 1,
       'rows': 10,
     }
+
+    // events
+    const elemBuscar = document.getElementById('buscarCursoBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('curs', event.target.value, .5) // medio dia
+    }
+    elemBuscar.value = getCookie('curs')
 
     buildTable(state)
   </script>

@@ -23,17 +23,21 @@
                     <h3 class="card-title">Oficinas</h3>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
-                        <div class="input-icon me-3">
-                          <span class="input-icon-addon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                              stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <circle cx="10" cy="10" r="7"></circle>
-                              <line x1="21" y1="21" x2="15" y2="15"></line>
-                            </svg>
-                          </span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarOficinaBox" onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en oficinas">
-                        </div>
+                        <form action="/admin/oficinas" method="GET">
+                          <div class="input-icon me-3">
+                            <span class="input-icon-addon">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="10" cy="10" r="7"></circle>
+                                <line x1="21" y1="21" x2="15" y2="15"></line>
+                              </svg>
+                            </span>
+                            <input type="text" class="form-control d-inline-block me-3" id="buscarOficinaBox" name="part"
+                              placeholder="Buscar..." aria-label="Buscar en oficinas">
+                          </div>
+                        </form>
                         <a href="/admin/oficinas/add" class="btn">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                             <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
@@ -117,9 +121,9 @@
       // events
       const elemBuscar = document.getElementById('buscarOficinaBox');
       elemBuscar.onchange = (event) => {
-        setCookie('filtro', event.target.value, .5) // medio dia
+        setCookie('ofic', event.target.value, .5) // medio dia
       }
-      elemBuscar.value = getCookie('filtro')
+      elemBuscar.value = getCookie('ofic')
       
       buildTable(state)
     </script>
