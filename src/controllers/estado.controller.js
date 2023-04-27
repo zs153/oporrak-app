@@ -213,7 +213,7 @@ export const borrarTraspaso = async (req, res) => {
 // usuarios
 export const estadosUsuario = async (req, res) => {
   // context
-  const context = req.body.context
+  const context = req.body.context;
 
   // proc
   try {
@@ -230,24 +230,24 @@ export const estadosUsuario = async (req, res) => {
 }
 export const estadosFechaTipo = async (req, res) => {
   // context
-  const context = req.body.context
+  const context = req.body.context;
 
   // proc
   try {
-    const result = await DAL.estadosFechaTipo(context)
+    const result = await DAL.estadosFechaTipo(context);
 
     if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data })
+      return res.status(200).json({ stat: 1, data: result.data });
     } else {
-      res.status(200).json({ stat: null, data: {} })
+      res.status(200).json({ stat: null, data: {} });
     }
   } catch (err) {
-    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' });
   }
 }
 export const estadosFechaUsuario = async (req, res) => {
   // context
-  const context = req.body.conext
+  const context = req.body.conext;
 
   // proc
   try {
@@ -264,18 +264,18 @@ export const estadosFechaUsuario = async (req, res) => {
 }
 export const estadosOficinaPerfil = async (req, res) => {
   // context
-  const context = req.body.context
+  const context = req.body.context;
 
   // proc
   try {
-    const result = await DAL.estadosOficinaPerfil(context)
+    const result = await DAL.estadosOficinaPerfil(context);
 
     if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data })
+      return res.status(200).json({ stat: 1, data: result.data });
     } else {
-      res.status(200).json({ stat: null, data: {} })
+      res.status(200).json({ stat: null, data: {} });
     }
   } catch (err) {
-    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' });
   }
 }

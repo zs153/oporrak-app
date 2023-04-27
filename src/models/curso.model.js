@@ -241,24 +241,20 @@ export const findAll = async (context) => {
 
   if (context.direction === 'next') {
     bind.idcurs = context.cursor.next
-    query += `WITH datos AS (
-      SELECT idcurs, descur, stacur FROM cursos
-      WHERE descur LIKE '%' || :part || '%' OR
+    query += `SELECT idcurs, descur, stacur FROM cursos
+    WHERE idcurs > :idcurs AND (
+      descur LIKE '%' || :part || '%' OR
       :part IS NULL
     )
-    SELECT * FROM datos
-    WHERE idcurs > :idcurs
     ORDER BY idcurs ASC
     FETCH NEXT :limit ROWS ONLY`
   } else {
     bind.idcurs = context.cursor.prev
-    query += `WITH datos AS (
-      SELECT idcurs, descur, stacur FROM cursos
-      WHERE descur LIKE '%' || :part || '%' OR
+    query += `SELECT idcurs, descur, stacur FROM cursos
+    WHERE idcurs < :idcurs AND (
+      descur LIKE '%' || :part || '%' OR
       :part IS NULL
     )
-    SELECT * FROM datos
-    WHERE idcurs < :idcurs
     ORDER BY idcurs DESC
     FETCH NEXT :limit ROWS ONLY`
   }
