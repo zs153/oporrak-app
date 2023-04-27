@@ -43,7 +43,7 @@ export const mainPage = async (req, res) => {
     let hasNextCursos = cursos.length === limit +1
     let nextCursor = 0
     let prevCursor = 0
-
+    
     if (hasNextCursos) {
       const nextCursorCursos = dir === 'next' ? cursos[limit - 1] : cursos[0]
       const prevCursorCursos = dir === 'next' ? cursos[0] : cursos[limit - 1]
@@ -52,45 +52,22 @@ export const mainPage = async (req, res) => {
 
       cursos.pop()
     } else {
-      if (dir === 'prev') {
-        context = {
-          limit: limit + 1,
-          direction: 'next',
-          cursor: {
-            next: 0,
-            prev: 0
-          },
-          part,
-        }
-        
-        const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos`, {
-          context,
-        })
-        
-        cursos = result.data.data
-        hasNextCursos = cursos.length === limit + 1
-        
-        if (hasNextCursos) {
-          const nextCursorCursos = cursos[limit - 1]
-          const prevCursorCursos = cursos[0]
-          nextCursor = nextCursorCursos.IDCURS
-          prevCursor = prevCursorCursos.IDCURS
-          
-          cursos.pop()
-        }
-        
-        hasPrevCursos = false
+      const nextCursorCursos = dir === 'next' ? 0 : cursos[0]
+      const prevCursorCursos = dir === 'next' ? cursos[0] : 0
+      nextCursor = nextCursorCursos.IDCURS
+      prevCursor = prevCursorCursos.IDCURS
+      
+      if (cursor) {
+        hasPrevCursos = prevCursorCursos === 0 ? false : true
+        hasNextCursos = nextCursorCursos === 0 ? false : true
       } else {
-        if (cursor) {
-          const prevCursorCursos = cursos[0]
-          prevCursor = prevCursorCursos.IDCURS
-          hasPrevCursos = true
-        } else {
-          hasPrevCursos = false
-        }
-        
+        hasPrevCursos = false
         hasNextCursos = false
       }
+    }
+
+    if (dir === 'prev') {
+      cursos = cursos.reverse()
     }
 
     cursor = {
@@ -108,6 +85,7 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/cursos', { user, datos })
   } catch (error) {
+    console.log(error);
     if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
