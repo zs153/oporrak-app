@@ -31,14 +31,12 @@ const removeSql = `BEGIN OPORRAK_PKG.DELETEOFICINA(
 export const find = async (context) => {
   // bind
   let query = baseQuery
-  let bind = {}
+  const bind = context
 
   if (context.IDOFIC) {
-    bind.IDOFIC = context.IDOFIC
     query += `WHERE oo.idofic = :idofic`
   }
   if (context.CODOFI) {
-    bind.CODOFI = context.CODOFI
     query += `WHERE oo.codofi = :codofi`
   }
   
@@ -95,8 +93,9 @@ export const findAll = async (context) => {
     return ({ stat: null, data: null })
   }
 };
-export const insert = async (bind) => {
+export const insert = async (context) => {
   // bind
+  let bind = context
   bind.IDOFIC = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -112,8 +111,9 @@ export const insert = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const update = async (bind) => {
+export const update = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateSql, bind)
 
@@ -123,8 +123,9 @@ export const update = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const remove = async (bind) => {
+export const remove = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeSql, bind)
 

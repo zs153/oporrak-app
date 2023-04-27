@@ -135,7 +135,7 @@ export const festivosOficina = async (req, res) => {
 // local
 export const festivosLocal = async (req, res) => {
   // context
-  const context = req.body.festivo
+  const context = req.body.context
 
   // proc
   try {

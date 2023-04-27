@@ -21,10 +21,9 @@ const activarSql = `BEGIN OPORRAK_PKG.ACTIVARHISTORICO(
 export const find = async (context) => {
   // bind
   let query = baseQuery;
-  let bind = {};
+  let bind = context;
 
   if (context.IDUSUA) {
-    bind.IDUSUA = context.IDUSUA;
     query += "WHERE idusua = :idusua";
   }
 
@@ -46,7 +45,7 @@ export const findAll = async (context) => {
   };
 
   if (context.direction === 'next') {
-    bind.NOMUSU = context.cursor.next === '' ? null : context.cursor.next;
+    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
     query = `WITH datos AS (
       SELECT idusua, nomusu, userid FROM historicos
       WHERE
@@ -59,7 +58,7 @@ export const findAll = async (context) => {
     FETCH NEXT :limit ROWS ONLY
     `
   } else {
-    bind.NOMUSU = context.cursor.prev === '' ? null : context.cursor.prev;
+    bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
     query = `WITH datos AS (
       SELECT idusua, nomusu, userid FROM historicos
       WHERE
@@ -82,8 +81,9 @@ export const findAll = async (context) => {
     return ({ stat: null, data: null })
   }
 };
-export const activar = async (bind) => {
+export const activar = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(activarSql, bind)
 

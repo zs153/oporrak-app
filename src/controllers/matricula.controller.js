@@ -2,7 +2,7 @@ import * as DAL from '../models/matricula.model'
 
 export const matricula = async (req, res) => {
   // context
-  const context = req.body.matricula
+  const context = req.body.context
 
   // proc
   try {
@@ -19,7 +19,7 @@ export const matricula = async (req, res) => {
 }
 export const matriculas = async (req, res) => {
   // context
-  const context = req.body.matricula
+  const context = req.body.context
 
   // proc
   try {
@@ -122,7 +122,7 @@ export const borrar = async (req, res) => {
 // usuarios
 export const usuariosMatricula = async (req, res) => {
   // context
-  const context = req.body.matricula
+  const context = req.body.context
 
   // proc
   try {
@@ -139,7 +139,7 @@ export const usuariosMatricula = async (req, res) => {
 }
 export const usuariosPendientes = async (req, res) => {
   // context
-  const context = req.body.matricula
+  const context = req.body.context
 
   // proc
   try {

@@ -11,7 +11,7 @@ const baseQuery = `SELECT
   hashor
 FROM estados
 `
-const estadosFechaPerfilQuery = `SELECT
+const estadosFechaTipoQuery = `SELECT
   uu.nomusu, uu.userid, uu.telusu, oo.desofi,
   LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.deshor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.deshor))), 2, '0') "DESHOR",
   LPAD(EXTRACT(HOUR FROM (TO_DSINTERVAL(p1.hashor))), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM (TO_DSINTERVAL(p1.hashor))), 2, '0') "HASHOR",  
@@ -156,10 +156,9 @@ const removeTraspasoSql = `BEGIN OPORRAK_PKG.DELETETRASPASO(
 export const find = async (context) => {
   // bind
   let query = baseQuery
-  let bind = {}
+  let bind = context
 
   if (context.IDESTA) {
-    bind.IDESTA = context.IDESTA
     query += `WHERE idesta = :idesta`
   }
 
@@ -172,8 +171,9 @@ export const find = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insert = async (bind) => {
+export const insert = async (context) => {
   // bind
+  let bind = context
   bind.IDESTA = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -189,8 +189,9 @@ export const insert = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const update = async (bind) => {
+export const update = async (context) => {  
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateSql, bind)
 
@@ -200,8 +201,9 @@ export const update = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const remove = async (bind) => {
+export const remove = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeSql, bind)
 
@@ -213,8 +215,9 @@ export const remove = async (bind) => {
 }
 
 // traspaso
-export const insertTraspaso = async (bind) => {
+export const insertTraspaso = async (context) => {  
   // bind
+  let bind = context
   bind.IDESTA = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -235,8 +238,9 @@ export const insertTraspaso = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const updateTraspaso = async (bind) => {
+export const updateTraspaso = async (context) => {
   // bind
+  let bind = context
   // proc
   const ret = await simpleExecute(updateTraspasoSql, bind)
 
@@ -246,8 +250,9 @@ export const updateTraspaso = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const removeTraspaso = async (bind) => {
+export const removeTraspaso = async (context) => {
   // bind
+  let bind = context
   // proc
   const ret = await simpleExecute(removeTraspasoSql, bind)
 
@@ -261,8 +266,8 @@ export const removeTraspaso = async (bind) => {
 // usuarios
 export const estadosUsuario = async (context) => {
   // bind
-  let query = estadosUsuarioQuery
-  let bind = context
+  const query = estadosUsuarioQuery
+  const bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -275,11 +280,8 @@ export const estadosUsuario = async (context) => {
 }
 export const estadosFechaUsuario = async (context) => {
   // bind
-  let query = estadosFechaUsuarioQuery
-  let bind = {
-    USUEST: context.USUEST,
-    FECEST: context.FECEST,
-  }
+  const query = estadosFechaUsuarioQuery
+  const bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -290,13 +292,10 @@ export const estadosFechaUsuario = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const estadosFechaPerfil = async (context) => {
+export const estadosFechaTipo = async (context) => {
   // bind
-  let query = estadosFechaPerfilQuery
-  let bind = {
-    TIPEST: context.TIPEST,
-    FECEST: context.FECEST,
-  }
+  const query = estadosFechaTipoQuery
+  const bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -310,10 +309,9 @@ export const estadosFechaPerfil = async (context) => {
 export const estadosOficinaPerfil = async (context) => {
   // bind
   let query = estadosOficinaPerfilQuery
-  let bind = context
+  const bind = context
 
   if (context.OFIEST) {
-    bind.OFIEST = context.OFIEST
     query += `WHERE t1.ofiusu = :ofiest
       ORDER BY t1.ofiusu, t1.idusua, t1.fecha, t1.tipest`
   } else {

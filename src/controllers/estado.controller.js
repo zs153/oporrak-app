@@ -228,16 +228,13 @@ export const estadosUsuario = async (req, res) => {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
 }
-export const estadosFechaPerfil = async (req, res) => {
+export const estadosFechaTipo = async (req, res) => {
   // context
-  const context = {
-    FECEST: req.body.estado.FECEST,
-    TIPEST: req.body.estado.TIPEST,
-  }
+  const context = req.body.context
 
   // proc
   try {
-    const result = await DAL.estadosFechaPerfil(context)
+    const result = await DAL.estadosFechaTipo(context)
 
     if (result.stat) {
       return res.status(200).json({ stat: 1, data: result.data })
@@ -250,10 +247,7 @@ export const estadosFechaPerfil = async (req, res) => {
 }
 export const estadosFechaUsuario = async (req, res) => {
   // context
-  const context = {
-    USUEST: req.body.estado.USUEST,
-    FECEST: req.body.estado.FECEST,
-  }
+  const context = req.body.conext
 
   // proc
   try {

@@ -16,7 +16,8 @@ const estadosSql = `WITH datos AS (
     SUM(CASE WHEN ee.tipest = 9 THEN EXTRACT(DAY FROM (hashor-deshor)*24*60) ELSE 0 END) "T"
   FROM usuarios uu
   LEFT JOIN estados ee ON ee.usuest = uu.idusua
-  WHERE uu.idusua = :idusua
+  WHERE uu.idusua = :idusua 
+  AND ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
   GROUP BY uu.idusua
 )
 SELECT 
@@ -27,10 +28,10 @@ SELECT
   uu.telusu,
   uu.stausu,
   dd.vacas,
-  TO_CHAR(TRUNC(dd.f/60), 'FM00') || ':' || TO_CHAR(mod(dd.f, 60), 'FM00') "FORMA",
-  TO_CHAR(TRUNC(dd.c/60), 'FM00') || ':' || TO_CHAR(mod(dd.c, 60), 'FM00') "CONCI",
-  TO_CHAR(TRUNC(dd.h/60), 'FM00') || ':' || TO_CHAR(mod(dd.h, 60), 'FM00') "HORAS",
-  TO_CHAR(TRUNC(dd.t/60), 'FM00') || ':' || TO_CHAR(mod(dd.t, 60), 'FM00') "TELEF",
+  TO_CHAR(TRUNC(dd.f/60), 'FM000') || ':' || TO_CHAR(mod(dd.f, 60), 'FM00') "FORMA",
+  TO_CHAR(TRUNC(dd.c/60), 'FM000') || ':' || TO_CHAR(mod(dd.c, 60), 'FM00') "CONCI",
+  TO_CHAR(TRUNC(dd.h/60), 'FM000') || ':' || TO_CHAR(mod(dd.h, 60), 'FM00') "HORAS",
+  TO_CHAR(TRUNC(dd.t/60), 'FM000') || ':' || TO_CHAR(mod(dd.t, 60), 'FM00') "TELEF",
   oo.desofi
 FROM datos dd
 INNER JOIN usuarios uu ON uu.idusua = dd.idusua
@@ -98,19 +99,15 @@ const perfilSql = `BEGIN OPORRAK_PKG.UPDATEPERFILUSUARIO(
 export const find = async (context) => {
   // bind
   let query = baseQuery;
-  let bind = {};
+  const bind = context
 
   if (context.IDUSUA) {
-    bind.IDUSUA = context.IDUSUA;
     query += `WHERE uu.idusua = :idusua`;
   } else if (context.USERID) {
-    bind.USERID = context.USERID;
     query += `WHERE uu.userid = :userid`;
   } else if (context.EMAUSU) {
-    bind.EMAUSU = context.EMAUSU;
     query += `WHERE uu.emausu = :emausu`;
   } else if (context.OFIUSU) {
-    bind.OFIUSU = context.OFIUSU;
     query += `WHERE uu.ofiusu = :ofiusu`;
   } 
 
@@ -172,12 +169,10 @@ export const findAll = async (context) => {
     return ({ stat: null, data: null })
   }
 };
-export const findEstados = async (context) => {
+export const conEstados = async (context) => {
   // bind
   let query = estadosSql
-  let bind = {
-    idusua: context.IDUSUA,
-  };
+  const bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -188,8 +183,9 @@ export const findEstados = async (context) => {
     return ({ stat: null, data: null })
   }
 };
-export const insert = async (bind) => {
+export const insert = async (context) => {
   // bind
+  let bind = context
   bind.IDUSUA = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -205,8 +201,9 @@ export const insert = async (bind) => {
     return ({ stat: null, data: err })
   }
 };
-export const update = async (bind) => {
+export const update = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateSql, bind)
 
@@ -216,8 +213,9 @@ export const update = async (bind) => {
     return ({ stat: null, data: err })
   }
 };
-export const remove = async (bind) => {
+export const remove = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeSql, bind)
 
@@ -227,8 +225,9 @@ export const remove = async (bind) => {
     return ({ stat: null, data: err })
   }
 };
-export const change = async (bind) => {
+export const change = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(cambioSql, bind)
 
@@ -238,8 +237,9 @@ export const change = async (bind) => {
     return ({ stat: null, data: err })
   }
 };
-export const forgot = async (bind) => {
+export const forgot = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(olvidoSql, bind)
 
@@ -249,8 +249,9 @@ export const forgot = async (bind) => {
     return ({ stat: null, data: err })
   }
 };
-export const profile = async (bind) => {
+export const profile = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(perfilSql, bind)
 

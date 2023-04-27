@@ -10,7 +10,7 @@ import {
   estadosOficinaPerfil,
   crearTraspaso,
   borrarTraspaso,
-  estadosFechaPerfil,
+  estadosFechaTipo,
   actualizarTraspaso,
 } from '../controllers/estado.controller'
 
@@ -26,7 +26,7 @@ apiEstadoRouter.post('/estados/update', actualizar)
 // usuario
 apiEstadoRouter.post('/estados/usuario', estadosUsuario)
 apiEstadoRouter.post('/estados/usuarios/fechas', estadosFechaUsuario)
-apiEstadoRouter.post('/estados/usuarios/perfiles', estadosFechaPerfil)
+apiEstadoRouter.post('/estados/usuarios/tipo', estadosFechaTipo)
 apiEstadoRouter.post('/estados/oficinas/perfiles', estadosOficinaPerfil)
 
 // traspaso

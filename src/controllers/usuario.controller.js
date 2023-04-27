@@ -44,12 +44,16 @@ export const conEstados = async (req, res) => {
 
   // proc
   try {
-    const result = await DAL.findEstados(context)
+    const result = await DAL.conEstados(context)
 
     if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
+      if (result.data.length === 1) {
+        res.status(200).json({ stat: 1, data: result.data[0] })
+      } else {
+        res.status(200).json({ stat: 1, data: result.data })
+      }
     } else {
-      res.status(400).json({ stat: null, data: {} })
+      res.status(400).json({ stat: null, data: 'La consulta no devuelve ningún dato' })
     }
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })

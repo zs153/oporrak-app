@@ -49,13 +49,9 @@ const updateSql = `BEGIN OPORRAK_PKG.UPDATEFESTIVOS(
 export const find = async (context) => {
   // bind
   let query = festivosSql
-  let bind = {
-    DESDE: context.DESDE,
-    HASTA: context.HASTA,
-  }
+  const bind = context
 
   if (context.OFIFES) {
-    bind.OFIFES = context.OFIFES
     query += `AND ofifes = :ofifes`
   }
 
@@ -68,8 +64,9 @@ export const find = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insert = async (bind) => {
+export const insert = async (context) => {
   // bind
+  let bind = context
   bind.IDFEST = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -85,8 +82,9 @@ export const insert = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const update = async (bind) => {
+export const update = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateSql, bind)
 
@@ -96,8 +94,9 @@ export const update = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const remove = async (bind) => {
+export const remove = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeSql, bind)
 
@@ -111,12 +110,8 @@ export const remove = async (bind) => {
 // oficinas
 export const festivosOficina = async (context) => {
   // bind
-  let query = festivosOficinaSql
-  let bind = {
-    OFIFES: context.OFIFES,
-    DESDE: context.DESDE,
-    HASTA: context.HASTA,
-  }
+  const query = festivosOficinaSql
+  const bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -130,13 +125,9 @@ export const festivosOficina = async (context) => {
 export const festivosLocal = async (context) => {
   // bind
   let query = festivosLocalSql
-  let bind = {
-    DESDE: context.DESDE,
-    HASTA: context.HASTA,
-  }
+  const bind = context
 
   if (context.OFIFES) {
-    bind.OFIFES = context.OFIFES
     query += `AND ff.ofifes = :ofifes`
   }
 

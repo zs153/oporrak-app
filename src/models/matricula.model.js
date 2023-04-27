@@ -75,10 +75,9 @@ const removeUsuarioSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
 // matriculas
 export const find = async (context) => {
   let query = baseSql
-  let bind = {}
+  let bind = context
 
   if (context.IDMATR) {
-    bind.IDMATR = context.IDMATR
     query += `WHERE mm.idmatr = :idmatr`
   }
 
@@ -91,8 +90,9 @@ export const find = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insert = async (bind) => {
+export const insert = async (context) => {
   // bind
+  let bind = context
   bind.IDMATR = {
     dir: BIND_OUT,
     type: NUMBER,
@@ -108,8 +108,9 @@ export const insert = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const update = async (bind) => {
+export const update = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(updateSql, bind)
 
@@ -119,8 +120,9 @@ export const update = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const remove = async (bind) => {
+export const remove = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeSql, bind)
 
@@ -135,11 +137,7 @@ export const remove = async (bind) => {
 export const usuariosMatricula = async (context) => {
   // bind
   let query = usuariosMatriculaSql
-  let bind = {}
-
-  if (context.IDMATR) {
-    bind.IDMATR = context.IDMATR
-  }
+  const bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -153,10 +151,9 @@ export const usuariosMatricula = async (context) => {
 export const usuariosPendientes = async (context) => {
   // bind
   let query = usuariosPendientesSql
-  let bind = {}
+  const bind = context
 
   if (context.IDMATR) {
-    bind.IDMATR = context.IDMATR
     query += `WHERE um.idmatr = :idmatr`
   }
 
@@ -169,8 +166,9 @@ export const usuariosPendientes = async (context) => {
     return ({ stat: null, data: null })
   }
 }
-export const insertUsuario = async (bind) => {
+export const insertUsuario = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(insertUsuarioSql, bind)
 
@@ -180,8 +178,9 @@ export const insertUsuario = async (bind) => {
     return ({ stat: null, data: err })
   }
 }
-export const removeUsuario = async (bind) => {
+export const removeUsuario = async (context) => {
   // bind
+  const bind = context
   // proc
   const ret = await simpleExecute(removeUsuarioSql, bind)
 

@@ -23,12 +23,9 @@ INNER JOIN cursos cc ON cc.idcurs = uc.idcurs
 export const findM = async (context) => {
   // bind
   let query = baseMatriculasQuery;
-  let bind = {
-    IDUSUA: context.IDUSUA,
-  };
+  const bind = context
 
   if (context.STAMAT) {
-    bind.STAMAT = context.STAMAT
     query += `AND mm.stamat = :stamat`
   }
 
@@ -46,10 +43,9 @@ export const findM = async (context) => {
 export const findC = async (context) => {
   // bind
   let query = baseCursosQuery;
-  let bind = {};
+  const bind = {};
 
   if (context.IDUSUA) {
-    bind.IDUSUA = context.IDUSUA
     query += `WHERE uc.idusua = :idusua`
   }
 

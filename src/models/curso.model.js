@@ -215,11 +215,10 @@ const removeUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOMATRICULA(
 // cursos
 export const find = async (context) => {
   // bind
-  let bind = {}
+  const bind = context
   let query = cursoSql
 
   if (context.IDCURS) {
-    bind.IDCURS = context.IDCURS
     query += `WHERE cc.idcurs = :idcurs`
   }
 
@@ -241,7 +240,7 @@ export const findAll = async (context) => {
   let query = ''
 
   if (context.direction === 'next') {
-    bind.IDCURS = context.cursor.next
+    bind.idcurs = context.cursor.next
     query += `WITH datos AS (
       SELECT idcurs, descur, stacur FROM cursos
       WHERE descur LIKE '%' || :part || '%' OR
@@ -252,7 +251,7 @@ export const findAll = async (context) => {
     ORDER BY idcurs ASC
     FETCH NEXT :limit ROWS ONLY`
   } else {
-    bind.IDCURS = context.cursor.prev
+    bind.idcurs = context.cursor.prev
     query += `WITH datos AS (
       SELECT idcurs, descur, stacur FROM cursos
       WHERE descur LIKE '%' || :part || '%' OR
@@ -319,14 +318,12 @@ export const remove = async (context) => {
 // turnos
 export const turno = async (context) => {
   // bind
-  let bind = {}
+  const bind = context
   let query = turnoSql
 
   if (context.IDCURS) {
-    bind.IDCURS = context.IDCURS
     query += `WHERE tc.idcurs = :idcurs`
   } else if (context.IDTURN) {
-    bind.IDTURN = context.IDTURN
     query += `WHERE tc.idturn = :idturn`
   }
 
@@ -385,14 +382,12 @@ export const removeTurno = async (context) => {
 // matricula
 export const matricula = async (context) => {
   // bind
-  let bind = {}
   let query = matriculaSql
+  const bind = context
 
   if (context.IDCURS) {
-    bind.IDCURS = context.IDCURS
     query += `WHERE mc.idcurs = :idcurs`
   } else if (context.IDMATR) {
-    bind.IDMATR = context.IDMATR
     query += `WHERE mm.idmatr = :idmatr`
   }
 
@@ -451,11 +446,10 @@ export const removeMatricula = async (context) => {
 // usuarios
 export const usuarios = async (context) => {
   // bind
-  let bind = {}
   let query = usuariosSql
+  let bind = context
 
   if (context.IDCURS) {
-    bind.IDCURS = context.IDCURS
     query += `WHERE uc.idcurs = :idcurs`
   }
 
@@ -470,11 +464,10 @@ export const usuarios = async (context) => {
 }
 export const usuariosPendientes = async (context) => {
   // bind
-  let bind = {}
   let query = usuariosPendientesSql
+  let bind = context
 
   if (context.IDCURS) {
-    bind.IDCURS = context.IDCURS
     query += `WHERE tc.idcurs = :idcurs
       AND uc.idusua IS NULL
     `
@@ -517,11 +510,10 @@ export const removeUsuario = async (context) => {
 // usuarios turno
 export const usuariosTurno = async (context) => {
   // bind
-  let bind = {}
   let query = usuariosTurnoSql
+  const bind = context
 
   if (context.IDTURN) {
-    bind.IDTURN = context.IDTURN
     query += `WHERE ut.idturn = :idturn`
   }
 
@@ -536,8 +528,8 @@ export const usuariosTurno = async (context) => {
 }
 export const usuariosTurnoPendientes = async (context) => {
   // bind
-  const bind = context
   const query = usuariosTurnoPendientesSql
+  const bind = context
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -577,10 +569,9 @@ export const removeUsuarioTurno = async (context) => {
 export const usuariosMatricula = async (context) => {
   // bind
   let query = usuariosMatriculaSql
-  let bind = {}
+  const bind = context
 
   if (context.IDMATR) {
-    bind.IDMATR = context.IDMATR
     query += `WHERE um.idmatr = :idmatr`
   }
 
