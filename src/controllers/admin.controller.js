@@ -8,21 +8,19 @@ import {
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const estado = {
-    FECEST: dateISOToUTCString(new Date()),
-    TIPEST: tiposEstado.telefono.ID,  // tipo excluido (no mostrar como ausencia los tipo telefono)
-  }
-  const context = {
-    IDUSUA: user.id,
-    STAMAT: estadosMatricula.abierta,
-  }
 
   try {
-    const perfiles = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios/perfiles`, {
-      estado,
+    const perfiles = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuarios/tipo`, {
+      context: {
+        FECEST: dateISOToUTCString(new Date()),
+        TIPEST: tiposEstado.telefono.ID,  // tipo excluido (no mostrar como ausencia los tipo telefono)
+      },
     })
     const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
-      context,
+      context: {
+        IDUSUA: user.id,
+        STAMAT: estadosMatricula.abierta,
+      },
     })
 
     let userid = ''

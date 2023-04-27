@@ -11,7 +11,9 @@ export const mainPage = async (req, res) => {
       context: {},
     })
     const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      context: { OFIUSU: req.params.idofic },
+      context: { 
+        OFIUSU: req.params.idofic 
+      },
     })
     const datos = {
       oficina: parseInt(req.params.idofic),

@@ -126,13 +126,12 @@ export const mainPage = async (req, res) => {
 // proc
 export const activar = async (req, res) => {
   const user = req.user
-  const context = {
-    CODOFI: req.body.codofi
-  }
 
   try {
     const oficina = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-      context
+      context: {
+        CODOFI: req.body.codofi
+      }
     })
     
     if (oficina.data.stat) {

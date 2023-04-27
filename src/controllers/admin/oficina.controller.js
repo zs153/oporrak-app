@@ -136,12 +136,11 @@ export const addPage = async (req, res) => {
 }
 export const editPage = async (req, res) => {
   const user = req.user
-  const context = {
-    IDOFIC: req.params.id,
-  }
   try {
     const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-      context,
+      context: {
+        IDOFIC: req.params.id,
+      },
     })
     const datos = {
       oficina: result.data.data,

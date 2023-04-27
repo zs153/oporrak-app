@@ -4,17 +4,20 @@ import { tiposMovimiento, estadosUsuario, tiposEstado, arrTiposEstadoUsuario, ar
 
 export const mainPage = async (req, res) => {
   const user = req.user
+  const currentYear = new Date().getFullYear()
 
   try {
     const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/stats`, {
       context: {
         IDUSUA: user.id,
+        DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+        HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
       },
     })
 
     const datos = {
       estadosUsuario,
-      usuario: usuario.data.data[0],
+      usuario: usuario.data.data,
     }
 
     res.render(`user/calendarios`, { user, datos })

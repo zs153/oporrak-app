@@ -4,14 +4,13 @@ import { estadosMatricula, tiposMovimiento } from '../../public/js/enumeraciones
 
 export const matriculasPage = async (req, res) => {
   const user = req.user
-  const context = {
-    IDUSUA: user.id,
-    STAMAT: estadosMatricula.abierta,
-  }
 
   try {
     const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
-      context
+      context: {
+        IDUSUA: user.id,
+        STAMAT: estadosMatricula.abierta,
+      }
     })
     const datos = {
       matriculas: matriculas.data.data,
@@ -32,15 +31,13 @@ export const matriculasPage = async (req, res) => {
 }
 export const cursosPage = async (req, res) => {
   const user = req.user
-  const context = {
-    IDUSUA: req.user.id
-  }
 
   try {
     const cursos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/cursos`, {
-      context,
+      context: {
+        IDUSUA: req.user.id
+      },
     })
-
     const datos = {
       cursos: cursos.data.data,
     }

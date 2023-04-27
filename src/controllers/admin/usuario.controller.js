@@ -6,7 +6,6 @@ import {
   arrEstadosUsuario,
   estadosUsuario,
   tiposMovimiento,
-  tiposRol,
 } from '../../public/js/enumeraciones'
 import { serverAPI, puertoAPI, secreto } from '../../config/settings'
 
@@ -129,11 +128,10 @@ export const mainPage = async (req, res) => {
 export const addPage = async (req, res) => {
   const user = req.user
   const filteredRol = arrTiposRol.filter(itm => itm.id <= user.rol)
-  const context = {}
 
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-      context,
+      context: {},
     })
     const datos = {
       oficinas: oficinas.data.data,
@@ -158,16 +156,15 @@ export const addPage = async (req, res) => {
 export const editPage = async (req, res) => {
   const user = req.user
   const filteredRol = arrTiposRol.filter(itm => itm.id <= user.rol)
-  const context = {
-    IDUSUA: req.params.id,
-  } 
 
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
       context: {}
     })
     const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      context,
+      context: {
+        IDUSUA: req.params.id,
+      },
     })
     const datos = {
       usuario: usuario.data.data,
@@ -179,13 +176,13 @@ export const editPage = async (req, res) => {
 
     res.render('admin/usuarios/edit', { user, datos })
   } catch (error) {
-    if (error.response.status === 400) {
+    if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
       });
     } else {
       res.render("admin/error500", {
-        alerts: [{ msg: error.response.data.msg }],
+        alerts: [{ msg: error }],
       });
     }
   }

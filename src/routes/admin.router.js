@@ -13,7 +13,7 @@ const adminRouter = express.Router()
 //--------------- paginas
 // festivos
 adminRouter.get('/festivos', verifyTokenAndAdmin, festivo.mainPage)
-adminRouter.post('/festivos/calendario', verifyTokenAndAdmin, festivo.calendarioPage)
+adminRouter.get('/festivos/calendario/:id', verifyTokenAndAdmin, festivo.calendarioPage)
 
 // oficinas
 adminRouter.get('/oficinas', verifyTokenAndAdmin, oficina.mainPage)

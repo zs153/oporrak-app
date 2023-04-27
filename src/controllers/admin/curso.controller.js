@@ -281,7 +281,7 @@ export const matriculasPage = async (req, res) => {
         IDCURS: req.params.id,
       },
     });
-    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas`, {
+    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context: {
         IDCURS: req.params.id,
       },
@@ -320,8 +320,8 @@ export const addMatriculaPage = async (req, res) => {
       },
     });
     const datos = {
-      curso: curso.data.data,
       matricula,
+      curso: curso.data.data,
       arrEstadosMatricula,
     };
 

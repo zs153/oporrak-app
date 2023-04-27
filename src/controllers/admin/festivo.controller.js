@@ -4,14 +4,104 @@ import { tiposEstado, tiposMovimiento } from '../../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
-  const context = {}
+
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  let hasPrevOficinas = false
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let context = {}
+
+  if (cursor) {
+    hasPrevOficinas = true
+    context = {
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: 0,
+        prev: 0,
+      },
+      part,
+    }
+  }
 
   try {
-    const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-      context
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
+      context,
     })
+
+    let oficinas = result.data.data
+    let hasNextOficinas = oficinas.length === limit + 1
+    let nextCursor = 0
+    let prevCursor = 0
+
+    if (hasNextOficinas) {
+      const nextCursorOficinas = dir === 'next' ? oficinas[limit - 1] : oficinas[0]
+      const prevCursorOficinas = dir === 'next' ? oficinas[0] : oficinas[limit - 1]
+      nextCursor = nextCursorOficinas.IDOFIC
+      prevCursor = prevCursorOficinas.IDOFIC
+
+      oficinas.pop()
+    } else {
+      if (dir === 'prev') {
+        context = {
+          limit: limit + 1,
+          direction: 'next',
+          cursor: {
+            next: 0,
+            prev: 0
+          },
+          part,
+        }
+
+        const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
+          context,
+        })
+
+        oficinas = result.data.data
+        hasNextOficinas = oficinas.length === limit + 1
+
+        if (hasNextOficinas) {
+          const nextCursorOficinas = oficinas[limit - 1]
+          const prevCursorOficinas = oficinas[0]
+          nextCursor = nextCursorOficinas.IDOFIC
+          prevCursor = prevCursorOficinas.IDOFIC
+
+          oficinas.pop()
+        }
+
+        hasPrevOficinas = false
+      } else {
+        if (cursor) {
+          const prevCursorOficinas = oficinas[0]
+          prevCursor = prevCursorOficinas.IDOFIC
+          hasPrevOficinas = true
+        } else {
+          hasPrevOficinas = false
+        }
+
+        hasNextOficinas = false
+      }
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
     const datos = {
-      oficinas: oficinas.data.data,
+      limit,
+      oficinas,
+      hasPrevOficinas,
+      hasNextOficinas,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
     }
 
     res.render('admin/festivos', { user, datos })
@@ -30,19 +120,19 @@ export const mainPage = async (req, res) => {
 export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
-  const context = {
-    OFIFES: req.body.idofic,
-    DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-    HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
-  }
-  const oficina = {
-    IDOFIC: req.body.idofic,
-    DESOFI: req.body.desofi,
-  }
 
   try {
-    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos`, {
-      context,
+    const oficina = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+      context: {
+        IDOFIC: req.params.id,
+      },
+    })
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/locales`, {
+      context: {
+        OFIFES: req.params.id,
+        DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
+        HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
+      },
     })
 
     let dataSource = []
@@ -58,7 +148,7 @@ export const calendarioPage = async (req, res) => {
     }
 
     const datos = {
-      oficina,
+      oficina: oficina.data.data,
       dataSource: JSON.stringify(dataSource),
       tiposEstado,
     }
@@ -138,4 +228,10 @@ const dateISOToUTCString = (dateISO) => {
   const fecha = new Date(dateISO);
   const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
   return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
+}
+const convertNodeToCursor = (node) => {
+  return new Buffer.from(node, 'binary').toString('base64')
+}
+const convertCursorToNode = (cursor) => {
+  return new Buffer.from(cursor, 'base64').toString('binary')
 }
