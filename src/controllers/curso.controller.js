@@ -142,7 +142,7 @@ export const turnos = async (req, res) => {
 
   // proc
   try {
-    const result = await DAL.turno(context)
+    const result = await DAL.turnos(context)
 
     if (result.stat) {
       return res.status(200).json({ stat: 1, data: result.data })
@@ -268,7 +268,7 @@ export const matriculas = async (req, res) => {
 
   // proc
   try {
-    const result = await DAL.matricula(context)
+    const result = await DAL.matriculas(context)
 
     if (result.stat) {
       return res.status(200).json({ stat: 1, data: result.data })

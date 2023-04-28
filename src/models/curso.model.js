@@ -332,6 +332,60 @@ export const turno = async (context) => {
     return ({ stat: null, data: null })
   }
 }
+export const turnos = async (context) => {
+  // bind
+  let bind = {
+    idcurs: context.idcurs,
+    limit: context.limit,
+    part: context.part,
+  }
+  let query = ''
+
+  if (context.direction === 'next') {
+    bind.idturn = context.cursor.next
+    query += `SELECT 
+    tt.idturn, tt.destur, tt.loctur, tt.initur, tt.fintur,
+    TO_CHAR(tt.initur, 'DD/MM/YYYY') "STRINI",
+    TO_CHAR(tt.fintur, 'DD/MM/YYYY') "STRFIN",
+    LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS "INIHOR",
+    LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS "FINHOR"
+    FROM turnos tt
+    INNER JOIN turnoscurso tc ON tc.idturn = tt.idturn
+    WHERE tt.idturn > :idturn AND tc.idcurs = :idcurs
+    AND (
+      tt.destur LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY tt.idturn ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.idturn = context.cursor.prev
+    query += `SELECT 
+    tt.idturn, tt.destur, tt.loctur, tt.initur, tt.fintur,
+    TO_CHAR(tt.initur, 'DD/MM/YYYY') "STRINI",
+    TO_CHAR(tt.fintur, 'DD/MM/YYYY') "STRFIN",
+    LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS "INIHOR",
+    LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS "FINHOR"
+    FROM turnos tt
+    INNER JOIN turnoscurso tc ON tc.idturn = tt.idturn 
+    WHERE tt.idturn < :idturn AND tc.idcurs = :idcurs
+    AND (
+      tt.destur LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY tt.idturn DESC
+    FETCH NEXT :limit ROWS ONLY`
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
+}
 export const insertTurno = async (context) => {
   // bind
   let bind = context
@@ -396,6 +450,60 @@ export const matricula = async (context) => {
     return ({ stat: null, data: null })
   }
 }
+export const matriculas = async (context) => {
+  // bind
+  let bind = {
+    idcurs: context.idcurs,
+    limit: context.limit,
+    part: context.part,
+  }
+  let query = ''
+
+  if (context.direction === 'next') {
+    bind.idmatr = context.cursor.next
+    query += `SELECT 
+    mm.idmatr, mm.desmat, mm.notmat, mm.stamat,
+    TO_CHAR(mm.inimat, 'YYYY-MM-DD') "INIMAT",
+    TO_CHAR(mm.finmat, 'YYYY-MM-DD') "FINMAT",
+    TO_CHAR(mm.inimat, 'DD/MM/YYYY') "STRINI",
+    TO_CHAR(mm.finmat, 'DD/MM/YYYY') "STRFIN"
+    FROM matriculas mm
+    INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
+    WHERE mm.idmatr > :idmatr AND mc.idcurs = :idcurs
+    AND (
+      mm.desmat LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY mm.idmatr ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.idmatr = context.cursor.prev
+    query += `SELECT 
+    mm.idmatr, mm.desmat, mm.notmat, mm.stamat,
+    TO_CHAR(mm.inimat, 'YYYY-MM-DD') "INIMAT",
+    TO_CHAR(mm.finmat, 'YYYY-MM-DD') "FINMAT",
+    TO_CHAR(mm.inimat, 'DD/MM/YYYY') "STRINI",
+    TO_CHAR(mm.finmat, 'DD/MM/YYYY') "STRFIN"
+    FROM matriculas mm
+    INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
+    WHERE mm.idmatr < :idmatr AND mc.idcurs = :idcurs
+    AND (
+      mm.desmat LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY mm.idmatr DESC
+    FETCH NEXT :limit ROWS ONLY`
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }
+}
 export const insertMatricula = async (context) => {
   // bind
   let bind = context
@@ -439,7 +547,7 @@ export const removeMatricula = async (context) => {
   }
 }
 
-// usuarios
+// usuarios curso
 export const usuarios = async (context) => {
   // bind
   let query = usuariosSql
@@ -564,11 +672,49 @@ export const removeUsuarioTurno = async (context) => {
 // usuarios matricula
 export const usuariosMatricula = async (context) => {
   // bind
-  let query = usuariosMatriculaSql
-  const bind = context
+  let bind = {
+    idmatr: context.idmatr,
+    limit: context.limit,
+    part: context.part,
+  }
+  let query = ''
 
-  if (context.IDMATR) {
-    query += `WHERE um.idmatr = :idmatr`
+  if (context.direction === 'next') {
+    bind.idusua = context.cursor.next
+    query += `SELECT 
+    uu.idusua,
+    uu.nomusu,
+    uu.userid,
+    oo.desofi
+    FROM usuarios uu
+    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    WHERE uu.idusua > :idusua AND um.idmatr = :idmatr
+    AND (
+      uu.nomusu LIKE '%' || :part || '%' OR
+      oo.desofi LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY uu.idusua ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.idmatr = context.cursor.prev
+    query += `SELECT 
+    uu.idusua,
+    uu.nomusu,
+    uu.userid,
+    oo.desofi
+    FROM usuarios uu
+    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    WHERE uu.idusua < :idusua AND um.idmatr = :idmatr
+    AND (
+      uu.nomusu LIKE '%' || :part || '%' OR
+      oo.desofi LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY uu.idusua DESC
+    FETCH NEXT :limit ROWS ONLY`
   }
 
   // proc
@@ -578,7 +724,7 @@ export const usuariosMatricula = async (context) => {
     return ({ stat: 1, data: ret.rows })
   } else {
     return ({ stat: null, data: null })
-  }
+  }  
 }
 export const insertUsuarioMatricula = async (context) => {
   // bind
