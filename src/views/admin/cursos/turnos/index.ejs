@@ -30,17 +30,21 @@
                   </div>
                   <div class="col-auto ms-auto">
                     <div class="d-flex">
-                      <div class="input-icon me-3">
-                        <span class="input-icon-addon">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <circle cx="10" cy="10" r="7"></circle>
-                            <line x1="21" y1="21" x2="15" y2="15"></line>
-                          </svg>
-                        </span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarTurnoBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
-                      </div>
+                      <form action="/admin/cursos/turnos/<%= datos.curso.IDCURS %>" method="GET">
+                        <div class="input-icon me-3">
+                          <span class="input-icon-addon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                              stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <circle cx="10" cy="10" r="7"></circle>
+                              <line x1="21" y1="21" x2="15" y2="15"></line>
+                            </svg>
+                          </span>
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarTurnoBox" name="part"
+                            placeholder="Buscar..." aria-label="Buscar en turnos">
+                        </div>
+                      </form>
                       <a href="/admin/cursos/turnos/add/<%- datos.curso.IDCURS %>" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                           <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
@@ -124,11 +128,22 @@
   <script>
     const orgList = <%- JSON.stringify(datos.turnos) %>
     const curso = <%- JSON.stringify(datos.curso) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextTurnos = <%- datos.hasNextTurnos %>
+    const hasPrevTurnos = <%- datos.hasPrevTurnos %>
+
     let state = {
       'querySet': orgList,
       'page': 1,
       'rows': 10,
     }
+
+    // events
+    const elemBuscar = document.getElementById('buscarTurnoBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('turn', event.target.value, .5) // medio dia
+    }
+    elemBuscar.value = getCookie('turn')
 
     buildTable(state)
   </script>
