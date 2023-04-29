@@ -197,6 +197,12 @@ FROM usuarios uu
 INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
 `
+const usuariosMatriculaPendientesSql = `SELECT idusua,nomusu
+FROM usuarios
+WHERE idusua NOT IN (
+  SELECT idusua FROM usuariosmatricula
+);
+`
 const insertUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOMATRICULA(
   :idmatr,
   :arrusu,
@@ -698,7 +704,7 @@ export const usuariosMatricula = async (context) => {
     ORDER BY uu.idusua ASC
     FETCH NEXT :limit ROWS ONLY`
   } else {
-    bind.idmatr = context.cursor.prev
+    bind.idusua = context.cursor.prev
     query += `SELECT 
     uu.idusua,
     uu.nomusu,
@@ -711,6 +717,52 @@ export const usuariosMatricula = async (context) => {
     AND (
       uu.nomusu LIKE '%' || :part || '%' OR
       oo.desofi LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY uu.idusua DESC
+    FETCH NEXT :limit ROWS ONLY`
+  }
+
+  // proc
+  const ret = await simpleExecute(query, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: ret.rows })
+  } else {
+    return ({ stat: null, data: null })
+  }  
+}
+export const usuariosMatriculaPendientes = async (context) => {
+  // bind
+  let bind = {
+    idmatr: context.idmatr,
+    limit: context.limit,
+    part: context.part,
+  }
+  let query = ''
+
+  if (context.direction === 'next') {
+    bind.idusua = context.cursor.next
+    query += `SELECT uu.idusua, uu.nomusu
+    FROM usuarios uu
+    WHERE uu.idusua > :idusua AND uu.idusua NOT IN (
+      SELECT um.idusua FROM usuariosmatricula um
+      WHERE um.idmatr = :idmatr
+    ) AND (
+      uu.nomusu LIKE '%' || :part || '%' OR
+      :part IS NULL
+    )
+    ORDER BY uu.idusua ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.idusua = context.cursor.prev
+    query += `SELECT uu.idusua, uu.nomusu
+    FROM usuarios uu
+    WHERE uu.idusua < :idusua AND uu.idusua NOT IN (
+      SELECT um.idusua FROM usuariosmatricula um
+      WHERE um.idmatr = :idmatr
+    ) AND (
+      uu.nomusu LIKE '%' || :part || '%' OR
       :part IS NULL
     )
     ORDER BY uu.idusua DESC

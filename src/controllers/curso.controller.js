@@ -574,6 +574,23 @@ export const usuariosMatricula = async (req, res) => {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
 }
+export const usuariosMatriculaPendientes = async (req, res) => {
+  // context
+  const context = req.body.context
+
+  // proc
+  try {
+    const result = await DAL.usuariosMatriculaPendientes(context)
+
+    if (result.stat) {
+      return res.status(200).json({ stat: 1, data: result.data })
+    } else {
+      res.status(200).json({ stat: null, data: {} })
+    }
+  } catch (err) {
+    return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
+  }
+}
 export const crearUsuarioMatricula = async (req, res) => {
   // context
   const matricula = {
