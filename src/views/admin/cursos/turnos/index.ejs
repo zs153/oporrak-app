@@ -141,9 +141,9 @@
     // events
     const elemBuscar = document.getElementById('buscarTurnoBox');
     elemBuscar.onchange = (event) => {
-      setCookie('turn', event.target.value, .5) // medio dia
+      setCookie('filtro', event.target.value, .5) // medio dia
     }
-    elemBuscar.value = getCookie('turn')
+    elemBuscar.value = getCookie('filtro')
 
     buildTable(state)
   </script>

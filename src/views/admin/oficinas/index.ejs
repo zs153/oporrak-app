@@ -8,6 +8,30 @@
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <!-- styles -->
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+      const getCookie = (key) => {
+        let value = ''
+        document.cookie.split(';').forEach((e) => {
+          if (e.includes(key)) {
+            value = e.split('=')[1]
+          }
+        })
+        return value
+      }
+      const setCookie = (name, value, days) => {
+        let expires = "";
+        if (days) {
+          let date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          expires = "; expires=" + date.toUTCString();
+        }
+        // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+      }
+      const deleteCookie = () => {
+        document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+      }
+    </script>
   </head>
   <body class="antialiased">
     <div class="wrapper">
@@ -38,7 +62,7 @@
                               placeholder="Buscar..." aria-label="Buscar en oficinas">
                           </div>
                         </form>
-                        <a href="/admin/oficinas/add" class="btn">
+                        <a href="/admin/oficinas/add" id="newOfic" class="btn">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                             <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                           </svg>
@@ -119,11 +143,14 @@
       }
 
       // events
+      const elemNewOficina = document.getElementById('newOfic');
+      elemNewOficina.setAttribute('href', `/admin/oficinas/add?part=${getCookie('filtro')}`)
+
       const elemBuscar = document.getElementById('buscarOficinaBox');
       elemBuscar.onchange = (event) => {
-        setCookie('ofic', event.target.value, .5) // medio dia
+        setCookie('filtro', event.target.value, .5) // medio dia
       }
-      elemBuscar.value = getCookie('ofic')
+      elemBuscar.value = getCookie('filtro')
       
       buildTable(state)
     </script>

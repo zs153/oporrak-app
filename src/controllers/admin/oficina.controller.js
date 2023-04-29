@@ -9,12 +9,11 @@ export const mainPage = async (req, res) => {
   const limit = req.query.limit ? req.query.limit : 10
   const part = req.query.part ? req.query.part.toUpperCase() : ''
 
-  let hasPrevOficinas = false
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let hasPrevOficinas = cursor ? true:false
   let context = {}
 
   if (cursor) {
-    hasPrevOficinas = true
     context = {
       limit: limit + 1,
       direction: dir,
@@ -42,7 +41,7 @@ export const mainPage = async (req, res) => {
     let hasNextOficinas = oficinas.length === limit +1
     let nextCursor = 0
     let prevCursor = 0
-
+    
     if (hasNextOficinas) {
       const nextCursorOficinas = dir === 'next' ? oficinas[limit - 1] : oficinas[0]
       const prevCursorOficinas = dir === 'next' ? oficinas[0] : oficinas[limit - 1]
@@ -51,45 +50,22 @@ export const mainPage = async (req, res) => {
 
       oficinas.pop()
     } else {
-      if (dir === 'prev') {
-        context = {
-          limit: limit + 1,
-          direction: 'next',
-          cursor: {
-            next: 0,
-            prev: 0
-          },
-          part,
-        }
-        
-        const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficinas`, {
-          context,
-        })
-        
-        oficinas = result.data.data
-        hasNextOficinas = oficinas.length === limit + 1
-        
-        if (hasNextOficinas) {
-          const nextCursorOficinas = oficinas[limit - 1]
-          const prevCursorOficinas = oficinas[0]
-          nextCursor = nextCursorOficinas.IDOFIC
-          prevCursor = prevCursorOficinas.IDOFIC
-          
-          oficinas.pop()
-        }
-        
-        hasPrevOficinas = false
+      const nextCursorOficinas = dir === 'next' ? 0 : oficinas[0]
+      const prevCursorOficinas = dir === 'next' ? oficinas[0] : 0
+      nextCursor = nextCursorOficinas.IDOFIC
+      prevCursor = prevCursorOficinas.IDOFIC
+      
+      if (cursor) {
+        hasNextOficinas = nextCursorOficinas === 0 ? false : true
+        hasPrevOficinas = prevCursorOficinas === 0 ? false : true
       } else {
-        if (cursor) {
-          const prevCursorOficinas = oficinas[0]
-          prevCursor = prevCursorOficinas.IDOFIC
-          hasPrevOficinas = true
-        } else {
-          hasPrevOficinas = false
-        }
-        
         hasNextOficinas = false
+        hasPrevOficinas = false
       }
+    }
+
+    if (dir === 'prev') {
+      oficinas = oficinas.reverse()
     }
 
     cursor = {
@@ -97,10 +73,9 @@ export const mainPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      limit,
       oficinas,
-      hasPrevOficinas,
       hasNextOficinas,
+      hasPrevOficinas,
       cursor: convertNodeToCursor(JSON.stringify(cursor)),
     }
 
@@ -116,6 +91,7 @@ export const mainPage = async (req, res) => {
       });
     }
   }
+
 }
 export const addPage = async (req, res) => {
   const user = req.user

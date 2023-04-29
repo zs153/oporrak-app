@@ -128,9 +128,9 @@
     // events
     const elemBuscar = document.getElementById('buscarCursoBox');
     elemBuscar.onchange = (event) => {
-      setCookie('curs', event.target.value, .5) // medio dia
+      setCookie('filtro', event.target.value, .5) // medio dia
     }
-    elemBuscar.value = getCookie('curs')
+    elemBuscar.value = getCookie('filtro')
 
     buildTable(state)
   </script>

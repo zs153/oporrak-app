@@ -623,25 +623,93 @@ export const usuariosTurnoAddPage = async (req, res) => {
 // pages usuarios matricula
 export const usuariosMatriculaPage = async (req, res) => {
   const user = req.user
-  const curso = {
-    IDCURS: req.params.idcurs,
+
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let hasPrevUsuarios = cursor ? true:false
+  let context = {}
+
+  if (cursor) {
+    context = {
+      idmatr: req.params.idmatr,
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      idmatr: req.params.idmatr,
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: 0,
+        prev: 0,
+      },
+      part,
+    }
   }
 
   try {
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context: {
+        IDCURS: req.params.idcurs,
+      },
+    })    
     const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context: {
         IDMATR: req.params.idmatr,
       },
     })
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/usuarios`, {
-      context: {
-        IDMATR: req.params.idmatr,
-      },
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/usuarios`, {
+      context,
     })
+
+    let usuarios = result.data.data
+    let hasNextUsuarios = usuarios.length === limit +1
+    let nextCursor = 0
+    let prevCursor = 0
+    
+    if (hasNextUsuarios) {
+      const nextCursorUsuarios = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
+      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
+      nextCursor = nextCursorUsuarios.IDMATR
+      prevCursor = prevCursorUsuarios.IDMATR
+
+      usuarios.pop()
+    } else {
+      const nextCursorUsuarios = dir === 'next' ? 0 : usuarios[0]
+      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : 0
+      nextCursor = nextCursorUsuarios.IDMATR
+      prevCursor = prevCursorUsuarios.IDMATR
+      
+      if (cursor) {
+        hasNextUsuarios = nextCursorUsuarios === 0 ? false : true
+        hasPrevUsuarios = prevCursorUsuarios === 0 ? false : true
+      } else {
+        hasNextUsuarios = false
+        hasPrevUsuarios = false
+      }
+    }
+
+    if (dir === 'prev') {
+      usuarios = usuarios.reverse()
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
     const datos = {
-      curso,
+      curso: curso.data.data,
       matricula: matricula.data.data,
-      usuarios: usuarios.data.data,
+      usuarios,
+      hasNextUsuarios,
+      hasPrevUsuarios,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
     }
 
     res.render('admin/cursos/matriculas/usuarios', { user, datos })
@@ -658,27 +726,97 @@ export const usuariosMatriculaPage = async (req, res) => {
   }
 }
 export const usuariosMatriculaAddPage = async (req, res) => {
-  const user = req.user;
-  const curso = {
-    IDCURS: req.params.idcurs,
+  const user = req.user
+
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let hasPrevUsuarios = cursor ? true:false
+  let context = {}
+
+  if (cursor) {
+    context = {
+      idmatr: req.params.idmatr,
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      idmatr: req.params.idmatr,
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: 0,
+        prev: 0,
+      },
+      part,
+    }
   }
 
   try {
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+      context: {
+        IDCURS: req.params.idcurs,
+      },
+    })    
     const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context: {
         IDMATR: req.params.idmatr,
       },
     })
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuario`, {
-      context: {},
-    });
-    const datos = {
-      curso,
-      matricula: matricula.data.data,
-      usuarios: usuarios.data.data,
-    };
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/usuarios/pendientes`, {
+      context,
+    })
 
-    res.render("admin/cursos/matriculas/usuarios/add", { user, datos });
+    let usuarios = result.data.data
+    let hasNextUsuarios = usuarios.length === limit +1
+    let nextCursor = 0
+    let prevCursor = 0
+    
+    if (hasNextUsuarios) {
+      const nextCursorUsuarios = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
+      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
+      nextCursor = nextCursorUsuarios.IDUSUA
+      prevCursor = prevCursorUsuarios.IDUSUA
+
+      usuarios.pop()
+    } else {
+      const nextCursorUsuarios = dir === 'next' ? 0 : usuarios[0]
+      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : 0
+      nextCursor = nextCursorUsuarios.IDUSUA
+      prevCursor = prevCursorUsuarios.IDUSUA
+      
+      if (cursor) {
+        hasNextUsuarios = nextCursorUsuarios === 0 ? false : true
+        hasPrevUsuarios = prevCursorUsuarios === 0 ? false : true
+      } else {
+        hasNextUsuarios = false
+        hasPrevUsuarios = false
+      }
+    }
+
+    if (dir === 'prev') {
+      usuarios = usuarios.reverse()
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
+    const datos = {
+      curso: curso.data.data,
+      matricula: matricula.data.data,
+      usuarios,
+      hasNextUsuarios,
+      hasPrevUsuarios,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
+    }
+
+    res.render('admin/cursos/matriculas/usuarios/add', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {

@@ -32,19 +32,21 @@
                       </div>
                       <div class="col-auto ms-auto">
                         <div class="d-flex">
-                          <div class="input-icon me-3">
-                            <span class="input-icon-addon">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <circle cx="10" cy="10" r="7"></circle>
-                                <line x1="21" y1="21" x2="15" y2="15"></line>
-                              </svg>
-                            </span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarMatriculaBox"
-                              onkeyup="arrayFilter(this.value);" placeholder="Buscar..." aria-label="Buscar en matrículas">
-                          </div>
+                          <form action="/admin/cursos/matriculas/<%= datos.matricula.IDMATR %>" method="GET">
+                            <div class="input-icon me-3">
+                              <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                  stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <circle cx="10" cy="10" r="7"></circle>
+                                  <line x1="21" y1="21" x2="15" y2="15"></line>
+                                </svg>
+                              </span>
+                              <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" name="part"
+                                placeholder="Buscar..." aria-label="Buscar en matriculas">
+                            </div>
+                          </form>
                           <a href="/admin/cursos/matriculas/usuarios/add/<%- datos.curso.IDCURS %>/<%- datos.matricula.IDMATR %>"
                             class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
@@ -128,6 +130,9 @@
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const curso = <%- JSON.stringify(datos.curso) %>
     const matricula = <%- JSON.stringify(datos.matricula) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextUsuarios = <%- datos.hasNextUsuarios %>
+    const hasPrevUsuarios = <%- datos.hasPrevUsuarios %>
 
     let state = {
       'querySet': orgList,
@@ -135,6 +140,12 @@
       'rows': 10,
     }
 
+    // events
+    const elemBuscar = document.getElementById('buscarUsuarioBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5) // medio dia
+    }
+    elemBuscar.value = getCookie('filtro')
     buildTable(state)
   </script>
 </body>

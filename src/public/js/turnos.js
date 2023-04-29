@@ -30,7 +30,7 @@ const setCookie = (name, value, days) => {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 const deleteCookie = () => {
-  document.cookie = 'turn=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
 }
 const sortTableByColumn = (table, column, asc = true) => {
   const dirModifier = asc ? 1 : -1;
