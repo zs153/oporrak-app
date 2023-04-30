@@ -112,10 +112,14 @@ const createPages = () => {
 
   if (hasPrevOficinas) {
     str += "<li class='page-item previous no'><a href='/admin/festivos?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarOficinaBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
+  } else {
+    str += "<li><a href='#' class='nav-link disabled'>&#9664 Anterior</a>";
   }
 
   if (hasNextOficinas) {
     str += "<li class='page-item next no'><a href='/admin/festivos?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarOficinaBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
+  } else {
+    str += "<li><a href='#' class='nav-link disabled'>Siguiente &#9654</a>";
   }
   str += "</ul>";
 

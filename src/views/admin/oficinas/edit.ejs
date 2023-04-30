@@ -9,6 +9,30 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
 </head>
 
 <body class="antialiased">
@@ -22,7 +46,7 @@
             <div class="col-2"></div>
             <div class="col-8">
               <div class="card mt-3">            
-                <form action="/admin/oficinas/update" method="POST" onsubmit="return validate();">
+                <form action="#" id="edit" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idofic" name="idofic" value="<%- datos.oficina.IDOFIC %>">
                   <div class="card-header">
                     <h3 class="card-title">Oficina</h3>
@@ -66,6 +90,10 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
+  <script>
+      const elemEdit = document.getElementById('edit');
+      elemEdit.setAttribute('action', `/admin/oficinas/update?part=${getCookie('filtro')}`)
+  </script>
   <script>
     const desofi = document.getElementById('desofi')
     const codofi = document.getElementById('codofi')

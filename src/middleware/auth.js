@@ -7,7 +7,6 @@ import { publicKey, puertoAPI, secreto, serverAPI } from '../config/settings'
 const authRoutes = async (req, res, next) => {
   let tokenHeader = req.cookies.auth
 
-  console.log('pass...', tokenHeader);
   try {
     const localKey = createSecretKey(new Buffer.from(secreto, 'hex'));
 

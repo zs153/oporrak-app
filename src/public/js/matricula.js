@@ -160,10 +160,14 @@ const createPages = () => {
 
   if (hasPrevMatriculas) {
     str += "<li class='page-item previous no'><a href='/admin/cursos/matriculas/" + curso.IDCURS + "?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarMatriculaBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
+  } else {
+    str += "<li><a href='#' class='nav-link disabled'>&#9664 Anterior</a>";
   }
 
   if (hasNextMatriculas) {
     str += "<li class='page-item next no'><a href='/admin/cursos/matriculas/" + curso.IDCURS + "?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarMatriculaBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
+  } else {
+    str += "<li><a href='#' class='nav-link disabled'>Siguiente &#9654</a>";
   }
   str += "</ul>";
 

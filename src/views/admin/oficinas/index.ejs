@@ -62,7 +62,7 @@
                               placeholder="Buscar..." aria-label="Buscar en oficinas">
                           </div>
                         </form>
-                        <a href="/admin/oficinas/add" id="newOfic" class="btn">
+                        <a href="#" id="new" class="btn">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                             <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                           </svg>
@@ -116,7 +116,7 @@
                   <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
                 </div>
                 <div class="col">
-                  <form action="/admin/oficinas/delete" method="POST">
+                  <form action="#" id="del" method="POST">
                     <input type="hidden" id="idofic" name="idofic" value="">
                     <button type="submit" class="btn btn-danger w-100" id="btnDelete">Borrar oficina</button>
                   </form>
@@ -143,8 +143,11 @@
       }
 
       // events
-      const elemNewOficina = document.getElementById('newOfic');
-      elemNewOficina.setAttribute('href', `/admin/oficinas/add?part=${getCookie('filtro')}`)
+      const elemNew = document.getElementById('new');
+      elemNew.setAttribute('href', `/admin/oficinas/add?part=${getCookie('filtro')}`)
+
+      const elemDel = document.getElementById('del');
+      elemDel.setAttribute('action', `/admin/oficinas/delete?part=${getCookie('filtro')}`)
 
       const elemBuscar = document.getElementById('buscarOficinaBox');
       elemBuscar.onchange = (event) => {

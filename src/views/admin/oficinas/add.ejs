@@ -8,6 +8,30 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
 </head>
 
 <body class="antialiased">
@@ -20,7 +44,7 @@
           <div class="row">
             <div class="col-12">
               <div class="card mt-3">
-                <form action="/admin/oficinas/insert" method="POST" onsubmit="return validate();">
+                <form action="#" id="add" method="POST" onsubmit="return validate();">
                   <div class="card-header">
                     <h3 class="card-title">Oficina</h3>
                   </div>
@@ -63,6 +87,10 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
+  <script>
+    const elemEdit = document.getElementById('add');
+    elemEdit.setAttribute('action', `/admin/oficinas/insert?part=${getCookie('filtro')}`)
+  </script>
   <script>
     const desofi = document.getElementById('desofi')
     const codofi = document.getElementById('codofi')

@@ -3023,7 +3023,7 @@ a.avatar {
 .btn:disabled,
 .btn.disabled {
   pointer-events: none;
-  opacity: 0.65;
+  opacity: 0.1;
 }
 
 /* form-label */

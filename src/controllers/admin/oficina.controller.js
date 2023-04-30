@@ -153,7 +153,7 @@ export const insert = async (req, res) => {
       movimiento,
     })
 
-    res.redirect('/admin/oficinas')
+    res.redirect(`/admin/oficinas?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -184,7 +184,7 @@ export const update = async (req, res) => {
       movimiento,
     })
 
-    res.redirect('/admin/oficinas')
+    res.redirect(`/admin/oficinas?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -213,7 +213,8 @@ export const remove = async (req, res) => {
       movimiento,
     })
 
-    res.redirect('/admin/oficinas')
+    console.log(req.query.part);
+    res.redirect(`/admin/oficinas?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
