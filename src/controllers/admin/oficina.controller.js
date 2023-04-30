@@ -91,7 +91,6 @@ export const mainPage = async (req, res) => {
       });
     }
   }
-
 }
 export const addPage = async (req, res) => {
   const user = req.user
@@ -213,7 +212,6 @@ export const remove = async (req, res) => {
       movimiento,
     })
 
-    console.log(req.query.part);
     res.redirect(`/admin/oficinas?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {

@@ -57,7 +57,6 @@ export const estadosPage = async (req, res) => {
     context.OFIEST = req.body.ofiest
   }
 
-  console.log(context);
   try {
     const oficinas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
       context: {},
