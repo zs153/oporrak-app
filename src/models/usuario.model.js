@@ -46,8 +46,6 @@ const insertSql = `BEGIN OPORRAK_PKG.INSERTUSUARIO(
     :perusu,
     :telusu,
     :stausu,
-    :pwdusu,
-    :seed,
     :usumov,
     :tipmov,
     :idusua
@@ -129,7 +127,7 @@ export const findAll = async (context) => {
   };
 
   if (context.direction === 'next') {
-    bind.NOMUSU = context.cursor.next === '' ? null : context.cursor.next;
+    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
     query = `WITH datos AS (
       SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
       INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
@@ -144,7 +142,7 @@ export const findAll = async (context) => {
     FETCH NEXT :limit ROWS ONLY
     `
   } else {
-    bind.NOMUSU = context.cursor.prev === '' ? null : context.cursor.prev;
+    bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
     query = `WITH datos AS (
       SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
       INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu

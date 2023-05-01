@@ -72,15 +72,11 @@ export const crear = async (req, res) => {
     TELUSU: req.body.usuario.TELUSU,
     STAUSU: req.body.usuario.STAUSU,
   }
-  const recurso = {
-    PWDUSU: req.body.recurso.PWDUSU,
-    SEED: req.body.recurso.SEED,
-  }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
     TIPMOV: req.body.movimiento.TIPMOV,
   }
-  const context = Object.assign(usuario, recurso, movimiento)
+  const context = Object.assign(usuario, movimiento)
 
   // proc
   try {

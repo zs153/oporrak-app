@@ -1,21 +1,24 @@
 import { simpleExecute } from "../services/database.js";
 
-const baseQuery = `SELECT 
-    idusua,
-    nomusu,
-    userid,
-    emausu,
-    perusu
-  FROM historicos
+const baseQuery = `SELECT *
+FROM historicos
 `
+const updateSql = `BEGIN OPORRAK_PKG.UPDATEHISTORICO(
+  :idusua,
+  :ofiusu, 
+  :rolusu, 
+  :emausu, 
+  :perusu, 
+  :telusu, 
+  :usumov, 
+  :tipmov
+); END;
+`;
 const activarSql = `BEGIN OPORRAK_PKG.ACTIVARHISTORICO(
-    :idusua,
-    :ofiusu,
-    :rolusu,
-    :stausu,
-    :usumov,
-    :tipmov
-  ); END;
+  :idusua,
+  :usumov,
+  :tipmov
+); END;
 `
 
 export const find = async (context) => {
@@ -79,6 +82,18 @@ export const findAll = async (context) => {
     return ({ stat: 1, data: ret.rows })
   } else {
     return ({ stat: null, data: null })
+  }
+};
+export const update = async (context) => {
+  // bind
+  const bind = context
+  // proc
+  const ret = await simpleExecute(updateSql, bind)
+
+  if (ret) {
+    return ({ stat: 1, data: bind })
+  } else {
+    return ({ stat: null, data: err })
   }
 };
 export const activar = async (context) => {

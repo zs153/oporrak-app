@@ -1,8 +1,7 @@
 import { BIND_OUT, NUMBER } from "oracledb";
 import { simpleExecute } from '../services/database.js'
 
-const baseQuery = `SELECT 
-  oo.*
+const baseQuery = `SELECT *
 FROM oficinas oo
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTOFICINA(
@@ -34,10 +33,10 @@ export const find = async (context) => {
   const bind = context
 
   if (context.IDOFIC) {
-    query += `WHERE oo.idofic = :idofic`
+    query += `WHERE idofic = :idofic`
   }
   if (context.CODOFI) {
-    query += `WHERE oo.codofi = :codofi`
+    query += `WHERE codofi = :codofi`
   }
   
   // proc
@@ -57,7 +56,7 @@ export const findAll = async (context) => {
   };
 
   if (context.direction === 'next') {
-    bind.IDOFIC = context.cursor.next;
+    bind.idofic = context.cursor.next;
     query = `WITH datos AS (
       SELECT * FROM oficinas
       WHERE
@@ -70,7 +69,7 @@ export const findAll = async (context) => {
     FETCH NEXT :limit ROWS ONLY
     `
   } else {
-    bind.IDOFIC = context.cursor.prev;
+    bind.idofic = context.cursor.prev;
     query = `WITH datos AS (
       SELECT * FROM oficinas
       WHERE
