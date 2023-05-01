@@ -8,6 +8,30 @@
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <!-- styles -->
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+      const getCookie = (key) => {
+        let value = ''
+        document.cookie.split(';').forEach((e) => {
+          if (e.includes(key)) {
+            value = e.split('=')[1]
+          }
+        })
+        return value
+      }
+      const setCookie = (name, value, days) => {
+        let expires = "";
+        if (days) {
+          let date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          expires = "; expires=" + date.toUTCString();
+        }
+        // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+      }
+      const deleteCookie = () => {
+        document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+      }
+    </script>
   </head>
   <body class="antialiased">
     <div class="wrapper">
@@ -68,45 +92,32 @@
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="modal-status bg-success"></div>
-          <form action="/admin/historicos/activar" method="POST" onsubmit="return validate();">
-            <input type="hidden" id="idusua" name="idusua" value="">
-            <div class="modal-body text-center py-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24"
-                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M9 12l2 2l4 -4"></path>
-              </svg>
-              <h3>Activar usuario</h3>
-              <div id="msgact"></div>
-              <div class="card-body text-start">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="mb-1">
-                      <div class="input-control">
-                        <label class="form-label required">Código Oficina</label>
-                        <input type="text" name="codofi" id="codofi" class="form-control" value=""  />
-                        <div class="invalid-feedback"></div>
-                      </div>
+          <div class="modal-body text-center py-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24"
+                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M9 12l2 2l4 -4"></path>
+                </svg>
+                <h3>Activar usuario</h3>
+                <div id="msgact"></div>
+              </div>
+              <div class="modal-footer">
+                <div class="w-100">
+                  <div class="row">
+                    <div class="col">
+                      <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
+                    </div>
+                    <div class="col">
+                      <form action="#" method="POST" id="activ" onsubmit="return validate();">
+                        <input type="hidden" id="idusua" name="idusua" value="">
+                      	<button type="submit" class="btn btn-success w-100">Activar usuario</button>
+		                  </form>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="modal-footer">
-              <div class="w-100">
-                <div class="row">
-                  <div class="col">
-                    <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
-                  </div>
-                  <div class="col">
-                    <button type="submit" class="btn btn-success w-100">Activar usuario</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
         </div>
       </div>
     </div>
@@ -121,8 +132,6 @@
 
       let state = {
         'querySet': orgList,
-        'page': 1,
-        'rows': 10,
       }
 
       // events
@@ -131,41 +140,12 @@
         setCookie('filtro', event.target.value, .5) // medio dia
       }
       elemBuscar.value = getCookie('filtro')
-        
+
+      // inicializar action
+      const elemActivar = document.getElementById('activ')
+      elemActivar.setAttribute('action', `/admin/historicos/activar?part=${getCookie('filtro')}`)
+
       buildTable(state)
-    </script>
-    <script>
-      const codofi = document.getElementById('codofi')
-
-      const validate = () => {
-        const codofiValue = codofi.value
-
-        if (codofiValue === '') {
-          setError(codofi, 'Código requerido')
-          setTimeout(function () {
-            setSuccess(codofi)
-          }, 3000)
-          return false
-        }
-
-        deleteCookie()
-        return true
-      }
-
-      const setSuccess = (element) => {
-        const inputControl = element.parentElement;
-        const errorDisplay = inputControl.querySelector('.invalid-feedback');
-        errorDisplay.innerText = '';
-        inputControl.classList.add('is-valid');
-        element.classList.remove('is-invalid');
-      }
-      const setError = (element, message) => {
-        const inputControl = element.parentElement;
-        const errorDisplay = inputControl.querySelector('.invalid-feedback');
-        errorDisplay.innerText = message;
-        element.classList.add('is-invalid');
-        inputControl.classList.remove('is-valid');
-      }
     </script>
   </body>
 </html>

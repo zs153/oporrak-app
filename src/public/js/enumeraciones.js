@@ -66,6 +66,8 @@ export const tiposMovimiento = {
   matricularse: 65,
   crearTraspaso: 66,
   borrarTraspaso: 67,
+  activarHistorico: 68,
+  modificarHistorico: 69,
 }
 export const tiposPerfil = {
   general: 1,

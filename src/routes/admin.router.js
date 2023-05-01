@@ -22,6 +22,7 @@ adminRouter.get('/oficinas/edit/:id', verifyTokenAndAdmin, oficina.editPage)
 
 // historico
 adminRouter.get('/historicos', verifyTokenAndResp, historico.mainPage)
+adminRouter.get('/historicos/edit/:id', verifyTokenAndResp, historico.editPage)
 
 // usuarios
 adminRouter.get('/usuarios', verifyTokenAndResp, usuario.mainPage)
@@ -50,6 +51,7 @@ adminRouter.post('/oficinas/delete', verifyTokenAndAdmin, oficina.remove)
 
 // historico
 adminRouter.post('/historicos/activar', verifyTokenAndResp, historico.activar)
+adminRouter.post('/historicos/update', verifyTokenAndResp, historico.update)
 
 // usuarios
 adminRouter.post('/usuarios/insert', verifyTokenAndResp, usuario.insert)

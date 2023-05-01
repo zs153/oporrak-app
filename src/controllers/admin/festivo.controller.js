@@ -43,21 +43,17 @@ export const mainPage = async (req, res) => {
     let prevCursor = 0
     
     if (hasNextOficinas) {
-      const nextCursorOficinas = dir === 'next' ? oficinas[limit - 1] : oficinas[0]
-      const prevCursorOficinas = dir === 'next' ? oficinas[0] : oficinas[limit - 1]
-      nextCursor = nextCursorOficinas.IDOFIC
-      prevCursor = prevCursorOficinas.IDOFIC
+      nextCursor = dir === 'next' ? oficinas[limit - 1].IDOFIC : oficinas[0].IDOFIC
+      prevCursor = dir === 'next' ? oficinas[0].IDOFIC : oficinas[limit - 1].IDOFIC
 
       oficinas.pop()
     } else {
-      const nextCursorOficinas = dir === 'next' ? 0 : oficinas[0]
-      const prevCursorOficinas = dir === 'next' ? oficinas[0] : 0
-      nextCursor = nextCursorOficinas.IDOFIC
-      prevCursor = prevCursorOficinas.IDOFIC
+      nextCursor = dir === 'next' ? 0 : oficinas[0]?.IDOFIC
+      prevCursor = dir === 'next' ? oficinas[0]?.IDOFIC : 0
       
       if (cursor) {
-        hasNextOficinas = nextCursorOficinas === 0 ? false : true
-        hasPrevOficinas = prevCursorOficinas === 0 ? false : true
+        hasNextOficinas = nextCursor === 0 ? false : true
+        hasPrevOficinas = prevCursor === 0 ? false : true
       } else {
         hasNextOficinas = false
         hasPrevOficinas = false

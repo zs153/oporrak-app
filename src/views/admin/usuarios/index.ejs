@@ -9,6 +9,30 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
 </head>
 
 <body class="antialiased">
@@ -40,7 +64,7 @@
                             placeholder="Buscar..." aria-label="Buscar en usuarios">
                         </div>
                       </form>
-                      <a href="/admin/usuarios/add" class="btn">
+                      <a href="#" id="new" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                           <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                         </svg>
@@ -97,7 +121,7 @@
                 <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
-                <form action="/admin/usuarios/delete" method="POST">
+                <form action="#" id="del" method="POST">
                   <input type="hidden" id="idusua" name="idusua" value="">
                   <button type="submit" class="btn btn-danger w-100" id="btnUpdate">Borrar usuario</button>
                 </form>
@@ -120,8 +144,6 @@
 
     let state = {
       'querySet': orgList,
-      'page': 1,
-      'rows': 10,
     }
 
     // events
@@ -130,7 +152,14 @@
       setCookie('filtro', event.target.value, .5) // medio dia
     }
     elemBuscar.value = getCookie('filtro')
-    
+
+    // inicializacion
+    const elemNew = document.getElementById('new');
+    elemNew.setAttribute('href', `/admin/usuarios/add?part=${getCookie('filtro')}`)
+
+    const elemDel = document.getElementById('del');
+    elemDel.setAttribute('action', `/admin/usuarios/delete?part=${getCookie('filtro')}`)
+
     buildTable(state)
   </script>
 </body>

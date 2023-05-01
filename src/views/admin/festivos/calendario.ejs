@@ -13,29 +13,15 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/js-year-calendar.min.css" />
     <script>
-      const getCookie = (key) => {
-        let value = ''
-        document.cookie.split(';').forEach((e) => {
-          if (e.includes(key)) {
-            value = e.split('=')[1]
-          }
-        })
-        return value
+      const dateISOToUTCString = (dateISO) => {
+        const fecha = new Date(dateISO)
+        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+        return new Date(fecha.getTime() - userTimezoneOffset)
+          .toISOString()
+          .slice(0, 10)
       }
-      const setCookie = (name, value, days) => {
-        let expires = "";
-        if (days) {
-          let date = new Date();
-          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-          expires = "; expires=" + date.toUTCString();
-        }
-        // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-      }
-      const deleteCookie = () => {
-        document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
-      }
-    </script>    
+    </script>
     <style>
       .calendar-header {
         border: none !important;
@@ -139,14 +125,6 @@
       elemUpdate.setAttribute('action', `/admin/festivos/update?part=${getCookie('filtro')}`)
     </script>
     <script>
-      const dateISOToUTCString = (dateISO) => {
-        const fecha = new Date(dateISO)
-        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
-
-        return new Date(fecha.getTime() - userTimezoneOffset)
-          .toISOString()
-          .slice(0, 10)
-      }
       const oficina = <%- JSON.stringify(datos.oficina) %>
 
       let eventos = []
