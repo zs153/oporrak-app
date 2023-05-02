@@ -499,14 +499,14 @@ export const crearUsuarioTurno = async (req, res) => {
   const turno = {
     IDTURN: req.body.turno.IDTURN,
   }
+  const tipo = {
+    TIPEST: req.body.tipo.TIPEST,
+  }
   const usuarios = {
     ARRUSU: {
       type: 'USRTYPE',
       val: req.body.usuarios.ARRUSU,
     }
-  }
-  const tipo = {
-    TIPEST: req.body.tipo.TIPEST,
   }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,

@@ -116,15 +116,6 @@ const removeMatriculaSql = `BEGIN OPORRAK_PKG.DELETEMATRICULACURSO(
 ); END;
 `
 // usuarios
-const usuariosSql = `SELECT 
-  uu.idusua,
-  uu.nomusu,
-  uu.userid,
-  oo.desofi
-FROM usuarios uu
-INNER JOIN usuarioscurso uc ON uc.idusua = uu.idusua
-INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-`
 const usuariosPendientesSql = `SELECT
   uu.idusua, uu.nomusu
 FROM turnoscurso tc
@@ -147,31 +138,6 @@ const removeUsuarioSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOCURSO(
 ); END;
 `
 // usuarios turno
-const usuariosTurnoSql = `SELECT 
-  uu.idusua,
-  uu.nomusu,
-  uu.userid,
-  oo.desofi
-FROM usuarios uu
-INNER JOIN usuariosturno ut ON ut.idusua = uu.idusua
-INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-`
-const usuariosTurnoPendientesSql = `SELECT 
-  uu.idusua, uu.nomusu, oo.idofic, oo.desofi
-FROM matriculascurso mc
-INNER JOIN usuariosmatricula um ON um.idmatr = mc.idmatr
-LEFT JOIN (
-  SELECT 
-    ut.idusua
-  FROM turnoscurso tc
-  INNER JOIN usuariosturno ut ON ut.idturn = tc.idturn
-  WHERE tc.idcurs = :idcurs
-) pp ON pp.idusua = um.idusua
-INNER JOIN usuarios uu ON uu.idusua = um.idusua
-INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-WHERE mc.idcurs = :idcurs
-  AND pp.idusua IS NULL
-`
 const insertUsuarioTurnoSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOTURNO(
   :idturn,
   :tipest,
@@ -188,21 +154,6 @@ const removeUsuarioTurnoSql = `BEGIN OPORRAK_PKG.DELETEUSUARIOTURNO(
 ); END;
 `
 // usuarios matricula
-const usuariosMatriculaSql = `SELECT 
-  uu.idusua,
-  uu.nomusu,
-  uu.userid,
-  oo.desofi
-FROM usuarios uu
-INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
-INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-`
-const usuariosMatriculaPendientesSql = `SELECT idusua,nomusu
-FROM usuarios
-WHERE idusua NOT IN (
-  SELECT idusua FROM usuariosmatricula
-);
-`
 const insertUsuarioMatriculaSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOMATRICULA(
   :idmatr,
   :arrusu,
@@ -247,21 +198,25 @@ export const findAll = async (context) => {
 
   if (context.direction === 'next') {
     bind.idcurs = context.cursor.next
-    query += `SELECT idcurs, descur, stacur FROM cursos
-    WHERE idcurs > :idcurs AND (
-      descur LIKE '%' || :part || '%' OR
-      :part IS NULL
+    query += `SELECT cc.idcurs,cc.descur,cc.stacur
+    FROM cursos cc
+    WHERE cc.idcurs > :idcurs
+    AND (
+      cc.descur LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
-    ORDER BY idcurs ASC
+    ORDER BY cc.idcurs ASC
     FETCH NEXT :limit ROWS ONLY`
   } else {
     bind.idcurs = context.cursor.prev
-    query += `SELECT idcurs, descur, stacur FROM cursos
-    WHERE idcurs < :idcurs AND (
-      descur LIKE '%' || :part || '%' OR
-      :part IS NULL
+    query += `SELECT cc.idcurs,cc.descur,cc.stacur
+    FROM cursos cc
+    WHERE cc.idcurs < :idcurs
+    AND (
+      cc.descur LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
-    ORDER BY idcurs DESC
+    ORDER BY cc.idcurs DESC
     FETCH NEXT :limit ROWS ONLY`
   }
 
@@ -359,8 +314,8 @@ export const turnos = async (context) => {
     INNER JOIN turnoscurso tc ON tc.idturn = tt.idturn
     WHERE tt.idturn > :idturn AND tc.idcurs = :idcurs
     AND (
-      tt.destur LIKE '%' || :part || '%' OR
-      :part IS NULL
+      tt.destur LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
     ORDER BY tt.idturn ASC
     FETCH NEXT :limit ROWS ONLY`
@@ -376,8 +331,8 @@ export const turnos = async (context) => {
     INNER JOIN turnoscurso tc ON tc.idturn = tt.idturn 
     WHERE tt.idturn < :idturn AND tc.idcurs = :idcurs
     AND (
-      tt.destur LIKE '%' || :part || '%' OR
-      :part IS NULL
+      tt.destur LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
     ORDER BY tt.idturn DESC
     FETCH NEXT :limit ROWS ONLY`
@@ -477,8 +432,8 @@ export const matriculas = async (context) => {
     INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
     WHERE mm.idmatr > :idmatr AND mc.idcurs = :idcurs
     AND (
-      mm.desmat LIKE '%' || :part || '%' OR
-      :part IS NULL
+      mm.desmat LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
     ORDER BY mm.idmatr ASC
     FETCH NEXT :limit ROWS ONLY`
@@ -494,8 +449,8 @@ export const matriculas = async (context) => {
     INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr
     WHERE mm.idmatr < :idmatr AND mc.idcurs = :idcurs
     AND (
-      mm.desmat LIKE '%' || :part || '%' OR
-      :part IS NULL
+      mm.desmat LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
     ORDER BY mm.idmatr DESC
     FETCH NEXT :limit ROWS ONLY`
@@ -556,11 +511,45 @@ export const removeMatricula = async (context) => {
 // usuarios curso
 export const usuarios = async (context) => {
   // bind
-  let query = usuariosSql
-  let bind = context
+  let query = '';
+  let bind = {
+    idcurs: context.idcurs,
+    limit: context.limit,
+    part: context.part,
+  };
 
-  if (context.IDCURS) {
-    query += `WHERE uc.idcurs = :idcurs`
+  if (context.direction === 'next') {
+    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
+    query = `SELECT 
+    uu.idusua,uu.userid,uu.nomusu,oo.desofi
+    FROM usuarios uu
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN usuarioscurso uc ON uc.idusua= uu.idusua
+    WHERE uu.nomusu > :nomusu  OR :nomusu IS NULL 
+    AND uc.idcurs = :idcurs
+    AND (
+      uu.nomusu LIKE '%' || :part || '%' 
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    )
+    ORDER BY uu.nomusu ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
+    query = `SELECT 
+    uu.idusua,uu.userid,uu.nomusu,oo.desofi
+    FROM usuarios uu
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN usuarioscurso uc ON uc.idusua= uu.idusua
+    WHERE uu.nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL 
+    AND uc.idcurs = :idcurs
+    AND (
+      uu.nomusu LIKE '%' || :part || '%'
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    )
+    ORDER BY uu.nomusu DESC
+    FETCH NEXT :limit ROWS ONLY`
   }
 
   // proc
@@ -620,11 +609,43 @@ export const removeUsuario = async (context) => {
 // usuarios turno
 export const usuariosTurno = async (context) => {
   // bind
-  let query = usuariosTurnoSql
-  const bind = context
+  let query = '';
+  let bind = {
+    idturn: context.idturn,
+    limit: context.limit,
+    part: context.part,
+  };
 
-  if (context.IDTURN) {
-    query += `WHERE ut.idturn = :idturn`
+  if (context.direction === 'next') {
+    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
+    query = `SELECT 
+    uu.idusua,uu.userid,uu.nomusu,oo.desofi
+    FROM usuarios uu
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN usuariosturno ut ON ut.idusua= uu.idusua AND ut.idturn = :idturn
+    WHERE uu.nomusu > :nomusu  OR :nomusu IS NULL 
+    AND (
+      uu.nomusu LIKE '%' || :part || '%' 
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    )
+    ORDER BY uu.nomusu ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
+    query = `SELECT 
+    uu.idusua,uu.userid,uu.nomusu,oo.desofi
+    FROM usuarios uu
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN usuariosturno ut ON ut.idusua= uu.idusua AND ut.idturn = :idturn
+    WHERE uu.nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL 
+    AND (
+      uu.nomusu LIKE '%' || :part || '%'
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    )
+    ORDER BY uu.nomusu DESC
+    FETCH NEXT :limit ROWS ONLY`
   }
 
   // proc
@@ -638,8 +659,55 @@ export const usuariosTurno = async (context) => {
 }
 export const usuariosTurnoPendientes = async (context) => {
   // bind
-  const query = usuariosTurnoPendientesSql
-  const bind = context
+  let query = '';
+  let bind = {
+    idcurs: context.idcurs,
+    idturn: context.idturn,
+    limit: context.limit,
+    part: context.part,
+  };
+
+  if (context.direction === 'next') {
+    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
+    query = `SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
+    FROM usuarios uu
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN matriculascurso mc ON mc.idcurs = :idcurs
+    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua AND um.idmatr = mc.idmatr
+    WHERE uu.nomusu > :nomusu 
+      OR :nomusu IS NULL
+      AND uu.idusua NOT IN (
+        SELECT ut.idusua FROM usuariosturno ut
+        WHERE ut.idturn = :idturn
+      )
+    AND (
+      uu.nomusu LIKE '%' || :part || '%' 
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    )
+    ORDER BY uu.nomusu ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
+    query = `SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
+    FROM usuarios uu
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN matriculascurso mc ON mc.idcurs = :idcurs
+    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua AND um.idmatr = mc.idmatr
+    WHERE < CONVERT(:nomusu, 'US7ASCII') 
+      OR :nomusu IS NULL
+      AND uu.idusua NOT IN (
+        SELECT ut.idusua FROM usuariosturno ut
+        WHERE ut.idturn = :idturn
+      )
+    AND (
+      uu.nomusu LIKE '%' || :part || '%' 
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    )
+    ORDER BY uu.nomusu DESC
+    FETCH NEXT :limit ROWS ONLY`
+  }
 
   // proc
   const ret = await simpleExecute(query, bind)
@@ -687,37 +755,29 @@ export const usuariosMatricula = async (context) => {
 
   if (context.direction === 'next') {
     bind.idusua = context.cursor.next
-    query += `SELECT 
-    uu.idusua,
-    uu.nomusu,
-    uu.userid,
-    oo.desofi
+    query += `SELECT uu.idusua,uu.userid,uu.nomusu,oo.desofi
     FROM usuarios uu
-    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
     INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-    WHERE uu.idusua > :idusua AND um.idmatr = :idmatr
+    INNER JOIN usuariosmatricula um ON um.idusua= uu.idusua AND um.idmatr = :idmatr
+    WHERE uu.nomusu > :nomusu  OR :nomusu IS NULL 
     AND (
-      uu.nomusu LIKE '%' || :part || '%' OR
-      oo.desofi LIKE '%' || :part || '%' OR
-      :part IS NULL
+      uu.nomusu LIKE '%' || :part || '%'
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
-    ORDER BY uu.idusua ASC
+    ORDER BY uu.nomusu ASC
     FETCH NEXT :limit ROWS ONLY`
   } else {
     bind.idusua = context.cursor.prev
-    query += `SELECT 
-    uu.idusua,
-    uu.nomusu,
-    uu.userid,
-    oo.desofi
+    query += `SELECT uu.idusua,uu.nomusu,uu.userid,oo.desofi
     FROM usuarios uu
-    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua
     INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-    WHERE uu.idusua < :idusua AND um.idmatr = :idmatr
+    INNER JOIN usuariosmatricula um ON um.idusua= uu.idusua AND um.idmatr = :idmatr
+    WHERE uu.idusua < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL
     AND (
-      uu.nomusu LIKE '%' || :part || '%' OR
-      oo.desofi LIKE '%' || :part || '%' OR
-      :part IS NULL
+      uu.nomusu LIKE '%' || :part || '%'
+      OR oo.desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
     )
     ORDER BY uu.idusua DESC
     FETCH NEXT :limit ROWS ONLY`
@@ -743,7 +803,7 @@ export const usuariosMatriculaPendientes = async (context) => {
 
   if (context.direction === 'next') {
     bind.idusua = context.cursor.next
-    query += `SELECT uu.idusua, uu.nomusu
+    query += `SELECT uu.idusua,uu.nomusu
     FROM usuarios uu
     WHERE uu.idusua > :idusua AND uu.idusua NOT IN (
       SELECT um.idusua FROM usuariosmatricula um
@@ -756,7 +816,7 @@ export const usuariosMatriculaPendientes = async (context) => {
     FETCH NEXT :limit ROWS ONLY`
   } else {
     bind.idusua = context.cursor.prev
-    query += `SELECT uu.idusua, uu.nomusu
+    query += `SELECT uu.idusua,uu.nomusu
     FROM usuarios uu
     WHERE uu.idusua < :idusua AND uu.idusua NOT IN (
       SELECT um.idusua FROM usuariosmatricula um
