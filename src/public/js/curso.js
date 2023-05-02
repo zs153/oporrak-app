@@ -10,28 +10,6 @@ document.querySelectorAll(".sortable th").forEach(headerCell => {
 });
 
 // funcs
-const getCookie = (key) => {
-  let value = ''
-  document.cookie.split(';').forEach((e) => {
-    if (e.includes(key)) {
-      value = e.split('=')[1]
-    }
-  })
-  return value
-}
-const setCookie = (name, value, days) => {
-  let expires = "";
-  if (days) {
-    let date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-  }
-  // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-const deleteCookie = () => {
-  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
-}
 const sortTableByColumn = (table, column, asc = true) => {
   const dirModifier = asc ? 1 : -1;
   const tBody = table.tBodies[0];
@@ -97,7 +75,7 @@ const buildTable = (state) => {
         </a>
         <ul>
           <li class="nav-item">
-            <a href="/admin/cursos/edit/${element.IDCURS}" class="nav-link">
+            <a href="/admin/cursos/edit/${element.IDCURS}?part=${getCookie('filtro')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" width="24" height="24" viewBox="0 0 20 20" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke-width=".4" fill="none" d="M6.85 20.575q-.6 0-1.012-.412-.413-.413-.413-1.013V4.85q0-.6.413-1.013.412-.412 1.012-.412h7.825L18.6 7.35v3.4h-.65V7.675h-3.6V4.05h-7.5q-.3 0-.55.25-.25.25-.25.55v14.275q0 .3.25.55.25.25.55.25h4.25v.65Zm-.8-.65V4.05 19.925ZM17.025 14.6l.45.425-3.75 3.75v1.1h1.1l3.775-3.75.45.45-3.95 3.95h-2v-2Zm2.025 1.975L17.025 14.6l1.05-1.05q.225-.2.525-.2.3 0 .475.2l1 1q.2.2.2.487 0 .288-.2.538Z"/></svg>
               </svg>
@@ -114,20 +92,20 @@ const buildTable = (state) => {
           </li>
           <div class="nav-divider"></div>
           <li class="nav-item">
-            <a href="/admin/cursos/turnos/${element.IDCURS}" class="nav-link">
+            <a href="/admin/cursos/turnos/${element.IDCURS}?part=${getCookie('filtro')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" height="24" width="24" viewBox="0 0 20 20" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke-width=".4" fill="none" d="M9.7 19.3v-6.825q0-.275.1-.537.1-.263.325-.488L16.25 5.3h-3.2v-.625h4.275V8.95H16.7v-3.2l-6.15 6.125q-.125.125-.175.262-.05.138-.05.288V19.3Z"/></svg>
               Turnos
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin/cursos/matriculas/${element.IDCURS}" class="nav-link">
+            <a href="/admin/cursos/matriculas/${element.IDCURS}?part=${getCookie('filtro')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" class="icon icon-inline me-2" width="24" height="24" viewBox="0 0 20 20" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke-width=".4" fill="none" d="M15.85 13.5q-.8 0-1.362-.55-.563-.55-.563-1.375 0-.8.55-1.375t1.375-.575q.8 0 1.375.575t.575 1.375q0 .8-.575 1.363-.575.562-1.375.562Zm-4.9 4.925v-.85q0-.225.125-.462.125-.238.35-.388.975-.55 2.087-.862 1.113-.313 2.338-.313t2.325.313q1.1.312 2.125.862.2.15.338.388.137.237.137.462v.85Zm.625-1.05v.425h8.575v-.425q-1.025-.575-2.112-.887-1.088-.313-2.188-.313t-2.187.313q-1.088.312-2.088.887Zm4.275-4.5q.525 0 .913-.387.387-.388.387-.913t-.387-.913q-.388-.387-.913-.387t-.912.387q-.388.388-.388.913t.388.913q.387.387.912.387Zm0-1.3Zm0 6.225ZM4.275 13.3v-.65h6.7v.65Zm0-7.95v-.625H14.95v.625Zm7.775 3.975H4.275v-.65h8.3q-.125.15-.263.312-.137.163-.262.338Z"/></svg>
               Matrícula
             </a>
           </li>
           <div class="nav-divider"></div>
           <li class="nav-item">
-            <a href="/admin/cursos/usuarios/${element.IDCURS}" class="nav-link">
+            <a href="/admin/cursos/usuarios/${element.IDCURS}?part=${getCookie('filtro')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" height="24" width="24" viewBox="0 0 20 20" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke-width=".4" fill="none" d="M3.35 15.8v-.625h7.625v.625Zm0-7v-.625h7.625V8.8Zm12.7 8.725-2.6-2.575.45-.45 2.125 2.125 4.25-4.25.425.475Zm0-7-2.6-2.575.45-.45 2.125 2.125 4.25-4.25.425.475Z"/></svg>
               Certificados
             </a>

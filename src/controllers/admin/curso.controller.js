@@ -44,21 +44,17 @@ export const mainPage = async (req, res) => {
     let prevCursor = 0
     
     if (hasNextCursos) {
-      const nextCursorCursos = dir === 'next' ? cursos[limit - 1] : cursos[0]
-      const prevCursorCursos = dir === 'next' ? cursos[0] : cursos[limit - 1]
-      nextCursor = nextCursorCursos.IDCURS
-      prevCursor = prevCursorCursos.IDCURS
+      nextCursor = dir === 'next' ? cursos[limit - 1].IDCURS : cursos[0].IDCURS
+      prevCursor = dir === 'next' ? cursos[0].IDCURS : cursos[limit - 1].IDCURS
 
       cursos.pop()
     } else {
-      const nextCursorCursos = dir === 'next' ? 0 : cursos[0]
-      const prevCursorCursos = dir === 'next' ? cursos[0] : 0
-      nextCursor = nextCursorCursos.IDCURS
-      prevCursor = prevCursorCursos.IDCURS
+      nextCursor = dir === 'next' ? 0 : cursos[0].IDCURS
+      prevCursor = dir === 'next' ? cursos[0].IDCURS : 0
       
       if (cursor) {
-        hasNextCursos = nextCursorCursos === 0 ? false : true
-        hasPrevCursos = prevCursorCursos === 0 ? false : true
+        hasNextCursos = nextCursor === 0 ? false : true
+        hasPrevCursos = prevCursor === 0 ? false : true
       } else {
         hasNextCursos = false
         hasPrevCursos = false
@@ -191,21 +187,17 @@ export const turnosPage = async (req, res) => {
     let prevCursor = 0
     
     if (hasNextTurnos) {
-      const nextCursorTurnos = dir === 'next' ? turnos[limit - 1] : turnos[0]
-      const prevCursorTurnos = dir === 'next' ? turnos[0] : turnos[limit - 1]
-      nextCursor = nextCursorTurnos.IDTURN
-      prevCursor = prevCursorTurnos.IDTURN
+      nextCursor = dir === 'next' ? turnos[limit - 1].IDTURN : turnos[0].IDTURN
+      prevCursor = dir === 'next' ? turnos[0].IDTURN : turnos[limit - 1].IDTURN
 
       turnos.pop()
     } else {
-      const nextCursorTurnos = dir === 'next' ? 0 : turnos[0]
-      const prevCursorTurnos = dir === 'next' ? turnos[0] : 0
-      nextCursor = nextCursorTurnos.IDTURN
-      prevCursor = prevCursorTurnos.IDTURN
+      nextCursor = dir === 'next' ? 0 : turnos[0].IDTURN
+      prevCursor = dir === 'next' ? turnos[0].IDTURN : 0
       
       if (cursor) {
-        hasNextTurnos = nextCursorTurnos === 0 ? false : true
-        hasPrevTurnos = prevCursorTurnos === 0 ? false : true
+        hasNextTurnos = nextCursor === 0 ? false : true
+        hasPrevTurnos = prevCursor === 0 ? false : true
       } else {
         hasNextTurnos = false
         hasPrevTurnos = false
@@ -361,21 +353,17 @@ export const matriculasPage = async (req, res) => {
     let prevCursor = 0
     
     if (hasNextMatriculas) {
-      const nextCursorMatriculas = dir === 'next' ? matriculas[limit - 1] : matriculas[0]
-      const prevCursorMatriculas = dir === 'next' ? matriculas[0] : matriculas[limit - 1]
-      nextCursor = nextCursorMatriculas.IDMATR
-      prevCursor = prevCursorMatriculas.IDMATR
+      nextCursor = dir === 'next' ? matriculas[limit - 1].IDMATR : matriculas[0].IDMATR
+      prevCursor = dir === 'next' ? matriculas[0].IDMATR : matriculas[limit - 1].IDMATR
 
       matriculas.pop()
     } else {
-      const nextCursorMatriculas = dir === 'next' ? 0 : matriculas[0]
-      const prevCursorMatriculas = dir === 'next' ? matriculas[0] : 0
-      nextCursor = nextCursorMatriculas.IDMATR
-      prevCursor = prevCursorMatriculas.IDMATR
+      nextCursor = dir === 'next' ? 0 : matriculas[0].IDMATR
+      prevCursor = dir === 'next' ? matriculas[0].IDMATR : 0
       
       if (cursor) {
-        hasNextMatriculas = nextCursorMatriculas === 0 ? false : true
-        hasPrevMatriculas = prevCursorMatriculas === 0 ? false : true
+        hasNextMatriculas = nextCursor === 0 ? false : true
+        hasPrevMatriculas = prevCursor === 0 ? false : true
       } else {
         hasNextMatriculas = false
         hasPrevMatriculas = false
@@ -482,25 +470,88 @@ export const editMatriculaPage = async (req, res) => {
 
 // pages usuarios curso
 export const usuariosPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
+
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let hasPrevUsers = cursor ? true : false
+  let context = {}
+
+  if (cursor) {
+    context = {
+      idcurs: req.params.id,
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      idcurs: req.params.id,
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: '',
+        prev: '',
+      },
+      part,
+    }
+  }
 
   try {
     const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       context: {
         IDCURS: req.params.id,
       },
-    });
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/usuarios`, {
-      context: {
-        IDCURS: req.params.id,
-      },
-    });
+    })
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/usuarios`, {
+      context,
+    })
+
+    let usuarios = result.data.data
+    let hasNextUsers = usuarios.length === limit + 1
+    let nextCursor = ''
+    let prevCursor = ''
+
+    if (hasNextUsers) {
+      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
+
+      usuarios.pop()
+    } else {
+      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
+
+      if (cursor) {
+        hasNextUsers = nextCursor === '' ? false : true
+        hasPrevUsers = prevCursor === '' ? false : true
+      } else {
+        hasNextUsers = false
+        hasPrevUsers = false
+      }
+    }
+
+    if (dir === 'prev') {
+      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
     const datos = {
       curso: curso.data.data,
-      usuarios: usuarios.data.data,
-    };
+      usuarios,
+      hasPrevUsers,
+      hasNextUsers,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
+      estadosUsuario,
+    }
 
-    res.render("admin/cursos/usuarios", { user, datos });
+    res.render('admin/cursos/usuarios', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -549,8 +600,37 @@ export const usuariosAddPage = async (req, res) => {
 // pages usuarios turno
 export const usuariosTurnoPage = async (req, res) => {
   const user = req.user
+
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
   const curso = {
-    IDCURS: req.params.idcurs,
+    IDCURS: req.params.idcurs
+  }
+
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let hasPrevUsers = cursor ? true : false
+  let context = {}
+
+  if (cursor) {
+    context = {
+      idturn: req.params.idturn,
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      idturn: req.params.idturn,
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: '',
+        prev: '',
+      },
+      part,
+    }
   }
 
   try {
@@ -559,15 +639,48 @@ export const usuariosTurnoPage = async (req, res) => {
         IDTURN: req.params.idturn,
       },
     })
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos/usuarios`, {
-      context: {
-        IDTURN: req.params.idturn,
-      },
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos/usuarios`, {
+      context,
     })
+
+    let usuarios = result.data.data
+    let hasNextUsers = usuarios.length === limit + 1
+    let nextCursor = ''
+    let prevCursor = ''
+
+    if (hasNextUsers) {
+      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
+
+      usuarios.pop()
+    } else {
+      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
+
+      if (cursor) {
+        hasNextUsers = nextCursor === '' ? false : true
+        hasPrevUsers = prevCursor === '' ? false : true
+      } else {
+        hasNextUsers = false
+        hasPrevUsers = false
+      }
+    }
+
+    if (dir === 'prev') {
+      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
     const datos = {
       curso,
       turno: turno.data.data,
-      usuarios: usuarios.data.data,
+      usuarios,
+      hasPrevUsers,
+      hasNextUsers,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
     }
 
     res.render('admin/cursos/turnos/usuarios', { user, datos })
@@ -584,29 +697,94 @@ export const usuariosTurnoPage = async (req, res) => {
   }
 }
 export const usuariosTurnoAddPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
+
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 10
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
   const curso = {
-    IDCURS: req.params.idcurs,
+    IDCURS: req.params.idcurs
   }
 
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let hasPrevUsers = cursor ? true : false
+  let context = {}
+
+  if (cursor) {
+    context = {
+      idcurs: req.params.idcurs,
+      idturn: req.params.idturn,
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      idcurs: req.params.idcurs,
+      idturn: req.params.idturn,
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: '',
+        prev: '',
+      },
+      part,
+    }
+  }
+
+  console.log('context...',context);
   try {
     const turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context: {
         IDTURN: req.params.idturn,
       },
     })
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos/usuarios/pendientes`, {
-      context: {
-        IDCURS: req.params.idcurs,
-      },
-    });
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos/usuarios/pendientes`, {
+      context,
+    })
+
+    let usuarios = result.data.data
+    let hasNextUsers = usuarios.length === limit + 1
+    let nextCursor = ''
+    let prevCursor = ''
+
+    if (hasNextUsers) {
+      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
+
+      usuarios.pop()
+    } else {
+      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
+
+      if (cursor) {
+        hasNextUsers = nextCursor === '' ? false : true
+        hasPrevUsers = prevCursor === '' ? false : true
+      } else {
+        hasNextUsers = false
+        hasPrevUsers = false
+      }
+    }
+
+    if (dir === 'prev') {
+      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
     const datos = {
       curso,
       turno: turno.data.data,
-      usuarios: usuarios.data.data,
-    };
+      usuarios,
+      hasPrevUsers,
+      hasNextUsers,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
+    }
 
-    res.render("admin/cursos/turnos/usuarios/add", { user, datos });
+    res.render('admin/cursos/turnos/usuarios/add', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {

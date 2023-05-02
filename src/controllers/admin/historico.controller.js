@@ -174,7 +174,6 @@ export const activar = async (req, res) => {
       TIPMOV: tiposMovimiento.activarHistorico,
     }
 
-    console.log('usuario...',usuario);
     await axios.post(`http://${serverAPI}:${puertoAPI}/api/historicos/activar`, {
       usuario,
       movimiento,

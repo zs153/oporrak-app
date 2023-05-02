@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { scrypt } from 'crypto'
-import { serverAPI, puertoAPI, secreto } from '../../config/settings'
+import { serverAPI, puertoAPI } from '../../config/settings'
 import {
   arrTiposRol,
   arrTiposPerfil,

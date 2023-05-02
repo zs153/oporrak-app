@@ -10,28 +10,6 @@ document.querySelectorAll(".sortable th").forEach(headerCell => {
 });
 
 // funcs
-const getCookie = (key) => {
-  let value = ''
-  document.cookie.split(';').forEach((e) => {
-    if (e.includes(key)) {
-      value = e.split('=')[1]
-    }
-  })
-  return value
-}
-const setCookie = (name, value, days) => {
-  let expires = "";
-  if (days) {
-    let date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-  }
-  // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-const deleteCookie = () => {
-  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
-}
 const sortTableByColumn = (table, column, asc = true) => {
   const dirModifier = asc ? 1 : -1;
   const tBody = table.tBodies[0];
@@ -52,34 +30,15 @@ const sortTableByColumn = (table, column, asc = true) => {
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
   table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
 }
-const arrayFilter = (value) => {
-  const filtro = value.toUpperCase()
-  const trimmedData = orgList.filter(itm => Object.keys(itm).some(k => JSON.stringify(itm[k]).includes(filtro)))
-  state.querySet = trimmedData
-  state.page = 1
-
-  buildTable(state)
-}
-const pagination = (querySet, page, rows) => {
-  const trimStart = (page - 1) * rows
-  const trimEnd = trimStart + rows
-  const trimmedData = querySet.slice(trimStart, trimEnd)
-  const pages = Math.ceil(querySet.length / rows);
-
-  return {
-    'querySet': trimmedData,
-    'pages': pages,
-  }
-}
 const buildTable = (state) => {
   const table = document.getElementById('table-body')
-  const data = pagination(state.querySet, state.page, state.rows)
-  const myList = data.querySet
+  const myList = state.querySet
   table.innerHTML = ''
 
   myList.map(element => {
-    // col1
     const row = document.createElement('tr')
+    
+    // col1
     let cell = document.createElement('td')
     cell.classList.add("w-4")
     cell.innerHTML = `<div class="align-items-center">
@@ -134,73 +93,24 @@ const buildTable = (state) => {
     table.appendChild(row)
   })
 
-  createPagination(data.pages, state.page)
+  createPages()
 }
-const createPagination = (pages, page) => {
-  let str = `<ul>`;
-  let active;
-  let pageCutLow = page - 1;
-  let pageCutHigh = page + 1;
 
-  if (pages === 1) {
-    str += `<li class="page-item disabled"><a>Pág</a></li>`;
-  }
+const createPages = () => {
+  let str = "<ul>";
 
-  if (page > 1) {
-    str += `<li class="page-item previous no"><a onclick="onclickPage(${pages}, ${page - 1})">&#9664</a></li>`;
-  }
-
-  if (pages < 6) {
-    for (let p = 1; p <= pages; p++) {
-      active = page === p ? "active" : "no";
-      str += `<li class="${active}"><a onclick="onclickPage(${pages}, ${p})">${p}</a></li>`;
-    }
+  if (hasPrevUsers) {
+    str += "<li class='page-item previous no'><a href='/admin/cursos/turnos/usuarios/" + curso.IDCURS + "/" + turno.IDTURN + "?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUserBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
   } else {
-    if (page > 2) {
-      str += `<li class="no page-item"><a onclick="onclickPage(${pages}, 1)">1</a></li>`;
-      if (page > 3) {
-        str += `<li class="out-of-range"><i>...</i></li>`;
-      }
-    }
-
-    if (page === 1) {
-      pageCutHigh += 2;
-    } else if (page === 2) {
-      pageCutHigh += 1;
-    }
-    if (page === pages) {
-      pageCutLow -= 2;
-    } else if (page === pages - 1) {
-      pageCutLow -= 1;
-    }
-    for (let p = pageCutLow; p <= pageCutHigh; p++) {
-      if (p === 0) {
-        p += 1;
-      }
-      if (p > pages) {
-        continue
-      }
-      active = page === p ? "active" : "no";
-      str += `<li class="${active}"><a onclick="onclickPage(${pages}, ${p})">${p}</a></li>`;
-    }
-
-    if (page < pages - 1) {
-      if (page < pages - 2) {
-        str += `<li class="out-of-range"><i>...</i></li>`;
-      }
-      str += `<li class="page-item no"><a onclick="onclickPage(${pages}, ${pages})">${pages}</a></li>`;
-    }
+    str += "<li><a href='#' class='nav-link disabled'>&#9664 Anterior</a>";
   }
 
-  if (page < pages) {
-    str += `<li class="page-item next no"><a onclick="onclickPage(${pages}, ${page + 1})">&#9654</a></li>`;
+  if (hasNextUsers) {
+    str += "<li class='page-item next no'><a href='/admin/cursos/turnos/usuarios/" + curso.IDCURS + "/" + turno.IDTURN + "?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUserBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
+  } else {
+    str += "<li><a href='#' class='nav-link disabled'>Siguiente &#9654</a>";
   }
-  str += `</ul>`;
+  str += "</ul>";
 
   document.getElementById('pagination-wrapper').innerHTML = str;
-}
-const onclickPage = (pages, page) => {
-  createPagination(pages, page)
-  state.page = page
-  buildTable(state)
 }
