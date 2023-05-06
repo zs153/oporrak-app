@@ -10,28 +10,6 @@ document.querySelectorAll(".sortable th").forEach(headerCell => {
 });
 
 // funcs
-const getCookie = (key) => {
-  let value = ''
-  document.cookie.split(';').forEach((e) => {
-    if (e.includes(key)) {
-      value = e.split('=')[1]
-    }
-  })
-  return value
-}
-const setCookie = (name, value, days) => {
-  let expires = "";
-  if (days) {
-    let date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-  }
-  // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-const deleteCookie = () => {
-  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
-}
 const sortTableByColumn = (table, column, asc = true) => {
   const dirModifier = asc ? 1 : -1;
   const tBody = table.tBodies[0];
@@ -58,8 +36,9 @@ const buildTable = (state) => {
   table.innerHTML = ''
 
   myList.map(element => {
-    // col1
     const row = document.createElement('tr')
+    
+    // col1
     let cell = document.createElement('td')
     cell.classList.add("w-4")
     cell.innerHTML = `<div class="align-items-center">

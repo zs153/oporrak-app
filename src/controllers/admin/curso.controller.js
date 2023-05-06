@@ -733,7 +733,6 @@ export const usuariosTurnoAddPage = async (req, res) => {
     }
   }
 
-  console.log('context...',context);
   try {
     const turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context: {
@@ -805,9 +804,12 @@ export const usuariosMatriculaPage = async (req, res) => {
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
   const part = req.query.part ? req.query.part.toUpperCase() : ''
+  const curso = {
+    IDCURS: req.params.idcurs
+  }
 
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
-  let hasPrevUsuarios = cursor ? true:false
+  let hasPrevUsers = cursor ? true:false
   let context = {}
 
   if (cursor) {
@@ -824,19 +826,19 @@ export const usuariosMatriculaPage = async (req, res) => {
       limit: limit + 1,
       direction: dir,
       cursor: {
-        next: 0,
-        prev: 0,
+        next: '',
+        prev: '',
       },
       part,
     }
   }
 
   try {
-    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      context: {
-        IDCURS: req.params.idcurs,
-      },
-    })    
+    // const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+    //   context: {
+    //     IDCURS: req.params.idcurs,
+    //   },
+    // })
     const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context: {
         IDMATR: req.params.idmatr,
@@ -847,34 +849,30 @@ export const usuariosMatriculaPage = async (req, res) => {
     })
 
     let usuarios = result.data.data
-    let hasNextUsuarios = usuarios.length === limit +1
-    let nextCursor = 0
-    let prevCursor = 0
+    let hasNextUsers = usuarios.length === limit +1
+    let nextCursor = ''
+    let prevCursor = ''
     
-    if (hasNextUsuarios) {
-      const nextCursorUsuarios = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
-      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUsuarios.IDMATR
-      prevCursor = prevCursorUsuarios.IDMATR
+    if (hasNextUsers) {
+      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
 
       usuarios.pop()
     } else {
-      const nextCursorUsuarios = dir === 'next' ? 0 : usuarios[0]
-      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : 0
-      nextCursor = nextCursorUsuarios.IDMATR
-      prevCursor = prevCursorUsuarios.IDMATR
+      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
       
       if (cursor) {
-        hasNextUsuarios = nextCursorUsuarios === 0 ? false : true
-        hasPrevUsuarios = prevCursorUsuarios === 0 ? false : true
+        hasNextUsers = nextCursor === '' ? false : true
+        hasPrevUsers = prevCursor === '' ? false : true
       } else {
-        hasNextUsuarios = false
-        hasPrevUsuarios = false
+        hasNextUsers = false
+        hasPrevUsers = false
       }
     }
 
     if (dir === 'prev') {
-      usuarios = usuarios.reverse()
+      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
     }
 
     cursor = {
@@ -882,11 +880,11 @@ export const usuariosMatriculaPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      curso: curso.data.data,
+      curso,
       matricula: matricula.data.data,
       usuarios,
-      hasNextUsuarios,
-      hasPrevUsuarios,
+      hasPrevUsers,
+      hasNextUsers,
       cursor: convertNodeToCursor(JSON.stringify(cursor)),
     }
 
@@ -909,13 +907,17 @@ export const usuariosMatriculaAddPage = async (req, res) => {
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
   const part = req.query.part ? req.query.part.toUpperCase() : ''
+  const curso = {
+    IDCURS: req.params.idcurs
+  }
 
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
-  let hasPrevUsuarios = cursor ? true:false
+  let hasPrevUsers = cursor ? true : false
   let context = {}
 
   if (cursor) {
     context = {
+      idcurs: req.params.idcurs,
       idmatr: req.params.idmatr,
       limit: limit + 1,
       direction: dir,
@@ -924,23 +926,24 @@ export const usuariosMatriculaAddPage = async (req, res) => {
     }
   } else {
     context = {
+      idcurs: req.params.idcurs,
       idmatr: req.params.idmatr,
       limit: limit + 1,
       direction: dir,
       cursor: {
-        next: 0,
-        prev: 0,
+        next: '',
+        prev: '',
       },
       part,
     }
   }
 
   try {
-    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      context: {
-        IDCURS: req.params.idcurs,
-      },
-    })    
+    // const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+    //   context: {
+    //     IDCURS: req.params.idcurs,
+    //   },
+    // })    
     const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context: {
         IDMATR: req.params.idmatr,
@@ -951,34 +954,30 @@ export const usuariosMatriculaAddPage = async (req, res) => {
     })
 
     let usuarios = result.data.data
-    let hasNextUsuarios = usuarios.length === limit +1
+    let hasNextUsers = usuarios.length === limit + 1
     let nextCursor = 0
     let prevCursor = 0
     
-    if (hasNextUsuarios) {
-      const nextCursorUsuarios = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
-      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUsuarios.IDUSUA
-      prevCursor = prevCursorUsuarios.IDUSUA
+    if (hasNextUsers) {
+      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
 
       usuarios.pop()
     } else {
-      const nextCursorUsuarios = dir === 'next' ? 0 : usuarios[0]
-      const prevCursorUsuarios = dir === 'next' ? usuarios[0] : 0
-      nextCursor = nextCursorUsuarios.IDUSUA
-      prevCursor = prevCursorUsuarios.IDUSUA
-      
+      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
+
       if (cursor) {
-        hasNextUsuarios = nextCursorUsuarios === 0 ? false : true
-        hasPrevUsuarios = prevCursorUsuarios === 0 ? false : true
+        hasNextUsers = nextCursor === '' ? false : true
+        hasPrevUsers = prevCursor === '' ? false : true
       } else {
-        hasNextUsuarios = false
-        hasPrevUsuarios = false
+        hasNextUsers = false
+        hasPrevUsers = false
       }
     }
 
     if (dir === 'prev') {
-      usuarios = usuarios.reverse()
+      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
     }
 
     cursor = {
@@ -986,11 +985,11 @@ export const usuariosMatriculaAddPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      curso: curso.data.data,
+      curso,
       matricula: matricula.data.data,
       usuarios,
-      hasNextUsuarios,
-      hasPrevUsuarios,
+      hasPrevUsers,
+      hasNextUsers,
       cursor: convertNodeToCursor(JSON.stringify(cursor)),
     }
 

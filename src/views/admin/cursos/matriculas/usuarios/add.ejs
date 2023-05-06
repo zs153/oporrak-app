@@ -9,6 +9,29 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
 </head>
 
 <body class="antialiased">
@@ -43,7 +66,7 @@
                                     <line x1="21" y1="21" x2="15" y2="15"></line>
                                   </svg>
                                 </span>
-                                <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" name="part"
+                                <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part"
                                   placeholder="Buscar..." aria-label="Buscar en usuarios">
                               </div>
                             </form>
@@ -56,6 +79,9 @@
                             <tr class="header">
                               <th class="w-4"></th>
                               <th>Nombre</th>
+                              <th class="w-9">Oficina</th>
+                              <th class="w-0"></th>
+                              <th class="w-0"></th>
                             </tr>
                           </thead>
                           <tbody id="table-body">
@@ -64,7 +90,7 @@
                         <div id="pagination-wrapper" class="py-1"></div>
                       </div>
                       <div class="card-footer">
-                        <form id="form" action="/admin/cursos/matriculas/usuarios/insert" method="POST" onsubmit="return addUsuarios();">
+                        <form action="#" id="add" method="POST" onsubmit="return addUsuarios();">
                           <div class="col-12 d-flex">
                             <a href="/admin/cursos/matriculas/usuarios/<%- datos.curso.IDCURS %>/<%- datos.matricula.IDMATR %>"
                               class="btn btn-link">Volver</a>
@@ -91,21 +117,24 @@
     const curso = <%- JSON.stringify(datos.curso) %>
     const matricula = <%- JSON.stringify(datos.matricula) %>
     const cursor = <%- JSON.stringify(datos.cursor) %>
-    const hasNextUsuarios = <%- datos.hasNextUsuarios %>
-    const hasPrevUsuarios = <%- datos.hasPrevUsuarios %>
-
-    let state = {
+    const hasNextUsers = <%- datos.hasNextUsers %>
+    const hasPrevUsers = <%- datos.hasPrevUsers %>
+    cost state = {
       'querySet': orgList,
-      'page': 1,
-      'rows': 10,
     }
 
     // events
-    const elemBuscar = document.getElementById('buscarUsuarioBox');
+    const elemBuscar = document.getElementById('buscarUserBox');
     elemBuscar.onchange = (event) => {
       setCookie('filtro', event.target.value, .5) // medio dia
     }
     elemBuscar.value = getCookie('filtro')
+
+    // inicicalizar
+    const elemAdd = document.getElementById('add')
+    elemAdd.setAttribute('adction', `/admin/cursos/matriculas/usuarios/insert?part=${getCookie('filtro')}`)
+
+    // tabla
     buildTable(state)
   </script>
 </body>
