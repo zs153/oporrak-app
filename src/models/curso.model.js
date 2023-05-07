@@ -753,9 +753,11 @@ export const usuariosMatricula = async (context) => {
 
   if (context.direction === 'next') {
     bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
-    query += `SELECT uu.idusua,uu.userid,uu.nomusu,oo.desofi
+    query += `SELECT 
+    uu.idusua,uu.userid,uu.nomusu,oo.desofi
     FROM usuarios uu
     INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN usuariosmatricula um ON um.idusua= uu.idusua AND um.idmatr = :idmatr
     WHERE uu.nomusu > :nomusu OR :nomusu IS NULL 
     AND (
       uu.nomusu LIKE '%' || :part || '%' 
@@ -765,73 +767,17 @@ export const usuariosMatricula = async (context) => {
     ORDER BY uu.nomusu ASC
     FETCH NEXT :limit ROWS ONLY`
   } else {
-    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
+    bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
     query += `SELECT uu.idusua,uu.nomusu,uu.userid,oo.desofi
     FROM usuarios uu
     INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    INNER JOIN usuariosmatricula um ON um.idusua= uu.idusua AND um.idmatr = :idmatr
     WHERE uu.nomusu < :nomusu OR :nomusu IS NULL 
     AND (
       uu.nomusu LIKE '%' || :part || '%'
       OR oo.desofi LIKE '%' || :part || '%'
       OR :part IS NULL
     )
-    ORDER BY uu.nomusu DESC
-    FETCH NEXT :limit ROWS ONLY`
-  }
-
-  console.log(query,bind);
-  // proc
-  const ret = await simpleExecute(query, bind)
-
-  if (ret) {
-    return ({ stat: 1, data: ret.rows })
-  } else {
-    return ({ stat: null, data: null })
-  }  
-}
-export const usuariosMatriculaPendientes = async (context) => {
-  // bind
-  let bind = {
-    idmatr: context.idmatr,
-    limit: context.limit,
-    part: context.part,
-  }
-  let query = ''
-
-  if (context.direction === 'next') {
-    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
-    query += `SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
-    FROM usuarios uu
-    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua AND um.idmatr = mc.idmatr
-    WHERE uu.nomusu > :nomusu OR :nomusu IS NULL
-      AND uu.idusua NOT IN (
-        SELECT ut.idusua FROM usuariosmatricula um
-        WHERE um.idmatr = :idmatr
-      )
-      AND (
-        uu.nomusu LIKE '%' || :part || '%' 
-        OR oo.desofi LIKE '%' || :part || '%'
-        OR :part IS NULL
-      )
-    ORDER BY uu.nomusu ASC
-    FETCH NEXT :limit ROWS ONLY`
-  } else {
-    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
-    query += `SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
-    FROM usuarios uu
-    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua AND um.idmatr = mc.idmatr
-    WHERE uu.nomusu < :nomusu OR :nomusu IS NULL
-      AND uu.idusua NOT IN (
-        SELECT ut.idusua FROM usuariosmatricula um
-        WHERE um.idmatr = :idmatr
-      )
-      AND (
-        uu.nomusu LIKE '%' || :part || '%' 
-        OR oo.desofi LIKE '%' || :part || '%'
-        OR :part IS NULL
-      )
     ORDER BY uu.nomusu DESC
     FETCH NEXT :limit ROWS ONLY`
   }
