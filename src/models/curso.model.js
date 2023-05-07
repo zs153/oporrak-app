@@ -669,42 +669,46 @@ export const usuariosTurnoPendientes = async (context) => {
 
   if (context.direction === 'next') {
     bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
-    query = `SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
+    query = `WITH datos AS (
+    SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
     FROM usuarios uu
     INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
     INNER JOIN matriculascurso mc ON mc.idcurs = :idcurs
     INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua AND um.idmatr = mc.idmatr
-    WHERE uu.nomusu > :nomusu OR :nomusu IS NULL
-      AND uu.idusua NOT IN (
-        SELECT ut.idusua FROM usuariosturno ut
-        WHERE ut.idturn = :idturn
-      )
-      AND (
-        uu.nomusu LIKE '%' || :part || '%' 
-        OR oo.desofi LIKE '%' || :part || '%'
-        OR :part IS NULL
-      )
-    ORDER BY uu.nomusu ASC
+    WHERE uu.idusua NOT IN (
+      SELECT ut.idusua FROM usuariosturno ut
+      WHERE ut.idturn = :idturn
+    )
+    AND (        
+      nomusu LIKE '%' || :part || '%' 
+      OR desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    ))
+    SELECT * FROM datos
+    WHERE nomusu > :nomusu OR :nomusu IS NULL
+    ORDER BY nomusu ASC
     FETCH NEXT :limit ROWS ONLY`
   } else {
     bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
-    query = `SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
-    FROM usuarios uu
-    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-    INNER JOIN matriculascurso mc ON mc.idcurs = :idcurs
-    INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua AND um.idmatr = mc.idmatr
-    WHERE uu.nomusu < :nomusu OR :nomusu IS NULL
-      AND uu.idusua NOT IN (
+    query = `WITH datos AS (
+      SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
+      FROM usuarios uu
+      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+      INNER JOIN matriculascurso mc ON mc.idcurs = :idcurs
+      INNER JOIN usuariosmatricula um ON um.idusua = uu.idusua AND um.idmatr = mc.idmatr
+      WHERE uu.idusua NOT IN (
         SELECT ut.idusua FROM usuariosturno ut
         WHERE ut.idturn = :idturn
       )
-      AND (
-        uu.nomusu LIKE '%' || :part || '%' 
-        OR oo.desofi LIKE '%' || :part || '%'
+      AND (        
+        nomusu LIKE '%' || :part || '%' 
+        OR desofi LIKE '%' || :part || '%'
         OR :part IS NULL
-      )
-    ORDER BY uu.nomusu DESC
-    FETCH NEXT :limit ROWS ONLY`
+      ))
+      SELECT * FROM datos
+      WHERE nomusu < :nomusu OR :nomusu IS NULL
+      ORDER BY nomusu DESC
+      FETCH NEXT :limit ROWS ONLY`
   }
 
   // proc
