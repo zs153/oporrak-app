@@ -27,7 +27,6 @@ import {
   updateMatricula,
   deleteMatricula,
   usuariosMatriculaPage,
-  usuariosMatriculaAddPage,
   insertUsuarioMatricula,
   deleteUsuarioMatricula,
   usuariosAddPage,
@@ -60,7 +59,6 @@ cursoRouter.get("/cursos/turnos/usuarios/add/:idcurs/:idturn", authRoutes, usuar
 
 // paginas usuarios matricula
 cursoRouter.get("/cursos/matriculas/usuarios/:idcurs/:idmatr", authRoutes, usuariosMatriculaPage);
-cursoRouter.get("/cursos/matriculas/usuarios/add/:idcurs/:idmatr", authRoutes, usuariosMatriculaAddPage);
 
 // proc cursos
 cursoRouter.post("/cursos/insert", authRoutes, insert);

@@ -142,8 +142,7 @@
     const cursor = <%- JSON.stringify(datos.cursor) %>
     const hasNextCursos = <%- datos.hasNextCursos %>
     const hasPrevCursos = <%- datos.hasPrevCursos %>
-
-    let state = {
+    const state = {
       'querySet': orgList,
     }
 
@@ -154,12 +153,13 @@
     }
     elemBuscar.value = getCookie('filtro')
 
-    // inicializaciones
+    // inicializacion
     const elemNew = document.getElementById('new')
     elemNew.setAttribute('href', `/admin/cursos/add?part=${getCookie('filtro')}`)
     const elemDel = document.getElementById('del')
     elemDel.setAttribute('action', `/admin/cursos/delete?part=${getCookie('filtro')}`)
     
+    // tabla
     buildTable(state)
   </script>
 </body>

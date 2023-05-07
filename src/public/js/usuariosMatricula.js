@@ -95,18 +95,17 @@ const buildTable = (state) => {
 
   createPages()
 }
-
 const createPages = () => {
   let str = "<ul>";
 
-  if (hasPrevUsuarios) {
-    str += "<li class='page-item previous no'><a href='/admin/cursos/matriculas/usuarios/" + curso.IDCURS + "/" + matricula.IDMATR +"?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUsuarioBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
+  if (hasPrevUsers) {
+    str += "<li class='page-item previous no'><a href='/admin/cursos/matriculas/usuarios/" + curso.IDCURS + "/" + matricula.IDMATR +"?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUserBox').value + "&dir=prev' class='nav-link'>&#9664 Anterior</a>";
   } else {
     str += "<li><a href='#' class='nav-link disabled'>&#9664 Anterior</a>";
   }
 
-  if (hasNextUsuarios) {
-    str += "<li class='page-item next no'><a href='/admin/cursos/matriculas/usuarios" + curso.IDCURS + "/" + matricula.IDMATR + "?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUsuarioBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
+  if (hasNextUsers) {
+    str += "<li class='page-item next no'><a href='/admin/cursos/matriculas/usuarios/" + curso.IDCURS + "/" + matricula.IDMATR + "?cursor=" + JSON.stringify(cursor) + "&part=" + document.getElementById('buscarUserBox').value + "&dir=next' class='nav-link'>Siguiente &#9654</a>";
   } else {
     str += "<li><a href='#' class='nav-link disabled'>Siguiente &#9654</a>";
   }

@@ -92,15 +92,15 @@ const buildTable = (state) => {
           </li>
           <div class="nav-divider"></div>
           <li class="nav-item">
-            <a href="/admin/cursos/turnos/${element.IDCURS}?part=${getCookie('filtro')}" class="nav-link">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" height="24" width="24" viewBox="0 0 20 20" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke-width=".4" fill="none" d="M9.7 19.3v-6.825q0-.275.1-.537.1-.263.325-.488L16.25 5.3h-3.2v-.625h4.275V8.95H16.7v-3.2l-6.15 6.125q-.125.125-.175.262-.05.138-.05.288V19.3Z"/></svg>
-              Turnos
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="/admin/cursos/matriculas/${element.IDCURS}?part=${getCookie('filtro')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" class="icon icon-inline me-2" width="24" height="24" viewBox="0 0 20 20" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke-width=".4" fill="none" d="M15.85 13.5q-.8 0-1.362-.55-.563-.55-.563-1.375 0-.8.55-1.375t1.375-.575q.8 0 1.375.575t.575 1.375q0 .8-.575 1.363-.575.562-1.375.562Zm-4.9 4.925v-.85q0-.225.125-.462.125-.238.35-.388.975-.55 2.087-.862 1.113-.313 2.338-.313t2.325.313q1.1.312 2.125.862.2.15.338.388.137.237.137.462v.85Zm.625-1.05v.425h8.575v-.425q-1.025-.575-2.112-.887-1.088-.313-2.188-.313t-2.187.313q-1.088.312-2.088.887Zm4.275-4.5q.525 0 .913-.387.387-.388.387-.913t-.387-.913q-.388-.387-.913-.387t-.912.387q-.388.388-.388.913t.388.913q.387.387.912.387Zm0-1.3Zm0 6.225ZM4.275 13.3v-.65h6.7v.65Zm0-7.95v-.625H14.95v.625Zm7.775 3.975H4.275v-.65h8.3q-.125.15-.263.312-.137.163-.262.338Z"/></svg>
               Matrícula
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/cursos/turnos/${element.IDCURS}?part=${getCookie('filtro')}" class="nav-link">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" height="24" width="24" viewBox="0 0 20 20" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke-width=".4" fill="none" d="M9.7 19.3v-6.825q0-.275.1-.537.1-.263.325-.488L16.25 5.3h-3.2v-.625h4.275V8.95H16.7v-3.2l-6.15 6.125q-.125.125-.175.262-.05.138-.05.288V19.3Z"/></svg>
+              Turnos
             </a>
           </li>
           <div class="nav-divider"></div>

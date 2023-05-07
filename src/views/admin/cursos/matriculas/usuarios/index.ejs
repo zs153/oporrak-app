@@ -56,7 +56,7 @@
                       <div class="col-auto ms-auto">
                         <div class="d-flex">
                           <form action="/admin/cursos/matriculas/usuarios/<%= datos.curso.IDCURS %>/<%= datos.matricula.IDMATR %>" method="GET">
-                            <div class="input-icon me-3">
+                            <div class="input-icon">
                               <span class="input-icon-addon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                   viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -66,17 +66,9 @@
                                   <line x1="21" y1="21" x2="15" y2="15"></line>
                                 </svg>
                               </span>
-                              <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part"
-                                placeholder="Buscar..." aria-label="Buscar en matriculas">
+                              <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part" placeholder="Buscar..." aria-label="Buscar en matriculas">
                             </div>
                           </form>
-                          <a href="/admin/cursos/matriculas/usuarios/add/<%- datos.curso.IDCURS %>/<%- datos.matricula.IDMATR %>"
-                            class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
-                              <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
-                            </svg>
-                            Nuevo Usuario
-                          </a>
                         </div>
                       </div>
                     </div>
@@ -86,7 +78,7 @@
                           <tr class="header">
                             <th class="w-4"></th>
                             <th>Nombre</th>
-                            <th>Oficina</th>
+                            <th class="w-20">Oficina</th>
                             <th class="w-5"></th>
                           </tr>
                         </thead>
@@ -97,7 +89,7 @@
                     <div class="card-footer">
                       <div id="pagination-wrapper" class="py-1"></div>
                       <div class="ms-auto d-flex py-1">
-                        <a href="/admin/cursos/matriculas/<%- datos.curso.IDCURS %>" class="btn btn-white">Volver</a>
+                        <a href="/admin/cursos/matriculas/<%- datos.curso.IDCURS %>" onclick="deleteCookie();" class="btn btn-white">Volver</a>
                       </div>
                     </div>
                   </div>
@@ -168,8 +160,6 @@
     elemBuscar.value = getCookie('filtro')
 
     // inicializacion
-    const elemNew = document.getElementById('new')
-    elemNew.setAttribute('href', `/admin/cursos/matriculas/usuarios/add/${curso.IDCURS}/${matricula.IDMATR}?part=${getCookie('filtro')}`)
     const elemDel = document.getElementById('del')
     elemDel.setAttribute('action', `/admin/cursos/matriculas/usuarios/delete?part=${getCookie('filtro')}`)
 

@@ -535,7 +535,7 @@ export const usuariosPage = async (req, res) => {
     }
 
     if (dir === 'prev') {
-      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+      usuarios = usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU))
     }
 
     cursor = {
@@ -667,7 +667,8 @@ export const usuariosTurnoPage = async (req, res) => {
     }
 
     if (dir === 'prev') {
-      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+      //usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+      usuarios = usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU))
     }
 
     cursor = {
@@ -767,7 +768,8 @@ export const usuariosTurnoAddPage = async (req, res) => {
     }
 
     if (dir === 'prev') {
-      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+      //usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+      usuarios = usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU))      
     }
 
     cursor = {
@@ -856,7 +858,7 @@ export const usuariosMatriculaPage = async (req, res) => {
     if (hasNextUsers) {
       nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
       prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
-
+      
       usuarios.pop()
     } else {
       nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
@@ -872,7 +874,7 @@ export const usuariosMatriculaPage = async (req, res) => {
     }
 
     if (dir === 'prev') {
-      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
+      usuarios = usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU))
     }
 
     cursor = {
@@ -889,111 +891,6 @@ export const usuariosMatriculaPage = async (req, res) => {
     }
 
     res.render('admin/cursos/matriculas/usuarios', { user, datos })
-  } catch (error) {
-    if (error.response?.status === 400) {
-      res.render("admin/error400", {
-        alerts: [{ msg: error.response.data.msg }],
-      });
-    } else {
-      res.render("admin/error500", {
-        alerts: [{ msg: error }],
-      });
-    }
-  }
-}
-export const usuariosMatriculaAddPage = async (req, res) => {
-  const user = req.user
-
-  const dir = req.query.dir ? req.query.dir : 'next'
-  const limit = req.query.limit ? req.query.limit : 10
-  const part = req.query.part ? req.query.part.toUpperCase() : ''
-  const curso = {
-    IDCURS: req.params.idcurs
-  }
-
-  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
-  let hasPrevUsers = cursor ? true : false
-  let context = {}
-
-  if (cursor) {
-    context = {
-      idcurs: req.params.idcurs,
-      idmatr: req.params.idmatr,
-      limit: limit + 1,
-      direction: dir,
-      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
-      part,
-    }
-  } else {
-    context = {
-      idcurs: req.params.idcurs,
-      idmatr: req.params.idmatr,
-      limit: limit + 1,
-      direction: dir,
-      cursor: {
-        next: '',
-        prev: '',
-      },
-      part,
-    }
-  }
-
-  try {
-    // const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-    //   context: {
-    //     IDCURS: req.params.idcurs,
-    //   },
-    // })    
-    const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
-      context: {
-        IDMATR: req.params.idmatr,
-      },
-    })
-    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matriculas/usuarios/pendientes`, {
-      context,
-    })
-
-    let usuarios = result.data.data
-    let hasNextUsers = usuarios.length === limit + 1
-    let nextCursor = 0
-    let prevCursor = 0
-    
-    if (hasNextUsers) {
-      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
-      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
-
-      usuarios.pop()
-    } else {
-      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
-      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
-
-      if (cursor) {
-        hasNextUsers = nextCursor === '' ? false : true
-        hasPrevUsers = prevCursor === '' ? false : true
-      } else {
-        hasNextUsers = false
-        hasPrevUsers = false
-      }
-    }
-
-    if (dir === 'prev') {
-      usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
-    }
-
-    cursor = {
-      next: nextCursor,
-      prev: prevCursor,
-    }
-    const datos = {
-      curso,
-      matricula: matricula.data.data,
-      usuarios,
-      hasPrevUsers,
-      hasNextUsers,
-      cursor: convertNodeToCursor(JSON.stringify(cursor)),
-    }
-
-    res.render('admin/cursos/matriculas/usuarios/add', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
