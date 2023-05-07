@@ -634,6 +634,11 @@ export const usuariosTurnoPage = async (req, res) => {
   }
 
   try {
+    // const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+    //   context: {
+    //     IDCURS: req.params.idcurs,
+    //   },
+    // })
     const turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context: {
         IDTURN: req.params.idturn,
@@ -701,7 +706,7 @@ export const usuariosTurnoAddPage = async (req, res) => {
   const user = req.user
 
   const dir = req.query.dir ? req.query.dir : 'next'
-  const limit = req.query.limit ? req.query.limit : 10
+  const limit = req.query.limit ? req.query.limit : 100
   const part = req.query.part ? req.query.part.toUpperCase() : ''
   const curso = {
     IDCURS: req.params.idcurs
@@ -748,10 +753,15 @@ export const usuariosTurnoAddPage = async (req, res) => {
     let hasNextUsers = usuarios.length === limit + 1
     let nextCursor = ''
     let prevCursor = ''
+    let alerts = undefined
 
     if (hasNextUsers) {
+      alerts = [{ msg: 'Se supera el límite de registros permitidos. Sólo se muestran 99 registros. Refine la consulta' }]
       nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
       prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
+
+      hasNextUsers = false
+      hasPrevUsers = false
 
       usuarios.pop()
     } else {
@@ -785,7 +795,7 @@ export const usuariosTurnoAddPage = async (req, res) => {
       cursor: convertNodeToCursor(JSON.stringify(cursor)),
     }
 
-    res.render('admin/cursos/turnos/usuarios/add', { user, datos })
+    res.render('admin/cursos/turnos/usuarios/add', { user, alerts, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {

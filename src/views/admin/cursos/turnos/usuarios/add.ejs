@@ -43,10 +43,17 @@
         <div class="page-body">
           <div class="row">
               <div class="col-12">
+                <% if(typeof alerts !== 'undefined' ) { %>
+                  <% alerts.map(function (alert){ %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <%- alert.msg %>
+                    </div>
+                  <% }) %>
+                <% } %>
                 <div class="card">
                   <div class="card-header">
                     <div>
-                      <h3 class="card-title">Usuarios Matriculados</h3>
+                      <h3 class="card-title">Usuarios Pendientes de Matricular</h3>
                       <span class="text-muted">
                         <small>
                           Turno: <%- datos.turno.DESTUR %>
@@ -56,7 +63,7 @@
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
                         <form action="/admin/cursos/turnos/usuarios/add/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>" method="GET">
-                          <div class="input-icon me-3">
+                          <div class="input-icon">
                             <span class="input-icon-addon">
                               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -65,20 +72,20 @@
                                 <line x1="21" y1="21" x2="15" y2="15"></line>
                               </svg>
                             </span>
-                            <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part" placeholder="Buscar..."
+                            <input type="text" class="form-control d-inline-block" id="buscarUserBox" name="part" placeholder="Buscar..."
                               aria-label="Buscar en usuarios">
                           </div>
                         </form>
                       </div>
                     </div>
                   </div>
-                  <div class="card-body">
-                    <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                  <div class="card-body overflow-auto">
+                    <table class="table table-vcenter table-striped sortable table-fixHead" id="tblUsuarios">
                       <thead>
                         <tr class="header">
                           <th class="w-4"></th>
                           <th>Nombre</th>
-                          <th class="w-9">Oficina</th>
+                          <th class="w-20">Oficina</th>
                           <th class="w-0"></th>
                           <th class="w-0"></th>
                         </tr>
@@ -86,12 +93,12 @@
                       <tbody id="table-body">
                       </tbody>
                     </table>
-                    <div id="pagination-wrapper" class="py-1"></div>
+                    <!-- <div id="pagination-wrapper" class="py-1"></div> -->
                   </div>
                   <div class="card-footer">
                     <form action="#" id="add" method="POST" onsubmit="return addUsuarios();">
                       <div class="col-12 d-flex">
-                        <a href="/admin/cursos/turnos/usuarios/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>" class="btn btn-link">Volver</a>
+                        <a href="/admin/cursos/turnos/usuarios/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>" onclick="deleteCookie();" class="btn btn-link">Volver</a>
                         <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
                         <input type="hidden" name="idturn" id="idturn" value="<%- datos.turno.IDTURN %>">
                         <input type="hidden" name="arrusu" id="arrusu" value="">

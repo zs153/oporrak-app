@@ -37,9 +37,9 @@ const buildTable = (state) => {
 
   myList.map(element => {
     const row = document.createElement('tr')
-    let cell = document.createElement('td')
-
+    
     // col1
+    let cell = document.createElement('td')
     cell.classList.add("w-4")
     cell.innerHTML = `<input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select invoice">`
     row.appendChild(cell)
@@ -55,6 +55,7 @@ const buildTable = (state) => {
 
     // col3
     cell = document.createElement('td')
+    cell.classList.add("w-20")
     cell.innerHTML = `<div class="d-flex align-items-center">
       <div class="flex-fill">
         <div class="font-weight-medium">${element.DESOFI}</div>
@@ -64,12 +65,14 @@ const buildTable = (state) => {
 
     // col4
     cell = document.createElement('td')
+    cell.classList.add("w-0")
     cell.style.display = 'none'
     cell.value = element.IDUSUA
     row.appendChild(cell)
 
     // col5
     cell = document.createElement('td')
+    cell.classList.add("w-0")
     cell.style.display = 'none'
     cell.value = element.IDOFIC
     row.appendChild(cell)
@@ -77,7 +80,7 @@ const buildTable = (state) => {
     table.appendChild(row)
   })
 
-  createPages()
+  //createPages()
 }
 
 const createPages = () => {

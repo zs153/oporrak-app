@@ -129,11 +129,8 @@
     const cursor = <%- JSON.stringify(datos.cursor) %>
     const hasNextMatriculas = <%- datos.hasNextMatriculas %>
     const hasPrevMatriculas = <%- datos.hasPrevMatriculas %>
-
-    let state = {
+    const state = {
       'querySet': orgList,
-      'page': 1,
-      'rows': 10,
     }
 
     // events
@@ -142,6 +139,8 @@
       setCookie('filtro', event.target.value, .5) // medio dia
     }
     elemBuscar.value = getCookie('filro')
+
+    // tabla
     buildTable(state)
   </script>
 </body>
