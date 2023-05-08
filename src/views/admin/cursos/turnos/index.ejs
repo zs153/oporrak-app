@@ -130,11 +130,8 @@
     const cursor = <%- JSON.stringify(datos.cursor) %>
     const hasNextTurnos = <%- datos.hasNextTurnos %>
     const hasPrevTurnos = <%- datos.hasPrevTurnos %>
-
-    let state = {
+    const state = {
       'querySet': orgList,
-      'page': 1,
-      'rows': 10,
     }
 
     // events

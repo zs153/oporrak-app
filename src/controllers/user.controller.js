@@ -19,6 +19,7 @@ export const mainPage = async (req, res) => {
         STAMAT: estadosMatricula.abierta,
       },
     })
+    const hayMatricula = matriculas.data.stat ? true:false
 
     let userid = ''
     let data = []
@@ -40,9 +41,10 @@ export const mainPage = async (req, res) => {
       data.push(itm)
     })
 
+
     const datos = {
       estados: data,
-      hayMatricula: matriculas.data.stat === 1 ? true : false,
+      hayMatricula,
     }
 
     res.render('user', { user, datos })

@@ -6,7 +6,7 @@ export const matriculasPage = async (req, res) => {
   const user = req.user
 
   try {
-    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
+    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matricula`, {
       context: {
         IDUSUA: user.id,
         STAMAT: estadosMatricula.abierta,
@@ -33,7 +33,7 @@ export const cursosPage = async (req, res) => {
   const user = req.user
 
   try {
-    const cursos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/cursos`, {
+    const cursos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/curso`, {
       context: {
         IDUSUA: req.user.id
       },

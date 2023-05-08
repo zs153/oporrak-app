@@ -116,13 +116,14 @@ export const editPage = async (req, res) => {
   const user = req.user
 
   try {
-    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       context: {
         IDCURS: req.params.id,
       },
     })
+    const curso = result.data.stat === 1 ? result.data.data[0] : []
     const datos = {
-      curso: curso.data.data,
+      curso,
       arrEstadosCurso,
     }
 
@@ -174,7 +175,7 @@ export const turnosPage = async (req, res) => {
   }
 
   try {
-    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+    let curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       context: {
         IDCURS: req.params.id,
       },
@@ -183,6 +184,7 @@ export const turnosPage = async (req, res) => {
       context,
     })
 
+    curso = result.data.stat === 1 ? result.data.data[0] : []
     let turnos = result.data.data
     let hasNextTurnos = turnos.length === limit +1
     let nextCursor = 0
@@ -215,7 +217,7 @@ export const turnosPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      curso: curso.data.data,
+      curso,
       turnos,
       hasNextTurnos,
       hasPrevTurnos,
@@ -272,24 +274,27 @@ export const addTurnoPage = async (req, res) => {
 export const editTurnoPage = async (req, res) => {
   const user = req.user;
 
+  console.log(req.params);
   try {
-    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+    let curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       context: {
         IDCURS: req.params.idcurs,
       },
     });
-    const turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
+    let turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context: {
-        IDCURS: req.params.idcurs,
+        IDTURN: req.params.idturn,
       },
     });
 
-    turno.data.data.INITUR = dateISOToUTCString(turno.data.data.INITUR)
-    turno.data.data.FINTUR = dateISOToUTCString(turno.data.data.FINTUR)
+    curso = curso.data.stat === 1 ? curso.data.data[0] : []
+    turno = turno.data.stat === 1 ? turno.data.data[0] : []
+    turno.INITUR = dateISOToUTCString(turno.INITUR)
+    turno.FINTUR = dateISOToUTCString(turno.FINTUR)
 
     const datos = {
-      curso: curso.data.data,
-      turno: turno.data.data,
+      curso,
+      turno,
     };
 
     res.render("admin/cursos/turnos/edit", { user, datos });

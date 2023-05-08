@@ -16,7 +16,7 @@ export const mainPage = async (req, res) => {
         TIPEST: tiposEstado.telefono.ID,  // tipo excluido (no mostrar como ausencia los tipo telefono)
       },
     })
-    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
+    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matricula`, {
       context: {
         IDUSUA: user.id,
         STAMAT: estadosMatricula.abierta,
