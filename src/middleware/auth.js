@@ -55,7 +55,7 @@ const authRoutes = async (req, res, next) => {
           }
 
           res.cookie('auth', localToken, options)
-          res.cookie('verPan', 1, { path: '/admin' })
+          res.cookie('verPan', 1, { path: '/user' })
         }).catch(err => {
           throw new Error(err)
         })

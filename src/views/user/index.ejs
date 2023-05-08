@@ -281,7 +281,7 @@
                   interesado</a>
               </div>
               <div class="col">
-                <a href="/admin/formacion/matriculas" class="btn btn-white w-100">Ir a matriculaciones</a>
+                <a href="/user/formacion/matriculas" class="btn btn-white w-100">Ir a matriculaciones</a>
               </div>
             </div>
             <div>
@@ -327,7 +327,7 @@
     const [name, ...rest] = document.cookie.split('=');
 
     if (name === '') {
-      document.cookie = "verPan=1;path=/admin"
+      document.cookie = "verPan=1;path=/user"
     }
     const verPanel = rest.join('=').trim() === '1' && hayMatricula ? true : false;
 
