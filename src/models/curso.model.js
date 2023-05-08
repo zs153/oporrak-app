@@ -183,9 +183,9 @@ export const find = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const findAll = async (context) => {
@@ -224,9 +224,9 @@ export const findAll = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const insert = async (context) => {
@@ -244,7 +244,7 @@ export const insert = async (context) => {
     bind.IDCURS = ret.outBinds.IDCURS
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }
 export const update = async (context) => {
@@ -256,7 +256,7 @@ export const update = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const remove = async (context) => {
@@ -268,7 +268,7 @@ export const remove = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 
@@ -288,9 +288,9 @@ export const turno = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const turnos = async (context) => {
@@ -342,9 +342,9 @@ export const turnos = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const insertTurno = async (context) => {
@@ -362,7 +362,7 @@ export const insertTurno = async (context) => {
     bind.IDTURN = ret.outBinds.IDTURN
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const updateTurno = async (context) => {
@@ -374,7 +374,7 @@ export const updateTurno = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const removeTurno = async (context) => {
@@ -386,7 +386,7 @@ export const removeTurno = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 
@@ -406,9 +406,9 @@ export const matricula = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const matriculas = async (context) => {
@@ -460,9 +460,9 @@ export const matriculas = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const insertMatricula = async (context) => {
@@ -480,7 +480,7 @@ export const insertMatricula = async (context) => {
     bind.IDMATR = ret.outBinds.IDMATR
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const updateMatricula = async (context) => {
@@ -492,7 +492,7 @@ export const updateMatricula = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const removeMatricula = async (context) => {
@@ -504,7 +504,7 @@ export const removeMatricula = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 
@@ -556,9 +556,9 @@ export const usuarios = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const usuariosPendientes = async (context) => {
@@ -576,9 +576,9 @@ export const usuariosPendientes = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const insertUsuario = async (context) => {
@@ -590,7 +590,7 @@ export const insertUsuario = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const removeUsuario = async (context) => {
@@ -602,7 +602,7 @@ export const removeUsuario = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 
@@ -652,9 +652,9 @@ export const usuariosTurno = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const usuariosTurnoPendientes = async (context) => {
@@ -715,9 +715,9 @@ export const usuariosTurnoPendientes = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const insertUsuarioTurno = async (context) => {
@@ -729,7 +729,7 @@ export const insertUsuarioTurno = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const removeUsuarioTurno = async (context) => {
@@ -741,7 +741,7 @@ export const removeUsuarioTurno = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 
@@ -790,10 +790,10 @@ export const usuariosMatricula = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
-  }  
+    return ({ stat: 0, data: [] })
+  }
 }
 export const insertUsuarioMatricula = async (context) => {
   // bind
@@ -804,7 +804,7 @@ export const insertUsuarioMatricula = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }
 export const removeUsuarioMatricula = async (context) => {
@@ -816,6 +816,6 @@ export const removeUsuarioMatricula = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }

@@ -23,9 +23,9 @@ export const findM = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 
@@ -43,8 +43,8 @@ export const findC = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
