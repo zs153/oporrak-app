@@ -39,9 +39,10 @@ export const cursosPage = async (req, res) => {
       },
     })
     const datos = {
-      cursos: cursos.data.data,
+      cursos: cursos.data.data
     }
 
+    console.log(datos.cursos);
     res.render('user/formacion/cursos', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {

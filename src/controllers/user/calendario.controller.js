@@ -7,19 +7,19 @@ export const mainPage = async (req, res) => {
   const currentYear = new Date().getFullYear()
 
   try {
-    const usuario = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/stats`, {
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/stats`, {
       context: {
         IDUSUA: user.id,
         DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
         HASTA: dateISOToUTCString(`${currentYear + 1}-12-31T00:00:00`),
       },
     })
-
+    
     const datos = {
       estadosUsuario,
-      usuario: usuario.data.data,
+      usuario: result.data.data,
     }
-
+    
     res.render(`user/calendarios`, { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {
@@ -166,10 +166,4 @@ const dateISOToUTCString = (dateISO) => {
   const fecha = new Date(dateISO);
   const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
   return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10);
-}
-const convertNodeToCursor = (node) => {
-  return new Buffer.from(node, 'binary').toString('base64')
-}
-const convertCursorToNode = (cursor) => {
-  return new Buffer.from(cursor, 'base64').toString('binary')
 }

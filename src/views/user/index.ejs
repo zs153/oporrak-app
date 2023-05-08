@@ -317,13 +317,13 @@
 
     document.getElementById('checkShow').addEventListener('change', (itm) => {
       if (itm.target.checked) {
-        document.cookie = "verPan=0;path=/admin"
+        document.cookie = "verPan=0;path=/user"
       } else {
-        document.cookie = "verPan=1;path=/admin"
+        document.cookie = "verPan=1;path=/user"
       }
     })
 
-    const hayMatricula = <% - datos.hayMatricula %>
+    const hayMatricula = <%- datos.hayMatricula %>
     const [name, ...rest] = document.cookie.split('=');
 
     if (name === '') {

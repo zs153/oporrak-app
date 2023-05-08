@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { serverAPI, puertoAPI } from '../../config/settings'
-import { arrEstadosCurso, arrEstadosMatricula, tiposMovimiento, tiposEstado } from '../../public/js/enumeraciones'
+import { arrEstadosCurso, arrEstadosMatricula, tiposMovimiento, tiposEstado, estadosUsuario } from '../../public/js/enumeraciones'
 
 // page cursos
 export const mainPage = async (req, res) => {
@@ -39,19 +39,19 @@ export const mainPage = async (req, res) => {
     })
 
     let cursos = result.data.data
-    let hasNextCursos = cursos.length === limit +1
+    let hasNextCursos = cursos.length === limit + 1
     let nextCursor = 0
     let prevCursor = 0
-    
+
     if (hasNextCursos) {
       nextCursor = dir === 'next' ? cursos[limit - 1].IDCURS : cursos[0].IDCURS
       prevCursor = dir === 'next' ? cursos[0].IDCURS : cursos[limit - 1].IDCURS
 
       cursos.pop()
     } else {
-      nextCursor = dir === 'next' ? 0 : cursos[0].IDCURS
-      prevCursor = dir === 'next' ? cursos[0].IDCURS : 0
-      
+      nextCursor = dir === 'next' ? 0 : cursos[0]?.IDCURS
+      prevCursor = dir === 'next' ? cursos[0]?.IDCURS : 0
+
       if (cursor) {
         hasNextCursos = nextCursor === 0 ? false : true
         hasPrevCursos = prevCursor === 0 ? false : true
@@ -69,6 +69,7 @@ export const mainPage = async (req, res) => {
       next: nextCursor,
       prev: prevCursor,
     }
+
     const datos = {
       cursos,
       hasNextCursos,
@@ -79,6 +80,7 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/cursos', { user, datos })
   } catch (error) {
+    console.log(error);
     if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
@@ -192,8 +194,8 @@ export const turnosPage = async (req, res) => {
 
       turnos.pop()
     } else {
-      nextCursor = dir === 'next' ? 0 : turnos[0].IDTURN
-      prevCursor = dir === 'next' ? turnos[0].IDTURN : 0
+      nextCursor = dir === 'next' ? 0 : turnos[0]?.IDTURN
+      prevCursor = dir === 'next' ? turnos[0]?.IDTURN : 0
       
       if (cursor) {
         hasNextTurnos = nextCursor === 0 ? false : true
@@ -358,8 +360,8 @@ export const matriculasPage = async (req, res) => {
 
       matriculas.pop()
     } else {
-      nextCursor = dir === 'next' ? 0 : matriculas[0].IDMATR
-      prevCursor = dir === 'next' ? matriculas[0].IDMATR : 0
+      nextCursor = dir === 'next' ? 0 : matriculas[0]?.IDMATR
+      prevCursor = dir === 'next' ? matriculas[0]?.IDMATR : 0
       
       if (cursor) {
         hasNextMatriculas = nextCursor === 0 ? false : true
@@ -468,7 +470,7 @@ export const editMatriculaPage = async (req, res) => {
   }
 }
 
-// pages usuarios curso
+// pages usuarios certificados curso
 export const usuariosPage = async (req, res) => {
   const user = req.user
 
@@ -1232,7 +1234,7 @@ export const deleteMatricula = async (req, res) => {
   }
 }
 
-// proc usuarios curso
+// proc usuarios certificados curso
 export const insertUsuario = async (req, res) => {
   const user = req.user;
   const curso = {

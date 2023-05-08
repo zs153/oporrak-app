@@ -13,7 +13,7 @@ export const mainPage = async (req, res) => {
         TIPEST: tiposEstado.telefono.ID,  // tipo excluido (no mostrar como ausencia los tipo telefono)
       },
     })
-    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matriculas`, {
+    const matriculas = await axios.post(`http://${serverAPI}:${puertoAPI}/api/formacion/matricula`, {
       context: {
         IDUSUA: user.id,
         STAMAT: estadosMatricula.abierta,
@@ -42,14 +42,14 @@ export const mainPage = async (req, res) => {
 
     const datos = {
       estados: data,
-      hayMatricula: matriculas.data.data.length > 0 ? true : false,
+      hayMatricula: matriculas.data.stat === 1 ? true : false,
     }
 
-    res.render('admin', { user, datos })
+    res.render('user', { user, datos })
   } catch (error) {
     const msg = 'No se ha podido acceder a los datos de la aplicación.'
 
-    res.render('admin/error400', {
+    res.render('user/error400', {
       alerts: [{ msg }],
     })
   }
