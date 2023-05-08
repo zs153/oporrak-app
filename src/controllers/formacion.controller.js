@@ -12,7 +12,7 @@ export const matricula = async (req, res) => {
     if (result.stat) {
       res.status(200).json({ stat: 1, data: result.data[0] })
     } else {
-      res.status(400).json({ stat: null, data: 'Matrícula no encontrado' })
+      res.status(400).json({ stat: null, data: {} })
     }
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
@@ -48,7 +48,7 @@ export const curso = async (req, res) => {
     if (result.stat) {
       res.status(200).json({ stat: 1, data: result.data[0] })
     } else {
-      res.status(400).json({ stat: null, data: 'Curso no encontrado' })
+      res.status(400).json({ stat: null, data: {} })
     }
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })

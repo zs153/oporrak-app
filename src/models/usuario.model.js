@@ -20,22 +20,16 @@ const estadosSql = `WITH datos AS (
   AND ee.fecest BETWEEN TO_DATE(:desde, 'YYYY-MM-DD') AND TO_DATE(:hasta, 'YYYY-MM-DD')
   GROUP BY uu.idusua
 )
-SELECT 
-  uu.idusua,
-  uu.nomusu,
-  uu.userid,
-  uu.ofiusu,
-  uu.telusu,
-  uu.stausu,
-  dd.vacas,
-  TO_CHAR(TRUNC(dd.f/60), 'FM000') || ':' || TO_CHAR(mod(dd.f, 60), 'FM00') "FORMA",
-  TO_CHAR(TRUNC(dd.c/60), 'FM000') || ':' || TO_CHAR(mod(dd.c, 60), 'FM00') "CONCI",
-  TO_CHAR(TRUNC(dd.h/60), 'FM000') || ':' || TO_CHAR(mod(dd.h, 60), 'FM00') "HORAS",
-  TO_CHAR(TRUNC(dd.t/60), 'FM000') || ':' || TO_CHAR(mod(dd.t, 60), 'FM00') "TELEF",
-  oo.desofi
-FROM datos dd
-INNER JOIN usuarios uu ON uu.idusua = dd.idusua
+SELECT uu.idusua,uu.nomusu,uu.userid,uu.ofiusu,uu.telusu,uu.stausu,oo.desofi,
+  CASE WHEN dd.vacas IS NULL THEN 0 ELSE dd.vacas END "VACAS",
+  CASE WHEN dd.f IS NULL THEN '000:00' ELSE TO_CHAR(TRUNC(dd.f/60), '099') || ':' || TO_CHAR(mod(dd.f, 60), '09') END "FORMA",
+  CASE WHEN dd.c IS NULL THEN '000:00' ELSE TO_CHAR(TRUNC(dd.c/60), '099') || ':' || TO_CHAR(mod(dd.c, 60), '09') END "CONCI",
+  CASE WHEN dd.h IS NULL THEN '000:00' ELSE TO_CHAR(TRUNC(dd.h/60), '099') || ':' || TO_CHAR(mod(dd.h, 60), '09') END "HORAS",
+  CASE WHEN dd.t IS NULL THEN '000:00' ELSE TO_CHAR(TRUNC(dd.t/60), '099') || ':' || TO_CHAR(mod(dd.t, 60), '09') END "TELEF"
+FROM usuarios uu
 INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+LEFT JOIN datos dd ON dd.idusua = uu.idusua
+WHERE uu.idusua = :idusua
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTUSUARIO(
     :nomusu,

@@ -34,7 +34,7 @@ export const historicos = async (req, res) => {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }
-export const modificiar = async (req, res) => {
+export const modificar = async (req, res) => {
   // context
   const usuario = {
     IDUSUA: req.body.usuario.IDUSUA,
