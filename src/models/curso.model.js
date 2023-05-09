@@ -1,8 +1,7 @@
 import { BIND_OUT, NUMBER } from 'oracledb'
 import { simpleExecute } from '../services/database.js'
 
-const cursoSql = `SELECT 
-  cc.*
+const cursoSql = `SELECT cc.*
 FROM cursos cc
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTCURSO(
@@ -116,13 +115,6 @@ const removeMatriculaSql = `BEGIN OPORRAK_PKG.DELETEMATRICULACURSO(
 ); END;
 `
 // usuarios
-const usuariosPendientesSql = `SELECT
-  uu.idusua, uu.nomusu
-FROM turnoscurso tc
-INNER JOIN usuariosturno ut ON ut.idturn = tc.idturn
-LEFT JOIN usuarioscurso uc ON uc.idusua = ut.idusua AND uc.idcurs = :idcurs
-INNER JOIN usuarios uu ON uu.idusua = ut.idusua
-`
 const insertUsuarioSql = `BEGIN OPORRAK_PKG.INSERTUSUARIOCURSO(
   :idcurs,
   :arrusu,
@@ -563,13 +555,55 @@ export const usuarios = async (context) => {
 }
 export const usuariosPendientes = async (context) => {
   // bind
-  let query = usuariosPendientesSql
-  let bind = context
+  let query = '';
+  let bind = {
+    idcurs: context.idcurs,
+    limit: context.limit,
+    part: context.part,
+  };
 
-  if (context.IDCURS) {
-    query += `WHERE tc.idcurs = :idcurs
-      AND uc.idusua IS NULL
-    `
+  if (context.direction === 'next') {
+    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
+    query = `WITH datos AS (
+    SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
+    FROM usuariosturno ut
+    INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn AND tc.idcurs = :idcurs
+    INNER JOIN usuarios uu ON uu.idusua = ut.idusua
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    WHERE uu.idusua NOT IN (
+      SELECT uc.idusua FROM usuarioscurso uc
+      WHERE uc.idcurs = :idcurs
+    )    
+    AND (
+      nomusu LIKE '%' || :part || '%' 
+      OR desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    ))
+    SELECT * FROM datos
+    WHERE nomusu > :nomusu OR :nomusu IS NULL
+    ORDER BY nomusu ASC
+    FETCH NEXT :limit ROWS ONLY`
+  } else {
+    bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
+    query = `WITH datos AS (
+    SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi
+    FROM usuariosturno ut
+    INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn AND tc.idcurs = :idcurs
+    INNER JOIN usuarios uu ON uu.idusua = ut.idusua
+    INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+    WHERE uu.idusua NOT IN (
+      SELECT uc.idusua FROM usuarioscurso uc
+      WHERE uc.idcurs = :idcurs
+    )    
+    AND (
+      nomusu LIKE '%' || :part || '%' 
+      OR desofi LIKE '%' || :part || '%'
+      OR :part IS NULL
+    ))
+    SELECT * FROM datos
+    WHERE nomusu < :nomusu OR :nomusu IS NULL
+    ORDER BY nomusu DESC
+    FETCH NEXT :limit ROWS ONLY`
   }
 
   // proc
@@ -584,6 +618,7 @@ export const usuariosPendientes = async (context) => {
 export const insertUsuario = async (context) => {
   // bind
   const bind = context
+
   // proc
   const ret = await simpleExecute(insertUsuarioSql, bind)
 

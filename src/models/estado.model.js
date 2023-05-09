@@ -166,9 +166,9 @@ export const find = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const insert = async (context) => {
@@ -186,7 +186,7 @@ export const insert = async (context) => {
     bind.IDESTA = ret.outBinds.IDESTA
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }
 export const update = async (context) => {  
@@ -198,7 +198,7 @@ export const update = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }
 export const remove = async (context) => {
@@ -210,7 +210,7 @@ export const remove = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }
 
@@ -235,7 +235,7 @@ export const insertTraspaso = async (context) => {
     bind.IDTRAS = await result.outBinds.IDTRAS
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }
 export const updateTraspaso = async (context) => {
@@ -247,7 +247,7 @@ export const updateTraspaso = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }
 export const removeTraspaso = async (context) => {
@@ -259,7 +259,7 @@ export const removeTraspaso = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }
 
@@ -273,9 +273,9 @@ export const estadosUsuario = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const estadosFechaUsuario = async (context) => {
@@ -287,9 +287,9 @@ export const estadosFechaUsuario = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const estadosFechaTipo = async (context) => {
@@ -301,9 +301,9 @@ export const estadosFechaTipo = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }
 export const estadosOficinaPerfil = async (context) => {
@@ -323,8 +323,8 @@ export const estadosOficinaPerfil = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 }

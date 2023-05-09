@@ -107,9 +107,9 @@ export const find = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({stat: 1, data: ret.rows})
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({stat: null, data: null})
+    return ({ stat: 0, data: [] })
   }
 };
 export const findAll = async (context) => {
@@ -156,9 +156,9 @@ export const findAll = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 };
 export const conEstados = async (context) => {
@@ -190,7 +190,7 @@ export const insert = async (context) => {
     bind.IDUSUA = ret.outBinds.IDUSUA
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 };
 export const update = async (context) => {
@@ -202,7 +202,7 @@ export const update = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 };
 export const remove = async (context) => {
@@ -214,7 +214,7 @@ export const remove = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 };
 export const change = async (context) => {
@@ -226,7 +226,7 @@ export const change = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 };
 export const forgot = async (context) => {
@@ -238,7 +238,7 @@ export const forgot = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 };
 export const profile = async (context) => {
@@ -250,6 +250,6 @@ export const profile = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: 0, data: [] })
   }
 }

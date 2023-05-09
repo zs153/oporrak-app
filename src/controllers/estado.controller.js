@@ -9,11 +9,7 @@ export const estado = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data[0] })
-    } else {
-      return res.status(400).json({ stat: null, msg: 'No existen datos' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
@@ -26,11 +22,7 @@ export const estados = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(200).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
@@ -55,11 +47,7 @@ export const crear = async (req, res) => {
   try {
     const result = await DAL.insert(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Estado no insertado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -83,11 +71,7 @@ export const actualizar = async (req, res) => {
   try {
     const result = await DAL.update(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Estado no actualizado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -107,11 +91,7 @@ export const borrar = async (req, res) => {
   try {
     const result = await DAL.remove(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Estado no eliminado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -142,12 +122,7 @@ export const crearTraspaso = async (req, res) => {
   try {
     const result = await DAL.insertTraspaso(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Estado no insertado' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -171,11 +146,7 @@ export const actualizarTraspaso = async (req, res) => {
   try {
     const result = await DAL.updateTraspaso(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Estado no actualizado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -200,11 +171,7 @@ export const borrarTraspaso = async (req, res) => {
   try {
     const result = await DAL.removeTraspaso(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Estado no eliminado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -219,11 +186,7 @@ export const estadosUsuario = async (req, res) => {
   try {
     const result = await DAL.estadosUsuario(context)
 
-    if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(200).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
@@ -236,11 +199,7 @@ export const estadosFechaTipo = async (req, res) => {
   try {
     const result = await DAL.estadosFechaTipo(context);
 
-    if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data });
-    } else {
-      res.status(200).json({ stat: null, data: {} });
-    }
+    res.status(200).json(result)
   } catch (err) {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' });
   }
@@ -253,11 +212,7 @@ export const estadosFechaUsuario = async (req, res) => {
   try {
     const result = await DAL.estadosFechaUsuario(context)
 
-    if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(200).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' })
   }
@@ -270,11 +225,7 @@ export const estadosOficinaPerfil = async (req, res) => {
   try {
     const result = await DAL.estadosOficinaPerfil(context);
 
-    if (result.stat) {
-      return res.status(200).json({ stat: 1, data: result.data });
-    } else {
-      res.status(200).json({ stat: null, data: {} });
-    }
+    res.status(200).json(result)
   } catch (err) {
     return res.status(500).json({ stat: null, msg: 'Sin conexión con el servidor' });
   }

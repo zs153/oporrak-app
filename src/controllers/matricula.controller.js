@@ -8,11 +8,7 @@ export const matricula = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data[0] })
-    } else {
-      res.status(400).json({ stat: null, data: 'Matrícula no encontrado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -25,11 +21,7 @@ export const matriculas = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -53,12 +45,7 @@ export const crear = async (req, res) => {
   try {
     const result = await DAL.insert(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Matrícula no insertado' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -83,12 +70,7 @@ export const modificar = async (req, res) => {
   try {
     const result = await DAL.update(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Matrícula no actualizado' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -108,12 +90,7 @@ export const borrar = async (req, res) => {
   try {
     const result = await DAL.remove(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Matrícula no eliminado' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -128,11 +105,7 @@ export const usuariosMatricula = async (req, res) => {
   try {
     const result = await DAL.usuariosMatricula(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -145,11 +118,7 @@ export const usuariosPendientes = async (req, res) => {
   try {
     const result = await DAL.usuariosPendientes(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -172,12 +141,7 @@ export const crearUsuario = async (req, res) => {
   try {
     const result = await DAL.insertUsuario(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Usuarios no insertados' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -200,12 +164,7 @@ export const borrarUsuario = async (req, res) => {
   try {
     const result = await DAL.removeUsuario(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }

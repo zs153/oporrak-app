@@ -9,11 +9,7 @@ export const festivo = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data[0] })
-    } else {
-      res.status(400).json({ stat: null, data: 'Festivo no encontrado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -26,11 +22,7 @@ export const festivos = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(200).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -51,12 +43,7 @@ export const crear = async (req, res) => {
   try {
     const result = await DAL.insert(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Festivo no insertado' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -80,11 +67,7 @@ export const actualizar = async (req, res) => {
   try {
     const result = await DAL.update(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Usuario no actualizado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -104,11 +87,7 @@ export const borrar = async (req, res) => {
   try {
     const result = await DAL.remove(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -123,11 +102,7 @@ export const festivosOficina = async (req, res) => {
   try {
     const result = await DAL.festivosOficina(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -141,11 +116,7 @@ export const festivosLocal = async (req, res) => {
   try {
     const result = await DAL.festivosLocal(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }

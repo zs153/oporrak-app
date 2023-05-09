@@ -5,6 +5,7 @@ FROM historicos
 `
 const updateSql = `BEGIN OPORRAK_PKG.UPDATEHISTORICO(
   :idusua,
+  :nomusu,
   :ofiusu, 
   :rolusu, 
   :emausu, 
@@ -34,9 +35,9 @@ export const find = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 };
 export const findAll = async (context) => {
@@ -79,9 +80,9 @@ export const findAll = async (context) => {
   const ret = await simpleExecute(query, bind)
 
   if (ret) {
-    return ({ stat: 1, data: ret.rows })
+    return ({ stat: ret.rows.length, data: ret.rows })
   } else {
-    return ({ stat: null, data: null })
+    return ({ stat: 0, data: [] })
   }
 };
 export const update = async (context) => {
@@ -93,7 +94,7 @@ export const update = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 };
 export const activar = async (context) => {
@@ -105,6 +106,6 @@ export const activar = async (context) => {
   if (ret) {
     return ({ stat: 1, data: bind })
   } else {
-    return ({ stat: null, data: err })
+    return ({ stat: null, data: [] })
   }
 }

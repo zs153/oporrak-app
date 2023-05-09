@@ -8,15 +8,7 @@ export const usuario = async (req, res) => {
   try {
     const result = await DAL.find(context)
 
-    if (result.stat) {
-      if (result.data.length === 1) {
-        res.status(200).json({stat: 1, data: result.data[0]})
-      } else {
-        res.status(200).json({ stat: 1, data: result.data })
-      }
-    } else {
-      res.status(400).json({stat: null, data: 'Usuario no encontrado'})
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -29,11 +21,7 @@ export const usuarios = async (req, res) => {
   try {
     const result = await DAL.findAll(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: {} })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -46,15 +34,7 @@ export const conEstados = async (req, res) => {
   try {
     const result = await DAL.conEstados(context)
 
-    if (result.stat) {
-      if (result.data.length === 1) {
-        res.status(200).json({ stat: 1, data: result.data[0] })
-      } else {
-        res.status(200).json({ stat: 1, data: result.data })
-      }
-    } else {
-      res.status(400).json({ stat: null, data: 'La consulta no devuelve ningún dato' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -82,12 +62,7 @@ export const crear = async (req, res) => {
   try {
     const result = await DAL.insert(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Usuario no insertado' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -114,11 +89,7 @@ export const modificiar = async (req, res) => {
   try {
     const result = await DAL.update(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Usuario no actualizado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -138,11 +109,7 @@ export const borrar = async (req, res) => {
   try {
     const result = await DAL.remove(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Usuario no eliminado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -164,12 +131,7 @@ export const cambio = async (req, res) => {
   try {
     const result = await DAL.change(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Contraseña no cambiada' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -191,12 +153,7 @@ export const olvido = async (req, res) => {
   try {
     const result = await DAL.forgot(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Contraseña no reinicializada' })
-    }
-
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
@@ -219,11 +176,7 @@ export const perfil = async (req, res) => {
   try {
     const result = await DAL.profile(context)
 
-    if (result.stat) {
-      res.status(200).json({ stat: 1, data: result.data })
-    } else {
-      res.status(400).json({ stat: null, data: 'Perfil no actualizado' })
-    }
+    res.status(200).json(result)
   } catch (err) {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }

@@ -1,11 +1,13 @@
 import { simpleExecute } from '../services/database.js'
 
-const baseMatriculasQuery = `SELECT mm.* FROM matriculas mm
-WHERE mm.idmatr NOT IN (SELECT idmatr FROM usuariosmatricula WHERE idusua = :idusua)
+const baseMatriculasQuery = `SELECT mm.* 
+FROM matriculas mm
+WHERE mm.idmatr NOT IN (
+  SELECT idmatr FROM usuariosmatricula WHERE idusua = :idusua
+)
 AND sysdate BETWEEN mm.inimat AND mm.finmat
 `
-const baseCursosQuery = `SELECT 
-  cc.descur, cc.notcur
+const baseCursosQuery = `SELECT cc.descur,cc.notcur
 FROM usuarioscurso uc
 INNER JOIN cursos cc ON cc.idcurs = uc.idcurs
 `

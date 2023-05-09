@@ -1,9 +1,10 @@
 import * as DAL from '../models/curso.model'
+import oracledb from 'oracledb'
 
 // cursos
 export const curso = async (req, res) => {
   // context
-  const context = req.body.context
+  const context = req.body.context;
 
   // proc
   try {
@@ -338,7 +339,9 @@ export const crearUsuario = async (req, res) => {
     IDCURS: req.body.curso.IDCURS,
   }
   const usuarios = {
-    ARRUSU: req.body.usuarios.ARRUSU,
+    arrusu: {
+      val: req.body.usuarios.ARRUSU,
+    }
   }
   const movimiento = {
     USUMOV: req.body.movimiento.USUMOV,
