@@ -9,66 +9,109 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
+  <style>
+    .table-fixHead tbody {
+      overflow-y: scroll;
+      height: 56vh;
+      display: block;
+      flex: 1 1 auto;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../../partials/header') %>
-    <%- include('../../../partials/navbar', {opcion: 'CURSO' }) %>
+    <%- include('../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
     <div class="page-wrapper">
       <div class="container-xl">
         <div class="page-body">
           <div class="row">
-            <form id="form" action="/admin/cursos/usuarios/insert" method="POST" onsubmit="return addUsuarios();">
               <div class="col-12">
+                <% if(typeof alerts !=='undefined' ) { %>
+                  <% alerts.map(function (alert){ %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <%- alert.msg %>
+                    </div>
+                  <% }) %>
+                <% } %>
                 <div class="card">
                   <div class="card-header">
                     <div>
-                      <h3 class="card-title">Certificados Curso</h3>
-                        <span class="text-muted">
-                          <small><%- datos.curso.DESCUR %></small>
-                        </span>
+                      <h3 class="card-title">Usuarios Pendientes de Certificar</h3>
+                      <span class="text-muted">
+                        <small><%- datos.curso.DESCUR %></small>
+                      </span>
                     </div>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
-                        <div class="input-icon me-3">
-                          <span class="input-icon-addon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <circle cx="10" cy="10" r="7"></circle>
-                            <line x1="21" y1="21" x2="15" y2="15"></line>
-                            </svg>
-                          </span>
-                          <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
-                        </div>
+                        <form action="/admin/cursos/usuarios/add/<%- datos.curso.IDCURS %>" method="GET">
+                          <div class="input-icon">
+                            <span class="input-icon-addon">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="10" cy="10" r="7"></circle>
+                                <line x1="21" y1="21" x2="15" y2="15"></line>
+                              </svg>
+                            </span>
+                            <input type="text" class="form-control d-inline-block" id="buscarUserBox" name="part" placeholder="Buscar..."
+                              aria-label="Buscar en usuarios">
+                          </div>
+                        </form>
                       </div>
                     </div>
                   </div>
                   <div class="card-body">
-                    <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                    <table class="table table-vcenter table-striped sortable table-fixHead" id="tblUsuarios">
                       <thead>
                         <tr class="header">
                           <th class="w-4"></th>
                           <th>Nombre</th>
+                          <th class="w-20">Oficina</th>
+                          <th class="w-0"></th>
                         </tr>
                       </thead>
                       <tbody id="table-body">
                       </tbody>
                     </table>
-                    <div id="pagination-wrapper" class="py-1"></div>
                   </div>
-                    <div class="card-footer">
+                  <div class="card-footer">
+                    <form action="#" id="add" method="POST" onsubmit="return addUsuarios();">
                       <div class="col-12 d-flex">
-                        <a href="/admin/cursos/usuarios/<%- datos.curso.IDCURS %>" class="btn btn-link">Volver</a>
+                        <a href="/admin/cursos/usuarios/<%- datos.curso.IDCURS %>" onclick="deleteCookie();" class="btn btn-link">Volver</a>
                         <input type="hidden" name="arrusu" id="arrusu" value="">
                         <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
                         <button type="submit" class="btn btn-link ms-auto" id="btnAdd">Certificar usuarios</button>
                       </div>
-                    </div>
+                    </form>
+                  </div>
                 </div>
               </div>
-            </form>
           </div>
         </div>
       </div>
@@ -80,12 +123,26 @@
   <script src="/js/certificarUsuarios.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
-    let state = {
+    const curso = <%- JSON.stringify(datos.curso) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextUsers = <%- datos.hasNextUsers %>
+    const hasPrevUsers = <%- datos.hasPrevUsers %>
+    const state = {
       'querySet': orgList,
-      'page': 1,
-      'rows': 14,
     }
 
+    // events
+    const elemBuscar = document.getElementById('buscarUserBox')
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5)
+    }
+    elemBuscar.value = getCookie('filtro')
+
+    // inicializar
+    const elemAdd = document.getElementById('add')
+    elemAdd.setAttribute('action', `/admin/cursos/usuarios/insert?part=${getCookie('filtro')}`)
+
+    // table
     buildTable(state)
   </script>
 </body>

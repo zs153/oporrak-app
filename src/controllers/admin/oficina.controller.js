@@ -114,7 +114,7 @@ export const editPage = async (req, res) => {
       },
     })
     const datos = {
-      oficina: result.data.data,
+      oficina: result.data.data[0],
       tiposRol,
     }
 

@@ -35,10 +35,10 @@ const authRoutes = async (req, res, next) => {
           context,
         })
         const payload = {
-          id: usuario.data.data.IDUSUA,
-          userid: usuario.data.data.USERID,
-          rol: usuario.data.data.ROLUSU,
-          oficina: usuario.data.data.OFIUSU,
+          id: usuario.data.data[0].IDUSUA,
+          userid: usuario.data.data[0].USERID,
+          rol: usuario.data.data[0].ROLUSU,
+          oficina: usuario.data.data[0].OFIUSU,
         }
 
         await V3.encrypt(payload, localKey, {

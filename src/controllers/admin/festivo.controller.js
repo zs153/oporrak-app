@@ -119,7 +119,7 @@ export const calendarioPage = async (req, res) => {
     }
 
     const datos = {
-      oficina: oficina.data.data,
+      oficina: oficina.data.data[0],
       dataSource: JSON.stringify(dataSource),
       tiposEstado,
     }

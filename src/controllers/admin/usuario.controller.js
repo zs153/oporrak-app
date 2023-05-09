@@ -137,7 +137,7 @@ export const editPage = async (req, res) => {
       },
     })
     const datos = {
-      usuario: usuario.data.data,
+      usuario: usuario.data.data[0],
       oficinas: oficinas.data.data,
       filteredRol,
       arrTiposPerfil,

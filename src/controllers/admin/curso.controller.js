@@ -80,7 +80,6 @@ export const mainPage = async (req, res) => {
 
     res.render('admin/cursos', { user, datos })
   } catch (error) {
-    console.log(error);
     if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],
@@ -175,7 +174,7 @@ export const turnosPage = async (req, res) => {
   }
 
   try {
-    let curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
+    const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       context: {
         IDCURS: req.params.id,
       },
@@ -184,7 +183,6 @@ export const turnosPage = async (req, res) => {
       context,
     })
 
-    curso = result.data.stat === 1 ? result.data.data[0] : []
     let turnos = result.data.data
     let hasNextTurnos = turnos.length === limit +1
     let nextCursor = 0
@@ -217,7 +215,7 @@ export const turnosPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      curso,
+      curso: curso.data.data[0],
       turnos,
       hasNextTurnos,
       hasPrevTurnos,
@@ -246,7 +244,7 @@ export const addTurnoPage = async (req, res) => {
     INIHOR: '08:00',
     FINHOR: '14:00',
   }
-
+  
   try {
     const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
       context: {
@@ -254,7 +252,7 @@ export const addTurnoPage = async (req, res) => {
       },
     });
     const datos = {
-      curso: curso.data.data,
+      curso: curso.data.data[0],
       turno,
     };
 
@@ -273,22 +271,18 @@ export const addTurnoPage = async (req, res) => {
 }
 export const editTurnoPage = async (req, res) => {
   const user = req.user;
+  const curso = {
+    IDCURS: req.params.idcurs,
+  }
 
-  console.log(req.params);
   try {
-    let curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      context: {
-        IDCURS: req.params.idcurs,
-      },
-    });
     let turno = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turno`, {
       context: {
         IDTURN: req.params.idturn,
       },
     });
 
-    curso = curso.data.stat === 1 ? curso.data.data[0] : []
-    turno = turno.data.stat === 1 ? turno.data.data[0] : []
+    turno = turno.data.data[0]
     turno.INITUR = dateISOToUTCString(turno.INITUR)
     turno.FINTUR = dateISOToUTCString(turno.FINTUR)
 
@@ -386,7 +380,7 @@ export const matriculasPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      curso: curso.data.data,
+      curso: curso.data.data[0],
       matriculas,
       hasNextMatriculas,
       hasPrevMatriculas,
@@ -423,7 +417,7 @@ export const addMatriculaPage = async (req, res) => {
     });
     const datos = {
       matricula,
-      curso: curso.data.data,
+      curso: curso.data.data[0],
       arrEstadosMatricula,
     };
 
@@ -442,22 +436,20 @@ export const addMatriculaPage = async (req, res) => {
 }
 export const editMatriculaPage = async (req, res) => {
   const user = req.user;
+  const curso = {
+    IDCURS: req.params.idcurs,
+  }
 
   try {
-    const retCurso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
-      context: {
-        IDCURS: req.params.idcurs,
-      },
-    });
-    const retMatricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
+    const matricula = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/matricula`, {
       context: {
         IDMATR: req.params.idmatr,
       },
     });
 
     const datos = {
-      curso: retCurso.data.data,
-      matricula: retMatricula.data.data,
+      curso,
+      matricula: matricula.data.data[0],
       arrEstadosMatricula,
     };
 
@@ -550,7 +542,7 @@ export const usuariosPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      curso: curso.data.data,
+      curso: curso.data.data[0],
       usuarios,
       hasPrevUsers,
       hasNextUsers,
@@ -572,7 +564,36 @@ export const usuariosPage = async (req, res) => {
   }
 }
 export const usuariosAddPage = async (req, res) => {
-  const user = req.user;
+  const user = req.user
+
+  const dir = req.query.dir ? req.query.dir : 'next'
+  const limit = req.query.limit ? req.query.limit : 100
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
+  let hasPrevUsers = cursor ? true : false
+  let context = {}
+
+  if (cursor) {
+    context = {
+      idcurs: req.params.idcurs,
+      limit: limit + 1,
+      direction: dir,
+      cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
+      part,
+    }
+  } else {
+    context = {
+      idcurs: req.params.idcurs,
+      limit: limit + 1,
+      direction: dir,
+      cursor: {
+        next: '',
+        prev: '',
+      },
+      part,
+    }
+  }
 
   try {
     const curso = await axios.post(`http://${serverAPI}:${puertoAPI}/api/curso`, {
@@ -580,17 +601,55 @@ export const usuariosAddPage = async (req, res) => {
         IDCURS: req.params.idcurs,
       },
     })
-    const usuarios = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/usuarios/pendientes`, {
-      context: {
-        IDCURS: req.params.idcurs,
-      },
-    });
-    const datos = {
-      curso: curso.data.data,
-      usuarios: usuarios.data.data,
-    };
+    const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/usuarios/pendientes`, {
+      context,
+    })
 
-    res.render("admin/cursos/usuarios/add", { user, datos });
+    let usuarios = result.data.data
+    let hasNextUsers = usuarios.length === limit + 1
+    let nextCursor = ''
+    let prevCursor = ''
+    let alerts = undefined
+
+    if (hasNextUsers) {
+      alerts = [{ msg: 'Se supera el límite de registros permitidos. Sólo se muestran 99 registros. Refine la consulta' }]
+      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
+
+      hasNextUsers = false
+      hasPrevUsers = false
+
+      usuarios.pop()
+    } else {
+      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
+
+      if (cursor) {
+        hasNextUsers = nextCursor === '' ? false : true
+        hasPrevUsers = prevCursor === '' ? false : true
+      } else {
+        hasNextUsers = false
+        hasPrevUsers = false
+      }
+    }
+
+    if (dir === 'prev') {
+      usuarios = usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU))
+    }
+
+    cursor = {
+      next: nextCursor,
+      prev: prevCursor,
+    }
+    const datos = {
+      curso: curso.data.data[0],
+      usuarios,
+      hasPrevUsers,
+      hasNextUsers,
+      cursor: convertNodeToCursor(JSON.stringify(cursor)),
+    }
+
+    res.render('admin/cursos/usuarios/add', { user, alerts, datos })
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -689,7 +748,7 @@ export const usuariosTurnoPage = async (req, res) => {
     }
     const datos = {
       curso,
-      turno: turno.data.data,
+      turno: turno.data.data[0],
       usuarios,
       hasPrevUsers,
       hasNextUsers,
@@ -795,7 +854,7 @@ export const usuariosTurnoAddPage = async (req, res) => {
     }
     const datos = {
       curso,
-      turno: turno.data.data,
+      turno: turno.data.data[0],
       usuarios,
       hasPrevUsers,
       hasNextUsers,
@@ -900,7 +959,7 @@ export const usuariosMatriculaPage = async (req, res) => {
     }
     const datos = {
       curso,
-      matricula: matricula.data.data,
+      matricula: matricula.data.data[0],
       usuarios,
       hasPrevUsers,
       hasNextUsers,
@@ -1246,7 +1305,6 @@ export const insertUsuario = async (req, res) => {
     IDCURS: req.body.idcurs,
   }
   const usuarios = {
-    //ARRUSU: req.body.arrusu.split(',').map(itm => +itm)
     ARRUSU: JSON.parse(req.body.arrusu)
   }
   const movimiento = {

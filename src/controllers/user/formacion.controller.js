@@ -42,7 +42,6 @@ export const cursosPage = async (req, res) => {
       cursos: cursos.data.data
     }
 
-    console.log(datos.cursos);
     res.render('user/formacion/cursos', { user, datos })
   } catch (error) {
     if (error.response?.status === 400) {

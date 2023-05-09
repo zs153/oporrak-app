@@ -9,12 +9,36 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
 </head>
 
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../../partials/header') %>
-    <%- include('../../../partials/navbar', {opcion: 'CURSO' }) %>
+    <%- include('../../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
     <div class="page-wrapper">
       <div class="container-xl">
         <div class="page-body">
@@ -23,25 +47,28 @@
               <div class="card">
                 <div class="card-header">
                   <div>
-                    <h3 class="card-title">Usuarios certificados</h3>
-                      <span class="text-muted">
-                        <small><%- datos.curso.DESCUR %></small>
-                      </span>
+                    <h3 class="card-title">Usuarios Certificados</h3>
+                    <span class="text-muted">
+                      <small><%- datos.curso.DESCUR %></small>
+                    </span>
                   </div>
                   <div class="col-auto ms-auto">
                     <div class="d-flex">
-                      <div class="input-icon me-3">
-                        <span class="input-icon-addon">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <circle cx="10" cy="10" r="7"></circle>
-                            <line x1="21" y1="21" x2="15" y2="15"></line>
-                          </svg>
-                        </span>
-                        <input type="text" class="form-control d-inline-block me-3" id="buscarUsuarioBox" onkeyup="arrayFilter();" placeholder="Buscar..." aria-label="Buscar en sms">
-                      </div>
-                      <a href="/admin/cursos/usuarios/add/<%- datos.curso.IDCURS %>" class="btn btn-primary">
+                      <form action="/admin/cursos/usuarios/<%- datos.curso.IDCURS %>" method="GET">
+                        <div class="input-icon me-3">
+                          <span class="input-icon-addon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                              stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <circle cx="10" cy="10" r="7"></circle>
+                              <line x1="21" y1="21" x2="15" y2="15"></line>
+                            </svg>
+                          </span>
+                          <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part" placeholder="Buscar..."
+                            aria-label="Buscar en usuarios">
+                        </div>
+                      </form>
+                      <a href="#" id="new" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                           <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                         </svg>
@@ -71,7 +98,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -102,7 +128,7 @@
                 <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
-                <form action="/admin/cursos/usuarios/delete" method="POST">
+                <form action="#" id="del" method="POST">
                   <input type="hidden" id="idusua" name="idusua" value="">
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar usuario</button>
@@ -119,12 +145,28 @@
   <script src="/js/usuariosCurso.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
-    let state = {
+    const curso = <%- JSON.stringify(datos.curso) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextUsers = <%- datos.hasNextUsers %>
+    const hasPrevUsers = <%- datos.hasPrevUsers %>
+    const state = {
       'querySet': orgList,
-      'page': 1,
-      'rows': 10,
     }
 
+    // events
+    const elemBuscar = document.getElementById('buscarUserBox')
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5)
+    }
+    elemBuscar.value = getCookie('filtro')
+
+    // inicializacion
+    const elemNew = document.getElementById('new')
+    elemNew.setAttribute('href', `/admin/cursos/usuarios/add/<%- datos.curso.IDCURS %>?part=${getCookie('filtro')}`)
+    const elemDel = document.getElementById('del')
+    elemDel.setAttribute('action', `/admin/cursos/usuarios/delete?part=${getCookie('filtro')}`)
+    
+    // tabla
     buildTable(state)
   </script>
 </body>

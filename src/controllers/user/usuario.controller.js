@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { puertoAPI, serverAPI, serverWEB, puertoWEB, serverAUTH, puertoAUTH } from '../config/settings'
-import { tiposMovimiento, tiposEstado, estadosMatricula } from '../public/js/enumeraciones';
+import { puertoAPI, serverAPI } from '../../config/settings'
+import { tiposMovimiento, tiposEstado, estadosMatricula } from '../../public/js/enumeraciones';
 
 // page
 export const mainPage = async (req, res) => {
@@ -19,7 +19,7 @@ export const mainPage = async (req, res) => {
         STAMAT: estadosMatricula.abierta,
       },
     })
-    const hayMatricula = matriculas.data.stat ? true:false
+    const hayMatricula = matriculas.data.stat ? true : false
 
     let userid = ''
     let data = []
@@ -95,21 +95,6 @@ export const logoutPage = async (req, res) => {
 }
 
 // proc
-export const changePassword = async (req, res) => {
-  const strUrl = encodeURIComponent(`${serverWEB}:${puertoWEB}`);
-  const options = {
-    path: "/",
-    sameSite: true,
-    maxAge: 1,
-    httpOnly: true,
-  };
-
-  res.clearCookie("x-access_token");
-  res.cookie("auth", undefined, options);
-  res.cookie("noVer", undefined, options);
-
-  res.redirect(`http://${serverAUTH}:${puertoAUTH}/log/change/?valid=${strUrl}`)
-}
 export const updatePerfil = async (req, res) => {
   const user = req.user
   const usuario = {

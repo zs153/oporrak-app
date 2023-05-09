@@ -17,7 +17,7 @@ export const mainPage = async (req, res) => {
     
     const datos = {
       estadosUsuario,
-      usuario: result.data.data,
+      usuario: result.data.data[0],
     }
     
     res.render(`user/calendarios`, { user, datos })
