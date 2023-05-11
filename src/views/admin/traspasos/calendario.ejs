@@ -9,6 +9,29 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css" />
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
   <style>
     .calendar-header {
       border: none !important;
@@ -49,16 +72,13 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form action="/admin/traspasos/update" method="POST" onclick="return confirm();">
-                  <input type="hidden" name="usuario" id="usuario" value="" />
-                  <input type="hidden" name="eventos" id="eventos" value="" />
                   <div class="card-header p-2">
                     <div class="d-block">
                       <h3 class="card-title">Traspasos</h3>
                       <div>
                         <p class="subtitulo">
                           <span class="text-muted">
-                            <%- JSON.parse(datos.usuario).NOMUSU %>
+                            <%- datos.usuario.NOMUSU %>
                           </span>
                         </p>
                       </div>
@@ -99,19 +119,24 @@
                     <div id="calendar" class="form-control"></div>
                   </div>
                   <div class="card-footer p-2">
-                    <div class="d-flex">
-                      <a href="/admin/traspasos/<%- JSON.parse(datos.usuario).OFIUSU %>" class="btn btn-link">Cancelar</a>
-                      <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor"
-                          fill="none" stroke-linecap="round" stroke-linejoin="round">
-                          <path stroke-width=".4" fill="none"
-                            d="M11.025 19.575H5.9q-.65 0-1.062-.412-.413-.413-.413-1.038V5.875q0-.65.413-1.063.412-.412.987-.412h4.8q.1-.5.463-.838.362-.337.887-.337t.888.337q.362.338.462.838h4.8q.65 0 1.063.412.412.413.412 1.063V10h-.65V5.85q0-.3-.25-.55-.25-.25-.55-.25h-2.525v1.925H8.4V5.05H5.875q-.3 0-.55.25-.25.25-.25.55v12.275q0 .3.25.55.25.25.55.25h5.15Zm4.45-.675L12.2 15.6l.45-.45 2.825 2.825 5.65-5.65.475.45ZM12 5.3q.325 0 .525-.212.2-.213.2-.513 0-.3-.212-.513-.213-.212-.488-.212-.325 0-.525.212-.2.213-.2.513 0 .3.2.513.2.212.5.212Z" />
-                        </svg>
-                        Actualizar cambios
-                      </button>
-                    </div>
+                    <form action="/admin/traspasos/update" method="POST" onclick="return confirm();">
+                      <input type="hidden" name="idusua" value="<%= datos.usuario.IDUSUA %>">
+                      <input type="hidden" name="ofiusu" value="<%= datos.usuario.OFIUSU %>">
+                      <input type="hidden" name="eventos" id="eventos" value="" />
+                      <div class="d-flex">
+                        <input class="btn btn-white" action="action" onclick="window.history.go(-1); return false;" type="submit"
+                        value="Cancelar" />
+                        <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke-width=".4" fill="none"
+                              d="M11.025 19.575H5.9q-.65 0-1.062-.412-.413-.413-.413-1.038V5.875q0-.65.413-1.063.412-.412.987-.412h4.8q.1-.5.463-.838.362-.337.887-.337t.888.337q.362.338.462.838h4.8q.65 0 1.063.412.412.413.412 1.063V10h-.65V5.85q0-.3-.25-.55-.25-.25-.55-.25h-2.525v1.925H8.4V5.05H5.875q-.3 0-.55.25-.25.25-.25.55v12.275q0 .3.25.55.25.25.55.25h5.15Zm4.45-.675L12.2 15.6l.45-.45 2.825 2.825 5.65-5.65.475.45ZM12 5.3q.325 0 .525-.212.2-.213.2-.513 0-.3-.212-.513-.213-.212-.488-.212-.325 0-.525.212-.2.213-.2.513 0 .3.2.513.2.212.5.212Z" />
+                          </svg>
+                          Actualizar cambios
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                </form>
               </div>
             </div>
           </div>
@@ -213,13 +238,12 @@
     }
     const confirm = () => {
       document.getElementById("eventos").value = JSON.stringify(eventos)
-      document.getElementById("usuario").value = JSON.stringify(<%- datos.usuario %>)
       return true
     }
-    const festivosLocal = <%- datos.festivosLocal %>
+    const festivosLocal = <%- JSON.stringify(datos.festivosLocal) %>
 
     let dataSource = <%- datos.dataSource %>
-    let festivos = <%- datos.festivosComun %>
+    let festivos = <%- JSON.stringify(datos.festivosComun) %>
     let eventos = []
     let festivoLocal = null
     let calendario = null

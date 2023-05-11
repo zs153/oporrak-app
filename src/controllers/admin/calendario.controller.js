@@ -1,20 +1,19 @@
 import axios from 'axios'
 import { serverAPI, puertoAPI } from '../../config/settings'
-import { tiposRol, tiposMovimiento, estadosUsuario, tiposEstado, arrTiposEstadoUsuario, arrTiposEstado, arrColoresEstado } from '../../public/js/enumeraciones'
+import { tiposMovimiento, estadosUsuario, tiposEstado, arrTiposEstado, arrColoresEstado } from '../../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
 
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
-  const part = req.query.part ? req.query.part.toUpperCase() : null
+  const part = req.query.part ? req.query.part.toUpperCase() : ''
 
-  let hasPrevUsers = false
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
-  let context = user.rol === tiposRol.admin ? {} : { OFIUSU: user.oficina }
+  let hasPrevUsers = cursor ? true : false
+  let context = {}
 
   if (cursor) {
-    hasPrevUsers = true
     context = {
       limit: limit + 1,
       direction: dir,
@@ -44,52 +43,25 @@ export const mainPage = async (req, res) => {
     let prevCursor = ''
 
     if (hasNextUsers) {
-      const nextCursorUser = dir === 'next' ? usuarios[limit - 1] : usuarios[0]
-      const prevCursorUser = dir === 'next' ? usuarios[0] : usuarios[limit - 1]
-      nextCursor = nextCursorUser.NOMUSU
-      prevCursor = prevCursorUser.NOMUSU
+      nextCursor = dir === 'next' ? usuarios[limit - 1].NOMUSU : usuarios[0].NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0].NOMUSU : usuarios[limit - 1].NOMUSU
 
       usuarios.pop()
     } else {
-      if (dir === 'prev') {
-        context = {
-          limit: limit + 1,
-          direction: 'next',
-          cursor: {
-            next: '',
-            prev: ''
-          },
-          part,
-        }
+      nextCursor = dir === 'next' ? '' : usuarios[0]?.NOMUSU
+      prevCursor = dir === 'next' ? usuarios[0]?.NOMUSU : ''
 
-        const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
-          context,
-        })
-
-        usuarios = result.data.data
-        hasNextUsers = usuarios.length === limit + 1
-
-        if (hasNextUsers) {
-          const nextCursorUser = usuarios[limit - 1]
-          const prevCursorUser = usuarios[0]
-          nextCursor = nextCursorUser.NOMUSU
-          prevCursor = prevCursorUser.NOMUSU
-
-          usuarios.pop()
-        }
-
-        hasPrevUsers = false
+      if (cursor) {
+        hasNextUsers = nextCursor === '' ? false : true
+        hasPrevUsers = prevCursor === '' ? false : true
       } else {
-        if (cursor) {
-          const prevCursorUser = usuarios[0]
-          prevCursor = prevCursorUser.NOMUSU
-          hasPrevUsers = true
-        } else {
-          hasPrevUsers = false
-        }
-
         hasNextUsers = false
+        hasPrevUsers = false
       }
+    }
+
+    if (dir === 'prev') {
+      usuarios = usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU))
     }
 
     cursor = {
@@ -97,8 +69,7 @@ export const mainPage = async (req, res) => {
       prev: prevCursor,
     }
     const datos = {
-      limit,
-      usuarios: dir === 'next' ? usuarios : usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1),
+      usuarios,
       hasPrevUsers,
       hasNextUsers,
       cursor: convertNodeToCursor(JSON.stringify(cursor)),
@@ -132,14 +103,14 @@ export const calendarioPage = async (req, res) => {
     })
     const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
       context: {
-        USUEST: usuario.data.data.IDUSUA,
+        USUEST: usuario.data.data[0].IDUSUA,
         DESDE: desde,
         HASTA: hasta,
       },
     })
     const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/oficinas`, {
       context: {
-        OFIFES: usuario.data.data.OFIUSU,
+        OFIFES: usuario.data.data[0].OFIUSU,
         DESDE: desde,
         HASTA: hasta,  
       },
@@ -169,7 +140,7 @@ export const calendarioPage = async (req, res) => {
       tiposEstado,
       estadosUsuario,
       festivos: JSON.stringify(festivos.data.data),
-      usuario: usuario.data.data,
+      usuario: usuario.data.data[0],
       dataSource: JSON.stringify(dataSource),
     }
 

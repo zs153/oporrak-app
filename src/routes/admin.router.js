@@ -30,8 +30,8 @@ adminRouter.get('/usuarios/add', verifyTokenAndResp, usuario.addPage)
 adminRouter.get('/usuarios/edit/:id', verifyTokenAndResp, usuario.editPage)
 
 // traspaso
-adminRouter.get("/traspasos/:idofic", verifyTokenAndAdmin, traspaso.mainPage);
-adminRouter.post("/traspasos/calendario", verifyTokenAndAdmin, traspaso.calendarioPage);
+adminRouter.get("/traspasos", verifyTokenAndAdmin, traspaso.mainPage);
+adminRouter.get("/traspasos/calendarios/usuarios/:id", verifyTokenAndAdmin, traspaso.calendarioPage);
 
 // cursos
 // se sacan del admin router y se direccionan en curso router

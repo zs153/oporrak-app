@@ -38,6 +38,7 @@ export const mainPage = async (req, res) => {
     })
 
     let oficinas = result.data.data
+    oficinas.unshift({ IDOFIC: 0, DESOFI: 'FESTIVOS COMUNES', CODOFI: '000' })
     let hasNextOficinas = oficinas.length === limit +1
     let nextCursor = 0
     let prevCursor = 0
@@ -91,14 +92,22 @@ export const mainPage = async (req, res) => {
 export const calendarioPage = async (req, res) => {
   const user = req.user
   const currentYear = new Date().getFullYear()
+  let oficina = {
+    IDOFIC: 0,
+    DESOFI: 'FESTIVOS COMUNES',
+    CODOFI: '000'
+  }
 
   try {
-    const oficina = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
-      context: {
-        IDOFIC: req.params.id,
-      },
-    })
-    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/locales`, {
+    if (req.params.id !== '0') {
+      const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/oficina`, {
+        context: {
+          IDOFIC: req.params.id,
+        },
+      })
+      oficina = result.data.data[0]
+    }
+    const festivos = await axios.post(`http://${serverAPI}:${puertoAPI}/api/festivos/locales/oficinas`, {
       context: {
         OFIFES: req.params.id,
         DESDE: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
@@ -119,7 +128,7 @@ export const calendarioPage = async (req, res) => {
     }
 
     const datos = {
-      oficina: oficina.data.data[0],
+      oficina,
       dataSource: JSON.stringify(dataSource),
       tiposEstado,
     }

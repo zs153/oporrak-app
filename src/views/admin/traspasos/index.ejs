@@ -9,77 +9,114 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    const getCookie = (key) => {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
+    const setCookie = (name, value, days) => {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    const deleteCookie = () => {
+      document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+    }
+  </script>
 </head>
 
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %>
-    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
-    <div class="page-wrapper">
-      <div class="page-body">
-        <div class="container-xl">
-          <div class="row">
-            <div class="col-12">
-              <div class="card mt-1">
-                <form action="/admin/traspasos/calendario" method="POST">
-                  <input type="hidden" name="nomusu" id="nomusu" value="" />
-                  <div class="card-header">
-                    <h3 class="card-title">Traspasos</h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-4">
-                        <div class="mb-1">
-                          <div class="form-label">Oficina</div>
-                          <select class="form-select" id="cboofi" name="idofic" value="">
-                            <% datos.oficinas.map(element=> { %>
-                              <option value="<%- element.IDOFIC %>" <%- element.IDOFIC===datos.oficina ? "selected":"" %>>
-                                <%- element.DESOFI %>
-                              </option>
-                              <% }) %>
-                          </select>
-                        </div>
+      <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
+        <div class="page-wrapper">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <div>
+                        <h3 class="card-title">Traspasos</h3>
+                        <span class="text-muted">
+                          <small>Usuarios disponibles</small>
+                        </span>
                       </div>
-                      <div class="col-8">
-                        <div class="mb-1">
-                          <div class="form-label">Usuario</div>
-                          <select class="form-select" id="cbousu" name="idusua" value="">
-                            <% datos.usuarios.map(element=> { %>
-                              <option value="<%- element.IDUSUA %>" <%- element.IDUSUA===user.id ? "selected" :"" %>>
-                                <%- element.NOMUSU %>
-                              </option>
-                              <% }) %>
-                          </select>
+                      <div class="col-auto ms-auto">
+                        <div class="d-flex">
+                          <form action="/admin/traspasos" method="GET">
+                            <div class="input-icon me-3">
+                              <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                  stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <circle cx="10" cy="10" r="7"></circle>
+                                  <line x1="21" y1="21" x2="15" y2="15"></line>
+                                </svg>
+                              </span>
+                              <input type="text" class="form-control d-inline-block me-3" id="buscarUserBox" name="part"
+                                placeholder="Buscar..." aria-label="Buscar en usuarios">
+                            </div>
+                          </form>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="card-footer text-end">
-                    <div class="d-flex">
-                      <button type="submit" id="btnVer" class="btn btn-success ms-auto">Ver calendario</button>
+                    <div class="card-body">
+                      <table class="table table-vcenter table-striped sortable" id="tblUsuarios">
+                        <thead>
+                          <tr class="header">
+                            <th class="w-4"></th>
+                            <th>Nombre</th>
+                            <th class="w-20">Oficina</th>
+                            <th class="w-0"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                      </table>
+                      <div id="pagination-wrapper" class="py-1"></div>
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <%- include('../../partials/footer') %>
+        <%- include('../../partials/footer') %>
   </div>
 
   <script src="/js/ayuda.min.js"></script>
+  <script src="/js/selectUsuariosTraspaso.js"></script>
   <script>
-    // eventos form
-    document.getElementById('cboofi').addEventListener('change', function () {
-      const oficina = parseInt(this.value)
+    const orgList = <%- JSON.stringify(datos.usuarios) %>
+    const estadosUsuario = <%- JSON.stringify(datos.estadosUsuario) %>
+    const cursor = <%- JSON.stringify(datos.cursor) %>
+    const hasNextUsers = <%- datos.hasNextUsers %>
+    const hasPrevUsers = <%- datos.hasPrevUsers %>
+    const state = {
+      'querySet': orgList,
+    }
 
-      window.location.href = `http://<%- datos.serverWEB %>:<%- datos.puertoWEB %>/admin/traspasos/${oficina}`
-    });
-    document.getElementById('btnVer').addEventListener('click', () => {
-      document.getElementById('nomusu').value = document.getElementById('cbousu').options[document.getElementById('cbousu').selectedIndex].text
-    })
+    // events
+    const elemBuscar = document.getElementById('buscarUserBox');
+    elemBuscar.onchange = (event) => {
+      setCookie('filtro', event.target.value, .5) // medio dia
+    }
+    elemBuscar.value = getCookie('filtro')
+
+    // tabla
+    buildTable(state)
   </script>
 </body>
 
