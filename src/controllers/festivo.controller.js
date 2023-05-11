@@ -121,3 +121,16 @@ export const festivosLocal = async (req, res) => {
     res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
   }
 }
+export const festivosOficinaLocal = async (req, res) => {
+  // context
+  const context = req.body.context
+
+  // proc
+  try {
+    const result = await DAL.festivosOficinaLocal(context)
+
+    res.status(200).json(result)
+  } catch (err) {
+    res.status(500).json({ stat: null, data: 'Conexión no estableciada' })
+  }
+}
