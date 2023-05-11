@@ -31,11 +31,11 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-cards">
-            <% if (datos.cursos) { %> 
+            <% if (datos.cursos.length===0) { %>
               <p class="text-center">
-                El listado de cursos no contiene elementos
+                El listado de matrículas no contiene elementos
               </p>
-            <% } %> 
+            <% } %>
             <% datos.cursos.map(itm => { %>
             <div class="col-12">
               <div class="card">

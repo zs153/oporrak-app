@@ -198,7 +198,7 @@ export const update = async (req, res) => {
       estados.push({
         IDESTA: itm.idesta,
         FECEST: itm.fecest,
-        USUEST: usuario.IDUSUA,
+        USUEST: req.body.idusua,
         TIPEST: tiposEstado.traspasado.ID,
         OFIEST: 0,
       })

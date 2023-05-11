@@ -66,7 +66,7 @@ export const perfilPage = async (req, res) => {
       },
     })
     const datos = {
-      usuario: usuario.data.data,
+      usuario: usuario.data.data[0],
     }
 
     res.render('user/perfil', { user, datos })
