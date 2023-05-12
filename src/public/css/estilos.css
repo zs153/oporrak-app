@@ -6086,3 +6086,30 @@ Subheader
   line-height: 1rem;
   color: #626976;
 }
+
+/**
+Scrollbar
+*/
+*::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: rgba(var(--tblr-body-color-rgb), 0.16);
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(var(--tblr-body-color-rgb), 0.06);
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(var(--tblr-body-color-rgb), 0.32);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}

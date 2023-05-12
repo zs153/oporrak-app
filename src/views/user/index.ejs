@@ -9,6 +9,7 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+
 </head>
 
 <body class="antialiased">
@@ -22,13 +23,13 @@
                 <div class="col-md-6">
                   <div class="row row-cards">
                     <div class="col-12">
-                      <div class="card">
+                      <div class="card" style="height: 20rem;">
                         <div class="card-header">
                           <div class="card-title">
                             Administración
                           </div>
                         </div>
-                        <div class="card-body py-1">
+                        <div class="card-body card-body-scrollable">
                           <div class="row g-3">
                             <% datos.estados.map(itm=> { %>
                               <% if (itm.PERROL===1) { %>
@@ -79,13 +80,13 @@
                       </div>
                     </div>
                     <div class="col-12">
-                      <div class="card">
+                      <div class="card" style="height: 20rem;">
                         <div class="card-header">
                           <div class="card-title">
                             Responsables
                           </div>
                         </div>
-                        <div class="card-body py-1">
+                        <div class="card-body card-body-scrollable card-body-scrollable-shadow">
                           <div class="row g-3">
                             <% datos.estados.map(itm=> { %>
                               <% if (itm.PERROL===2) { %>
@@ -129,20 +130,24 @@
                                         <% } %>
                                   </div>
                                 </div>
-                                <% } %>
-                                  <% }) %>
+                              <% } %>
+                            <% }) %>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row row-cards">
                     <div class="col-12">
-                      <div class="card">
+                      <div class="card" style="height: 20rem;">
                         <div class="card-header">
                           <div class="card-title">
                             Liquidadores
                           </div>
                         </div>
-                        <div class="card-body py-1">
+                        <div class="card-body card-body-scrollable card-body-scrollable-shadow">
                           <div class="row g-3">
                             <% datos.estados.map(itm=> { %>
                               <% if (itm.PERROL===8) { %>
@@ -167,37 +172,33 @@
                                           </span>
                                         </div>
                                       </div>
-                                      <% } else { %>
-                                        <span class="avatar avatar-rounded bg-red-lt">
-                                          <h6>
-                                            <%- itm.USERID.slice(0,5) %>
-                                          </h6>
+                                    <% } else { %>
+                                      <span class="avatar avatar-rounded bg-red-lt">
+                                        <h6>
+                                          <%- itm.USERID.slice(0,5) %>
+                                        </h6>
+                                      </span>
+                                      <div class="col text-truncate">
+                                        <span style="font-size: .7rem;">
+                                          <%- itm.NOMUSU.slice(0,33) %>
                                         </span>
-                                        <div class="col text-truncate">
-                                          <span style="font-size: .7rem;">
-                                            <%- itm.NOMUSU.slice(0,33) %>
+                                        <div class="col text-muted">
+                                          <span style="color: red;font-size: .7rem;">
+                                            NO DISPONIBLE
                                           </span>
-                                          <div class="col text-muted">
-                                            <span style="color: red;font-size: .7rem;">
-                                              NO DISPONIBLE
-                                            </span>
-                                          </div>
                                         </div>
-                                        <% } %>
+                                      </div>
+                                    <% } %>
                                   </div>
                                 </div>
-                                <% } %>
-                                  <% }) %>
+                              <% } %>
+                            <% }) %>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row row-cards">
                     <div class="col-12">
-                      <div class="card">
+                      <div class="card" style="height: 20rem;">
                         <div class="card-header">
                           <div class="card-title">
                             Informadores
