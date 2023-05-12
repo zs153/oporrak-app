@@ -162,7 +162,6 @@ const buildTable = (state) => {
 
   createPages()
 }
-
 const createPages = () => {
   let str = "<ul>";
 
