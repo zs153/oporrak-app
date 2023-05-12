@@ -15,20 +15,20 @@ module.exports = function (grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       css: {
-        src: ['src/public/css/*.css'],
-        dest: 'src/public/css/styles.css'
+        src: ['src/public/css/estilos.css', 'src/public/css/navbar.css'],
+        dest: 'src/public/css/concat.css'
       },
     },
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
-      js: {
-        src: ['dist/app.js'],
-        dest: 'dist/app.js'
-      },
+      // js: {
+      //   src: ['dist/app.js'],
+      //   dest: 'dist/app.js'
+      // },
       css: {
-        src: 'src/public/css/styles.css',
+        src: 'src/public/css/concat.css',
         dest: 'src/public/css/styles.min.css'
       },
     },
