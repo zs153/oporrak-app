@@ -9,6 +9,7 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/js-year-calendar.min.css">
   <style>
     .calendar-header {
       border: none !important;
@@ -114,6 +115,7 @@
     </div>
     <%- include('../../partials/footer') %>
   </div>
+
   <div class="modal modal-blur fade" id="modal-form" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="container-xl">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -207,8 +209,8 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/js-year-calendar.js"></script>
-  <script src="/js/js-year-calendar.es.js"></script>
+  <script src="/js/js-year-calendar.min.js"></script>
+  <script src="/js/js-year-calendar.es.min.js"></script>
   <script>
     const dateISOToUTCString = (dateISO) => {
       const fecha = new Date(dateISO);

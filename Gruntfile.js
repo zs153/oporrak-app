@@ -23,13 +23,13 @@ module.exports = function (grunt) {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
-      // js: {
-      //   src: ['dist/app.js'],
-      //   dest: 'dist/app.js'
-      // },
+      js: {
+        src: ['./src/routes/user.router.js'],
+        dest: './src/routes/user.router.min.js'
+      },
       css: {
-        src: 'src/public/css/concat.css',
-        dest: 'src/public/css/styles.min.css'
+        src:  'src/public/css/concat.css',
+        dest: 'src/public/css/card-stamp.min.css'
       },
     },
   });
@@ -44,5 +44,5 @@ module.exports = function (grunt) {
   grunt.registerTask('default-js', ['uglify:js']);
   grunt.registerTask('default-css', ['concat:css', 'uglify:css']);
   grunt.registerTask('concat-css', ['concat:css']);
-
+  grunt.registerTask('default-uglify-css', ['uglify:css'])
 };

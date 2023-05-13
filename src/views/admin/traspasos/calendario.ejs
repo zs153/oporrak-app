@@ -9,6 +9,7 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/js-year-calendar.min.css">
   <script>
     const getCookie = (key) => {
       let value = ''
@@ -65,7 +66,7 @@
 <body class="antialiased">
   <div class="wrapper">
     <%- include('../../partials/header') %> 
-    <%- include('../../partials/navbar', {opcion: 'TRASPASO' }) %>
+    <%- include('../../partials/navbar', {opcion: 'ADMINISTRACION' }) %>
     <div class="page-wrapper">
       <div class="page-body">
         <div class="container-xl">
@@ -145,6 +146,7 @@
     </div>
     <%- include('../../partials/footer') %>
   </div>
+
   <div class="modal modal-blur fade" id="modal-solape" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="container-xl">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -163,8 +165,8 @@
   </div>
   
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/js-year-calendar.js"></script>
-  <script src="/js/js-year-calendar.es.js"></script>
+  <script src="/js/js-year-calendar.min.js"></script>
+  <script src="/js/js-year-calendar.es.min.js"></script>
   <script>
     const setSuccess = (element) => {
       const inputControl = element.parentElement

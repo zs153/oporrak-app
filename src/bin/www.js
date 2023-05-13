@@ -4,8 +4,8 @@
  */
 import debug from "debug";
 import http from "http";
-import app from "../app";
-import { puerto } from '../config/settings'
+import app from "../app.min";
+import { puerto } from '../config/settings.min'
 
 /**
  * Normalize a port into a number, string, or false.
