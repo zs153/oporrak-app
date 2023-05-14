@@ -147,7 +147,7 @@ export const update = async (req, res) => {
       });
     }
 
-    res.redirect("/user/calendarios")
+    res.redirect("/user/calendario")
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("user/error400", {
