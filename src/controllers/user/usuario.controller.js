@@ -21,6 +21,7 @@ export const mainPage = async (req, res) => {
     })
     const hayMatricula = matriculas.data.stat ? true : false
 
+    console.log(matriculas.data);
     let userid = ''
     let data = []
     perfiles.data.data.map(itm => {
