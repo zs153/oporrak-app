@@ -9,7 +9,6 @@
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <!-- styles -->
   <link rel="stylesheet" href="/css/styles.css">
-
 </head>
 
 <body class="antialiased">
@@ -300,30 +299,8 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
+  <script src="/js/user.min.js"></script>
   <script>
-    const openModal = () => {
-      const modal = document.getElementById('modal-matricula')
-
-      modal.style.display = 'block'
-      modal.setAttribute('aria-hidden', 'false', 'show')
-      modal.classList.add('show')
-    }
-    const closeModal = () => {
-      const modal = document.getElementById('modal-matricula')
-
-      modal.setAttribute('aria-hidden', 'true');
-      modal.classList.remove('show');
-      modal.style.display = 'none';
-    }
-
-    document.getElementById('checkShow').addEventListener('change', (itm) => {
-      if (itm.target.checked) {
-        document.cookie = "verPan=0;path=/user"
-      } else {
-        document.cookie = "verPan=1;path=/user"
-      }
-    })
-
     const hayMatricula = <%- datos.hayMatricula %>
     const [name, ...rest] = document.cookie.split('=');
 

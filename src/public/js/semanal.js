@@ -1,0 +1,480 @@
+const desfec = document.getElementById('desfec')
+const cbofor = document.getElementById('cbofor')
+
+const setSuccess = (element) => {
+  const inputControl = element.parentElement;
+  const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+  errorDisplay.innerText = '';
+  inputControl.classList.add('is-valid');
+  element.classList.remove('is-invalid');
+}
+const setError = (element, message) => {
+  const inputControl = element.parentElement;
+  const errorDisplay = inputControl.querySelector('.invalid-feedback');
+
+  errorDisplay.innerText = message;
+  element.classList.add('is-invalid');
+  inputControl.classList.remove('is-valid');
+}
+const yearMonthDayToUTCString = (year, month, day) => {
+  const yearCDM = ('000' + year).slice(-4)
+  const monthCDM = ('0' + month).slice(-2)
+  const dayCDM = ('0' + day).slice(-2)
+
+  const fecha = new Date(`${yearCDM}-${monthCDM}-${dayCDM}T00:00:00`)
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+  return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
+}
+const validate = () => {
+  const desfecValue = desfec.value.trim()
+
+  if (isNaN(Date.parse(desfecValue))) {
+    setError(desfec, 'Fecha requerida')
+    setTimeout(function () {
+      setSuccess(desfec)
+    }, 3000)
+    return false
+  }
+
+  return true
+}
+const estadosGantt = (estados, festivos, periodo, diasPeriodo) => {
+  const desde = new Date(periodo.desde)
+  const hasta = new Date(periodo.hasta)
+
+  let activosOficina = new Array(diasPeriodo * 14).fill(0)
+  let estadosUsuario = []
+  let oficinaActual = 0
+  let usuarioActual = 0
+
+  let rows = new Array();
+  let delta = 0;
+  let rowCount = 0;
+  let nombreUsuario = '';
+
+  if (estados.length === 0) {
+    return
+  }
+
+  estados.map(itm => {
+    const dia = new Date(itm.FECHA).getDate();
+    const diaSemana = new Date(itm.FECHA).getDay()
+    const festivo = festivos[festivos.indexOf(itm.FECHA)]
+    const desdeHora = itm.DESHOR.split(':')
+    const hastaHora = itm.HASHOR.split(':')
+    const offsetDesde = (parseInt(desdeHora[0]) - 8) * 2 + (parseInt(desdeHora[1]) < 30 ? 0 : 1)
+    const offsetHasta = (parseInt(hastaHora[0]) - 8) * 2 + (parseInt(hastaHora[1]) < 30 ? 0 : 1)
+
+    if (oficinaActual != itm.OFIUSU || usuarioActual != itm.IDUSUA) {
+      if (usuarioActual) {
+        rows[rowCount] = new Array();
+        rows[rowCount][0] = nombreUsuario;
+        rows[rowCount].push(estadosUsuario);
+        rowCount++;
+
+        //total
+        for (var i = 0; i < diasPeriodo * 14; i++) {
+          if (estadosUsuario[i] === 1 || estadosUsuario[i] === 10) {
+            activosOficina[i]++;
+          }
+          if (estadosUsuario[i] === -1) {
+            activosOficina[i] = ''
+          }
+        }
+      }
+
+      estadosUsuario = new Array(diasPeriodo * 14).fill(1); // todos en activo
+      usuarioActual = itm.IDUSUA;
+      nombreUsuario = itm.NOMUSU;
+    }
+
+    if (oficinaActual != itm.OFIUSU) {
+      if (oficinaActual) {
+        rows[rowCount] = new Array();
+        rows[rowCount][0] = 0; //indicador de total usuario
+        rows[rowCount].push(activosOficina);
+        rowCount++;
+
+        //reiniciar
+        activosOficina = new Array(diasPeriodo * 14).fill(0)
+      }
+
+      rows[rowCount] = new Array();
+      rows[rowCount][0] = -1; //indicador de total oficina
+      rows[rowCount].push(itm.DESOFI);
+      rowCount++;
+
+      oficinaActual = itm.OFIUSU
+    }
+
+    //acumulado estados
+    if (diaSemana === 6 || diaSemana === 0 || festivo) {
+      for (let i = offsetDesde; i < offsetHasta; i++) {
+        estadosUsuario[(diaSemana - 1) * 14 + i] = -1
+      }
+    } else {
+      for (let i = offsetDesde; i < offsetHasta; i++) {
+        estadosUsuario[(diaSemana - 1) * 14 + i] = Number(itm.TIPEST)
+      }
+    }
+  })
+
+  // ultimo usuario
+  rows[rowCount] = new Array();
+  rows[rowCount][0] = nombreUsuario;
+  rows[rowCount].push(estadosUsuario);
+
+  rowCount++;
+
+  //total ultimo usuario
+  for (var i = 0; i < diasPeriodo * 14; i++) {
+    if (estadosUsuario[i] === 1 || estadosUsuario[i] === 10) {
+      activosOficina[i]++;
+    }
+    if (estadosUsuario[i] === -1) {
+      activosOficina[i] = ''
+    }
+  }
+
+  rows[rowCount] = new Array();
+  rows[rowCount][0] = 0;
+  rows[rowCount].push(activosOficina);
+
+  //
+  // pintar tabla
+  //
+  let tblHeader = document.getElementsByTagName("thead")[0];
+  let tblBody = document.getElementsByTagName("tbody")[0];
+  let rowOficina = document.createElement("tr");
+  let rowUsuario = document.createElement("tr");
+  let rowHeader = document.createElement("tr");
+  let rowSubHeader = document.createElement("tr");
+  let hasHeaderOficina = false;
+
+  var col = null;
+  var texto = null;
+  var hasHeader = false;
+  var headerString = '';
+  var subHeaderString = '';
+
+  // descripcion header
+  col = document.createElement('th')
+  col.style.cssText = "border: none; text-align: center;"
+  col.style.minWidth = "250px"
+
+  rowHeader.appendChild(col)
+  tblHeader.appendChild(rowHeader)
+
+  // dias header
+  for (let d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
+    texto = document.createTextNode(('0' + d.getDate()).slice(-2))
+    col = document.createElement('th')
+    col.appendChild(texto)
+    col.colSpan = 14
+    col.style.cssText = "border: none; text-align: center"
+
+    rowHeader.appendChild(col)
+    tblHeader.appendChild(rowHeader)
+  }
+
+  // horas subheader
+  texto = document.createTextNode('')
+  col = document.createElement('th')
+  col.appendChild(texto)
+  col.style.cssText = "border: none; text-align: left"
+
+  rowSubHeader.appendChild(col)
+  tblHeader.appendChild(rowSubHeader)
+
+  for (let j = 0; j < diasPeriodo; j++) {
+    for (let i = 8; i <= 14; i++) {
+      texto = document.createTextNode(('0' + i).slice(-2))
+      col = document.createElement('th')
+      col.appendChild(texto)
+      col.colSpan = 2
+      col.style.cssText = "border: none; text-align: center"
+
+      rowSubHeader.appendChild(col)
+      tblHeader.appendChild(rowSubHeader)
+    }
+  }
+
+  // minutos
+  rowSubHeader = document.createElement("tr")
+  col = document.createElement('th')
+  col.style.cssText = "border: none;"
+  rowSubHeader.appendChild(col)
+  tblHeader.appendChild(rowSubHeader)
+  for (let j = 0; j < diasPeriodo * 14; j++) {
+    if (j % 2 === 0) {
+      texto = document.createTextNode('00')
+    } else {
+      texto = document.createTextNode('30')
+    }
+    col = document.createElement('th')
+    col.appendChild(texto)
+    col.style.cssText = "border: none; text-align: center; font-size: 8px;"
+    col.style.minWidth = "14px"
+    rowSubHeader.appendChild(col)
+    tblHeader.appendChild(rowSubHeader)
+  }
+
+  // rows
+  rows.map(itm => {
+    if (itm[0] === -1) {
+      // oficina
+      rowOficina = document.createElement('tr')
+      col = document.createElement('td')
+      texto = document.createTextNode(itm[1])
+
+      col.appendChild(texto)
+      col.style.cssText = "color: orangered; border: none; text-align: center;"
+      col.style.minWidth = "250px"
+
+      rowOficina.appendChild(col)
+      tblBody.appendChild(rowOficina)
+    } else if (itm[0] === 0) {
+      // total acumulado
+      rowOficina = document.createElement('tr')
+      col = document.createElement('td')
+      texto = document.createTextNode('Personal en activo')
+
+      col.appendChild(texto)
+      col.style.cssText = "color: blue; border: none; text-align: left;"
+
+      rowOficina.appendChild(col)
+
+      for (let i = 0; i < diasPeriodo * 14; i++) {
+        let col = document.createElement("td")
+        const texto = document.createTextNode(itm[1][i])
+
+        col.style.cssText = "color: blue; border: none; text-align: center;"
+        col.style.minWidth = "14px"
+        col.appendChild(texto)
+        rowOficina.appendChild(col)
+      }
+
+      tblBody.appendChild(rowOficina)
+    } else {
+      // nombre usuario
+      rowUsuario = document.createElement('tr')
+      col = document.createElement('td')
+      col.style.borderRight = "1px solid #9ba9be"
+      texto = document.createTextNode(itm[0])
+
+      col.appendChild(texto)
+      rowUsuario.appendChild(col)
+      tblBody.appendChild(rowUsuario)
+
+      // tipos de estado
+      for (var i = 0; i < diasPeriodo * 14; i++) {
+        col = document.createElement("td")
+        col.style.minWidth = "14px"
+        if ((i +1) % 14 === 0) {
+          col.style.borderRight = "1px solid #9ba9be"
+        }
+        if (itm[1][i] === -1) {
+          // festivo
+          col.style.background = '#FAFAFA'
+
+          rowUsuario.appendChild(col)
+        } else if (itm[1][i] === tipos.festivo.ID) {
+          // usuario en activo
+          col.style.background = '#FAFAFA'
+
+          rowUsuario.appendChild(col)
+        } else if (itm[1][i] === tipos.activo.ID) {
+          // usuario en activo
+
+          rowUsuario.appendChild(col)
+        } else if (itm[1][i] === tipos.vacacion.ID) {
+          var texto = document.createTextNode('vacación')
+
+          col.className = 'timeline vacas'
+          rowUsuario.appendChild(col)
+
+          // popup
+          var sub = document.createElement("div")
+          sub.className = 'popup'
+          sub.appendChild(texto)
+          col.appendChild(sub);
+          rowUsuario.appendChild(col)
+        } else if (itm[1][i] === tipos.baja.ID) {
+          var sub = document.createElement("div")
+          var texto = document.createTextNode('baja')
+
+          col.className = 'timeline bajas'
+          rowUsuario.appendChild(col)
+
+          sub.className = 'popup'
+          sub.appendChild(texto)
+          col.appendChild(sub)
+          rowUsuario.appendChild(col)
+        } else if (itm[1][i] === tipos.traspaso.ID) {
+          var sub = document.createElement("div")
+          var texto = document.createTextNode('traspaso')
+
+          col.className = 'timeline trasp'
+          rowUsuario.appendChild(col)
+
+          sub.className = 'popup'
+          sub.appendChild(texto)
+          col.appendChild(sub)
+          rowUsuario.appendChild(col)
+        } else if (itm[1][i] === tipos.formacion.ID) {
+          var sub = document.createElement("div")
+          var texto = document.createTextNode('formación')
+
+          col.className = 'timeline forma'
+          rowUsuario.appendChild(col)
+
+          sub.className = 'popup'
+          sub.appendChild(texto)
+          col.appendChild(sub)
+          rowUsuario.appendChild(col)
+        } else if (itm[1][i] === tipos.conciliacion.ID) {
+          var sub = document.createElement("div");
+          var texto = document.createTextNode(`conciliación`);
+
+          col.className = 'timeline conci';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (itm[1][i] === tipos.reunion.ID) {
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('reunión');
+
+          col.className = 'timeline reuni';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (itm[1][i] === tipos.horas.ID) {
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('horas');
+
+          col.className = 'timeline horas';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (itm[1][i] === tipos.telefono.ID) {
+          var sub = document.createElement("div");
+          var texto = document.createTextNode('teléfono');
+
+          col.className = 'timeline tele';
+          rowUsuario.appendChild(col);
+
+          sub.className = 'popup';
+          sub.appendChild(texto);
+          col.appendChild(sub);
+          rowUsuario.appendChild(col);
+        } else if (itm[1][i] === tipos.traspasado.ID) {
+          var sub = document.createElement("div")
+          var texto = document.createTextNode('traspasado')
+
+          col.className = 'timeline trasdo'
+          rowUsuario.appendChild(col)
+
+          sub.className = 'popup'
+          sub.appendChild(texto)
+          col.appendChild(sub)
+          rowUsuario.appendChild(col)
+        }
+      }
+    }
+  })
+}
+
+// eventos form
+desfec.addEventListener('change', function (e) {
+  const formato = document.getElementById('cbofor').value
+  const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
+  const currentMonth = new Date(document.querySelector("#desfec").value).getMonth() + 1
+
+  let desde = new Date(yearMonthDayToUTCString(currentYear, currentMonth, 1))
+  let hasta = desde
+
+  if (formato === '1') {
+    const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
+
+    hasta = new Date(yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth))
+  } else {
+    let t = new Date()
+
+    t = new Date(document.querySelector("#desfec").value)
+
+    if (t.getDay() === 0) {
+      t.setDate(t.getDate() + 1)
+
+      desde = new Date(t)
+      hasta = new Date(t.setDate(t.getDate() + 4))
+    } else if (t.getDay() === 1) {
+      t = new Date(new Date(document.querySelector("#desfec").value))
+      t.setDate(t.getDate() + 4)
+
+      desde = new Date(new Date(document.querySelector("#desfec").value))
+      hasta = t
+    } else {
+      const primerDiaSemana = t.getDate() - t.getDay()
+
+      t.setDate(desde.getDate() + primerDiaSemana)
+      desde = new Date(t)
+      hasta = new Date(t.setDate(t.getDate() + 4))
+    }
+  }
+
+  document.querySelector("#desde").value = desde.toISOString().slice(0, 10)
+  document.querySelector("#hasta").value = hasta.toISOString().slice(0, 10)
+})
+cbofor.addEventListener('change', function (e) {
+  const currentYear = new Date(document.querySelector("#desfec").value).getFullYear()
+  const currentMonth = new Date(document.querySelector("#desfec").value).getMonth() + 1
+
+  let desde = new Date(yearMonthDayToUTCString(currentYear, currentMonth, 1))
+  let hasta = desde
+
+  if (e.target.value === '1') {
+    const lastDayMonth = new Date(currentYear, currentMonth, 0).getDate()
+
+    hasta = new Date(yearMonthDayToUTCString(currentYear, currentMonth, lastDayMonth))
+  } else {
+    let t = new Date()
+
+    t = new Date(document.querySelector("#desfec").value)
+
+    if (t.getDay() === 0) {
+      t.setDate(t.getDate() + 1)
+
+      desde = new Date(t)
+      hasta = new Date(t.setDate(t.getDate() + 4))
+    } else if (t.getDay() === 1) {
+      t = new Date(new Date(document.querySelector("#desfec").value))
+      t.setDate(t.getDate() + 4)
+
+      desde = new Date(new Date(document.querySelector("#desfec").value))
+      hasta = t
+    } else {
+      const primerDiaSemana = t.getDate() - t.getDay()
+
+      t.setDate(desde.getDate() + primerDiaSemana)
+      desde = new Date(t)
+      hasta = new Date(t.setDate(t.getDate() + 4))
+    }
+  }
+
+  document.querySelector("#desde").value = desde.toISOString().slice(0, 10)
+  document.querySelector("#hasta").value = hasta.toISOString().slice(0, 10)
+})
+
+// show
+estadosGantt(estados, festivos, periodo, diasPeriodo)
