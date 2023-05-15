@@ -3,13 +3,13 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import path from 'path'
 
-// import rutas ma.minin
-import mainRouter from "./routes/main.router.min";
-// import rutas adm.minin
-import adminRouter from "./routes/admin.router.min";
-import cursoRouter from "./routes/curso.router.min";
-// import rutas us
-import userRouter from "./routes/user.router.min";
+// import rutas
+import mainRouter from "./routes/main.router";
+// import rutas
+import adminRouter from "./routes/admin.router";
+import cursoRouter from "./routes/curso.router";
+// import rutas 
+import userRouter from "./routes/user.router";
 
 const app = express();
 

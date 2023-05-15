@@ -23,7 +23,7 @@
                 <div class="col-md-6">
                   <div class="row row-cards">
                     <div class="col-12">
-                      <div class="card" style="height: 20rem;">
+                      <div class="card" style="height: 17rem;">
                         <div class="card-header">
                           <div class="card-title">
                             Administración
@@ -83,6 +83,67 @@
                       <div class="card" style="height: 20rem;">
                         <div class="card-header">
                           <div class="card-title">
+                            Liquidadores
+                          </div>
+                        </div>
+                        <div class="card-body card-body-scrollable card-body-scrollable-shadow">
+                          <div class="row g-3">
+                            <% datos.estados.map(itm=> { %>
+                              <% if (itm.PERROL===8) { %>
+                                <div class="col-6">
+                                  <div class="row align-items-center pt-1">
+                                    <% if(itm.TIPEST===1) {%>
+                                      <span class="avatar avatar-rounded bg-green-lt">
+                                        <h6>
+                                          <%- itm.USERID.slice(0,5) %>
+                                        </h6>
+                                      </span>
+                                      <div class="col text-truncate">
+                                        <span style="font-size: .7rem;">
+                                          <%- itm.NOMUSU.slice(0,33) %>
+                                        </span>
+                                        <div class="col text-truncate text-muted">
+                                          <span style="font-size: .6rem;">
+                                            Oficina: <%- itm.DESOFI %>
+                                          </span>
+                                          <span style="font-size: .7rem; margin-left: 1rem;">
+                                            Tlf: <%- itm.TELUSU %>
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <% } else { %>
+                                        <span class="avatar avatar-rounded bg-red-lt">
+                                          <h6>
+                                            <%- itm.USERID.slice(0,5) %>
+                                          </h6>
+                                        </span>
+                                        <div class="col text-truncate">
+                                          <span style="font-size: .7rem;">
+                                            <%- itm.NOMUSU.slice(0,33) %>
+                                          </span>
+                                          <div class="col text-muted">
+                                            <span style="color: red;font-size: .7rem;">
+                                              NO DISPONIBLE
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <% } %>
+                                  </div>
+                                </div>
+                                <% } %>
+                                  <% }) %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row row-cards">
+                    <div class="col-12">
+                      <div class="card" style="height: 17rem;">
+                        <div class="card-header">
+                          <div class="card-title">
                             Responsables
                           </div>
                         </div>
@@ -130,69 +191,8 @@
                                         <% } %>
                                   </div>
                                 </div>
-                              <% } %>
-                            <% }) %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row row-cards">
-                    <div class="col-12">
-                      <div class="card" style="height: 20rem;">
-                        <div class="card-header">
-                          <div class="card-title">
-                            Liquidadores
-                          </div>
-                        </div>
-                        <div class="card-body card-body-scrollable card-body-scrollable-shadow">
-                          <div class="row g-3">
-                            <% datos.estados.map(itm=> { %>
-                              <% if (itm.PERROL===8) { %>
-                                <div class="col-6">
-                                  <div class="row align-items-center pt-1">
-                                    <% if(itm.TIPEST===1) {%>
-                                      <span class="avatar avatar-rounded bg-green-lt">
-                                        <h6>
-                                          <%- itm.USERID.slice(0,5) %>
-                                        </h6>
-                                      </span>
-                                      <div class="col text-truncate">
-                                        <span style="font-size: .7rem;">
-                                          <%- itm.NOMUSU.slice(0,33) %>
-                                        </span>
-                                        <div class="col text-truncate text-muted">
-                                          <span style="font-size: .6rem;">
-                                            Oficina: <%- itm.DESOFI %>
-                                          </span>
-                                          <span style="font-size: .7rem; margin-left: 1rem;">
-                                            Tlf: <%- itm.TELUSU %>
-                                          </span>
-                                        </div>
-                                      </div>
-                                    <% } else { %>
-                                      <span class="avatar avatar-rounded bg-red-lt">
-                                        <h6>
-                                          <%- itm.USERID.slice(0,5) %>
-                                        </h6>
-                                      </span>
-                                      <div class="col text-truncate">
-                                        <span style="font-size: .7rem;">
-                                          <%- itm.NOMUSU.slice(0,33) %>
-                                        </span>
-                                        <div class="col text-muted">
-                                          <span style="color: red;font-size: .7rem;">
-                                            NO DISPONIBLE
-                                          </span>
-                                        </div>
-                                      </div>
-                                    <% } %>
-                                  </div>
-                                </div>
-                              <% } %>
-                            <% }) %>
+                                <% } %>
+                                  <% }) %>
                           </div>
                         </div>
                       </div>
@@ -289,7 +289,7 @@
               <p>
                 <label class="form-check">
                   <input class="form-check-input" id="checkShow" name="checkShow" type="checkbox">
-                  <span class="form-check-label">No mostrar más este mensaje</span>
+                  <span class="form-check-label">No mostrar este mensaje</span>
                 </label>
               </p>
             </div>

@@ -15,14 +15,14 @@ export const mainPage = async (req, res) => {
 
   if (cursor) {
     context = {
-      limit: limit + 1,
+      limit: limit +1,
       direction: dir,
       cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
       part,
     }
   } else {
     context = {
-      limit: limit + 1,
+      limit: limit +1,
       direction: dir,
       cursor: {
         next: 0,
@@ -38,11 +38,12 @@ export const mainPage = async (req, res) => {
     })
 
     let oficinas = result.data.data
-    oficinas.unshift({ IDOFIC: 0, DESOFI: 'FESTIVOS COMUNES', CODOFI: '000' })
     let hasNextOficinas = oficinas.length === limit +1
     let nextCursor = 0
     let prevCursor = 0
     
+    //oficinas.unshift({ IDOFIC: 0, DESOFI: 'FESTIVOS COMUNES', CODOFI: '000' })
+
     if (hasNextOficinas) {
       nextCursor = dir === 'next' ? oficinas[limit - 1].IDOFIC : oficinas[0].IDOFIC
       prevCursor = dir === 'next' ? oficinas[0].IDOFIC : oficinas[limit - 1].IDOFIC

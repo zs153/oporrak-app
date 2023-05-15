@@ -37,8 +37,8 @@ adminRouter.get("/traspasos/calendarios/usuarios/:id", verifyTokenAndAdmin, tras
 // se sacan del admin router y se direccionan en curso router
 
 // calendario
-adminRouter.get("/calendarios", verifyTokenAndAdmin, calendario.mainPage);
-adminRouter.get("/calendarios/calendario", verifyTokenAndAdmin, calendario.calendarioPage);
+adminRouter.get("/calendarios", verifyTokenAndResp, calendario.mainPage);
+adminRouter.get("/calendarios/calendario", verifyTokenAndResp, calendario.calendarioPage);
 
 //--------------- procedures
 // festivos
@@ -62,6 +62,6 @@ adminRouter.post('/usuarios/delete', verifyTokenAndResp, usuario.remove)
 adminRouter.post("/traspasos/update", verifyTokenAndAdmin, traspaso.update);
 
 // calendario
-adminRouter.post("/calendarios/update", verifyTokenAndAdmin, calendario.update);
+adminRouter.post("/calendarios/update", verifyTokenAndResp, calendario.update);
 
 export default adminRouter

@@ -46,11 +46,11 @@
                 <div class="col-12">
                   <div class="card">
                     <div class="card-header">
-                      <h3 class="card-title">Festivos - Oficinas</h3>
+                      <h3 class="card-title">Festivos</h3>
                       <div class="col-auto ms-auto">
                         <div class="d-flex">
                           <form action="/admin/festivos" method="GET">
-                            <div class="input-icon">
+                            <div class="input-icon me-3">
                               <span class="input-icon-addon">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                   viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -64,6 +64,9 @@
                                 name="part" placeholder="Buscar..." aria-label="Buscar en oficinas">
                             </div>
                           </form>
+                          <a href="#" id="comun" class="btn">
+                            Festivos Comunes
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -109,6 +112,10 @@
     }
     elemBuscar.value = getCookie('filtro')
 
+    // inicializacion
+      const elemNew = document.getElementById('comun');
+      elemNew.setAttribute('href', `/admin/festivos/calendario/0?part=${getCookie('filtro')}`)
+      
     buildTable(state)
   </script>
 </body>

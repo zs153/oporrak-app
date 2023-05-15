@@ -1,5 +1,5 @@
 import express from "express";
-import authRoutes from "../middleware/auth";
+import {verifyTokenAndAdmin} from "../middleware/auth";
 import {
   mainPage,
   addPage,
@@ -35,56 +35,56 @@ import {
 const cursoRouter = express.Router();
 
 // paginas cursos
-cursoRouter.get("/cursos", authRoutes, mainPage);
-cursoRouter.get("/cursos/add", authRoutes, addPage);
-cursoRouter.get("/cursos/edit/:id", authRoutes, editPage);
+cursoRouter.get("/cursos", verifyTokenAndAdmin, mainPage);
+cursoRouter.get("/cursos/add", verifyTokenAndAdmin, addPage);
+cursoRouter.get("/cursos/edit/:id", verifyTokenAndAdmin, editPage);
 
 // paginas turnos
-cursoRouter.get("/cursos/turnos/:id", authRoutes, turnosPage);
-cursoRouter.get("/cursos/turnos/add/:id", authRoutes, addTurnoPage);
-cursoRouter.get("/cursos/turnos/edit/:idcurs/:idturn", authRoutes, editTurnoPage);
+cursoRouter.get("/cursos/turnos/:id", verifyTokenAndAdmin, turnosPage);
+cursoRouter.get("/cursos/turnos/add/:id", verifyTokenAndAdmin, addTurnoPage);
+cursoRouter.get("/cursos/turnos/edit/:idcurs/:idturn", verifyTokenAndAdmin, editTurnoPage);
 
 // paginas matriculas
-cursoRouter.get("/cursos/matriculas/:id", authRoutes, matriculasPage);
-cursoRouter.get("/cursos/matriculas/add/:id", authRoutes, addMatriculaPage);
-cursoRouter.get("/cursos/matriculas/edit/:idcurs/:idmatr", authRoutes, editMatriculaPage);
+cursoRouter.get("/cursos/matriculas/:id", verifyTokenAndAdmin, matriculasPage);
+cursoRouter.get("/cursos/matriculas/add/:id", verifyTokenAndAdmin, addMatriculaPage);
+cursoRouter.get("/cursos/matriculas/edit/:idcurs/:idmatr", verifyTokenAndAdmin, editMatriculaPage);
 
 // paginas usuarios
-cursoRouter.get("/cursos/usuarios/:id", authRoutes, usuariosPage);
-cursoRouter.get("/cursos/usuarios/add/:idcurs", authRoutes, usuariosAddPage);
+cursoRouter.get("/cursos/usuarios/:id", verifyTokenAndAdmin, usuariosPage);
+cursoRouter.get("/cursos/usuarios/add/:idcurs", verifyTokenAndAdmin, usuariosAddPage);
 
 // paginas usuarios turno
-cursoRouter.get("/cursos/turnos/usuarios/:idcurs/:idturn", authRoutes, usuariosTurnoPage);
-cursoRouter.get("/cursos/turnos/usuarios/add/:idcurs/:idturn", authRoutes, usuariosTurnoAddPage);
+cursoRouter.get("/cursos/turnos/usuarios/:idcurs/:idturn", verifyTokenAndAdmin, usuariosTurnoPage);
+cursoRouter.get("/cursos/turnos/usuarios/add/:idcurs/:idturn", verifyTokenAndAdmin, usuariosTurnoAddPage);
 
 // paginas usuarios matricula
-cursoRouter.get("/cursos/matriculas/usuarios/:idcurs/:idmatr", authRoutes, usuariosMatriculaPage);
+cursoRouter.get("/cursos/matriculas/usuarios/:idcurs/:idmatr", verifyTokenAndAdmin, usuariosMatriculaPage);
 
 // proc cursos
-cursoRouter.post("/cursos/insert", authRoutes, insert);
-cursoRouter.post("/cursos/update", authRoutes, update);
-cursoRouter.post("/cursos/delete", authRoutes, remove);
+cursoRouter.post("/cursos/insert", verifyTokenAndAdmin, insert);
+cursoRouter.post("/cursos/update", verifyTokenAndAdmin, update);
+cursoRouter.post("/cursos/delete", verifyTokenAndAdmin, remove);
 
 // proc turnos
-cursoRouter.post("/cursos/turnos/insert", authRoutes, insertTurno);
-cursoRouter.post("/cursos/turnos/update", authRoutes, updateTurno);
-cursoRouter.post("/cursos/turnos/delete", authRoutes, deleteTurno);
+cursoRouter.post("/cursos/turnos/insert", verifyTokenAndAdmin, insertTurno);
+cursoRouter.post("/cursos/turnos/update", verifyTokenAndAdmin, updateTurno);
+cursoRouter.post("/cursos/turnos/delete", verifyTokenAndAdmin, deleteTurno);
 
 // proc matriculas
-cursoRouter.post("/cursos/matriculas/insert", authRoutes, insertMatricula);
-cursoRouter.post("/cursos/matriculas/update", authRoutes, updateMatricula);
-cursoRouter.post("/cursos/matriculas/delete", authRoutes, deleteMatricula);
+cursoRouter.post("/cursos/matriculas/insert", verifyTokenAndAdmin, insertMatricula);
+cursoRouter.post("/cursos/matriculas/update", verifyTokenAndAdmin, updateMatricula);
+cursoRouter.post("/cursos/matriculas/delete", verifyTokenAndAdmin, deleteMatricula);
 
 // proc usuarios curso
-cursoRouter.post("/cursos/usuarios/insert", authRoutes, insertUsuario);
-cursoRouter.post("/cursos/usuarios/delete", authRoutes, deleteUsuario);
+cursoRouter.post("/cursos/usuarios/insert", verifyTokenAndAdmin, insertUsuario);
+cursoRouter.post("/cursos/usuarios/delete", verifyTokenAndAdmin, deleteUsuario);
 
 // proc usuarios turno
-cursoRouter.post("/cursos/turnos/usuarios/insert", authRoutes, insertUsuarioTurno);
-cursoRouter.post("/cursos/turnos/usuarios/delete", authRoutes, deleteUsuarioTurno);
+cursoRouter.post("/cursos/turnos/usuarios/insert", verifyTokenAndAdmin, insertUsuarioTurno);
+cursoRouter.post("/cursos/turnos/usuarios/delete", verifyTokenAndAdmin, deleteUsuarioTurno);
 
 // proc usuarios matricula
-cursoRouter.post("/cursos/matriculas/usuarios/insert", authRoutes, insertUsuarioMatricula);
-cursoRouter.post("/cursos/matriculas/usuarios/delete", authRoutes, deleteUsuarioMatricula);
+cursoRouter.post("/cursos/matriculas/usuarios/insert", verifyTokenAndAdmin, insertUsuarioMatricula);
+cursoRouter.post("/cursos/matriculas/usuarios/delete", verifyTokenAndAdmin, deleteUsuarioMatricula);
 
 export default cursoRouter;

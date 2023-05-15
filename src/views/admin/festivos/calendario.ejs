@@ -89,13 +89,14 @@
                 <div class="card">
                   <form action="#" id="upd" method="POST">
                     <input type="hidden" name="eventos" id="eventos" value="" />
+                    <input type="hidden" name="idofic" id="idofic" value="<%= datos.oficina.IDOFIC %>" />
                     <div class="card-header p-2">
                       <div class="d-block">
                         <h3 class="card-title">Calendario Festivos</h3>
                         <div>
                           <p class="subtitulo">
                             <span class="text-muted">
-                              <%- datos.oficina.DESOFI %>
+                              <%= datos.oficina.DESOFI %>
                             </span>
                           </p>
                         </div>

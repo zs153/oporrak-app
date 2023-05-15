@@ -84,7 +84,6 @@ const authRoutes = async (req, res, next) => {
     return res.redirect('/')
   }
 }
-
 export const verifyTokenAndAdmin = (req, res, next) => {
   authRoutes(req, res, () => {
     if (req.user.rol === tiposRol.admin) {

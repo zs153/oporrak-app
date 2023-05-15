@@ -6,6 +6,7 @@ import {
   arrEstadosUsuario,
   estadosUsuario,
   tiposMovimiento,
+  tiposRol,
 } from '../../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
@@ -21,6 +22,7 @@ export const mainPage = async (req, res) => {
 
   if (cursor) {
     context = {
+      oficina: user.rol === tiposRol.admin ? 0 : user.oficina,
       limit: limit + 1,
       direction: dir,
       cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
@@ -28,6 +30,7 @@ export const mainPage = async (req, res) => {
     }
   } else {
     context = {
+      oficina: user.rol === tiposRol.admin ? 0 : user.oficina,
       limit: limit + 1,
       direction: dir,
       cursor: {
