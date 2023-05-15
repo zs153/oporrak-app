@@ -67,8 +67,7 @@ export const findAll = async (context) => {
     SELECT * FROM datos
     WHERE idofic > :idofic
     ORDER BY idofic ASC
-    FETCH NEXT :limit ROWS ONLY
-    `
+    FETCH NEXT :limit ROWS ONLY`
   } else {
     bind.idofic = context.cursor.prev;
     query = `WITH datos AS (
@@ -80,8 +79,7 @@ export const findAll = async (context) => {
     SELECT * FROM datos
     WHERE idofic < :idofic
     ORDER BY idofic DESC
-    FETCH NEXT :limit ROWS ONLY
-    `
+    FETCH NEXT :limit ROWS ONLY`
   }
 
   // proc

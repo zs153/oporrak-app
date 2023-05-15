@@ -120,32 +120,38 @@ export const findAll = async (context) => {
     part: context.part,
   };
 
-  if (context.direction === 'next') {
-    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
+  if (context.oficina) {
+    bind.ofiusu = context.oficina
     query = `WITH datos AS (
       SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
       INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-      WHERE
+      WHERE uu.ofiusu = :ofiusu AND
+        (uu.nomusu LIKE '%' || :part || '%' OR
+        oo.desofi LIKE '%' || :part || '%' OR
+        :part IS NULL)
+    )
+    `
+  } else {
+    query = `WITH datos AS (
+      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
+      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
+      WHERE 
         uu.nomusu LIKE '%' || :part || '%' OR
         oo.desofi LIKE '%' || :part || '%' OR
         :part IS NULL
     )
-    SELECT * FROM datos
+    `
+  }
+
+  if (context.direction === 'next') {
+    bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
+    query += `SELECT * FROM datos
     WHERE nomusu > :nomusu OR :nomusu IS NULL
     ORDER BY nomusu ASC
-    FETCH NEXT :limit ROWS ONLY
-    `
+    FETCH NEXT :limit ROWS ONLY`
   } else {
     bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
-    query = `WITH datos AS (
-      SELECT uu.idusua, uu.userid, uu.nomusu, uu.telusu, uu.stausu, oo.desofi FROM usuarios uu
-      INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu
-      WHERE
-        (uu.nomusu LIKE '%' || :part || '%') OR
-        (oo.desofi LIKE '%' || :part || '%') OR
-        :part IS NULL
-    )
-    SELECT * FROM datos
+    query += `SELECT * FROM datos
     WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL
     ORDER BY nomusu DESC
     FETCH NEXT :limit ROWS ONLY
