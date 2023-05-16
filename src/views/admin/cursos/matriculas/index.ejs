@@ -121,7 +121,7 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/matricula.min.js"></script>
+  <script src="/js/indexMatricula.min.js"></script>
   <script>
     const estados = <%- JSON.stringify(datos.arrEstadosMatricula) %>
     const orgList = <%- JSON.stringify(datos.matriculas) %>
@@ -129,19 +129,9 @@
     const cursor = <%- JSON.stringify(datos.cursor) %>
     const hasNextMatriculas = <%- datos.hasNextMatriculas %>
     const hasPrevMatriculas = <%- datos.hasPrevMatriculas %>
-    const state = {
-      'querySet': orgList,
-    }
-
-    // events
-    const elemBuscar = document.getElementById('buscarMatriculaBox');
-    elemBuscar.onchange = (event) => {
-      setCookie('filtro', event.target.value, .5) // medio dia
-    }
-    elemBuscar.value = getCookie('filro')
 
     // tabla
-    buildTable(state)
+    buildTable(orgList)
   </script>
 </body>
 

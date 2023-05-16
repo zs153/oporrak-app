@@ -12,40 +12,6 @@
     <!-- styles -->
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/js-year-calendar.min.css" />
-    <script>
-      const getCookie = (key) => {
-        let value = ''
-        document.cookie.split(';').forEach((e) => {
-          if (e.includes(key)) {
-            value = e.split('=')[1]
-          }
-        })
-        return value
-      }
-      const setCookie = (name, value, days) => {
-        let expires = "";
-        if (days) {
-          let date = new Date();
-          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-          expires = "; expires=" + date.toUTCString();
-        }
-        // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-      }
-      const deleteCookie = () => {
-        document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
-      }
-    </script>
-    <script>
-      const dateISOToUTCString = (dateISO) => {
-        const fecha = new Date(dateISO)
-        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
-
-        return new Date(fecha.getTime() - userTimezoneOffset)
-          .toISOString()
-          .slice(0, 10)
-      }
-    </script>
     <style>
       .calendar-header {
         border: none !important;
@@ -145,134 +111,10 @@
     <script src="/js/ayuda.min.js"></script>
     <script src="/js/js-year-calendar.min.js"></script>
     <script src="/js/js-year-calendar.es.min.js"></script>
+    <script src="/js/calendarioFestivos.min.js"></script>
     <script>
-      const elemUpdate = document.getElementById('upd');
-      elemUpdate.setAttribute('action', `/admin/festivos/update?part=${getCookie('filtro')}`)
-    </script>
-    <script>
-      const oficina = <%- JSON.stringify(datos.oficina) %>
-
-      let eventos = []
       let dataSource = <%- datos.dataSource %>
-      let calendario = null
-      let currentYear = new Date().getFullYear()
-      let params = {
-        color: '<%- datos.tiposEstado.festivo.COLOR %>',
-        desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
-        hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
-      }
-
-      calendario = new Calendar("#calendar", {
-        minDate: new Date(params.desde),
-        maxDate: new Date(params.hasta),
-        language: "es",
-        displayHeader: false,
-        customDayRenderer: function (e, date) {
-          if (date.getDay() === 0) {
-            e.style.color = params.color
-          }
-        },
-        dataSource: function () {
-          return dataSource.map(itm => ({
-            idfest: itm.idfest,
-            ofifes: itm.ofifes,
-            startDate: new Date(itm.fecfes),
-            endDate: new Date(itm.fecfes),
-            color: itm.color,
-          }))
-        }
-      })
-      calendario.setYear(currentYear)
-
-      // eventos
-      document.getElementById('btnUpdate').addEventListener('click', () => {
-        document.getElementById("eventos").value = JSON.stringify(eventos)
-        return
-      })
-      document.getElementById('cboyea').addEventListener('change', function() {
-        currentYear = parseInt(document.querySelector("#cboyea").value)
-
-        params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
-        params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
-
-        calendario.setMinDate(new Date(params.desde));
-        calendario.setMaxDate(new Date(params.hasta));
-        calendario.setYear(currentYear)
-      });
-      document.querySelector('#calendar').addEventListener('clickDay', async function(e) {
-        // bloquear festivos
-        if (e.element.classList.contains('domingo')) {
-          return
-        }
-
-        const fecha = dateISOToUTCString(e.date)
-        if (e.events.length) {
-          // borrar
-          if (e.events[0].idfest < 0) {
-            let pos = eventos.map(itm => itm.idfest).indexOf(fecha);
-            eventos.splice(pos, 1)
-          } else {
-            eventos.push({
-              idfest: e.events[0].idfest,
-              fecfes: '',
-              ofifes: 0,
-            })
-          }
-
-          pos = dataSource.map(itm => itm.fecfes).indexOf(fecha);
-          dataSource.splice(pos, 1)
-
-          let data = []
-          dataSource.map(itm => {
-            data.push({
-              idfest: itm.idfest,
-              ofifes: itm.ofifes,
-              startDate: new Date(itm.startDate),
-              endDate: new Date(itm.endDate),
-              color: itm.color,
-            })
-          })
-          calendario.setDataSource(data, {
-            preventRendering: false
-          })
-
-          // actualizar dia
-          e.element.attributes.removeNamedItem("style")
-        } else {
-          const id = -(Date.now())
-
-          // insertar
-          dataSource.push({
-            idfest: id,
-            ofifes: oficina.IDOFIC,
-            startDate: fecha,
-            endDate: fecha,
-            color: params.color,
-          })
-          eventos.push({
-            idfest: id,
-            fecfes: fecha,
-            ofifes: oficina.IDOFIC,
-          })
-
-          let data = []
-          dataSource.map(itm => {
-            data.push({
-              idfest: itm.idfest,
-              ofifes: itm.ofifes,
-              startDate: new Date(itm.startDate),
-              endDate: new Date(itm.endDate),
-              color: itm.color,
-            })
-          })
-          calendario.setDataSource(data, {
-            preventRendering: false
-          })
-
-          // actualizar dia
-          e.element.style.boxShadow = params.color + ' 0px -4px 0px 0px inset'
-        }
-      })
+      const oficina = <%- JSON.stringify(datos.oficina) %>
     </script>
   </body>
 </html>

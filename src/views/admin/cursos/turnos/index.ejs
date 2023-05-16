@@ -123,26 +123,16 @@
   </div>
 
   <script src="/js/ayuda.min.js"></script>
-  <script src="/js/turno.min.js"></script>
+  <script src="/js/indexTurno.min.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.turnos) %>
     const curso = <%- JSON.stringify(datos.curso) %>
     const cursor = <%- JSON.stringify(datos.cursor) %>
     const hasNextTurnos = <%- datos.hasNextTurnos %>
     const hasPrevTurnos = <%- datos.hasPrevTurnos %>
-    const state = {
-      'querySet': orgList,
-    }
-
-    // events
-    const elemBuscar = document.getElementById('buscarTurnoBox');
-    elemBuscar.onchange = (event) => {
-      setCookie('filtro', event.target.value, .5) // medio dia
-    }
-    elemBuscar.value = getCookie('filtro')
 
     // table
-    buildTable(state)
+    buildTable(orgList)
   </script>
 </body>
 

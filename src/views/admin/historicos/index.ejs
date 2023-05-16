@@ -8,30 +8,6 @@
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <!-- styles -->
     <link rel="stylesheet" href="/css/styles.css">
-    <script>
-      const getCookie = (key) => {
-        let value = ''
-        document.cookie.split(';').forEach((e) => {
-          if (e.includes(key)) {
-            value = e.split('=')[1]
-          }
-        })
-        return value
-      }
-      const setCookie = (name, value, days) => {
-        let expires = "";
-        if (days) {
-          let date = new Date();
-          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-          expires = "; expires=" + date.toUTCString();
-        }
-        // document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-      }
-      const deleteCookie = () => {
-        document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
-      }
-    </script>
   </head>
   <body class="antialiased">
     <div class="wrapper">
@@ -123,29 +99,15 @@
     </div>
 
     <script src="/js/ayuda.min.js"></script>
-    <script src="/js/historico.min.js"></script>
+    <script src="/js/indexHistorico.min.js"></script>
     <script>
       const orgList = <%- JSON.stringify(datos.usuarios) %>
       const cursor = <%- JSON.stringify(datos.cursor) %>
       const hasNextUsers = <%- datos.hasNextUsers %>
       const hasPrevUsers = <%- datos.hasPrevUsers %>
 
-      let state = {
-        'querySet': orgList,
-      }
-
-      // events
-      const elemBuscar = document.getElementById('buscarUserBox');
-      elemBuscar.onchange = (event) => {
-        setCookie('filtro', event.target.value, .5) // medio dia
-      }
-      elemBuscar.value = getCookie('filtro')
-
-      // inicializar action
-      const elemActivar = document.getElementById('activ')
-      elemActivar.setAttribute('action', `/admin/historicos/activar?part=${getCookie('filtro')}`)
-
-      buildTable(state)
+      // tabla
+      buildTable(orgList)
     </script>
   </body>
 </html>
