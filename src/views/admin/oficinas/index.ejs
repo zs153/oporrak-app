@@ -105,16 +105,13 @@
       </div>
     </div>
 
-    <script src="/js/ayuda.min.js"></script>
-    <script src="/js/indexOficinas.min.js"></script>
     <script>
       const orgList = <%- JSON.stringify(datos.oficinas) %>
       const cursor = <%- JSON.stringify(datos.cursor) %>
       const hasNextOficinas = <%- datos.hasNextOficinas %>
       const hasPrevOficinas = <%- datos.hasPrevOficinas %>
-      
-      // table
-      buildTable(orgList)
     </script>
+    <script src="/js/ayuda.min.js"></script>
+    <script src="/js/indexOficinas.min.js"></script>
   </body>
 </html>

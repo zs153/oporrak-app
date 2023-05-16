@@ -167,3 +167,6 @@ elemNew.setAttribute('href', `/admin/usuarios/add?part=${getCookie('filtro')}`)
 
 const elemDel = document.getElementById('del');
 elemDel.setAttribute('action', `/admin/usuarios/delete?part=${getCookie('filtro')}`)
+
+// tabla
+buildTable(orgList)

@@ -143,3 +143,6 @@ elemBuscar.value = getCookie('filtro')
 // inicializar action
 const elemActivar = document.getElementById('activ')
 elemActivar.setAttribute('action', `/admin/historicos/activar?part=${getCookie('filtro')}`)
+
+// tabla
+buildTable(orgList)

@@ -126,3 +126,6 @@ elemBuscar.value = getCookie('filtro')
 // inicializar
 const elemAdd = document.getElementById('add')
 elemAdd.setAttribute('action', `/admin/cursos/usuarios/insert?part=${getCookie('filtro')}`)
+
+// table
+buildTable(orgList)

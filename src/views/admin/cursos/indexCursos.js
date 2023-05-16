@@ -173,3 +173,6 @@ const elemNew = document.getElementById('new')
 elemNew.setAttribute('href', `/admin/cursos/add?part=${getCookie('filtro')}`)
 const elemDel = document.getElementById('del')
 elemDel.setAttribute('action', `/admin/cursos/delete?part=${getCookie('filtro')}`)
+
+// tabla
+buildTable(orgList)

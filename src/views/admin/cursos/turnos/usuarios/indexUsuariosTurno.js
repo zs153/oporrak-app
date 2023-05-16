@@ -148,3 +148,6 @@ const elemNew = document.getElementById('new')
 elemNew.setAttribute('href', `/admin/cursos/turnos/usuarios/add/${curso.IDCURS}/${turno.IDTURN}?part=${getCookie('filtro')}`)
 const elemDel = document.getElementById('del')
 elemDel.setAttribute('action', `/admin/cursos/turnos/usuarios/delete?part=${getCookie('filtro')}`)
+
+// tabla
+buildTable(orgList)

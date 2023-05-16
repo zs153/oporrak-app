@@ -41,6 +41,15 @@ let params = {
   hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
 }
 
+Calendar.locales.es = {
+  days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+  daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+  daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+  months: ["Enero/Urtarrila", "Febrero/Otsaila", "Marzo/Martxoa", "Abril/Apirila", "Mayo/Maiatza", "Junio/Ekaina", "Julio/Uztaila", "Agosto/Abuztua", "Septiembre/Iraila", "Octubre/Urria", "Noviembre/Azaroa", "Diciembre/Abendua"],
+  monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+  weekShort: "S",
+  weekStart: 1
+};
 calendario = new Calendar("#calendar", {
   minDate: new Date(params.desde),
   maxDate: new Date(params.hasta),

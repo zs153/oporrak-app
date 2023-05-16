@@ -738,7 +738,6 @@ export const usuariosTurnoPage = async (req, res) => {
     }
 
     if (dir === 'prev') {
-      //usuarios = usuarios.sort((a, b) => a.NOMUSU > b.NOMUSU ? 1 : -1)
       usuarios = usuarios.sort((a, b) => a.NOMUSU.localeCompare(b.NOMUSU))
     }
 

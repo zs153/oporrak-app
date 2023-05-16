@@ -100,8 +100,6 @@
     <%- include('../../../../partials/footer') %>
   </div>
 
-  <script src="/js/ayuda.min.js"></script>
-  <script src="/js/addUsuariosTurno.min.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.usuarios) %>
     const cursor = <%- JSON.stringify(datos.cursor) %>
@@ -109,10 +107,9 @@
     const turno = <%- JSON.stringify(datos.turno) %>
     const hasNextUsers = <%- datos.hasNextUsers %>
     const hasPrevUsers = <%- datos.hasPrevUsers %>
-
-    // tabla
-    buildTable(state)
   </script>
+  <script src="/js/ayuda.min.js"></script>
+  <script src="/js/addUsuariosTurno.min.js"></script>
 </body>
 
 </html>

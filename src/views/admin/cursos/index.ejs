@@ -110,18 +110,15 @@
     </div>
   </div>
 
-  <script src="/js/ayuda.min.js"></script>
-  <script src="/js/indexCursos.min.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.cursos) %>
     const estados = <%- JSON.stringify(datos.arrEstadosCurso) %>
     const cursor = <%- JSON.stringify(datos.cursor) %>
     const hasNextCursos = <%- datos.hasNextCursos %>
-    const hasPrevCursos = <%- datos.hasPrevCursos %>
-    
-    // tabla
-    buildTable(orgList)
+    const hasPrevCursos = <%- datos.hasPrevCursos %>    
   </script>
+  <script src="/js/ayuda.min.js"></script>
+  <script src="/js/indexCursos.min.js"></script>
 </body>
 
 </html>

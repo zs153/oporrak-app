@@ -207,16 +207,15 @@
     </div>
   </div>
 
-  <script src="/js/ayuda.min.js"></script>
-  <script src="/js/js-year-calendar.js"></script>
-  <script src="/js/js-year-calendar.es.js"></script>
-  <script src="/js/calendariosAdmin.js"></script>
   <script>
     const colores = <%- JSON.stringify(datos.arrColoresEstado) %>
     const festivos = <%- JSON.stringify(datos.festivos) %>
-    const festivos = <%- JSON.stringify(datos.tiposEstado) %>
-    let dataSource = <% - datos.dataSource %>
+    const tipos = <%- JSON.stringify(datos.tiposEstado) %>
+    let dataSource = <%- datos.dataSource %>
   </script>
+  <script src="/js/ayuda.min.js"></script>
+  <script src="/js/js-year-calendar.min.js"></script>
+  <script src="/js/calendariosAdmin.min.js"></script>
 </body>
 
 </html>

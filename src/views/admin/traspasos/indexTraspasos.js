@@ -153,3 +153,6 @@ elemBuscar.onchange = (event) => {
   setCookie('filtro', event.target.value, .5) // medio dia
 }
 elemBuscar.value = getCookie('filtro')
+
+// tabla
+buildTable(orgList)

@@ -122,18 +122,15 @@
     </div>
   </div>
 
-  <script src="/js/ayuda.min.js"></script>
-  <script src="/js/indexTurno.min.js"></script>
   <script>
     const orgList = <%- JSON.stringify(datos.turnos) %>
     const curso = <%- JSON.stringify(datos.curso) %>
     const cursor = <%- JSON.stringify(datos.cursor) %>
     const hasNextTurnos = <%- datos.hasNextTurnos %>
-    const hasPrevTurnos = <%- datos.hasPrevTurnos %>
-
-    // table
-    buildTable(orgList)
+    const hasPrevTurnos = <%- datos.hasPrevTurnos %>    
   </script>
+  <script src="/js/ayuda.min.js"></script>
+  <script src="/js/indexTurnos.min.js"></script>
 </body>
 
 </html>

@@ -135,6 +135,9 @@ elemBuscar.value = getCookie('filtro')
 
 // inicializacion
 const elemNew = document.getElementById('new')
-elemNew.setAttribute('href', `/admin/cursos/usuarios/add/<%- datos.curso.IDCURS %>?part=${getCookie('filtro')}`)
+elemNew.setAttribute('href', `/admin/cursos/usuarios/add/${curso.IDCURS}?part=${getCookie('filtro')}`)
 const elemDel = document.getElementById('del')
 elemDel.setAttribute('action', `/admin/cursos/usuarios/delete?part=${getCookie('filtro')}`)
+
+// tabla
+buildTable(orgList)
