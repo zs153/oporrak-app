@@ -168,7 +168,7 @@ const deleteMenuEvent = async (id) => {
     })
   }
 
-  pos = dataSource.map(itm => itm.idesta).indexOf(id)
+  let pos = dataSource.map(itm => itm.idesta).indexOf(id)
   dataSource.splice(pos, 1)
 
   let data = []
@@ -370,7 +370,7 @@ document.getElementById('calendar').addEventListener('clickDay', async function 
         })
       }
 
-      pos = dataSource.map(itm => itm.idesta).indexOf(e.events[0].idesta);
+      let pos = dataSource.map(itm => itm.idesta).indexOf(e.events[0].idesta);
       dataSource.splice(pos,1)
 
       let data = []

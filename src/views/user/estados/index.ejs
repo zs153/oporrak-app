@@ -72,8 +72,11 @@
                       <div class="mb-1">
                         <div class="form-label">Formato</div>
                         <select class="form-select" id="cbofor" name="format" value="">
-                          <option value="1">MENSUAL</option>
-                          <option value="2">SEMANAL</option>
+                          <% datos.arrTiposFormato.map(element=> { %>
+                            <option value="<%- element.id %>"<%- element.id == datos.formato ? " selected":"" %>>
+                              <%- element.des %>
+                            </option>
+                            <% }) %>
                         </select>
                       </div>
                     </div>

@@ -84,6 +84,10 @@ export const tiposVisualizacion = {
   pendientes: 1,
   resueltos: 2,
 }
+export const tiposFormato = {
+  mensual: 1,
+  semanal: 2,
+}
 export const estadosUsuario = {
   reserva: 0,
   activo: 1,
@@ -155,6 +159,10 @@ export const arrTiposPerfil = [
   { id: 1, des: 'GENERAL' },
   { id: 3, des: 'INFORMADOR' },
   { id: 8, des: 'LIQUIDADOR' },
+]
+export const arrTiposFormato = [
+  { id: 1, des: 'MENSUAL' },
+  { id: 2, des: 'SEMANAL' },
 ]
 export const arrEstadosUsuario = [
   { id: 0, des: 'RESERVA' },

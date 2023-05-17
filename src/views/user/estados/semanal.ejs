@@ -299,10 +299,10 @@
                     <div class="form-label">Perfil</div>
                     <select class="form-select" id="cboper" name="perusu" value="">
                       <% datos.arrTiposPerfil.map(element=> { %>
-                      <option value="<%= element.id %>"<%- element.des === "INFORMADOR" ? " selected":"" %>>
-                        <%= element.des %>
-                      </option>
-                      <% }) %>
+                        <option value="<%= element.id %>"<%- element.des === "INFORMADOR" ? " selected":"" %>>
+                          <%= element.des %>
+                        </option>
+                        <% }) %>
                     </select>
                   </div>
                 </div>
@@ -321,9 +321,12 @@
                 <div class="col-6">
                   <div class="mb-1">
                     <div class="form-label">Formato</div>
-                    <select class="form-select" id="cbofor" name="format" value="">
-                      <option value="1">MENSUAL</option>
-                      <option value="2">SEMANAL</option>
+                    <select class="form-select" id="cbofor" name="format" value="<%= datos.formato %>">
+                      <% datos.arrTiposFormato.map(element=> { %>
+                        <option value="<%- element.id %>"<%= element.id == datos.formato ? " selected":"" %>>
+                          <%- element.des %>
+                        </option>
+                      <% }) %>
                     </select>
                   </div>
                 </div>

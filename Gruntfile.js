@@ -24,8 +24,8 @@ module.exports = function (grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       js: {
-        src: ['./src/views/user/estados/semanal.js'],
-        dest: './src/public/js/semanal.min.js'
+        src: ['./src/controllers/user/estado.controller.js'],
+        dest: './src/controllers/user/estado.controller.min.js'
       },
       css: {
         src:  'src/public/css/concat.css',

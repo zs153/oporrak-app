@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { serverAPI, puertoAPI } from '../../config/settings'
-import { tiposRol, tiposEstado, arrTiposPerfil } from '../../public/js/enumeraciones'
+import { tiposRol, tiposEstado, arrTiposPerfil, arrTiposFormato, tiposFormato } from '../../public/js/enumeraciones'
 
 // pages
 export const mainPage = async (req, res) => {
@@ -19,6 +19,8 @@ export const mainPage = async (req, res) => {
     const datos = {
       oficinas: oficinas.data.data,
       arrTiposPerfil,
+      arrTiposFormato,
+      formato: tiposFormato.mensual,
       desde,
       hasta,
     }
@@ -44,6 +46,7 @@ export const estadosPage = async (req, res) => {
     DESDE: req.body.desde,
     HASTA: req.body.hasta,
   }
+  const formato = req.body.format
   const descripcionOficina = req.body.desofi
   const descripcionPerfil = req.body.desper
   const diasPeriodo = Math.ceil(Date.parse(periodo.HASTA) - Date.parse(periodo.DESDE)) / (1000 * 60 * 60 * 24) + 1
@@ -79,14 +82,17 @@ export const estadosPage = async (req, res) => {
       tiposEstado,
       tiposRol,
       arrTiposPerfil,
+      arrTiposFormato,
       periodo,
       diasPeriodo,
+      formato,
       strDesde: new Date(periodo.DESDE).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       strHasta: new Date(periodo.HASTA).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }),
       descripcionOficina,
       descripcionPerfil,
     }
 
+    console.log(datos.formato);
     if (req.body.format === '1') {
       res.render('user/estados/mensual', { user, datos })
     } else {
