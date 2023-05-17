@@ -112,6 +112,7 @@ export const insert = async (context) => {
 export const update = async (context) => {
   // bind
   const bind = context
+  
   // proc
   const ret = await simpleExecute(updateSql, bind)
 
