@@ -32,18 +32,18 @@ LEFT JOIN datos dd ON dd.idusua = uu.idusua
 WHERE uu.idusua = :idusua
 `
 const insertSql = `BEGIN OPORRAK_PKG.INSERTUSUARIO(
-    :nomusu,
-    :ofiusu,
-    :rolusu,
-    :userid,
-    :emausu,
-    :perusu,
-    :telusu,
-    :stausu,
-    :usumov,
-    :tipmov,
-    :idusua
-  ); END;
+  :nomusu,
+  :ofiusu,
+  :rolusu,
+  :userid,
+  :emausu,
+  :perusu,
+  :telusu,
+  :stausu,
+  :usumov,
+  :tipmov,
+  :idusua
+); END;
 `;
 const updateSql = `BEGIN OPORRAK_PKG.UPDATEUSUARIO(
     :idusua,

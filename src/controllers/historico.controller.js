@@ -33,6 +33,7 @@ export const modificar = async (req, res) => {
     NOMUSU: req.body.usuario.NOMUSU,
     OFIUSU: req.body.usuario.OFIUSU,
     ROLUSU: req.body.usuario.ROLUSU,
+    USERID: req.body.usuario.USERID,
     EMAUSU: req.body.usuario.EMAUSU,
     PERUSU: req.body.usuario.PERUSU,
     TELUSU: req.body.usuario.TELUSU,
