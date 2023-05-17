@@ -36,7 +36,7 @@ let eventos = []
 let calendario = null
 let currentYear = new Date().getFullYear()
 let params = {
-  color: '<%- datos.tiposEstado.festivo.COLOR %>',
+  color,
   desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
   hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
 }
@@ -107,7 +107,7 @@ document.getElementById('calendar').addEventListener('clickDay', async function 
       })
     }
 
-    pos = dataSource.map(itm => itm.fecfes).indexOf(fecha);
+    let pos = dataSource.map(itm => itm.fecfes).indexOf(fecha);
     dataSource.splice(pos, 1)
 
     let data = []
@@ -133,27 +133,34 @@ document.getElementById('calendar').addEventListener('clickDay', async function 
     dataSource.push({
       idfest: id,
       ofifes: oficina.IDOFIC,
-      startDate: fecha,
-      endDate: fecha,
+      startDate: new Date(fecha),
+      endDate: new Date(fecha),
       color: params.color,
     })
+    // dataSource.push({
+    //   idfest: id,
+    //   ofifes: oficina.IDOFIC,
+    //   startDate: fecha,
+    //   endDate: fecha,
+    //   color: params.color,
+    // })
     eventos.push({
       idfest: id,
       fecfes: fecha,
       ofifes: oficina.IDOFIC,
     })
 
-    let data = []
-    dataSource.map(itm => {
-      data.push({
-        idfest: itm.idfest,
-        ofifes: itm.ofifes,
-        startDate: new Date(itm.startDate),
-        endDate: new Date(itm.endDate),
-        color: itm.color,
-      })
-    })
-    calendario.setDataSource(data, {
+    // let data = []
+    // dataSource.map(itm => {
+    //   data.push({
+    //     idfest: itm.idfest,
+    //     ofifes: itm.ofifes,
+    //     startDate: new Date(itm.startDate),
+    //     endDate: new Date(itm.endDate),
+    //     color: itm.color,
+    //   })
+    // })
+    calendario.setDataSource(dataSource, {
       preventRendering: false
     })
 

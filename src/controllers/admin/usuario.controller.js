@@ -184,7 +184,6 @@ export const insert = async (req, res) => {
 
     await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios/insert`, {
       usuario,
-      recurso,
       movimiento,
     })
 

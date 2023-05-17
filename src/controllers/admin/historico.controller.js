@@ -135,6 +135,7 @@ export const update = async (req, res) => {
     NOMUSU: req.body.nomusu,
     OFIUSU: req.body.ofiusu,
     ROLUSU: req.body.rolusu,
+    USERID: req.body.userid,
     EMAUSU: req.body.emausu,
     PERUSU: req.body.perusu,
     TELUSU: req.body.telusu,

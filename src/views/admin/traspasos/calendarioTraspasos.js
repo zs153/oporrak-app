@@ -55,7 +55,7 @@ const festivoOficina = async (oficina) => {
 
   // estados
   if (festivoLocal) {
-    pos = festivos.map((e) => e.FECFES).indexOf(festivoLocal)
+    let pos = festivos.map((e) => e.FECFES).indexOf(festivoLocal)
     festivos.splice(pos, 1)
   }
 
