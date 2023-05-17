@@ -29,6 +29,9 @@ userRouter.get("/estados", authRoutes, estado.mainPage);
 // perfil
 userRouter.post('/perfil', authRoutes, usuario.updatePerfil)
 
+// cambio password
+userRouter.post('/cambio', authRoutes, usuario.changePassword)
+
 // calendario
 userRouter.post("/calendarios/update", authRoutes, calendario.update);
 

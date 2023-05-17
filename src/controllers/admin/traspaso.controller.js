@@ -222,7 +222,6 @@ export const update = async (req, res) => {
       });
     }
 
-    console.log(req.query);
     res.redirect(`/admin/traspasos?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
