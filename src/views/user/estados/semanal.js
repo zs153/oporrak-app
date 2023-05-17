@@ -250,8 +250,9 @@ const estadosGantt = (estados, festivos, periodo, diasPeriodo) => {
         let col = document.createElement("td")
         const texto = document.createTextNode(itm[1][i])
 
-        col.style.cssText = "color: blue; border: none; text-align: center;"
+        col.style.cssText = "color:blue;border:none;text-align:center;"
         col.style.minWidth = "14px"
+        col.style.fontSize = "10px"
         col.appendChild(texto)
         rowOficina.appendChild(col)
       }
