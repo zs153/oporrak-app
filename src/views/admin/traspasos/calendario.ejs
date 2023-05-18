@@ -142,7 +142,10 @@
   </div>
   
   <script>
+    const color = '<%- datos.tiposEstado.traspaso.COLOR %>'
     const festivosLocal = <%- JSON.stringify(datos.festivosLocal) %>
+    const festivosComun = <%- JSON.stringify(datos.festivosComun) %>
+    const tipos = <%- JSON.stringify(datos.tiposEstado) %>
     let festivos = <%- JSON.stringify(datos.festivosComun) %>
     let dataSource = <%- datos.dataSource %>
   </script>

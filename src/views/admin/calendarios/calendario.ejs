@@ -46,7 +46,7 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form action="/admin/calendarios/update" method="POST" onclick="return confirm();">
+                <form action="#" id="upd" method="POST" onclick="return confirm();">
                   <input type="hidden" name="usuario" id="usuario" value="<%= JSON.stringify(datos.usuario) %>" />
                   <input type="hidden" name="eventos" id="eventos" value="" />
                   <div class="card-header p-2">
@@ -95,7 +95,7 @@
                   </div>
                   <div class="card-footer p-2">
                     <div class="d-flex">
-                      <a href="/admin/calendarios" class="btn btn-white">Cancelar</a>
+                      <input class="btn btn-white" action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancelar" />
                       <button type="submit" class="btn btn-primary ms-auto" id="btnUpdate">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24"
                           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -216,6 +216,10 @@
   <script src="/js/ayuda.min.js"></script>
   <script src="/js/js-year-calendar.min.js"></script>
   <script src="/js/calendariosAdmin.min.js"></script>
+  <script>
+    const elemAdd = document.getElementById('upd');
+    elemAdd.setAttribute('action', `/admin/calendarios/update?part=${getCookie('filtro')}`)
+  </script>  
 </body>
 
 </html>

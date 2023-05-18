@@ -210,7 +210,7 @@ export const update = async (req, res) => {
       });
     }
 
-    res.redirect("/admin/calendarios")
+    res.redirect(`/admin/calendarios?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {

@@ -1,3 +1,24 @@
+const getCookie = (key) => {
+  let value = ''
+  document.cookie.split(';').forEach((e) => {
+    if (e.includes(key)) {
+      value = e.split('=')[1]
+    }
+  })
+  return value
+}
+const setCookie = (name, value, days) => {
+  let expires = "";
+  if (days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+const deleteCookie = () => {
+  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+}
 const dateISOToUTCString = (dateISO) => {
   const fecha = new Date(dateISO);
   const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;

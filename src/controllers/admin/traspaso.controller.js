@@ -121,29 +121,26 @@ export const calendarioPage = async (req, res) => {
     })
     const estados = await axios.post(`http://${serverAPI}:${puertoAPI}/api/estados/usuario`, {
       context: {
+        TIPEST: tiposEstado.traspasado.ID,
         USUEST: req.params.id,
         DESDE: periodo.DESDE,
         HASTA: periodo.HASTA,
       },
     })
-    const festivosComun = festivos.data.data.filter(itm => itm.OFIFES === 0)
+    const festivosComun = festivos.data.data.filter(itm => itm.OFIFES === 0).map(itm => itm.FECFES)
     const festivosLocal = festivos.data.data.filter(itm => itm.OFIFES > 0)
     
     let dataSource = []
     estados.data.data.map(itm => {
-      if (itm.TIPEST === tiposEstado.traspaso.ID) {
-        itm.TIPEST = tiposEstado.traspasado.ID
-        const estado = estados.data.data[estados.data.data.indexOf(itm)]
-        const rec = {
-          idesta: itm.IDESTA,
-          ofiest: estado.OFIEST,
-          startDate: estado.STRFEC,
-          endDate: estado.STRFEC,
-          rangoH: `${estado.DESOFI}\n(${estado.DESHOR} a ${estado.HASHOR})`,
-          color: `${tiposEstado.traspaso.COLOR}`
-        }
-        dataSource.push(rec)
+      const rec = {
+        idesta: itm.IDESTA,
+        ofiest: itm.OFIEST,
+        startDate: itm.STRFEC,
+        endDate: itm.STRFEC,
+        rangoH: `${itm.DESOFI}\n(${itm.DESHOR} a ${itm.HASHOR})`,
+        color: `${tiposEstado.traspaso.COLOR}`
       }
+      dataSource.push(rec)
     })
 
     const datos = {
@@ -204,7 +201,7 @@ export const update = async (req, res) => {
       })
     }
   })
-
+  
   const context = {
     ARRTRA: estados // importante!! los campos del array estados tienen que ir en mayusculas
   }

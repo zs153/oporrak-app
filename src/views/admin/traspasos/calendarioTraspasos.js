@@ -51,23 +51,13 @@ const dateISOToUTCString = (dateISO) => {
   return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
 }
 const festivoOficina = async (oficina) => {
-  let estadosOficina
+  const estadosOficina = oficina === 0 ? dataSource : dataSource.filter(itm => itm.ofiest === oficina)
 
-  // estados
-  if (festivoLocal) {
-    let pos = festivos.map((e) => e.FECFES).indexOf(festivoLocal)
-    festivos.splice(pos, 1)
-  }
-
-  if (oficina === 0) {
-    estadosOficina = dataSource
-    festivoLocal = null
-  } else {
+  festivos = festivosComun.slice()
+  if (oficina) {
     const festivo = festivosLocal[festivosLocal.map((itm) => itm.OFIFES).indexOf(oficina)]
-    estadosOficina = dataSource.filter(itm => itm.ofiest === oficina)
-
-    festivos.push(festivo)
-    festivoLocal = festivo.FECFES
+    
+    festivos.push(festivo.FECFES)
   }
 
   let data = []
@@ -101,7 +91,7 @@ let currentYear = new Date().getFullYear()
 let params = {
   destino: 0,
   nombre: '',
-  color: '<%- datos.tiposEstado.traspaso.COLOR %>',
+  color,
   desde: dateISOToUTCString(`${currentYear}-01-01T00:00:00`),
   hasta: dateISOToUTCString(`${currentYear}-12-31T00:00:00`),
 }
@@ -139,12 +129,12 @@ calendario = new Calendar("#calendar", {
     if (e.parentElement.classList.contains('festivo')) {
       e.parentElement.classList.remove('festivo')
     }
-    if (festivos.map(itm => itm.FECFES).indexOf(fecha) !== -1) {
-      e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
+    if (festivos.indexOf(fecha) !== -1) {
+      e.style.color = tipos.festivo.COLOR
       e.parentElement.classList.add('festivo')
     }
     if (date.getDay() === 0) {
-      e.style.color = '<%- datos.tiposEstado.festivo.COLOR %>'
+      e.style.color = tipos.festivo.COLOR
     }
   },
   dataSource: function () {

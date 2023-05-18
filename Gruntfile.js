@@ -24,8 +24,8 @@ module.exports = function (grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       js: {
-        src: ['./src/views/admin/festivos/calendarioFestivos.js'],
-        dest: './src/public/js/calendarioFestivos.min.js'
+        src: ['./src/views/admin/calendarios/calendariosAdmin.js'],
+        dest: './src/views/admin/calendarios/calendariosAdmin.min.js'
       },
       css: {
         src:  'src/public/css/concat.css',
