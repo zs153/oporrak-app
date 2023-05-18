@@ -266,9 +266,13 @@ export const removeTraspaso = async (context) => {
 // usuarios
 export const estadosUsuario = async (context) => {
   // bind
-  const query = estadosUsuarioQuery
+  let query = estadosUsuarioQuery
   const bind = context
 
+  if (context.TIPEST) {
+    query += `AND tipest = :tipest`
+  }
+  
   // proc
   const ret = await simpleExecute(query, bind)
 
