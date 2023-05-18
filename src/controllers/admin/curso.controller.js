@@ -1000,7 +1000,7 @@ export const insert = async (req, res) => {
       movimiento,
     })
 
-    res.redirect('/admin/cursos')
+    res.redirect(`/admin/cursos?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1034,7 +1034,7 @@ export const update = async (req, res) => {
       movimiento,
     })
 
-    res.redirect('/admin/cursos')
+    res.redirect(`/admin/cursos?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1063,7 +1063,7 @@ export const remove = async (req, res) => {
       movimiento,
     })
 
-    res.redirect('/admin/cursos')
+    res.redirect(`/admin/cursos?part=${req.query.part}`)
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1103,7 +1103,7 @@ export const insertTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1141,7 +1141,7 @@ export const updateTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1174,7 +1174,7 @@ export const deleteTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/turnos/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1213,7 +1213,7 @@ export const insertMatricula = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1250,7 +1250,7 @@ export const updateMatricula = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1283,7 +1283,7 @@ export const deleteMatricula = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1318,7 +1318,7 @@ export const insertUsuario = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/usuarios/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/usuarios/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1351,7 +1351,7 @@ export const deleteUsuario = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/usuarios/${curso.IDCURS}`);
+    res.redirect(`/admin/cursos/usuarios/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1393,7 +1393,7 @@ export const insertUsuarioTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/usuarios/${curso.IDCURS}/${turno.IDTURN}`);
+    res.redirect(`/admin/cursos/turnos/usuarios/${curso.IDCURS}/${turno.IDTURN}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1429,7 +1429,7 @@ export const deleteUsuarioTurno = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/turnos/usuarios/${curso.IDCURS}/${turno.IDTURN}`);
+    res.redirect(`/admin/cursos/turnos/usuarios/${curso.IDCURS}/${turno.IDTURN}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1467,7 +1467,7 @@ export const insertUsuarioMatricula = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/matriculas/usuarios/${curso.IDCURS}/${matricula.IDMATR}`);
+    res.redirect(`/admin/cursos/matriculas/usuarios/${curso.IDCURS}/${matricula.IDMATR}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {
@@ -1503,7 +1503,7 @@ export const deleteUsuarioMatricula = async (req, res) => {
       movimiento,
     });
 
-    res.redirect(`/admin/cursos/matriculas/usuarios/${curso.IDCURS}/${matricula.IDMATR}`);
+    res.redirect(`/admin/cursos/matriculas/usuarios/${curso.IDCURS}/${matricula.IDMATR}?part=${req.query.part}`);
   } catch (error) {
     if (error.response?.status === 400) {
       res.render("admin/error400", {

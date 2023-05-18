@@ -57,7 +57,7 @@ const festivoOficina = async (oficina) => {
   if (oficina) {
     const festivo = festivosLocal[festivosLocal.map((itm) => itm.OFIFES).indexOf(oficina)]
     
-    festivos.push(festivo.FECFES)
+    festivos.push(festivo?.FECFES)
   }
 
   let data = []
