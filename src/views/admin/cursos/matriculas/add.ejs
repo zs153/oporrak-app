@@ -21,7 +21,7 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <form action="/admin/cursos/matriculas/insert" method="POST" onsubmit="return validate();">
+                <form action="#" id="add" method="POST" onsubmit="return validate();">
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <div class="card-header">
                     <div>
@@ -90,7 +90,7 @@
                   </div>
                   <div class="card-footer text-end">
                     <div class="d-flex">
-                      <a href="/admin/cursos/matriculas/<%- datos.curso.IDCURS %>" class="btn btn-white">Cancelar</a>
+                      <input class="btn btn-white" action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancelar" />
                       <button type="submit" class="btn btn-primary ms-auto" id="btnInsert">Crear matrícula</button>
                     </div>
                   </div>
@@ -106,6 +106,10 @@
 
   <script src="/js/ayuda.min.js"></script>
   <script src="/js/addEditMatriculas.min.js"></script>
+  <script>
+    const elemEdit = document.getElementById('add');
+    elemEdit.setAttribute('action', `/admin/cursos/matriculas/insert?part=${getCookie('filtro')}`)
+  </script>
 </body>
 
 </html>

@@ -174,12 +174,18 @@ const createPages = () => {
   document.getElementById('pagination-wrapper').innerHTML = str;
 }
 
-// events
 const elemBuscar = document.getElementById('buscarMatriculaBox');
 elemBuscar.onchange = (event) => {
   setCookie('filtro', event.target.value, .5) // medio dia
 }
-elemBuscar.value = getCookie('filro')
+elemBuscar.value = getCookie('filtro')
+
+// incializacion
+const elemNew = document.getElementById('new');
+elemNew.setAttribute('href', `/admin/cursos/matriculas/add/${curso.IDCURS}?part=${getCookie('filtro')}`)
+
+const elemDel = document.getElementById('del');
+elemDel.setAttribute('action', `/admin/cursos/matriculas/delete?part=${getCookie('filtro')}`)
 
 // tabla
 buildTable(orgList)

@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-auto ms-auto">
                       <div class="d-flex">
-                        <form action="/admin/cursos/turnos/usuarios/add/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>" method="GET">
+                        <form action="#" id="add" method="GET">
                           <div class="input-icon">
                             <span class="input-icon-addon">
                               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -78,12 +78,11 @@
                       <tbody id="table-body">
                       </tbody>
                     </table>
-                    <!-- <div id="pagination-wrapper" class="py-1"></div> -->
                   </div>
                   <div class="card-footer">
-                    <form action="#" id="add" method="POST" onsubmit="return addUsuarios();">
+                    <form action="#" id="upd" method="POST" onsubmit="return addUsuarios();">
                       <div class="col-12 d-flex">
-                        <a href="/admin/cursos/turnos/usuarios/<%- datos.curso.IDCURS %>/<%- datos.turno.IDTURN %>" onclick="deleteCookie();" class="btn btn-white">Volver</a>
+                        <input class="btn btn-white" action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancelar" />
                         <input type="hidden" name="idcurs" id="idcurs" value="<%- datos.curso.IDCURS %>">
                         <input type="hidden" name="idturn" id="idturn" value="<%- datos.turno.IDTURN %>">
                         <input type="hidden" name="arrusu" id="arrusu" value="">

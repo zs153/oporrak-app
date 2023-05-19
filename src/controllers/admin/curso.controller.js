@@ -1135,6 +1135,7 @@ export const updateTurno = async (req, res) => {
     TIPMOV: tiposMovimiento.modificarTurno,
   }
 
+  console.log(turno);
   try {
     await axios.post(`http://${serverAPI}:${puertoAPI}/api/cursos/turnos/update`, {
       turno,
@@ -1212,9 +1213,10 @@ export const insertMatricula = async (req, res) => {
       matricula,
       movimiento,
     });
-
+    
     res.redirect(`/admin/cursos/matriculas/${curso.IDCURS}?part=${req.query.part}`);
   } catch (error) {
+    console.log('pass...', error);
     if (error.response?.status === 400) {
       res.render("admin/error400", {
         alerts: [{ msg: error.response.data.msg }],

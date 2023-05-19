@@ -345,7 +345,7 @@ document.querySelector('#calendar').addEventListener('clickDay', async function 
       params.tipo === tipos.reunion.ID ||
       params.tipo === tipos.horas.ID ||
       params.tipo === tipos.telefono.ID)) {
-    editEvent()
+    editEvento(e)
     return
   }
 

@@ -45,7 +45,7 @@
                             placeholder="Buscar..." aria-label="Buscar en matriculas">
                         </div>
                       </form>
-                      <a href="/admin/cursos/matriculas/add/<%- datos.curso.IDCURS %> " class="btn btn-primary">
+                      <a href="#" id="new" class="btn">                        
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                           <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                         </svg>
@@ -107,7 +107,7 @@
                 <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
-                <form action="/admin/cursos/matriculas/delete" method="POST">
+                <form action="#" id="del" method="POST">
                   <input type="hidden" id="idmatr" name="idmatr" value="">
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnDelete">Borrar matrícula</button>
@@ -123,8 +123,8 @@
   <script>
     const estados = <%- JSON.stringify(datos.arrEstadosMatricula) %>
     const orgList = <%- JSON.stringify(datos.matriculas) %>
-    const curso = <%- JSON.stringify(datos.curso) %>
     const cursor = <%- JSON.stringify(datos.cursor) %>
+    const curso = <%- JSON.stringify(datos.curso) %>
     const hasNextMatriculas = <%- datos.hasNextMatriculas %>
     const hasPrevMatriculas = <%- datos.hasPrevMatriculas %>    
   </script>

@@ -148,7 +148,7 @@ const buildTable = (state) => {
           </li>
           <div class="nav-divider"></div>
           <li class="nav-item">
-            <a href="/admin/cursos/turnos/usuarios/${curso.IDCURS}/${element.IDTURN}" class="nav-link">
+            <a href="/admin/cursos/turnos/usuarios/${curso.IDCURS}/${element.IDTURN}?part=${getCookie('filtro')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline me-2" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke-width=".4" fill="none" d="M3.35 15.8v-.625h7.625v.625Zm0-7v-.625h7.625V8.8Zm12.7 8.725-2.6-2.575.45-.45 2.125 2.125 4.25-4.25.425.475Zm0-7-2.6-2.575.45-.45 2.125 2.125 4.25-4.25.425.475Z"/></svg>
               Incripción de usuarios
             </a>
@@ -188,6 +188,13 @@ elemBuscar.onchange = (event) => {
   setCookie('filtro', event.target.value, .5) // medio dia
 }
 elemBuscar.value = getCookie('filtro')
+
+// inicializacion
+const elemNew = document.getElementById('new');
+elemNew.setAttribute('href', `/admin/cursos/turnos/add/${curso.IDCURS}?part=${getCookie('filtro')}`)
+
+const elemDel = document.getElementById('del');
+elemDel.setAttribute('action', `/admin/cursos/turnos/delete?part=${getCookie('filtro')}`)
 
 // table
 buildTable(orgList)

@@ -144,7 +144,7 @@ elemBuscar.onchange = (event) => {
 elemBuscar.value = getCookie('filtro')
 
 // inicializar
-const elemAdd = document.getElementById('add')
+const elemAdd = document.getElementById('upd')
 elemAdd.setAttribute('action', `/admin/cursos/turnos/usuarios/insert?part=${getCookie('filtro')}`)
 
 // tabla

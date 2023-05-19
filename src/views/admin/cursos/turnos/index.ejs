@@ -45,7 +45,7 @@
                             placeholder="Buscar..." aria-label="Buscar en turnos">
                         </div>
                       </form>
-                      <a href="/admin/cursos/turnos/add/<%- datos.curso.IDCURS %>" class="btn btn-primary">
+                      <a href="#" id="new" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="24" width="24" viewBox="0 0 24 24">
                           <path d="M11.25 18.75v-6h-6v-1.5h6v-6h1.5v6h6v1.5h-6v6Z" />
                         </svg>
@@ -109,7 +109,7 @@
                 <a href="#" class="btn btn-white w-100" data-bs-dismiss="modal">Cancelar</a>
               </div>
               <div class="col">
-                <form action="/admin/cursos/turnos/delete" method="POST">
+                <form  action="#" id="del" method="POST">
                   <input type="hidden" id="idturn" name="idturn" value="">
                   <input type="hidden" id="idcurs" name="idcurs" value="<%- datos.curso.IDCURS %>">
                   <button type="submit" class="btn btn-danger w-100" id="btnBorrar">Borrar turno</button>

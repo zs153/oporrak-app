@@ -136,17 +136,18 @@ const createPages = () => {
 }
 
 // events
-const elemNew = document.getElementById('new');
-elemNew.setAttribute('href', `/admin/oficinas/add?part=${getCookie('filtro')}`)
-
-const elemDel = document.getElementById('del');
-elemDel.setAttribute('action', `/admin/oficinas/delete?part=${getCookie('filtro')}`)
-
 const elemBuscar = document.getElementById('buscarOficinaBox');
 elemBuscar.onchange = (event) => {
   setCookie('filtro', event.target.value, .5) // medio dia
 }
 elemBuscar.value = getCookie('filtro')
+
+// incializacion
+const elemNew = document.getElementById('new');
+elemNew.setAttribute('href', `/admin/oficinas/add?part=${getCookie('filtro')}`)
+
+const elemDel = document.getElementById('del');
+elemDel.setAttribute('action', `/admin/oficinas/delete?part=${getCookie('filtro')}`)
 
 // tabla
 buildTable(orgList)

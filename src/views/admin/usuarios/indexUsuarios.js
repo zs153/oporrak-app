@@ -58,8 +58,8 @@ const buildTable = (state) => {
   table.innerHTML = ''
 
   myList.map(element => {
-    // col1
     const row = document.createElement('tr')
+    // col1
     let cell = document.createElement('td')
     cell.classList.add("w-4")
     if (element.STAUSU === estadosUsuario.activo) {
