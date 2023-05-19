@@ -1,16 +1,8 @@
 import { simpleExecute } from '../services/database.js'
 
-const baseMatriculasQuery = `SELECT mm.* 
-FROM matriculas mm
-WHERE mm.idmatr NOT IN (
-  SELECT idmatr FROM usuariosmatricula WHERE idusua = :idusua
-)
-AND sysdate BETWEEN mm.inimat AND mm.finmat
-`
-const baseCursosQuery = `SELECT cc.descur,cc.notcur
-FROM usuarioscurso uc
-INNER JOIN cursos cc ON cc.idcurs = uc.idcurs
-`
+const baseMatriculasQuery = "SELECT mm.* FROM matriculas mm WHERE mm.idmatr NOT IN (SELECT idmatr FROM usuariosmatricula WHERE idusua = :idusua) AND sysdate BETWEEN mm.inimat AND mm.finmat"
+const baseCursosQuery = "SELECT cc.descur,cc.notcur FROM usuarioscurso uc INNER JOIN cursos cc ON cc.idcurs = uc.idcurs"
+
 // matriculas
 export const findM = async (context) => {
   // bind
@@ -18,7 +10,7 @@ export const findM = async (context) => {
   const bind = context
 
   if (context.STAMAT) {
-    query += `AND mm.stamat = :stamat`
+    query += "AND mm.stamat = :stamat"
   }
 
   // proc
@@ -38,7 +30,7 @@ export const findC = async (context) => {
   const bind = context;
   
   if (context.IDUSUA) {
-    query += `AND uc.idusua = :idusua`
+    query += " AND uc.idusua = :idusua"
   }
 
   // proc

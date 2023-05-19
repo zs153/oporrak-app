@@ -1,31 +1,10 @@
 import { BIND_OUT, NUMBER } from "oracledb";
 import { simpleExecute } from '../services/database.js'
 
-const baseQuery = `SELECT *
-FROM oficinas oo
-`
-const insertSql = `BEGIN OPORRAK_PKG.INSERTOFICINA(
-  :desofi, 
-  :codofi,
-  :usumov,
-  :tipmov,
-  :idofic
-); END;
-`
-const updateSql = `BEGIN OPORRAK_PKG.UPDATEOFICINA(
-  :idofic,
-  :desofi, 
-  :codofi,
-  :usumov,
-  :tipmov
-); END;
-`
-const removeSql = `BEGIN OPORRAK_PKG.DELETEOFICINA(
-  :idofic,
-  :usumov,
-  :tipmov 
-); END;
-`
+const baseQuery = "SELECT * FROM oficinas oo"
+const insertSql = "BEGIN OPORRAK_PKG.INSERTOFICINA(:desofi, :codofi,:usumov,:tipmov,:idofic); END;"
+const updateSql = "BEGIN OPORRAK_PKG.UPDATEOFICINA(:idofic,:desofi, :codofi,:usumov,:tipmov); END;"
+const removeSql = "BEGIN OPORRAK_PKG.DELETEOFICINA(:idofic,:usumov,:tipmov ); END;"
 
 export const find = async (context) => {
   // bind
@@ -33,10 +12,10 @@ export const find = async (context) => {
   const bind = context
 
   if (context.IDOFIC) {
-    query += `WHERE idofic = :idofic`
+    query += " WHERE idofic = :idofic"
   }
   if (context.CODOFI) {
-    query += `WHERE codofi = :codofi`
+    query += " WHERE codofi = :codofi"
   }
   
   // proc
@@ -58,28 +37,10 @@ export const findAll = async (context) => {
 
   if (context.direction === 'next') {
     bind.idofic = context.cursor.next;
-    query = `WITH datos AS (
-      SELECT * FROM oficinas
-      WHERE
-        desofi LIKE '%' || :part || '%' OR
-        :part IS NULL
-    )
-    SELECT * FROM datos
-    WHERE idofic > :idofic
-    ORDER BY idofic ASC
-    FETCH NEXT :limit ROWS ONLY`
+    query = "WITH datos AS (SELECT * FROM oficinas WHERE desofi LIKE '%' || :part || '%' OR :part IS NULL) SELECT * FROM datos WHERE idofic > :idofic ORDER BY idofic ASC FETCH NEXT :limit ROWS ONLY"
   } else {
     bind.idofic = context.cursor.prev;
-    query = `WITH datos AS (
-      SELECT * FROM oficinas
-      WHERE
-        desofi LIKE '%' || :part || '%' OR
-        :part IS NULL
-    )
-    SELECT * FROM datos
-    WHERE idofic < :idofic
-    ORDER BY idofic DESC
-    FETCH NEXT :limit ROWS ONLY`
+    query = "WITH datos AS (SELECT * FROM oficinas WHERE desofi LIKE '%' || :part || '%' OR :part IS NULL) SELECT * FROM datos WHERE idofic < :idofic ORDER BY idofic DESC FETCH NEXT :limit ROWS ONLY"
   }
 
   // proc

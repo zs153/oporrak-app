@@ -1,5 +1,4 @@
 import * as DAL from '../models/curso.model'
-import oracledb from 'oracledb'
 
 // cursos
 export const curso = async (req, res) => {

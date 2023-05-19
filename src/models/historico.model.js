@@ -1,27 +1,8 @@
 import { simpleExecute } from "../services/database.js";
 
-const baseQuery = `SELECT *
-FROM historicos
-`
-const updateSql = `BEGIN OPORRAK_PKG.UPDATEHISTORICO(
-  :idusua,
-  :nomusu,
-  :ofiusu, 
-  :rolusu,
-  :userid,
-  :emausu, 
-  :perusu, 
-  :telusu, 
-  :usumov, 
-  :tipmov
-); END;
-`;
-const activarSql = `BEGIN OPORRAK_PKG.ACTIVARHISTORICO(
-  :idusua,
-  :usumov,
-  :tipmov
-); END;
-`
+const baseQuery = "SELECT * FROM historicos"
+const updateSql = "BEGIN OPORRAK_PKG.UPDATEHISTORICO(:idusua,:nomusu,:ofiusu, :rolusu,:userid,:emausu,:perusu,:telusu,:usumov,:tipmov); END;";
+const activarSql = "BEGIN OPORRAK_PKG.ACTIVARHISTORICO(:idusua,:usumov:tipmov); END;"
 
 export const find = async (context) => {
   // bind
@@ -29,7 +10,7 @@ export const find = async (context) => {
   let bind = context;
 
   if (context.IDUSUA) {
-    query += "WHERE idusua = :idusua";
+    query += " WHERE idusua = :idusua";
   }
 
   // proc
@@ -51,30 +32,10 @@ export const findAll = async (context) => {
 
   if (context.direction === 'next') {
     bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
-    query = `WITH datos AS (
-      SELECT idusua, nomusu, userid FROM historicos
-      WHERE
-        nomusu LIKE '%' || :part || '%' OR
-        :part IS NULL
-    )
-    SELECT * FROM datos
-    WHERE nomusu > :nomusu OR :nomusu IS NULL
-    ORDER BY nomusu ASC
-    FETCH NEXT :limit ROWS ONLY
-    `
+    query = "WITH datos AS (SELECT idusua, nomusu, userid FROM historicos WHERE nomusu LIKE '%' || :part || '%' OR :part IS NULL) SELECT * FROM datos WHERE nomusu > :nomusu OR :nomusu IS NULL ORDER BY nomusu ASC FETCH NEXT :limit ROWS ONLY"
   } else {
     bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
-    query = `WITH datos AS (
-      SELECT idusua, nomusu, userid FROM historicos
-      WHERE
-        nomusu LIKE '%' || :part || '%' OR
-        :part IS NULL
-    )
-    SELECT * FROM datos
-    WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL
-    ORDER BY nomusu DESC
-    FETCH NEXT :limit ROWS ONLY
-    `
+    query = "WITH datos AS (SELECT idusua, nomusu, userid FROM historicos WHERE nomusu LIKE '%' || :part || '%' OR :part IS NULL) SELECT * FROM datos WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL ORDER BY nomusu DESC FETCH NEXT :limit ROWS ONLY"
   }
 
   // proc
