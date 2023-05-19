@@ -3,3 +3,4 @@ dist/
 .vscode/
 .env
 dist.tag.gz
+Grunfile.js
