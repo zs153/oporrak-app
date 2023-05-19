@@ -6,12 +6,12 @@ const insertSql = "BEGIN OPORRAK_PKG.INSERTCURSO(:descur,:durcur,:poncur,:notcur
 const updateSql = "BEGIN OPORRAK_PKG.UPDATECURSO(:idcurs,:descur,:durcur,:poncur,:notcur,:stacur,:usumov,:tipmov); END;"
 const removeSql = "BEGIN OPORRAK_PKG.DELETECURSO(:idcurs,:usumov,:tipmov ); END;"
 // turnos
-const turnoSql = "SELECT tt.idturn,tt.destur,tt.loctur,tt.initur,tt.fintur,TO_CHAR(tt.initur, 'DD/MM/YYYY') STRINI,TO_CHAR(tt.fintur, 'DD/MM/YYYY') STRFIN,LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS INIHOR,LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS FINHOR FROM turnos ttINNER JOIN turnoscurso tc ON tc.idturn = tt.idturn"
+const turnoSql = "SELECT tt.idturn,tt.destur,tt.loctur,tt.initur,tt.fintur,TO_CHAR(tt.initur, 'DD/MM/YYYY') STRINI,TO_CHAR(tt.fintur, 'DD/MM/YYYY') STRFIN,LPAD(EXTRACT(HOUR FROM tt.inihor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.inihor), 2, '0') AS INIHOR,LPAD(EXTRACT(HOUR FROM tt.finhor), 2, '0')||':'||LPAD(EXTRACT(MINUTE FROM tt.finhor), 2, '0') AS FINHOR FROM turnos tt INNER JOIN turnoscurso tc ON tc.idturn = tt.idturn"
 const insertTurnoSql = "BEGIN OPORRAK_PKG.INSERTTURNOCURSO(:idcurs,:destur,TO_DATE(:initur,'YYYY-MM-DD'),TO_DATE(:fintur,'YYYY-MM-DD'),:inihor,:finhor,:loctur,:usumov,:tipmov,:idturn); END;"
 const updateTurnoSql = "BEGIN OPORRAK_PKG.UPDATETURNOCURSO(:idturn,:destur,TO_DATE(:initur,'YYYY-MM-DD'),TO_DATE(:fintur,'YYYY-MM-DD'),:inihor,:finhor,:loctur,:usumov,:tipmov); END;"
 const removeTurnoSql = "BEGIN OPORRAK_PKG.DELETETURNOCURSO(:idcurs,:idturn,:usumov,:tipmov); END;"
 // matriculas
-const matriculaSql = "SELECT mm.idmatr, mm.desmat, mm.notmat, mm.stamat,TO_CHAR(mm.inimat, 'YYYY-MM-DD') INIMAT,TO_CHAR(mm.finmat, 'YYYY-MM-DD') FINMAT,TO_CHAR(mm.inimat, 'DD/MM/YYYY') STRINI,TO_CHAR(mm.finmat, 'DD/MM/YYYY') STRFIN FROM matriculas mmINNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr"
+const matriculaSql = "SELECT mm.idmatr,mm.desmat,mm.notmat,mm.stamat,TO_CHAR(mm.inimat, 'YYYY-MM-DD') INIMAT,TO_CHAR(mm.finmat, 'YYYY-MM-DD') FINMAT,TO_CHAR(mm.inimat, 'DD/MM/YYYY') STRINI,TO_CHAR(mm.finmat, 'DD/MM/YYYY') STRFIN FROM matriculas mm INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr"
 const insertMatriculaSql = "BEGIN OPORRAK_PKG.INSERTMATRICULACURSO(:idcurs,:desmat,TO_DATE(:inimat,'YYYY-MM-DD'),TO_DATE(:finmat,'YYYY-MM-DD'),:notmat,:stamat,:usumov,:tipmov,:idmatr); END;"
 const updateMatriculaSql = "BEGIN OPORRAK_PKG.UPDATEMATRICULA(:idmatr,:desmat,TO_DATE(:inimat,'YYYY-MM-DD'),TO_DATE(:finmat,'YYYY-MM-DD'),:notmat,:stamat,:usumov,:tipmov); END;"
 const removeMatriculaSql = "BEGIN OPORRAK_PKG.DELETEMATRICULACURSO(:idcurs,:idmatr,:usumov,:tipmov); END;"
@@ -234,10 +234,10 @@ export const matriculas = async (context) => {
 
   if (context.direction === 'next') {
     bind.idmatr = context.cursor.next
-    query += "SELECT mm.idmatr, mm.desmat, mm.notmat, mm.stamat,TO_CHAR(mm.inimat, 'YYYY-MM-DD') INIMAT,TO_CHAR(mm.finmat, 'YYYY-MM-DD') FINMAT,TO_CHAR(mm.inimat, 'DD/MM/YYYY') STRINI,TO_CHAR(mm.finmat, 'DD/MM/YYYY') STRFIN FROM matriculas mm INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr WHERE mm.idmatr > :idmatr AND mc.idcurs = :idcurs AND (mm.desmat LIKE '%' || :part || '%' OR :part IS NULL) ORDER BY mm.idmatr ASC FETCH NEXT :limit ROWS ONLY"
+    query += "SELECT mm.idmatr,mm.desmat,mm.notmat,mm.stamat,TO_CHAR(mm.inimat, 'YYYY-MM-DD') INIMAT,TO_CHAR(mm.finmat, 'YYYY-MM-DD') FINMAT,TO_CHAR(mm.inimat, 'DD/MM/YYYY') STRINI,TO_CHAR(mm.finmat, 'DD/MM/YYYY') STRFIN FROM matriculas mm INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr WHERE mm.idmatr > :idmatr AND mc.idcurs = :idcurs AND (mm.desmat LIKE '%' || :part || '%' OR :part IS NULL) ORDER BY mm.idmatr ASC FETCH NEXT :limit ROWS ONLY"
   } else {
     bind.idmatr = context.cursor.prev
-    query += "SELECT mm.idmatr, mm.desmat, mm.notmat, mm.stamat,TO_CHAR(mm.inimat, 'YYYY-MM-DD') INIMAT,TO_CHAR(mm.finmat, 'YYYY-MM-DD') FINMAT,TO_CHAR(mm.inimat, 'DD/MM/YYYY') STRINI,TO_CHAR(mm.finmat, 'DD/MM/YYYY') STRFIN FROM matriculas mm INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr WHERE mm.idmatr < :idmatr AND mc.idcurs = :idcurs AND (mm.desmat LIKE '%' || :part || '%' OR :part IS NULL) ORDER BY mm.idmatr DESC FETCH NEXT :limit ROWS ONLY"
+    query += "SELECT mm.idmatr,mm.desmat,mm.notmat,mm.stamat,TO_CHAR(mm.inimat, 'YYYY-MM-DD') INIMAT,TO_CHAR(mm.finmat, 'YYYY-MM-DD') FINMAT,TO_CHAR(mm.inimat, 'DD/MM/YYYY') STRINI,TO_CHAR(mm.finmat, 'DD/MM/YYYY') STRFIN FROM matriculas mm INNER JOIN matriculascurso mc ON mc.idmatr = mm.idmatr WHERE mm.idmatr < :idmatr AND mc.idcurs = :idcurs AND (mm.desmat LIKE '%' || :part || '%' OR :part IS NULL) ORDER BY mm.idmatr DESC FETCH NEXT :limit ROWS ONLY"
   }
 
   // proc
@@ -330,12 +330,13 @@ export const usuariosPendientes = async (context) => {
 
   if (context.direction === 'next') {
     bind.nomusu = context.cursor.next === '' ? null : context.cursor.next;
-    query = "WITH datos AS (SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi FROM usuariosturno ut INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn AND tc.idcurs = :idcurs INNER JOIN usuarios uu ON uu.idusua = ut.idusua INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu WHERE uu.idusua NOT IN (SELECT uc.idusua FROM usuarioscurso uc WHERE uc.idcurs = :idcurs) AND (nomusu LIKE '%' || :part || '%' OR desofi LIKE '%' || :part || '%' OR :part IS NULL)) SELECT * FROM datos WHERE nomusu > :nomusu OR :nomusu IS NULL ORDER BY nomusu ASC FETCH NEXT :limit ROWS ONLY"
+    query = "WITH datos AS (SELECT uu.idusua,uu.userid,uu.nomusu,oo.idofic,oo.desofi FROM usuariosturno ut INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn AND tc.idcurs = :idcurs INNER JOIN usuarios uu ON uu.idusua = ut.idusua INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu WHERE uu.idusua NOT IN (SELECT uc.idusua FROM usuarioscurso uc WHERE uc.idcurs = :idcurs) AND (nomusu LIKE '%' || :part || '%' OR desofi LIKE '%' || :part || '%' OR :part IS NULL)) SELECT * FROM datos WHERE nomusu > :nomusu OR :nomusu IS NULL ORDER BY nomusu ASC FETCH NEXT :limit ROWS ONLY"
   } else {
     bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
-    query = "WITH datos AS (SELECT uu.idusua,uu.nomusu,oo.idofic,oo.desofi FROM usuariosturno ut INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn AND tc.idcurs = :idcurs INNER JOIN usuarios uu ON uu.idusua = ut.idusua INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu WHERE uu.idusua NOT IN (SELECT uc.idusua FROM usuarioscurso uc WHERE uc.idcurs = :idcurs) AND (nomusu LIKE '%' || :part || '%' OR desofi LIKE '%' || :part || '%' OR :part IS NULL)) SELECT * FROM datos WHERE nomusu < :nomusu OR :nomusu IS NULL ORDER BY nomusu DESC FETCH NEXT :limit ROWS ONLY"
+    query = "WITH datos AS (SELECT uu.idusua,uu.userid,uu.nomusu,oo.idofic,oo.desofi FROM usuariosturno ut INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn AND tc.idcurs = :idcurs INNER JOIN usuarios uu ON uu.idusua = ut.idusua INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu WHERE uu.idusua NOT IN (SELECT uc.idusua FROM usuarioscurso uc WHERE uc.idcurs = :idcurs) AND (nomusu LIKE '%' || :part || '%' OR desofi LIKE '%' || :part || '%' OR :part IS NULL)) SELECT * FROM datos WHERE nomusu < :nomusu OR :nomusu IS NULL ORDER BY nomusu DESC FETCH NEXT :limit ROWS ONLY"
   }
 
+  console.log(query,bind);
   // proc
   const ret = await simpleExecute(query, bind)
 
@@ -492,6 +493,7 @@ export const insertUsuarioMatricula = async (context) => {
 export const removeUsuarioMatricula = async (context) => {
   // bind
   const bind = context
+
   // proc
   const ret = await simpleExecute(removeUsuarioMatriculaSql, bind)
 

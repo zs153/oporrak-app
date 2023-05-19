@@ -2,7 +2,7 @@ import { simpleExecute } from "../services/database.js";
 
 const baseQuery = "SELECT * FROM historicos"
 const updateSql = "BEGIN OPORRAK_PKG.UPDATEHISTORICO(:idusua,:nomusu,:ofiusu, :rolusu,:userid,:emausu,:perusu,:telusu,:usumov,:tipmov); END;";
-const activarSql = "BEGIN OPORRAK_PKG.ACTIVARHISTORICO(:idusua,:usumov:tipmov); END;"
+const activarSql = "BEGIN OPORRAK_PKG.ACTIVARHISTORICO(:idusua,:usumov,:tipmov); END;"
 
 export const find = async (context) => {
   // bind
