@@ -1,10 +1,6 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI } from '../../config/settings'
-import {
-  tiposMovimiento,
-  arrTiposRol,
-  arrTiposPerfil
-} from '../../public/js/enumeraciones'
+import { serverAPI,puertoAPI } from '../../config/settings'
+import { tiposMovimiento,arrTiposRol,arrTiposPerfil } from '../../public/js/enumeraciones'
 
 // pages
 export const mainPage = async (req, res) => {

@@ -1,5 +1,5 @@
 import express from 'express'
-import { verifyTokenAndAdmin, verifyTokenAndResp } from "../middleware/auth";
+import { verifyTokenAndAdmin,verifyTokenAndResp } from "../middleware/auth";
 
 import * as festivo from '../controllers/admin/festivo.controller'
 import * as oficina from '../controllers/admin/oficina.controller'

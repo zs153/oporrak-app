@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI } from '../../config/settings'
-import { arrEstadosCurso, arrEstadosMatricula, tiposMovimiento, tiposEstado, estadosUsuario } from '../../public/js/enumeraciones'
+import { serverAPI,puertoAPI } from '../../config/settings'
+import { arrEstadosCurso,arrEstadosMatricula,tiposMovimiento,tiposEstado,estadosUsuario } from '../../public/js/enumeraciones'
 
 // page cursos
 export const mainPage = async (req, res) => {

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { createPublicKey, createSecretKey } from 'crypto'
-import { V4, V3 } from 'paseto'
+import { createPublicKey,createSecretKey } from 'crypto'
+import { V4,V3 } from 'paseto'
 import { tiposRol } from '../public/js/enumeraciones'
-import { publicKey, puertoAPI, secreto, serverAPI } from '../config/settings'
+import { publicKey,puertoAPI,secreto,serverAPI } from '../config/settings'
 
 const authRoutes = async (req, res, next) => {
   let tokenHeader = req.cookies.auth

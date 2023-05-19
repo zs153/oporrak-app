@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { serverAPI, puertoAPI } from '../../config/settings'
-import { tiposMovimiento, estadosUsuario, tiposEstado, arrTiposEstadoUsuario, arrColoresEstado } from '../../public/js/enumeraciones'
+import { serverAPI,puertoAPI } from '../../config/settings'
+import { tiposMovimiento,estadosUsuario,tiposEstado,arrTiposEstadoUsuario,arrColoresEstado } from '../../public/js/enumeraciones'
 
 export const mainPage = async (req, res) => {
   const user = req.user
