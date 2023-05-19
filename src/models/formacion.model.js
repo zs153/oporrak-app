@@ -10,7 +10,7 @@ export const findM = async (context) => {
   const bind = context
 
   if (context.STAMAT) {
-    query += "AND mm.stamat = :stamat"
+    query += " AND mm.stamat = :stamat"
   }
 
   // proc

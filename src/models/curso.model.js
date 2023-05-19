@@ -307,7 +307,7 @@ export const usuarios = async (context) => {
     query = "SELECT uu.idusua,uu.userid,uu.nomusu,oo.desofi FROM usuarios uu INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu INNER JOIN usuarioscurso uc ON uc.idusua= uu.idusua WHERE uu.nomusu > :nomusu  OR :nomusu IS NULL AND uc.idcurs = :idcurs AND (uu.nomusu LIKE '%' || :part || '%' OR oo.desofi LIKE '%' || :part || '%' OR :part IS NULL) ORDER BY uu.nomusu ASC FETCH NEXT :limit ROWS ONLY"
   } else {
     bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
-    query = "SELECT uu.idusua,uu.userid,uu.nomusu,oo.desofi FROM usuarios uu INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu INNER JOIN usuarioscurso uc ON uc.idusua= uu.idusua WHERE uu.nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL AND uc.idcurs = :idcurs AND (uu.nomusu LIKE '%' || :part || '%' OR oo.desofi LIKE '%' || :part || '%' OR :part IS NULL) ORDER BY uu.nomusu DESC FETCH NEXT :limit ROWS ONLY"
+    query = "SELECT uu.idusua,uu.userid,uu.nomusu,oo.desofi FROM usuarios uu INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu INNER JOIN usuarioscurso uc ON uc.idusua= uu.idusua WHERE uu.nomusu < :nomusu OR :nomusu IS NULL AND uc.idcurs = :idcurs AND (uu.nomusu LIKE '%' || :part || '%' OR oo.desofi LIKE '%' || :part || '%' OR :part IS NULL) ORDER BY uu.nomusu DESC FETCH NEXT :limit ROWS ONLY"
   }
 
   // proc

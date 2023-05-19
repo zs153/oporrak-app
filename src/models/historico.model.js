@@ -35,7 +35,7 @@ export const findAll = async (context) => {
     query = "WITH datos AS (SELECT idusua, nomusu, userid FROM historicos WHERE nomusu LIKE '%' || :part || '%' OR :part IS NULL) SELECT * FROM datos WHERE nomusu > :nomusu OR :nomusu IS NULL ORDER BY nomusu ASC FETCH NEXT :limit ROWS ONLY"
   } else {
     bind.nomusu = context.cursor.prev === '' ? null : context.cursor.prev;
-    query = "WITH datos AS (SELECT idusua, nomusu, userid FROM historicos WHERE nomusu LIKE '%' || :part || '%' OR :part IS NULL) SELECT * FROM datos WHERE nomusu < CONVERT(:nomusu, 'US7ASCII') OR :nomusu IS NULL ORDER BY nomusu DESC FETCH NEXT :limit ROWS ONLY"
+    query = "WITH datos AS (SELECT idusua, nomusu, userid FROM historicos WHERE nomusu LIKE '%' || :part || '%' OR :part IS NULL) SELECT * FROM datos WHERE nomusu < :nomusu OR :nomusu IS NULL ORDER BY nomusu DESC FETCH NEXT :limit ROWS ONLY"
   }
 
   // proc
