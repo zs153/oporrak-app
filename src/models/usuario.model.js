@@ -128,8 +128,7 @@ export const findAll = async (context) => {
       WHERE uu.ofiusu = :ofiusu AND
         (uu.nomusu LIKE '%' || :part || '%' OR
         oo.desofi LIKE '%' || :part || '%' OR
-        :part IS NULL)
-    )
+        :part IS NULL))
     `
   } else {
     query = `WITH datos AS (
@@ -138,8 +137,7 @@ export const findAll = async (context) => {
       WHERE 
         uu.nomusu LIKE '%' || :part || '%' OR
         oo.desofi LIKE '%' || :part || '%' OR
-        :part IS NULL
-    )
+        :part IS NULL)
     `
   }
 
