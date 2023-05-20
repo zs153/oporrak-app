@@ -22,7 +22,7 @@ const setCookie = (name, value, days) => {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 const deleteCookie = () => {
-  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+  document.cookie = 'filtro1=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
 }
 const setSuccess = (element) => {
   const inputControl = element.parentElement;

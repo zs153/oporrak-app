@@ -17,7 +17,7 @@ const setCookie = (name, value, days) => {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 const deleteCookie = () => {
-  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+  document.cookie = 'filtro1=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
 }
 
 // inicializa sort
@@ -139,13 +139,13 @@ const createPages = () => {
 // events
 const elemBuscar = document.getElementById('buscarUserBox');
 elemBuscar.onchange = (event) => {
-  setCookie('filtro', event.target.value, .5) // medio dia
+  setCookie('filtro1', event.target.value, .5) // medio dia
 }
-elemBuscar.value = getCookie('filtro')
+elemBuscar.value = getCookie('filtro1')
 
 // inicializacion
 const elemDel = document.getElementById('del')
-elemDel.setAttribute('action', `/admin/cursos/matriculas/usuarios/delete?part=${getCookie('filtro')}`)
+elemDel.setAttribute('action', `/admin/cursos/matriculas/usuarios/delete?part=${getCookie('filtro1')}`)
 
 // tabla
 buildTable(orgList)

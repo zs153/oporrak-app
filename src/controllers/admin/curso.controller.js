@@ -146,7 +146,10 @@ export const turnosPage = async (req, res) => {
 
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
-  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  // Nota: no activar. (no debiera tener mas de una matrícula)
+  //const part = req.query.part ? req.query.part.toUpperCase() : ''
+  // descomentar y activar part en el context (quitar null) para volver a activar
 
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
   let hasPrevTurnos = cursor ? true:false
@@ -158,7 +161,7 @@ export const turnosPage = async (req, res) => {
       limit: limit + 1,
       direction: dir,
       cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
-      part,
+      part: null,
     }
   } else {
     context = {
@@ -169,7 +172,7 @@ export const turnosPage = async (req, res) => {
         next: 0,
         prev: 0,
       },
-      part,
+      part: null,
     }
   }
 
@@ -311,7 +314,10 @@ export const matriculasPage = async (req, res) => {
 
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
-  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  // Nota: no activar. (no debiera tener mas de una matrícula)
+  //const part = req.query.part ? req.query.part.toUpperCase() : ''
+  // descomentar y activar part en el context (quitar null) para volver a activar
 
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
   let hasPrevMatriculas = cursor ? true:false
@@ -323,7 +329,7 @@ export const matriculasPage = async (req, res) => {
       limit: limit + 1,
       direction: dir,
       cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
-      part,
+      part: null,
     }
   } else {
     context = {
@@ -334,7 +340,7 @@ export const matriculasPage = async (req, res) => {
         next: 0,
         prev: 0,
       },
-      part,
+      part: null,
     }
   }
 
@@ -473,7 +479,10 @@ export const usuariosPage = async (req, res) => {
 
   const dir = req.query.dir ? req.query.dir : 'next'
   const limit = req.query.limit ? req.query.limit : 10
-  const part = req.query.part ? req.query.part.toUpperCase() : ''
+
+  // Nota: no activar. (no debiera tener mas de una matrícula)
+  //const part = req.query.part ? req.query.part.toUpperCase() : ''
+  // descomentar y activar part en el context (quitar null) para volver a activar
 
   let cursor = req.query.cursor ? JSON.parse(req.query.cursor) : null
   let hasPrevUsers = cursor ? true : false
@@ -485,7 +494,7 @@ export const usuariosPage = async (req, res) => {
       limit: limit + 1,
       direction: dir,
       cursor: JSON.parse(convertCursorToNode(JSON.stringify(cursor))),
-      part,
+      part: null,
     }
   } else {
     context = {
@@ -496,7 +505,7 @@ export const usuariosPage = async (req, res) => {
         next: '',
         prev: '',
       },
-      part,
+      part: null,
     }
   }
 

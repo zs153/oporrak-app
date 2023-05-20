@@ -18,7 +18,7 @@ const setCookie = (name, value, days) => {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 const deleteCookie = () => {
-  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+  document.cookie = 'filtro1=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
 }
 
 // inicializa sort
@@ -107,13 +107,13 @@ const addUsuarios = () => {
 // events
 const elemBuscar = document.getElementById('buscarUserBox')
 elemBuscar.onchange = (event) => {
-  setCookie('filtro', event.target.value, .5)
+  setCookie('filtro1', event.target.value, .5)
 }
-elemBuscar.value = getCookie('filtro')
+elemBuscar.value = getCookie('filtro1')
 
 // inicializar
 const elemAdd = document.getElementById('add')
-elemAdd.setAttribute('action', `/admin/cursos/usuarios/insert?part=${getCookie('filtro')}`)
+elemAdd.setAttribute('action', `/admin/cursos/usuarios/insert?part=${getCookie('filtro1')}`)
 
 // table
 buildTable(orgList)

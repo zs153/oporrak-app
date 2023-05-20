@@ -18,7 +18,7 @@ const setCookie = (name, value, days) => {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 const deleteCookie = () => {
-  document.cookie = 'filtro=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
+  document.cookie = 'filtro1=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;'
 }
 
 // inicializa sort
@@ -121,7 +121,7 @@ const buildTable = (state) => {
         </a>
         <ul>
           <li class="nav-item">
-            <a href="/admin/cursos/matriculas/edit/${curso.IDCURS}/${element.IDMATR}?part=${getCookie('filtro')}" class="nav-link">
+            <a href="/admin/cursos/matriculas/edit/${curso.IDCURS}/${element.IDMATR}?part=${getCookie('filtro1')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke-width=".4" fill="none" d="M6.85 20.575q-.6 0-1.012-.412-.413-.413-.413-1.013V4.85q0-.6.413-1.013.412-.412 1.012-.412h7.825L18.6 7.35v3.4h-.65V7.675h-3.6V4.05h-7.5q-.3 0-.55.25-.25.25-.25.55v14.275q0 .3.25.55.25.25.55.25h4.25v.65Zm-.8-.65V4.05 19.925ZM17.025 14.6l.45.425-3.75 3.75v1.1h1.1l3.775-3.75.45.45-3.95 3.95h-2v-2Zm2.025 1.975L17.025 14.6l1.05-1.05q.225-.2.525-.2.3 0 .475.2l1 1q.2.2.2.487 0 .288-.2.538Z"/></svg>
               </svg>
@@ -138,7 +138,7 @@ const buildTable = (state) => {
           </li>
           <div class="nav-divider"></div>
           <li class="nav-item">
-            <a href="/admin/cursos/matriculas/usuarios/${curso.IDCURS}/${element.IDMATR}?part=${getCookie('filtro')}" class="nav-link">
+            <a href="/admin/cursos/matriculas/usuarios/${curso.IDCURS}/${element.IDMATR}?part=${getCookie('filtro1')}" class="nav-link">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" height="24" width="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke-width=".4" fill="none" d="M3.35 18.025V16.8q0-.725.363-1.1.362-.375.862-.65 1.325-.675 2.438-.975 1.112-.3 2.937-.3.75 0 1.3.037.55.038.925.113l-.575.6q-.3-.05-.737-.087-.438-.038-.913-.038-1.7 0-2.888.337-1.187.338-2.162.863-.55.275-.725.55Q4 16.425 4 16.8v.6h5.8l.625.625ZM15.2 19.35l-2.5-2.475.45-.475 2.05 2.05 5-5.025.475.45ZM9.925 11.2q-1.1 0-1.863-.762Q7.3 9.675 7.3 8.575T8.075 6.7q.775-.775 1.875-.775 1.075 0 1.85.775.775.775.775 1.875t-.775 1.863q-.775.762-1.875.762ZM9.8 17.4Zm.15-6.825q.825 0 1.413-.588.587-.587.587-1.412t-.587-1.413q-.588-.587-1.413-.587-.85 0-1.425.587-.575.588-.575 1.413 0 .825.575 1.412.575.588 1.425.588Zm0-2Z"/>
               </svg>
@@ -176,16 +176,19 @@ const createPages = () => {
 
 const elemBuscar = document.getElementById('buscarMatriculaBox');
 elemBuscar.onchange = (event) => {
-  setCookie('filtro', event.target.value, .5) // medio dia
+  setCookie('filtro1', event.target.value, .5) // medio dia
 }
-elemBuscar.value = getCookie('filtro')
+elemBuscar.value = getCookie('filtro1')
 
 // incializacion
 const elemNew = document.getElementById('new');
-elemNew.setAttribute('href', `/admin/cursos/matriculas/add/${curso.IDCURS}?part=${getCookie('filtro')}`)
+elemNew.setAttribute('href', `/admin/cursos/matriculas/add/${curso.IDCURS}?part=${getCookie('filtro1')}`)
 
 const elemDel = document.getElementById('del');
-elemDel.setAttribute('action', `/admin/cursos/matriculas/delete?part=${getCookie('filtro')}`)
+elemDel.setAttribute('action', `/admin/cursos/matriculas/delete?part=${getCookie('filtro1')}`)
+
+const elemVol = document.getElementById('vol');
+elemVol.setAttribute('href', `/admin/cursos?part=${getCookie('filtro')}`)
 
 // tabla
 buildTable(orgList)
