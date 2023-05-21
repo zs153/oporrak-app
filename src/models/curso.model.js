@@ -336,7 +336,6 @@ export const usuariosPendientes = async (context) => {
     query = "WITH datos AS (SELECT uu.idusua,uu.userid,uu.nomusu,oo.idofic,oo.desofi FROM usuariosturno ut INNER JOIN turnoscurso tc ON tc.idturn = ut.idturn AND tc.idcurs = :idcurs INNER JOIN usuarios uu ON uu.idusua = ut.idusua INNER JOIN oficinas oo ON oo.idofic = uu.ofiusu WHERE uu.idusua NOT IN (SELECT uc.idusua FROM usuarioscurso uc WHERE uc.idcurs = :idcurs) AND (nomusu LIKE '%' || :part || '%' OR desofi LIKE '%' || :part || '%' OR :part IS NULL)) SELECT * FROM datos WHERE nomusu < :nomusu OR :nomusu IS NULL ORDER BY nomusu DESC FETCH NEXT :limit ROWS ONLY"
   }
 
-  console.log(query,bind);
   // proc
   const ret = await simpleExecute(query, bind)
 

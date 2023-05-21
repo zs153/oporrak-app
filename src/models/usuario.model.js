@@ -88,7 +88,6 @@ export const insert = async (context) => {
     type: NUMBER,
   };
 
-  console.log(insertSql,bind);
   // proc
   const ret = await simpleExecute(insertSql, bind)
 
