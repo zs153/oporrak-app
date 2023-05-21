@@ -92,7 +92,6 @@ export const estadosPage = async (req, res) => {
       descripcionPerfil,
     }
 
-    console.log(datos.formato);
     if (req.body.format === '1') {
       res.render('user/estados/mensual', { user, datos })
     } else {

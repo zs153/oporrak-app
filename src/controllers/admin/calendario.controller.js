@@ -34,7 +34,6 @@ export const mainPage = async (req, res) => {
     }
   }
 
-  console.log('context...', context);
   try {
     const result = await axios.post(`http://${serverAPI}:${puertoAPI}/api/usuarios`, {
       context,
