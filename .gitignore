@@ -2,5 +2,5 @@ node_modules/
 dist/
 .vscode/
 .env
-dist.tag.gz
-Grunfile.js
+dist.tar.gz
+Gruntfile.js
