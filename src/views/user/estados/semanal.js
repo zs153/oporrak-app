@@ -111,7 +111,7 @@ const estadosGantt = (estados, festivos, periodo, diasPeriodo) => {
 
     //acumulado estados
     if (diaSemana === 6 || diaSemana === 0 || festivo) {
-      for (let i = offsetDesde; i < offsetHasta; i++) {
+      for (let i = 0; i < 14; i++) {
         estadosUsuario[(diaSemana - 1) * 14 + i] = -1
       }
     } else {
@@ -151,13 +151,9 @@ const estadosGantt = (estados, festivos, periodo, diasPeriodo) => {
   let rowUsuario = document.createElement("tr");
   let rowHeader = document.createElement("tr");
   let rowSubHeader = document.createElement("tr");
-  let hasHeaderOficina = false;
 
-  var col = null;
-  var texto = null;
-  var hasHeader = false;
-  var headerString = '';
-  var subHeaderString = '';
+  let col = null;
+  let texto = null;
 
   // descripcion header
   col = document.createElement('th')
