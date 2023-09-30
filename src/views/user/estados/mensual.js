@@ -27,6 +27,14 @@ const yearMonthDayToUTCString = (year, month, day) => {
 
   return new Date(fecha.getTime() - userTimezoneOffset).toISOString().slice(0, 10)
 }
+const dateISOToUTCString = (dateISO) => {
+  const fecha = new Date(dateISO)
+  const userTimezoneOffset = fecha.getTimezoneOffset() * 60000
+
+  return new Date(fecha.getTime() - userTimezoneOffset)
+    .toISOString()
+    .slice(0, 10)
+}
 const validate = () => {
   const desfecValue = desfec.value.trim()
 
@@ -147,7 +155,7 @@ const estadosGantt = (estados, festivos, periodo, diasPeriodo) => {
   var hasHeader = false;
   var headerString = '';
   var subHeaderString = '';
-
+  
   // descripcion header
   col = document.createElement('th')
   col.style.cssText = "border: none; text-align: center;"
@@ -157,8 +165,11 @@ const estadosGantt = (estados, festivos, periodo, diasPeriodo) => {
   tblHeader.appendChild(rowHeader)
 
   // dias header
-  for (let d = desde; d <= hasta; d.setDate(d.getDate() + 1)) {
-    texto = document.createTextNode(('0' + d.getDate()).slice(-2))
+  const diaInicio = desde.getDate() +1
+  const diaFin = hasta.getDate() +1
+  
+  for (let d = diaInicio; d <= diaFin; d++) {
+    texto = document.createTextNode(('0' + d).slice(-2))
     col = document.createElement('th')
     col.appendChild(texto)
     col.style.cssText = "border: none; text-align: center"
