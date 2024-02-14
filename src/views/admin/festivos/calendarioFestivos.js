@@ -51,8 +51,8 @@ Calendar.locales.es = {
   weekStart: 1
 };
 calendario = new Calendar("#calendar", {
-  minDate: new Date(params.desde),
-  maxDate: new Date(params.hasta),
+  //minDate: new Date(params.desde),
+  //maxDate: new Date(params.hasta),
   language: "es",
   displayHeader: false,
   customDayRenderer: function (e, date) {
@@ -80,11 +80,11 @@ document.getElementById('btnUpdate').addEventListener('click', () => {
 document.getElementById('cboyea').addEventListener('change', function () {
   currentYear = parseInt(document.querySelector("#cboyea").value)
 
-  params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
-  params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
+  //params.desde = dateISOToUTCString(`${currentYear}-01-01T00:00:00`)
+  //params.hasta = dateISOToUTCString(`${currentYear}-12-31T00:00:00`)
 
-  calendario.setMinDate(new Date(params.desde));
-  calendario.setMaxDate(new Date(params.hasta));
+  //calendario.setMinDate(new Date(params.desde));
+  //calendario.setMaxDate(new Date(params.hasta));
   calendario.setYear(currentYear)
 });
 document.getElementById('calendar').addEventListener('clickDay', async function (e) {

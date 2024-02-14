@@ -61,7 +61,7 @@ const estadosGantt = (estados, festivos, periodo, diasPeriodo) => {
   let delta = 0;
   let rowCount = 0;
   let nombreUsuario = '';
-
+  
   if (estados.length === 0) {
     return
   }

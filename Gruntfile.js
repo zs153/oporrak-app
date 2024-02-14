@@ -10,14 +10,16 @@ module.exports = function (grunt) {
     clean: {
       src: ['dist']
     },
-    concat: {
+    cssmin: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        mergeIntoShorthands: false,
+        roundingPrecision: -1
       },
-      css: {
-        src: ['src/public/css/estilos.css', 'src/public/css/navbar.css'],
-        dest: 'src/public/css/concat.css'
-      },
+      target: {
+        files: {
+          'src/public/css/styles.css': ['src/public/css/estilos.css', 'src/public/css/navbar.css', 'src/public/css/nav.css', 'src/public/css/tabs.css', 'src/public/css/fonts.css']
+        }
+      }
     },
     uglify: {
       options: {
@@ -79,7 +81,7 @@ module.exports = function (grunt) {
           'dist/public/js/perfil.min.js': ['./dist/public/js/perfil.min.js'],
           'dist/public/js/semanal.min.js': ['./dist/public/js/semanal.min.js'],
           // routes
-          'dist/routes/admin.routes.js': ['./dist/routes/admin.router.js'],
+          'dist/routes/admin.router.js': ['./dist/routes/admin.router.js'],
           'dist/routes/curso.router.js': ['./dist/routes/curso.router.js'],
           'dist/routes/main.router.js': ['./dist/routes/main.router.js'],
           'dist/routes/user.router.js':['./dist/routes/user.router.js'],
@@ -88,23 +90,21 @@ module.exports = function (grunt) {
         }
         // src: ['./dist/controllers/user/curso.controller.js'],
         // dest: './dist/controllers/user/curso.controller.js'
-      },
-      css: {
-        src:  'src/public/css/concat.css',
-        dest: 'src/public/css/card-stamp.min.css'
+        // src: ['./src/views/user/estados/semanal.js'],
+        // dest: './src/public/js/semanal.min.js'
       },
     },
   });
-
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   // Default task.
   grunt.registerTask('concat-js', ['concat:js']);
   grunt.registerTask('default-js', ['uglify:js']);
-  grunt.registerTask('default-css', ['concat:css', 'uglify:css']);
+  grunt.registerTask('default-css', ['uglify:css']);
   grunt.registerTask('concat-css', ['concat:css']);
-  grunt.registerTask('default-uglify-css', ['uglify:css'])
+  grunt.registerTask('css-min', ['cssmin']);
 };
