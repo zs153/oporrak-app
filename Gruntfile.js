@@ -37,7 +37,7 @@ module.exports = function (grunt) {
           'dist/controllers/oficina.controller.js': ['./dist/controllers/oficina.controller.js'],
           'dist/controllers/usuario.controller.js': ['./dist/controllers/usuario.controller.js'],
           // models
-          'dist/models/curso.models.js': ['./dist/models/curso.model.js'],
+          'dist/models/curso.model.js': ['./dist/models/curso.model.js'],
           'dist/models/estado.model.js': ['./dist/models/estado.model.js'],
           'dist/models/festivo.model.js': ['./dist/models/festivo.model.js'],
           'dist/models/formacion.model.js':['./dist/models/formacion.model.js'],
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
           'dist/models/oficina.model.js': ['./dist/models/oficina.model.js'],
           'dist/models/usuario.model.js': ['./dist/models/usuario.model.js'],
           // routes
-          'dist/routes/curso.routes.js': ['./dist/routes/curso.router.js'],
+          'dist/routes/curso.router.js': ['./dist/routes/curso.router.js'],
           'dist/routes/estado.router.js': ['./dist/routes/estado.router.js'],
           'dist/routes/festivo.router.js': ['./dist/routes/festivo.router.js'],
           'dist/routes/formacion.router.js':['./dist/routes/formacion.router.js'],
@@ -80,5 +80,4 @@ module.exports = function (grunt) {
   grunt.registerTask('default-js', ['uglify:js']);
   grunt.registerTask('default-css', ['concat:css', 'uglify:css']);
   grunt.registerTask('concat-css', ['concat:css']);
-  grunt.registerTask('default-uglify-css', ['uglify:css'])
 };

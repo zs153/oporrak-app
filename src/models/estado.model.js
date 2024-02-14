@@ -185,7 +185,6 @@ export const estadosOficinaPerfil = async (context) => {
   // proc
   const ret = await simpleExecute(query, bind)
 
-  console.log(ret.rows);
   if (ret) {
     return ({ stat: ret.rows.length, data: ret.rows })
   } else {
